@@ -22,7 +22,8 @@ Dabei ist zu beachten, dass jeder Spieler unabhängig der Länder immer mindeste
 #####Phase 2 - Befreien anderer Länder
 In dieser Phase hat der Spieler die Möglichkeit andere Länder, welche an seinen angrenzen anzugreifen. Hierbei ist zu beachten, dass man immer mindestens 2 Einheiten für einen Angriff braucht und mindestens 1 Einheit in einem Land stationiert sein muss.
 
-#####Phase 3 - Länderkarte einsetzen
+#####Phase 3 - Truppen bewegen
+Nach der Befereiungsphase dürfen Truppen zwischen den eigenen Ländergrenzen verschoben werden. Dabei darf eine beliebige Amzahl an Einheiten in ein anderes Gebiet bewegt werden, solange mindestens eine Einheit im Ursprungsgebiet bestehen bleibt und das Zielgebiet mit dem Ursprungsgebiet verbunden ist. 
 
 #####Phase 4 - Einheiten gruppieren
 
