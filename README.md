@@ -7,8 +7,16 @@
 >v1.0
 
 ###Regeln
+
+####Spielvorbereitung
+Vor dem Spiel haben die Spieler die Möglichkeit, sich für eine Farbe und einen Namen zu entscheiden.
+
 ####Spielanfang
 Zu beginn des Spieles wird die Startreiehenfolge zufällig bestimmt. Bei gleichen Zufallswerten werden diese neu generiert. Spieler mit einem höheren Wert kommen zuerst dran.  
+
+Die Gebiete werden den Spielern zufällig zugewiesen. Dabei erhält jeder Spieler (wenn möglich) die gleiche Anzahl an Gebieten. Ist eine faire Aufteilung nicht möglich, werden die übrigen Gebiete an eine weitere neutrale Fraktion verteilt. Diese Fraktion verhält sich komplett passiv und greift nicht in das Spielgeschehen ein.
+
+Nach der Verteilung können die Spieler ihre Gebiete mit zusätzlichen Einheiten verstärken. Die Anzahl der zusätzlichen Einheiten hängt von der Anahl der eigenen Gebiete ab.
 
 ####Spielablauf
 Jeder Spieler hat 4 Phasen in seinem Zug, die Spieler kommen nach der Reihe dran.
