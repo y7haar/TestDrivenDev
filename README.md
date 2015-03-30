@@ -29,7 +29,19 @@ In dieser Phase hat der Spieler neue Einheiten zu rekrutieren. Die Anzahl der ne
 Dabei ist zu beachten, dass jeder Spieler unabhängig der Anzahl der Länder immer mindestens 3 neue Einheiten bekommt.
 
 #####Phase 2 - Befreien anderer Länder
-In dieser Phase hat der Spieler die Möglichkeit andere Länder, welche an seinen angrenzen, anzugreifen. Hierbei ist zu beachten, dass man immer mindestens 2 Einheiten für einen Angriff im Gebiet braucht und mindestens 1 Einheit in einem Land stationiert sein muss.
+In dieser Phase hat der Spieler die Möglichkeit andere Länder, welche an seinen angrenzen, anzugreifen.
+
+**Angriff**
+Beim Angriff ist zu beachten, dass man immer mindestens 2 Einheiten für einen Angriff im Gebiet braucht und mindestens 1 Einheit in einem Land stationiert sein muss. 
+
+*Der Angreifer kann entscheiden, mit wie vielen Einheiten er angreifen möchte.*
+> Noch unklar
+
+**Verteidigung**
+> Noch unklar
+
+**Berechnung des Kampfs**
+>Muss noch entschieden werden.
 
 #####Phase 3 - Truppen bewegen / verstärken
 Nach der Befereiungsphase dürfen Truppen zwischen den eigenen Ländergrenzen verschoben werden. Dabei darf eine beliebige Amzahl an Einheiten in ein anderes Gebiet bewegt werden, solange mindestens eine Einheit im Ursprungsgebiet bestehen bleibt und das Zielgebiet mit dem Ursprungsgebiet verbunden ist. Diese Aktion darf lediglich einmal pro Phase ausgeführt werden.
@@ -40,6 +52,9 @@ Nach der Befereiungsphase dürfen Truppen zwischen den eigenen Ländergrenzen ve
 
 ###Ziel
 Das Ziel des Spiels ist es, alle Gebiete der Karte zu okkupieren und danach den endlosen Weltfrieden zu bewahren. Hat dies ein Spieler geschafft, endet das Spiel.
+
+###Niederlage
+Besitzt ein Spieler keine Gebiete mehr und hat alle Einheiten verloren, hat der Spieler das Spiel verloren und nimmt nun nicht mehr am Spielgeschehen teil. 
 
 
 
