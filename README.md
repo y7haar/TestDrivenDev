@@ -1,4 +1,4 @@
-#TDD - TestDrivenDevelopment - TEST
+#TDD - TestDrivenDevelopment
 
 ##Risiko (bzw rundenbasiertes StrategieSpiel)
 
