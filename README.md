@@ -4,7 +4,7 @@
 
 >Hier sollte die Spielanleitung rein um daraus die Testfälle zu entwickeln!
 
->v0.0.2
+>v0.0.3
 
 ###Regeln
 
@@ -29,19 +29,22 @@ In dieser Phase hat der Spieler neue Einheiten zu rekrutieren. Die Anzahl der ne
 Dabei ist zu beachten, dass jeder Spieler unabhängig der Anzahl der Länder immer mindestens 3 neue Einheiten bekommt.
 
 #####Phase 2 - Befreien anderer Länder
-In dieser Phase hat der Spieler die Möglichkeit andere Länder, welche an seinen angrenzen, anzugreifen.
+In dieser Phase hat der Spieler die Möglichkeit andere Länder, welche an seinen angrenzen, anzugreifen. Es können mehrere Angriffe in der Befreiungsphase ausgeführt werden.
 
 **Angriff**
 Beim Angriff ist zu beachten, dass man immer mindestens 2 Einheiten für einen Angriff im Gebiet braucht und mindestens 1 Einheit in einem Land stationiert sein muss. 
 
-*Der Angreifer kann entscheiden, mit wie vielen Einheiten er angreifen möchte.*
-> Noch unklar
+Ein Angriff erfolgt immer von einem eigenen Land in ein anderes direkt benachbartes Land, welches feindlich kontrolliert wird.
+
+Der Angreifer kann entscheiden, mit wie vielen Einheiten angegriffen wird. Maximal kann mit 3 Einheiten gleichzeitig angegriffen werden, sofern genügend Einheiten im Heimatland zur Verfügung stehen.
 
 **Verteidigung**
-> Noch unklar
+Der Verteidiger kann entscheiden, mit wie vielen Einheiten ein Angriff abgewehrt wird. Das Maximum der Einheiten beträgt 2, wenn genügend Einheiten in dem angegriffenen Gebiet sind.
+
 
 **Berechnung des Kampfs**
->Muss noch entschieden werden.
+>TODO
+
 
 #####Phase 3 - Truppen bewegen / verstärken
 Nach der Befereiungsphase dürfen Truppen zwischen den eigenen Ländergrenzen verschoben werden. Dabei darf eine beliebige Amzahl an Einheiten in ein anderes Gebiet bewegt werden, solange mindestens eine Einheit im Ursprungsgebiet bestehen bleibt und das Zielgebiet mit dem Ursprungsgebiet verbunden ist. Diese Aktion darf lediglich einmal pro Phase ausgeführt werden.
@@ -57,13 +60,4 @@ Das Ziel des Spiels ist es, alle Gebiete der Karte zu okkupieren und danach den 
 Besitzt ein Spieler keine Gebiete mehr und hat alle Einheiten verloren, hat der Spieler das Spiel verloren und nimmt nun nicht mehr am Spielgeschehen teil. 
 
 
-
 **Folgende Informationen sind optional und noch nicht komplett ausgearbeitet.**
-
-####Einheiten
-Einheiten gibt es in verschiedenen Klassen.
-#####Klassen
-######Standart
-Standartklasse
-######Ultra
-Ultraklasse
