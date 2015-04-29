@@ -17,9 +17,10 @@ TestCase("CountryTest", {
   },
   "test if country1 should store country2 as a border": function () { 
       
-     assertFalse(this.country1.getBorderCount() == 0);
+     assertEquals(0, this.country1.getBorderCount());
      this.country1.addBorder(this.country2);
-     assertTrue(this.country1.getBorderCount() > 0);
+     assertEquals(1, this.country1.getBorderCount());
   }
+
   
 });

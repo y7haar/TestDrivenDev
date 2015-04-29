@@ -5,6 +5,22 @@ Source-Code for Country
 
 (function()
 {
-    tddjs.namespace("client.map").Country = {    
+    var _border ;
+    
+    function addBorder(aCountry)
+    {
+        _border = aCountry;
+      
+    }
+    
+    function getBorderCount()
+    {
+        if(typeof _border === "undefined") return 0;
+        else return 1; 
+    }
+    
+    tddjs.namespace("client.map").Country = {
+        addBorder: addBorder,
+        getBorderCount: getBorderCount
     };    
 }());
