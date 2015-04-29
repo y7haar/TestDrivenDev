@@ -18,7 +18,7 @@ TestCase("CountryTest", {
       assertObject(this.country2);
       assertObject(this.country3);
   },
-  "test if country1 should store country2 and country 2 as a border": function () { 
+  "test if country1 should store country2 and country3 as a border": function () { 
       
      assertEquals(0, this.country1.getBorderCount());
      this.country1.addBorder(this.country2);
@@ -28,7 +28,7 @@ TestCase("CountryTest", {
      
   },  
     
-    "test if country1 border country2 should return true": function () {
+    "test if country1 border country2 and country3 should return true": function () {
         
      this.country1.addBorder(this.country2);
      this.country1.addBorder(this.country3);
