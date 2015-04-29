@@ -22,8 +22,9 @@ TestCase("CountryTest", {
      assertEquals(1, this.country1.getBorderCount());
   },  
     
-    "test if country1 border country2 should return true": function () { 
-      
+    "test if country1 border country2 should return true": function () {
+        
+     this.country1.addBorder(this.country2);
      assertTrue(this.country1.borders(this.country2));
   },
   

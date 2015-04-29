@@ -19,8 +19,18 @@ Source-Code for Country
         else return 1; 
     }
     
+    function borders(aCountry)
+    {
+        if( getBorderCount() == 1)
+        {
+            return (_border === aCountry);
+        }
+        else return false;
+    }
+    
     tddjs.namespace("client.map").Country = {
         addBorder: addBorder,
-        getBorderCount: getBorderCount
+        getBorderCount: getBorderCount,
+        borders: borders
     };    
 }());
