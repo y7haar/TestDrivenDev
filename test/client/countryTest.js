@@ -1,17 +1,18 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+/*
+ *
+ * Testcases for Country
  */
-
-
 
 TestCase("CountryTest", {
     
-    setUp: function () {    
+    setUp: function () {
+      this.country1 = Object.create(tddjs.client.map.Country);  
     },
 
-  "test": function () { 
+  "test object of country should not be undefined": function () { 
+      
+      assertObject(this.country1);
   }  
   
 });
