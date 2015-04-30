@@ -21,7 +21,6 @@ TestCase("LobbyControllerTest", {
   },
   
       "test lobbyController should hold a reference to lobby1": function () { 
-      assertTypeOf("undefined", this.lobbyController.getLobby());
       assertNotSame(this.lobby1, this.lobbyController.getLobby());
       
       this.lobbyController.addLobby(this.lobby1);
