@@ -4,24 +4,27 @@
 
 (function()
 {
-    var _lobby;
+    var _lobbies = [];
     
     function addLobby(aLobby)
     {
-        _lobby = aLobby;
+        _lobbies.push(aLobby);
     }
     
     function getLobbyCount()
     {
-        if(typeof _lobby === "undefined")
-            return 0;
-        
-        return 1;
+        return _lobbies.length;
+    }
+    
+    function getLobbies()
+    {
+        return _lobbies;
     }
     
     tddjs.namespace("server.controller").LobbyController = {
         addLobby: addLobby,
-        getLobbyCount: getLobbyCount
+        getLobbyCount: getLobbyCount,
+        getLobbies: getLobbies
         
     };
 }());
