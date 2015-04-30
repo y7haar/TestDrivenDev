@@ -18,6 +18,15 @@ TestCase("LobbyControllerTest", {
       assertEquals(0, this.lobbyController.getLobbyCount());
       this.lobbyController.addLobby(this.lobby1);
        assertEquals(1, this.lobbyController.getLobbyCount());
+  },
+  
+      "test lobbyController should hold a reference to lobby1": function () { 
+      assertTypeOf("undefined", this.lobbyController.getLobby());
+      assertNotSame(this.lobby1, this.lobbyController.getLobby());
+      
+      this.lobbyController.addLobby(this.lobby1);
+      
+       assertSame(this.lobby1, this.lobbyController.getLobby());
   }
   
 });
