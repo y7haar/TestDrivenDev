@@ -5,20 +5,28 @@
 (function ()
 {
         var _players = [];
+        var _maxPlayers;
     
         function addPlayer(aPlayer)
         {
-            _players.push(aPlayer);
+            if(_players.length < _maxPlayers)
+                 _players.push(aPlayer);
         }
         
         function getPlayers()
         {
             return _players;
         }
+        
+        function setMaxPlayers(aMaxPlayers)
+        {
+            _maxPlayers = aMaxPlayers;
+        }
     
         tddjs.namespace("server.model").Lobby = {
             addPlayer: addPlayer,
-            getPlayers: getPlayers
+            getPlayers: getPlayers,
+            setMaxPlayers: setMaxPlayers
         };
     
 }());
