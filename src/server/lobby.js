@@ -18,9 +18,17 @@
             return _players;
         }
         
+        /*
+         *  Sets max player count and kicks players, if current player count > maximum
+         */
         function setMaxPlayers(aMaxPlayers)
         {
             _maxPlayers = aMaxPlayers;
+
+            while(_players.length > aMaxPlayers)
+            {
+                    _players.pop();
+            }
         }
     
         tddjs.namespace("server.model").Lobby = {
