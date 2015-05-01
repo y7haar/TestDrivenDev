@@ -5,10 +5,14 @@
 TestCase("LobbyTest", {
     
     setUp: function () {
-      this.lobby = Object.create(tddjs.server.model.Lobby);
-      this.player1 = {};
-      this.player2 = {};
-      this.player3 = {};
+        this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.player1 = {};
+        this.player2 = {};
+        this.player3 = {};
+    },
+    
+    tearDown: function () {
+        this.lobby.getPlayers().length = 0;
     },
 
   "test object of Lobby should not be undefined": function () { 
@@ -16,6 +20,8 @@ TestCase("LobbyTest", {
   },
   
     "test Lobby should store player1 and player2 and player 3": function () { 
+        this.lobby.setMaxPlayers(3);
+        
         assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
         assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
