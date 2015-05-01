@@ -39,7 +39,7 @@ TestCase("LobbyTest", {
         assertTrue(this.lobby.getPlayers().indexOf(this.player3) >= 0);
   },
   
-      "test Lobby should store player1 and player2, but not player3 because the player limit is reached": function () { 
+      "test Lobby should only store player1, not store player3 and kick player2": function () { 
         this.lobby.setMaxPlayers(2);
           
         assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
@@ -57,6 +57,12 @@ TestCase("LobbyTest", {
         assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
         assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
+        
+        this.lobby.setMaxPlayers(1);
+        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
+        assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
+        assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
+        
   }
   
 });
