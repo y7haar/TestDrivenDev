@@ -5,26 +5,26 @@ Source-Code for Continent
 
 (function()
 {
-    var _land ;
+    var _Country = [];
     
     function addCountry(aCountry)
     {
-      
+      _Country.push(aCountry);
     }
     
     function getCountryCount()
     {
-
+       return _Country.length;
     }
     
     function getCountrys()
     {
-  
+        return _Country;
     }
     
     tddjs.namespace("client.map").Continent = {
-        addBorder: addCountry,
-        getBorderCount: getCountryCount,
-        borders: getCountrys
+        addCountry: addCountry,
+        getCountryCount: getCountryCount,
+        getCountrys: getCountrys
     };    
 }());
