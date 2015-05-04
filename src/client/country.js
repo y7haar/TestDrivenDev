@@ -39,6 +39,8 @@ Source-Code for Country
     function subUnits(count)
     {
         if(isNaN(count))throw new TypeError("Parameter is not a number");
+        
+        if( _unitCount - count < 1 ) _unitCount == 1;
         else _unitCount -= count;
     }
     
