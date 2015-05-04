@@ -59,7 +59,7 @@ TestCase("CountryUnitsTest", {
       this.object = {};
     },
     
-    "test country should return the count of units": function () { 
+    "test country return unitcount always should be 1 at creation": function () { 
       
         assertEquals(1, this.country1.getUnitCount());
     },
@@ -110,9 +110,19 @@ TestCase("CountryUnitsTest", {
        this.country1.subUnits(count);
        assertEquals(1, this.country1.getUnitCount());
        
-    }
-    
-    
+    }    
+});
 
-  
+
+TestCase("CountryAttacksTest", {
+        
+    setUp: function () {
+      this.country1 = Object.create(tddjs.client.map.Country);
+      this.country2 = Object.create(tddjs.client.map.Country); 
+    },
+    
+    "test country1 should attack country2": function () { 
+      
+        this.country1.attackBorder(country2);
+    } 
 });
