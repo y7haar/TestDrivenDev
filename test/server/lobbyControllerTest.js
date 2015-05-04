@@ -38,6 +38,25 @@ TestCase("LobbyControllerTest", {
        
         this.lobbyController.addLobby(this.lobby2);
         assertSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+  },
+  
+        "test lobbyController should hold a reference to lobby1 and remove lobby2": function () { 
+        assertNotSame(this.lobby1, this.lobbyController.getLobbies()[0]);
+        assertNotSame(this.lobby1, this.lobbyController.getLobbies()[1]);
+        assertNotSame(this.lobby2, this.lobbyController.getLobbies()[0]);
+        assertNotSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+      
+        this.lobbyController.addLobby(this.lobby1);
+        assertSame(this.lobby1, this.lobbyController.getLobbies()[0]);
+       
+        this.lobbyController.addLobby(this.lobby2);
+        assertSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+        
+        assertEquals(2, this.lobbyController.getLobbyCount());
+        
+        this.lobbyController.removeLobby(this.lobby2);
+        assertNotSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+        assertEquals(1, this.lobbyController.getLobbyCount());
   }
   
 });
