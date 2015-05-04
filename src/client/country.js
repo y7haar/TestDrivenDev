@@ -5,26 +5,22 @@ Source-Code for Country
 
 (function()
 {
-    var _border ;
+    var _border = [] ;
     
     function addBorder(aCountry)
     {
-        _border = aCountry;
+        _border.push(aCountry);
       
     }
     
     function getBorderCount()
     {
-        if(typeof _border === "undefined") return 0;
-        else return 1; 
+        return _border.length;
     }
     
     function borders(aCountry)
     {
-        if( getBorderCount() == 1)
-        {
-            return (_border === aCountry);
-        }
+        if( _border.indexOf(aCountry) >= 0) return true;        
         else return false;
     }
     
