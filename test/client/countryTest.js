@@ -103,6 +103,13 @@ TestCase("CountryUnitsTest", {
         , "TypeError");
         
         assertEquals(1, this.country1.getUnitCount());  
+    },    
+    "test Unit count should not fall under 1 after sub ": function () { 
+      
+       var count = this.country1.getUnitCount();
+       this.country1.subUnits(count);
+       assertEquals(1, this.country1.getUnitCount());
+       
     }
     
     
