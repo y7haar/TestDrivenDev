@@ -114,15 +114,3 @@ TestCase("CountryUnitsTest", {
 });
 
 
-TestCase("CountryAttacksTest", {
-        
-    setUp: function () {
-      this.country1 = Object.create(tddjs.client.map.Country);
-      this.country2 = Object.create(tddjs.client.map.Country); 
-    },
-    
-    "test country1 should attack country2": function () { 
-      
-        this.country1.attackBorder(country2);
-    } 
-});
