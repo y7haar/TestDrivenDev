@@ -6,6 +6,7 @@ Source-Code for Country
 (function()
 {
     var _border = [] ;
+    var _unitCount = 1;
     
     function addBorder(aCountry)
     {
@@ -24,9 +25,21 @@ Source-Code for Country
         else return false;
     }
     
+    function getUnitCount()
+    {
+        return _unitCount;
+    }
+    
+    function addUnits(count)
+    {
+        _unitCount += count;
+    }
+    
     tddjs.namespace("client.map").Country = {
         addBorder: addBorder,
         getBorderCount: getBorderCount,
-        borders: borders
+        borders: borders,
+        getUnitCount: getUnitCount,
+        addUntis: addUnits
     };    
 }());
