@@ -54,14 +54,21 @@ TestCase("CountryTest", {
 TestCase("CountryUnitsTest", {
         
     setUp: function () {
-      this.country1 = Object.create(tddjs.client.map.Country);  
+      this.country1 = Object.create(tddjs.client.map.Country); 
+      this.x = 10;
     },
     
-     "test country should return the count of units": function () { 
+    "test country should return the count of units": function () { 
       
         assertEquals(1, this.country1.getUnitCount());
+    },
+    
+    "test add x units to country return acctual unit count": function () { 
       
-   }
+        assertEquals(1, this.country1.getUnitCount());
+        this.country1.addUnit(x);
+        assertEquals(11, this.country1.getUnitCount());
+    }
 
   
 });
