@@ -17,6 +17,11 @@ Source-Code for Continent
        return _Country.length;
     }
     
+    function hasCountry(aCountry)
+    {
+       return false;
+    }
+    
     function getCountrys()
     {
         return _Country;
@@ -25,6 +30,7 @@ Source-Code for Continent
     tddjs.namespace("client.map").Continent = {
         addCountry: addCountry,
         getCountryCount: getCountryCount,
-        getCountrys: getCountrys
+        getCountrys: getCountrys,
+        hasCountry: hasCountry
     };    
 }());
