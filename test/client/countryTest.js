@@ -70,12 +70,10 @@ TestCase("CountryUnitsTest", {
         this.country1.addUnits(this.x);
         assertEquals(11, this.country1.getUnitCount());       
       
-    },
-    
+    },    
     "test if added Unit is number return excetion if not number": function () { 
       
-        this.country.addUnits(this.object);
-        assertException(this.country1.addUnits(this.object), "NotANumber");
+        assertException(this.country1.addUnits(this.x), "TypeError");
         assertEquals(1, this.country1.getUnitCount());  
     }
 
