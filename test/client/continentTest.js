@@ -31,11 +31,11 @@ TestCase("ContinentTest", {
      
   },
   "test if contrys are in Continent1": function() {
-      assertTrue(this.continent1.hasCountry(country1));
+      assertTrue(this.continent1.hasCountry(this.country1));
       
-      assertTrue(this.continent1.hasCountry(country2));
+      assertTrue(this.continent1.hasCountry(this.country2));
       
-      assertTrue(this.continent1.hasCountry(country3));
+      assertTrue(this.continent1.hasCountry(this.country3));
   }
 
   
