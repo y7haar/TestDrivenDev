@@ -38,7 +38,8 @@ Source-Code for Country
     
     function subUnits(count)
     {
-        _unitCount -= count;
+        if(isNaN(count))throw new TypeError("Parameter is not a number");
+        else _unitCount -= count;
     }
     
     tddjs.namespace("client.map").Country = {
