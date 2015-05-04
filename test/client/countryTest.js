@@ -5,7 +5,7 @@
  */
 
 TestCase("CountryTest", {
-    
+        
     setUp: function () {
       this.country1 = Object.create(tddjs.client.map.Country); 
       this.country2 = Object.create(tddjs.client.map.Country);
@@ -26,7 +26,7 @@ TestCase("CountryTest", {
      this.country1.addBorder(this.country3);
      assertEquals(2, this.country1.getBorderCount());
      
-  },  
+  },
     
     "test if country1 border country2 and country3 should return true": function () {
         
@@ -40,7 +40,28 @@ TestCase("CountryTest", {
       
      assertFalse(this.country1.borders(this.country2));
      assertFalse(this.country1.borders(this.country3));
-  }
+  },
+  
+   "test if country1 border country2 but not country3": function () {
+       
+     this.country1.addBorder(this.country2); 
+     assertTrue(this.country1.borders(this.country2));
+     assertFalse(this.country1.borders(this.country3));
+  }  
+});
+
+// Testcaes for Soldier --> Units of a Country
+TestCase("CountryUnitsTest", {
+        
+    setUp: function () {
+      this.country1 = Object.create(tddjs.client.map.Country);  
+    },
+    
+     "test country should return the count of units": function () { 
+      
+        assertEquals(1, this.country.getUnitCount());
+      
+   }
 
   
 });
