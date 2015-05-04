@@ -32,8 +32,13 @@ Source-Code for Country
     
     function addUnits(count)
     {
-        if(!isNaN(count))throw new TypeError("Parameter is not a number");
+        if(isNaN(count))throw new TypeError("Parameter is not a number");
         else _unitCount += count;
+    }
+    
+    function subUnits(count)
+    {
+        _unitCount -= count;
     }
     
     tddjs.namespace("client.map").Country = {
@@ -41,6 +46,7 @@ Source-Code for Country
         getBorderCount: getBorderCount,
         borders: borders,
         getUnitCount: getUnitCount,
-        addUnits: addUnits
+        addUnits: addUnits,
+        subUnits: subUnits
     };    
 }());
