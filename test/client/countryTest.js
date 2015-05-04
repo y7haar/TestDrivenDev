@@ -73,11 +73,23 @@ TestCase("CountryUnitsTest", {
     },    
     "test if added Unit is number return excetion if not number": function () { 
       
+        assertEquals(11, this.country1.getUnitCount());
+        
         assertException(function(){
             this.country1.addUnits(this.object);}
         , "TypeError");
-        assertEquals(1, this.country1.getUnitCount());  
-    }
+        
+        assertEquals(11, this.country1.getUnitCount());  
+    },    
+    "test substract x units to country return acctual unit count": function () { 
+      
+        assertEquals(11, this.country1.getUnitCount());
+        this.country1.subUnits(this.x);
+        assertEquals(1, this.country1.getUnitCount());       
+      
+    },   
+    
+    
 
   
 });
