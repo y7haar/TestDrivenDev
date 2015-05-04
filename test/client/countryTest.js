@@ -59,7 +59,7 @@ TestCase("CountryUnitsTest", {
     
      "test country should return the count of units": function () { 
       
-        assertEquals(1, this.country.getUnitCount());
+        assertEquals(1, this.country1.getUnitCount());
       
    }
 
