@@ -54,7 +54,7 @@ TestCase("CountryTest", {
 TestCase("CountryUnitsTest", {
         
     setUp: function () {
-      this.country1 = Object.create(tddjs.client.map.Country); 
+      this.country1 = new tddjs.client.map.Country(); 
       this.x = 10;
       this.object = {};
     },
