@@ -87,7 +87,8 @@ TestCase("CountryUnitsTest", {
     },    
     "test substract x units to country return acctual unit count": function () { 
       
-        assertEquals(1, this.country1.getUnitCount());
+        this.country1.addUnits(this.x);
+        assertEquals(11, this.country1.getUnitCount());
         this.country1.subUnits(this.x);
         assertEquals(1, this.country1.getUnitCount());       
       
@@ -108,7 +109,7 @@ TestCase("CountryUnitsTest", {
     "test Unit count should not fall under 1 after sub ": function () { 
       
        var count = this.country1.getUnitCount();
-       this.country1.subUnits(count);
+       this.country1.subUnits(count+1);
        assertEquals(1, this.country1.getUnitCount());
        
     },
