@@ -119,6 +119,16 @@ TestCase("CountryUnitsTest", {
        this.country1.setUnitCount(this.temp);
        assertEquals(42, this.country1.getUnitCount());
        
+    },
+    
+    "test setUnitCount should't be able to set UnitCount under 1": function () { 
+      
+         var country = this.country1;
+         
+        assertException(function(){
+            country.setUnitCount(-200);}
+        , "Error");
+       
     }
     
     
