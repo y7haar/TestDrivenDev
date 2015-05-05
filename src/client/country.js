@@ -53,14 +53,20 @@ tddjs.namespace("client.map");
         else
             this._unitCount -= count;
     }
+    
+    function setUnitCount(count)
+    {
+       this._unitCount === count;
+    }
 
     Country.prototype.addBorder = addBorder;
     Country.prototype.getBorderCount = getBorderCount;
     Country.prototype.borders = borders;
     
     Country.prototype.getUnitCount = getUnitCount;
+    Country.prototype.setUnitCount = setUnitCount; 
     Country.prototype.addUnits = addUnits;
-    Country.prototype.subUnits = subUnits;    
+    Country.prototype.subUnits = subUnits;
     
 }());
 
