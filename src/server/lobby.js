@@ -30,9 +30,19 @@
                     _players.pop();
             }
         }
+        
+        function kickPlayer(aPlayer)
+        {
+            
+            var index = _players.indexOf(aPlayer);
+            
+            if(index >= 0)
+                _players.splice(index, 1);
+        }
     
         tddjs.namespace("server.model").Lobby = {
             addPlayer: addPlayer,
+            kickPlayer: kickPlayer,
             getPlayers: getPlayers,
             setMaxPlayers: setMaxPlayers
         };
