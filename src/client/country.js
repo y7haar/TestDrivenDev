@@ -49,14 +49,14 @@ tddjs.namespace("client.map");
             throw new TypeError("Parameter is not a number");
 
         if (this._unitCount - count < 1)
-            this._unitCount == 1;
+            this._unitCount = 1;
         else
             this._unitCount -= count;
     }
     
     function setUnitCount(count)
-    {
-       this._unitCount === count;
+    {     
+       this._unitCount = count ;   
     }
 
     Country.prototype.addBorder = addBorder;
