@@ -7,9 +7,9 @@
 TestCase("CountryTest", {
         
     setUp: function () {
-      this.country1 = Object.create(tddjs.client.map.Country); 
-      this.country2 = Object.create(tddjs.client.map.Country);
-      this.country3 = Object.create(tddjs.client.map.Country); 
+      this.country1 = new tddjs.client.map.Country(); 
+      this.country2 = new tddjs.client.map.Country(); 
+      this.country3 = new tddjs.client.map.Country(); 
     },
 
   "test object of country should not be undefined": function () { 
