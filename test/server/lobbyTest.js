@@ -37,7 +37,7 @@ TestCase("LobbyTest", {
   },
   
     "test should throw Exception when Id is no Number": function () { 
-        assertException(new tddjs.server.model.Lobby(), "TypeError");
+        assertException(new tddjs.server.model.Lobby("a"), "TypeError");
   },
   
     "test Lobby should store player1 and player2 and player 3": function () { 
