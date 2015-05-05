@@ -13,6 +13,7 @@ TestCase("GameLoopTests", {
 
   "test object gameloop shoulde not be undefined": function () {
       
+      assertObject(this.gameLoop);      
   }
   
 });
