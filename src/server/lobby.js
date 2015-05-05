@@ -59,12 +59,27 @@ tddjs.namespace("server.model");
     {
         return _id;
     }
+    
+    function setName(aName)
+    {
+        if(typeof(aName) !== "string")
+            throw new TypeError("Parameter is not a string");
+        
+        _name = aName;
+    }
+    
+    function getName()
+    {
+        return _name;
+    }
 
     Lobby.prototype.addPlayer = addPlayer;
     Lobby.prototype.getPlayers = getPlayers;
     Lobby.prototype.setMaxPlayers = setMaxPlayers;
     Lobby.prototype.kickPlayer = kickPlayer;
     Lobby.prototype.getId = getId;
+    Lobby.prototype.setName = setName;
+    Lobby.prototype.getName = getName;
 
 }());
 
