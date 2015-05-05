@@ -57,6 +57,7 @@ TestCase("CountryUnitsTest", {
       this.country1 = new tddjs.client.map.Country(); 
       this.x = 10;
       this.object = {};
+      this.temp = 42;
     },
     
     "test country return unitcount always should be 1 at creation": function () { 
@@ -114,8 +115,7 @@ TestCase("CountryUnitsTest", {
     
     "test Country1 should store and return specific Unit count": function () { 
       
-       var temp = 42;
-       this.country1.setUnitCount(temp);
+       this.country1.setUnitCount(this.temp);
        assertEquals(42, this.country1.getUnitCount());
        
     }
