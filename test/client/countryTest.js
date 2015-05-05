@@ -110,7 +110,17 @@ TestCase("CountryUnitsTest", {
        this.country1.subUnits(count);
        assertEquals(1, this.country1.getUnitCount());
        
-    }    
+    },
+    
+    "test Country1 should store and return specific Unit count": function () { 
+      
+       var temp = 42;
+       this.country1.setUnitCount(temp);
+       assertEquals(42, this.country1.getUnitCount());
+       
+    }
+    
+    
 });
 
 
