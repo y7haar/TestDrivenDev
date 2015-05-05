@@ -55,7 +55,9 @@ tddjs.namespace("client.map");
     }
     
     function setUnitCount(count)
-    {     
+    {
+        if(count < 1 )
+            throw new Error("Count forbbided to be under 1");
        this._unitCount = count ;   
     }
 
