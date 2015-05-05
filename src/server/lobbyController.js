@@ -11,6 +11,14 @@
         _lobbies.push(aLobby);
     }
     
+    function removeLobby(aLobby)
+    {
+        var index = _lobbies.indexOf(aLobby);
+        
+        if(index >= 0)
+            _lobbies.splice(index, 1);
+    }
+    
     function getLobbyCount()
     {
         return _lobbies.length;
@@ -23,6 +31,7 @@
     
     tddjs.namespace("server.controller").LobbyController = {
         addLobby: addLobby,
+        removeLobby: removeLobby,
         getLobbyCount: getLobbyCount,
         getLobbies: getLobbies
         
