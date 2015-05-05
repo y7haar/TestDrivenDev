@@ -9,6 +9,7 @@ tddjs.namespace("client.map");
     function Country(){
         this._border = [];
         this._unitCount = 1;
+        this._owner;
     }
     tddjs.client.map.Country = Country;
     
@@ -60,6 +61,16 @@ tddjs.namespace("client.map");
             throw new Error("Count forbbided to be under 1");
        this._unitCount = count ;   
     }
+    
+    function setOwner(aOwner)
+    {
+        this._owner = aOwner;
+    }
+    
+    function getOwner()
+    {
+        return this._owner;
+    }
 
     Country.prototype.addBorder = addBorder;
     Country.prototype.getBorderCount = getBorderCount;
@@ -69,6 +80,9 @@ tddjs.namespace("client.map");
     Country.prototype.setUnitCount = setUnitCount; 
     Country.prototype.addUnits = addUnits;
     Country.prototype.subUnits = subUnits;
+    
+    Country.prototype.setOwner = setOwner;
+    Country.prototype.getOwner = getOwner;
     
 }());
 
