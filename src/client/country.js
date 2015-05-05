@@ -2,6 +2,16 @@
 Source-Code for Country
  */
 
+tddjs.namespace("client.map");
+
+(function()
+{
+    function Country(){
+        this._border = [];
+        this._unitCount = 1;
+    }
+    tddjs.client.map.Country = Country;
+}());
 
 (function()
 {
@@ -42,7 +52,7 @@ Source-Code for Country
         
         if( _unitCount - count < 1 ) _unitCount == 1;
         else _unitCount -= count;
-    }
+    } 
     
     tddjs.namespace("client.map").Country = {
         addBorder: addBorder,
