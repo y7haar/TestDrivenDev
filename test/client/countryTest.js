@@ -127,11 +127,27 @@ TestCase("CountryUnitsTest", {
          
         assertException(function(){
             country.setUnitCount(-200);}
-        , "Error");
-       
+        , "Error");       
+    }      
+});
+
+// Tastacaes for Player --> Owner of a country
+TestCase("CountryOwnerTest", {
+        
+    setUp: function () {
+      this.country1 = new tddjs.client.map.Country(); 
+      this.player = { name:'Peter'};
+      this.player2 = { name:'Herbert'};
+      this.player3 = { name:'Udo'};
+    },
+    
+    "test country shoulde store Player Object": function () { 
+      
+        this.country1.setOwner(this.player);
+        assertEquals(this.player,this.country1.getOwner());
     }
     
-    
+   
 });
 
 
