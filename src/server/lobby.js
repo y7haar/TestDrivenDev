@@ -8,12 +8,16 @@ tddjs.namespace("server.model");
 {
     var _players = [];
     var _maxPlayers;
-
+    var _id;
+    var _name;
 
     // Constructor
     function Lobby(aId)
     {
-
+        if(isNaN(aId))
+            throw new TypeError("Parameter is not a number");
+        
+        _id = aId;
     }
 
     tddjs.server.model.Lobby = Lobby;
@@ -50,11 +54,17 @@ tddjs.namespace("server.model");
         if (index >= 0)
             _players.splice(index, 1);
     }
+    
+    function getId()
+    {
+        return _id;
+    }
 
     Lobby.prototype.addPlayer = addPlayer;
     Lobby.prototype.getPlayers = getPlayers;
     Lobby.prototype.setMaxPlayers = setMaxPlayers;
     Lobby.prototype.kickPlayer = kickPlayer;
+    Lobby.prototype.getId = getId;
 
 }());
 
