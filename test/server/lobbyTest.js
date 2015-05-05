@@ -65,16 +65,22 @@ TestCase("LobbyTest", {
         
   },
   
-        "test Lobby should store player1 and kick player1": function () { 
-        this.lobby.setMaxPlayers(2);
+        "test Lobby should store player1 and kick player2 and player3": function () { 
+        this.lobby.setMaxPlayers(4);
           
         assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         
         this.lobby.addPlayer(this.player1);
         assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         
+        this.lobby.addPlayer(this.player2);
+        assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
+        
         this.lobby.kickPlayer(this.player1);
         assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
+        
+        this.lobby.kickPlayer(this.player2);
+        assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
   }
   
 });
