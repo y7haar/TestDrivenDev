@@ -33,8 +33,10 @@ TestCase("LobbyControllerTest", {
         this.lobbyController.addLobby(this.lobby1);
         this.lobbyController.addLobby(this.lobby2);
         
-        assertSame(this.lobby1, this.lobbyController.getLobbyById(1));
-        assertSame(this.lobby2, this.lobbyController.getLobbyById(2));
+        console.log("pub " + this.lobbyController.getLobbies());
+        
+        assertSame(this.lobby1, this.lobbyController.getLobbyById(0));
+        assertSame(this.lobby2, this.lobbyController.getLobbyById(1));
   },
   
    "test lobbyController should throw Exception if lobbyController does not store an element with the given id ": function () {     
