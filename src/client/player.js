@@ -20,7 +20,8 @@
     
     function hasCountry(searchedCountry)
     {
-        if(typeof(searchedCountry) !== "Country")
+
+        if(typeof searchedCountry != "Country")
             throw new Error("Hey");
     }
  
