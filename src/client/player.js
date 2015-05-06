@@ -3,7 +3,7 @@
  */
 (function(){
  
-    tddjs.namespace("client.player").Player = {
+    tddjs.namespace("client").Player = {
         
     };
 }());
