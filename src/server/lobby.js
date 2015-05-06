@@ -2,8 +2,6 @@
  *  Source-Code for Lobby
  */
 
-tddjs.namespace("server.model");
-
 (function()
 {
     var _players = [];
@@ -11,16 +9,14 @@ tddjs.namespace("server.model");
     var _id;
     var _name;
 
-    // Constructor
-    function Lobby(aId)
+    
+    function setId(aId)
     {
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
         _id = aId;
     }
-
-    tddjs.server.model.Lobby = Lobby;
 
     function addPlayer(aPlayer)
     {
@@ -73,13 +69,17 @@ tddjs.namespace("server.model");
         return _name;
     }
 
-    Lobby.prototype.addPlayer = addPlayer;
-    Lobby.prototype.getPlayers = getPlayers;
-    Lobby.prototype.setMaxPlayers = setMaxPlayers;
-    Lobby.prototype.kickPlayer = kickPlayer;
-    Lobby.prototype.getId = getId;
-    Lobby.prototype.setName = setName;
-    Lobby.prototype.getName = getName;
+    
+    tddjs.namespace("server.model").Lobby = {
+        addPlayer: addPlayer,
+        getPlayers: getPlayers,
+        setMaxPlayers: setMaxPlayers,
+        kickPlayer: kickPlayer,
+        getId: getId,
+        setId: setId,
+        setName: setName,
+        getName: getName    
+    };
 
 }());
 

@@ -5,7 +5,7 @@
 TestCase("LobbyTest", {
     
     setUp: function () {
-        this.lobby = new tddjs.server.model.Lobby(1);
+        this.lobby = Object.create(tddjs.server.model.Lobby);
         this.player1 = {};
         this.player2 = {};
         this.player3 = {};
@@ -20,10 +20,10 @@ TestCase("LobbyTest", {
   },
   
     "test Lobby should store Id": function () { 
-       this.lobby = new tddjs.server.model.Lobby(2);
+       this.lobby.setId(2);
        assertEquals(2, this.lobby.getId());
        
-       this.lobby = new tddjs.server.model.Lobby(1);
+       this.lobby.setId(1);
        assertEquals(1, this.lobby.getId());
   },
   
@@ -33,11 +33,11 @@ TestCase("LobbyTest", {
   },
   
       "test should throw Exception when name is no string": function () { 
-        assertException(function() {this.lobby.setName(3)}, "TypeError");
+        assertException(function() {this.lobby.setName(3);}, "TypeError");
   },
   
     "test should throw Exception when Id is no Number": function () { 
-        assertException(function() {new tddjs.server.model.Lobby("a")}, "TypeError");
+        assertException(function() {this.lobby.setId("a");}, "TypeError");
   },
   
     "test Lobby should store player1 and player2 and player 3": function () { 
