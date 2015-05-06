@@ -20,6 +20,10 @@ TestCase("PlayerTest", {
         assertException(function(){this.player1.setName(Undefined);},"TypeError");
         assertException(function(){this.player1.setName(125);},"TypeError");
         assertException(function(){this.player1.setName(this.player1);},"TypeError");
+    },
+    
+    "test Shouldnt be Able to ask for Countries which arent Countries": function() {
+        assertException(function(){this.player1.hasCountry("Fischi");}, "TypeError");
     }
 });
 
