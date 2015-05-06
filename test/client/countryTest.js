@@ -137,8 +137,8 @@ TestCase("CountryOwnerTest", {
     setUp: function () {
       this.country1 = Object.create(tddjs.client.map.Country); 
       this.player1 = Object.create(tddjs.client.Player);
-      this.player1 = Object.create(tddjs.client.Player);
-      this.player1 = Object.create(tddjs.client.Player);
+      this.player2 = Object.create(tddjs.client.Player);
+
       
     },
     
