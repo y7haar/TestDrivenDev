@@ -5,9 +5,10 @@
 (function()
 {
     var _players = [];
-    var _maxPlayers;
+    var _maxPlayers = 4;
     var _id;
-    var _name;
+    var _name = "GameLobby";
+    var _leader;
 
     
     function setId(aId)
@@ -44,11 +45,20 @@
 
     function kickPlayer(aPlayer)
     {
-
         var index = _players.indexOf(aPlayer);
 
         if (index >= 0)
             _players.splice(index, 1);
+        
+        if(_leader === aPlayer && _players.length > 0)
+        {
+            _leader = _players[0];
+        }
+        
+        if(_leader === aPlayer && _players.length === 0)
+        {
+            _leader = null;
+        }
     }
     
     function getId()
@@ -68,7 +78,27 @@
     {
         return _name;
     }
+    
+    function _hasPlayer(aPlayer)
+    {
+        if(_players.indexOf(aPlayer) < 0)
+            return false;
+        
+        return true;
+    }
 
+    function setLeader(aLeader)
+    {
+        if(! _hasPlayer(aLeader))
+            throw new Error("Leader is not stored in Lobby");
+        
+        _leader = aLeader;
+    }
+    
+    function getLeader()
+    {
+        return _leader;
+    }
     
     tddjs.namespace("server.model").Lobby = {
         addPlayer: addPlayer,
@@ -78,7 +108,9 @@
         getId: getId,
         setId: setId,
         setName: setName,
-        getName: getName    
+        getName: getName,
+        setLeader: setLeader,
+        getLeader: getLeader
     };
 
 }());
