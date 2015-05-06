@@ -35,8 +35,6 @@ TestCase("LobbyControllerTest", {
         this.lobbyController.addLobby(this.lobby1);
         this.lobbyController.addLobby(this.lobby2);
         
-        console.log("pub " + this.lobbyController.getLobbies());
-        
         assertSame(this.lobby1, this.lobbyController.getLobbyById(0));
         assertSame(this.lobby2, this.lobbyController.getLobbyById(1));
   },
@@ -62,6 +60,14 @@ TestCase("LobbyControllerTest", {
        
         this.lobbyController.addLobby(this.lobby5);
         assertSame(this.lobby5, this.lobbyController.getLobbies()[5]);
+  },
+  
+   "test lobbyController should throw an Exception when adding a Lobby at an existent index": function () { 
+        var lobbyController = this.lobbyController;
+        var lobby1 = this.lobby1;
+        
+        lobbyController.addLobby(lobby1);
+        assertException(function() { lobbyController.addLobby(lobby1); }, "Error");
   },
   
         "test lobbyController should hold a reference to lobby1 and remove lobby2": function () { 
