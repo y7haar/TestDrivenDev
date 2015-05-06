@@ -2,7 +2,6 @@
 Source-Code for Country
  */
 
-tddjs.namespace("client.map");
 
 (function()
 {
