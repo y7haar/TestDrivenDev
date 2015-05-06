@@ -9,8 +9,8 @@ TestCase("LobbyControllerTest", {
       this.lobby1 = Object.create(tddjs.server.model.Lobby);
       this.lobby2 = Object.create(tddjs.server.model.Lobby);
       
-      this.lobby1.setId(1);
-      this.lobby2.setId(2);
+      this.lobby1.setId(0);
+      this.lobby2.setId(1);
     },
     
     tearDown: function(){
