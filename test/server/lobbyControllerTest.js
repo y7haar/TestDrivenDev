@@ -13,6 +13,10 @@ TestCase("LobbyControllerTest", {
       this.lobby1.setId(0);
       this.lobby2.setId(1);
       this.lobby5.setId(5);
+      
+      console.log(this.lobby1.getId());
+      console.log(this.lobby2.getId());
+      console.log(this.lobby5.getId());
     },
     
     tearDown: function(){
