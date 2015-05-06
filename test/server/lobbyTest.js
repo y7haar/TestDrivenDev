@@ -2,7 +2,7 @@
  *  Testcases for Lobby
  */
 
-TestCase("LobbyTest", {
+TestCase("LobbyPlayerTest", {
     
     setUp: function () {
         this.lobby = Object.create(tddjs.server.model.Lobby);
@@ -107,5 +107,38 @@ TestCase("LobbyTest", {
 });
 
 
+TestCase("LobbyLeaderTest", {
+    
+    setUp: function () {
+        this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.player1 = {};
+        this.player2 = {};
+        this.player3 = {};
+        this.lobby.setMaxPlayers(4);
+    },
+    
+    tearDown: function () {
+        this.lobby.getPlayers().length = 0;
+    },
 
-
+   "test Lobby should store a lobby leader": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.setLeader(this.player1);
+        
+        assertSame(this.player1, this.lobby.getLeader());
+  },
+  
+     "test Lobby should throw an Exception if leader is not stored as player": function () { 
+        var player = this.player1;    
+        assertException(function() { this.lobby.setLeader(player); }, "Error");
+  },
+  
+    "test Lobby should set player2 as new leader, after player1 is kicked": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.addPlayer(this.player3);
+        
+        assertException(function() { this.lobby.setLeader(player); }, "Error");
+  }
+  
+});
