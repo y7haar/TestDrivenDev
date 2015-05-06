@@ -37,8 +37,9 @@ TestCase("LobbyControllerTest", {
         assertSame(this.lobby2, this.lobbyController.getLobbyById(2));
   },
   
-   "test lobbyController should return null if lobbyController does not store an element with the given id ": function () {     
-        assertNull(this.lobbyController.getLobbyById(5));
+   "test lobbyController should throw Exception if lobbyController does not store an element with the given id ": function () {     
+       var lobbyController = this.lobbyController; 
+       assertException(function(){lobbyController.getLobbyById(5);}, "Error");
   },
   
   "test lobbyController should throw Exception if parameter is no number ": function () { 
