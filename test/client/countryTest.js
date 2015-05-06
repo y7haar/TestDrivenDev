@@ -7,9 +7,9 @@
 TestCase("CountryTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
-      this.country2 = new tddjs.client.map.Country(); 
-      this.country3 = new tddjs.client.map.Country(); 
+      this.country1 = Object.create(tddjs.client.map.Country); 
+      this.country2 = Object.create(tddjs.client.map.Country); 
+      this.country3 = Object.create(tddjs.client.map.Country); 
     },
 
   "test object of country should not be undefined": function () { 
@@ -54,12 +54,12 @@ TestCase("CountryTest", {
 TestCase("CountryUnitsTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
+      this.country1 = Object.create(tddjs.client.map.Country); 
       this.x = 10;
       this.object = {};
       this.temp = 42;
-    },
-    
+    },    
+ 
     "test country return unitcount always should be 1 at creation": function () { 
       
         assertEquals(1, this.country1.getUnitCount());
@@ -74,7 +74,7 @@ TestCase("CountryUnitsTest", {
     },    
     "test if added Unit is number return excetion if not number": function () { 
       
-        assertEquals(1, this.country1.getUnitCount());
+        assertEquals(11, this.country1.getUnitCount());
         
         var country = this.country1;
         var obj = this.object;
@@ -83,20 +83,20 @@ TestCase("CountryUnitsTest", {
             country.addUnits(obj);}
         , "TypeError");
         
-        assertEquals(1, this.country1.getUnitCount());  
+        assertEquals(11, this.country1.getUnitCount());  
     },    
     "test substract x units to country return acctual unit count": function () { 
       
         this.country1.addUnits(this.x);
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(21, this.country1.getUnitCount());
         this.country1.subUnits(this.x);
-        assertEquals(1, this.country1.getUnitCount());       
+        assertEquals(11, this.country1.getUnitCount());       
       
     },
     
     "test if sub Unitcount is number return excetion if not number": function () { 
       
-        assertEquals(1, this.country1.getUnitCount());
+        assertEquals(11, this.country1.getUnitCount());
         var country = this.country1;
         var obj = this.object;
         
@@ -104,7 +104,7 @@ TestCase("CountryUnitsTest", {
             country.subUnits(obj);}
         , "TypeError");
         
-        assertEquals(1, this.country1.getUnitCount());  
+        assertEquals(11, this.country1.getUnitCount());  
     },    
     "test Unit count should not fall under 1 after sub ": function () { 
       
@@ -135,36 +135,41 @@ TestCase("CountryUnitsTest", {
 TestCase("CountryOwnerTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
-      this.player = { name:'Peter'};
-      this.player2 = { name:'Herbert'};
-      this.player3 = { name:'Udo'};
+      this.country1 = Object.create(tddjs.client.map.Country); 
+      this.player1 = Object.create(tddjs.client.Player);
+      this.player2 = Object.create(tddjs.client.Player);
+
+      
     },
     
     "test country should store Player Object": function () { 
       
         this.country1.setOwner(this.player);
-        assertEquals(this.player,this.country1.getOwner());
+        assertEquals(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should override old Owner": function () { 
       
         this.country1.setOwner(this.player);
-        assertEquals(this.player,this.country1.getOwner());
+        assertEquals(this.player1,this.country1.getOwner());
         assertNotEquals(this.player2,this.country1.getOwner());
         
         this.country1.setOwner(this.player2);
         assertEquals(this.player2,this.country1.getOwner());
+        assertNotEquals(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should throw exception if object is not a Player": function () { 
       
-        var country = this.country;
-        var player = this.player;
+        var country = this.country1; 
+        var player2 = "Peter";   
+        
+        this.country1.setOwner(this.player1);
+        assertEquals(this.player1,this.country1.getOwner());
         
         assertException(function(){
-            country.setOwner(player);
-        },"Error");
+            country.setOwner(player2);
+        },"TypeError");
     }
     
     
