@@ -136,9 +136,10 @@ TestCase("CountryOwnerTest", {
         
     setUp: function () {
       this.country1 = Object.create(tddjs.client.map.Country); 
-      this.player = { name:'Peter'};
-      this.player2 = { name:'Herbert'};
-      this.player3 = { name:'Udo'};
+      this.player1 = Object.create(tddjs.client.Player);
+      this.player1 = Object.create(tddjs.client.Player);
+      this.player1 = Object.create(tddjs.client.Player);
+      
     },
     
     "test country should store Player Object": function () { 
@@ -155,6 +156,7 @@ TestCase("CountryOwnerTest", {
         
         this.country1.setOwner(this.player2);
         assertEquals(this.player2,this.country1.getOwner());
+        assertNotEquals(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should throw exception if object is not a Player": function () { 
