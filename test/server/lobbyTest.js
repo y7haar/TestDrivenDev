@@ -140,10 +140,12 @@ TestCase("LobbyLeaderTest", {
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
         
-        var player = this.player1;
-        var lobby = this.lobby1;
+        this.lobby.setLeader(this.player1);
+        assertSame(this.player1, this.lobby.getLeader());
         
-        assertException(function() { lobby.setLeader(player); }, "Error");
+        this.lobby.kickPlayer(this.player1);
+        assertNotSame(this.player1, this.lobby.getLeader());
+        assertSame(this.player2, this.lobby.getLeader());
   }
   
 });
