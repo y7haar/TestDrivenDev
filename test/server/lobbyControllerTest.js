@@ -8,9 +8,11 @@ TestCase("LobbyControllerTest", {
       this.lobbyController = Object.create(tddjs.server.controller.LobbyController);
       this.lobby1 = Object.create(tddjs.server.model.Lobby);
       this.lobby2 = Object.create(tddjs.server.model.Lobby);
+      this.lobby5 = Object.create(tddjs.server.model.Lobby);
       
       this.lobby1.setId(0);
       this.lobby2.setId(1);
+      this.lobby5.setId(5);
     },
     
     tearDown: function(){
@@ -49,17 +51,17 @@ TestCase("LobbyControllerTest", {
         assertException(function() {lobbyController.getLobbyById("asd");}, "TypeError");
   },
   
-      "test lobbyController should hold a reference to lobby1 and lobby2": function () { 
+      "test lobbyController should hold a reference to lobby1 and lobby2 and store elements at given index (id)": function () { 
         assertNotSame(this.lobby1, this.lobbyController.getLobbies()[0]);
-        assertNotSame(this.lobby1, this.lobbyController.getLobbies()[1]);
-        assertNotSame(this.lobby2, this.lobbyController.getLobbies()[0]);
-        assertNotSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+        assertNotSame(this.lobby1, this.lobbyController.getLobbies()[5]);
+        assertNotSame(this.lobby5, this.lobbyController.getLobbies()[0]);
+        assertNotSame(this.lobby5, this.lobbyController.getLobbies()[5]);
       
         this.lobbyController.addLobby(this.lobby1);
         assertSame(this.lobby1, this.lobbyController.getLobbies()[0]);
        
-        this.lobbyController.addLobby(this.lobby2);
-        assertSame(this.lobby2, this.lobbyController.getLobbies()[1]);
+        this.lobbyController.addLobby(this.lobby5);
+        assertSame(this.lobby5, this.lobbyController.getLobbies()[5]);
   },
   
         "test lobbyController should hold a reference to lobby1 and remove lobby2": function () { 
