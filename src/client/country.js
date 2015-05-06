@@ -6,12 +6,10 @@ tddjs.namespace("client.map");
 
 (function()
 {
-    function Country(){
-        this._border = [];
-        this._unitCount = 1;
-        this._owner;
-    }
-    tddjs.client.map.Country = Country;
+   
+    this._border = [];
+    this._unitCount = 1;
+    this._owner; 
     
     function addBorder(aCountry)
     {
@@ -73,18 +71,20 @@ tddjs.namespace("client.map");
     {
         return this._owner;
     }
-
-    Country.prototype.addBorder = addBorder;
-    Country.prototype.getBorderCount = getBorderCount;
-    Country.prototype.borders = borders;
     
-    Country.prototype.getUnitCount = getUnitCount;
-    Country.prototype.setUnitCount = setUnitCount; 
-    Country.prototype.addUnits = addUnits;
-    Country.prototype.subUnits = subUnits;
+    tddjs.namespace("client.map").Country = {    
+    addBorder : addBorder,
+    getBorderCount : getBorderCount,
+    borders : borders,
     
-    Country.prototype.setOwner = setOwner;
-    Country.prototype.getOwner = getOwner;
+    getUnitCount : getUnitCount,
+    setUnitCount : setUnitCount, 
+    addUnits : addUnits,
+    subUnits : subUnits,
+    
+    setOwner : setOwner,
+    getOwner : getOwner
+    };
     
 }());
 
