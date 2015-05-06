@@ -64,7 +64,7 @@ tddjs.namespace("client.map");
     
     function setOwner(aOwner)
     {
-        if(typeof aOwner != typeof {name:'Peter'})
+        if(typeof aOwner != "object")
             throw new TypeError("setOwner expects a Player object as Parameter");
         this._owner = aOwner;
     }
