@@ -17,10 +17,17 @@
         
         name = newName;
     }
+    
+    function hasCountry(searchedCountry)
+    {
+        if(typeof(searchedCountry) !== "Country")
+            throw new TypeError("Not a Country");
+    }
  
     tddjs.namespace("client").Player = {
         getName: getName,
-        setName: setName
+        setName: setName,
+        hasCountry: hasCountry
     };
 }());
 
