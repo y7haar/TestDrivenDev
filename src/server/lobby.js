@@ -6,7 +6,7 @@
 {
     var _players = [];
     var _maxPlayers = 4;
-    var _id;
+    this._id = 0;
     var _name = "GameLobby";
     var _leader;
 
@@ -16,7 +16,7 @@
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
-        _id = aId;
+        this._id = aId;
     }
 
     function addPlayer(aPlayer)
@@ -63,7 +63,7 @@
     
     function getId()
     {
-        return _id;
+        return this._id;
     }
     
     function setName(aName)
