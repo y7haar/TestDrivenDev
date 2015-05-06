@@ -58,7 +58,11 @@ TestCase("CountryUnitsTest", {
       this.x = 10;
       this.object = {};
       this.temp = 42;
-    },    
+    },
+    tearDown: function()
+    {
+      delete this.country1;  
+    },
  
     "test country return unitcount always should be 1 at creation": function () { 
       
