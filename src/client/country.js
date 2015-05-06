@@ -4,8 +4,7 @@ Source-Code for Country
 
 
 (function()
-{
-   
+{   
     var _border = [];
     var _unitCount = 1;
     var _owner; 
