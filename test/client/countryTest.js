@@ -137,32 +137,32 @@ TestCase("CountryOwnerTest", {
     setUp: function () {
       this.country1 = Object.create(tddjs.client.map.Country); 
       this.player1 = Object.create(tddjs.client.Player);
-      this.player2 = Object.create(tddjs.client.Player);
-
-      
+      this.player2 = Object.create(tddjs.client.Player);      
     },
     
     "test country should store Player Object": function () { 
       
-        this.country1.setOwner(this.player);
-        assertEquals(this.player1,this.country1.getOwner());
+        this.country1.setOwner(this.player1);
+        assertSame(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should override old Owner": function () { 
       
-        this.country1.setOwner(this.player);
-        assertEquals(this.player1,this.country1.getOwner());
-        assertNotEquals(this.player2,this.country1.getOwner());
+        this.country1.setOwner(this.player1);
+        assertSame(this.player1,this.country1.getOwner());
+        assertNotSame(this.player2,this.country1.getOwner());
         
         this.country1.setOwner(this.player2);
-        assertEquals(this.player2,this.country1.getOwner());
-        assertNotEquals(this.player1,this.country1.getOwner());
+        assertSame(this.player2,this.country1.getOwner());
+        assertNotSame(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should throw exception if object is not a Player": function () { 
       
         var country = this.country1; 
-        var player2 = "Peter";   
+        var player2 = "Peter";
+        
+        console.log(this.player1);
         
         this.country1.setOwner(this.player1);
         assertEquals(this.player1,this.country1.getOwner());
