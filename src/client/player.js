@@ -12,6 +12,9 @@
     
     function setName(newName)
     {
+        if(typeof(newName) !== "string")
+            throw new TypeError("Not a String");
+        
         name = newName;
     }
  
