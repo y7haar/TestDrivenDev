@@ -145,13 +145,13 @@ TestCase("CountryOwnerTest", {
     "test country should store Player Object": function () { 
       
         this.country1.setOwner(this.player);
-        assertEquals(this.player,this.country1.getOwner());
+        assertEquals(this.player1,this.country1.getOwner());
     },
     
     "test setOwner should override old Owner": function () { 
       
         this.country1.setOwner(this.player);
-        assertEquals(this.player,this.country1.getOwner());
+        assertEquals(this.player1,this.country1.getOwner());
         assertNotEquals(this.player2,this.country1.getOwner());
         
         this.country1.setOwner(this.player2);
@@ -164,8 +164,8 @@ TestCase("CountryOwnerTest", {
         var country = this.country1; 
         var player2 = "Peter";   
         
-        this.country1.setOwner(this.player);
-        assertEquals(this.player,this.country1.getOwner());
+        this.country1.setOwner(this.player1);
+        assertEquals(this.player1,this.country1.getOwner());
         
         assertException(function(){
             country.setOwner(player2);
