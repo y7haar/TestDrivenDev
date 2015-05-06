@@ -16,7 +16,9 @@ TestCase("LobbyControllerTest", {
     },
     
     tearDown: function(){
-        this.lobbyController.getLobbies().length = 0;
+        this.lobbyController.removeLobby(this.lobby1);
+        this.lobbyController.removeLobby(this.lobby2);
+        this.lobbyController.removeLobby(this.lobby5);
     },
 
   "test object of LobbyController should not be undefined": function () { 
