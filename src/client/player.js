@@ -21,7 +21,7 @@
     function hasCountry(searchedCountry)
     {
         if(typeof(searchedCountry) !== "Country")
-            throw new TypeError("Not a Country");
+            throw new Error("Hey");
     }
  
     tddjs.namespace("client").Player = {
