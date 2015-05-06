@@ -58,8 +58,8 @@ TestCase("CountryUnitsTest", {
       this.x = 10;
       this.object = {};
       this.temp = 42;
-    },
-    
+    },    
+ 
     "test country return unitcount always should be 1 at creation": function () { 
       
         assertEquals(1, this.country1.getUnitCount());
@@ -74,7 +74,7 @@ TestCase("CountryUnitsTest", {
     },    
     "test if added Unit is number return excetion if not number": function () { 
       
-        assertEquals(1, this.country1.getUnitCount());
+        assertEquals(11, this.country1.getUnitCount());
         
         var country = this.country1;
         var obj = this.object;
@@ -83,20 +83,20 @@ TestCase("CountryUnitsTest", {
             country.addUnits(obj);}
         , "TypeError");
         
-        assertEquals(1, this.country1.getUnitCount());  
+        assertEquals(11, this.country1.getUnitCount());  
     },    
     "test substract x units to country return acctual unit count": function () { 
       
         this.country1.addUnits(this.x);
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(21, this.country1.getUnitCount());
         this.country1.subUnits(this.x);
-        assertEquals(1, this.country1.getUnitCount());       
+        assertEquals(11, this.country1.getUnitCount());       
       
     },
     
     "test if sub Unitcount is number return excetion if not number": function () { 
       
-        assertEquals(1, this.country1.getUnitCount());
+        assertEquals(11, this.country1.getUnitCount());
         var country = this.country1;
         var obj = this.object;
         
@@ -104,7 +104,7 @@ TestCase("CountryUnitsTest", {
             country.subUnits(obj);}
         , "TypeError");
         
-        assertEquals(1, this.country1.getUnitCount());  
+        assertEquals(11, this.country1.getUnitCount());  
     },    
     "test Unit count should not fall under 1 after sub ": function () { 
       
