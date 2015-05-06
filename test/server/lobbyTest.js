@@ -6,6 +6,7 @@ TestCase("LobbyPlayerTest", {
     
     setUp: function () {
         this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.lobby2 = Object.create(tddjs.server.model.Lobby);
         this.player1 = {};
         this.player2 = {};
         this.player3 = {};
@@ -25,11 +26,19 @@ TestCase("LobbyPlayerTest", {
        
        this.lobby.setId(1);
        assertEquals(1, this.lobby.getId());
+       
+       this.lobby2.setId(10);
+       assertEquals(1, this.lobby.getId());
+       assertEquals(10, this.lobby2.getId());
   },
   
     "test Lobby should store name": function () { 
         this.lobby.setName("TestLobby");
         assertEquals("TestLobby", this.lobby.getName());
+        
+        this.lobby2.setName("TestLobby2");
+        assertEquals("TestLobby", this.lobby.getName());
+        assertEquals("TestLobby2", this.lobby2.getName());
   },
   
       "test should throw Exception when name is no string": function () { 
