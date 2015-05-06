@@ -8,6 +8,10 @@ TestCase("PlayerTest", {
     
     "test Player Object should be created": function () {
         assertObject(this.player1);
+    },
+    
+    "test Playername should be defined": function() {
+        assertNotUndefined(this.player.getName());
     }
 });
 
