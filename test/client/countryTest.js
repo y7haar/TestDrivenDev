@@ -7,9 +7,9 @@
 TestCase("CountryTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
-      this.country2 = new tddjs.client.map.Country(); 
-      this.country3 = new tddjs.client.map.Country(); 
+      this.country1 = Object.create(tddjs.client.map.Country); 
+      this.country2 = Object.create(tddjs.client.map.Country); 
+      this.country3 = Object.create(tddjs.client.map.Country); 
     },
 
   "test object of country should not be undefined": function () { 
@@ -54,7 +54,7 @@ TestCase("CountryTest", {
 TestCase("CountryUnitsTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
+      this.country1 = Object.create(tddjs.client.map.Country); 
       this.x = 10;
       this.object = {};
       this.temp = 42;
@@ -135,7 +135,7 @@ TestCase("CountryUnitsTest", {
 TestCase("CountryOwnerTest", {
         
     setUp: function () {
-      this.country1 = new tddjs.client.map.Country(); 
+      this.country1 = Object.create(tddjs.client.map.Country); 
       this.player = { name:'Peter'};
       this.player2 = { name:'Herbert'};
       this.player3 = { name:'Udo'};
