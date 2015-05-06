@@ -146,6 +146,18 @@ TestCase("LobbyLeaderTest", {
         this.lobby.kickPlayer(this.player1);
         assertNotSame(this.player1, this.lobby.getLeader());
         assertSame(this.player2, this.lobby.getLeader());
+  },
+  
+  "test Lobby should set leader null if all players are kicked": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        
+        this.lobby.setLeader(this.player1);
+        assertSame(this.player1, this.lobby.getLeader());
+        
+        this.lobby.kickPlayer(this.player1);
+        this.lobby.kickPlayer(this.player2);
+        assertNull(this.lobby.getLeader());
   }
   
 });
