@@ -130,7 +130,9 @@ TestCase("LobbyLeaderTest", {
   
      "test Lobby should throw an Exception if leader is not stored as player": function () { 
         var player = this.player1;    
-        assertException(function() { this.lobby.setLeader(player); }, "Error");
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.setLeader(player); }, "Error");
   },
   
     "test Lobby should set player2 as new leader, after player1 is kicked": function () { 
@@ -138,7 +140,10 @@ TestCase("LobbyLeaderTest", {
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
         
-        assertException(function() { this.lobby.setLeader(player); }, "Error");
+        var player = this.player1;
+        var lobby = this.lobby1;
+        
+        assertException(function() { lobby.setLeader(player); }, "Error");
   }
   
 });
