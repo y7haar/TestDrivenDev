@@ -159,12 +159,15 @@ TestCase("CountryOwnerTest", {
     
     "test setOwner should throw exception if object is not a Player": function () { 
       
-        var country = this.country1;
-        var player = this.player;
+        var country = this.country1; 
+        var player2 = "Peter";   
+        
+        this.country1.setOwner(this.player);
+        assertEquals(this.player,this.country1.getOwner());
         
         assertException(function(){
-            country.setOwner(player);
-        },"Error");
+            country.setOwner(player2);
+        },"TypeError");
     }
     
     
