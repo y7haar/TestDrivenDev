@@ -29,11 +29,28 @@
         return _lobbies;
     }
     
+    
+    function getLobbyById(aId)
+    {  
+        console.log("array: " + _lobbies);
+        
+        if(isNaN(aId))
+            throw new TypeError("Parameter is not a number");
+        
+        var lobby = _lobbies[aId];
+        
+        if(typeof(lobby) === "undefined" || lobby === null )
+            throw new Error("Lobby with id " + aId + " doesnt exist");
+        
+        return lobby;
+    }
+    
     tddjs.namespace("server.controller").LobbyController = {
         addLobby: addLobby,
         removeLobby: removeLobby,
         getLobbyCount: getLobbyCount,
-        getLobbies: getLobbies
+        getLobbies: getLobbies,
+        getLobbyById: getLobbyById
         
     };
 }());
