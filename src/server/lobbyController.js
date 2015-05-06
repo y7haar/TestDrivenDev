@@ -5,17 +5,19 @@
 (function()
 {
     var _lobbies = [];
+    var _count = 0;
     
     function addLobby(aLobby)
     {
         var index = aLobby.getId();
-        
 
         if(typeof _lobbies[index] !== "undefined")
             throw new Error("Index already in use");
 
-        
         _lobbies[index] = aLobby;
+        _count++;
+        
+        console.log("array add: " + _lobbies);
     }
     
     function removeLobby(aLobby)
@@ -23,12 +25,15 @@
         var index = _lobbies.indexOf(aLobby);
         
         if(index >= 0)
+        {
             delete _lobbies[index];
+            _count--;
+        }
     }
     
     function getLobbyCount()
     {
-        return _lobbies.length;
+        return _count;
     }
     
     function getLobbies()
