@@ -8,7 +8,14 @@
     
     function addLobby(aLobby)
     {
-        _lobbies.push(aLobby);
+        var index = aLobby.getId();
+        
+
+        if(typeof _lobbies[index] !== "undefined")
+            throw new Error("Index already in use");
+
+        
+        _lobbies[index] = aLobby;
     }
     
     function removeLobby(aLobby)
@@ -16,7 +23,7 @@
         var index = _lobbies.indexOf(aLobby);
         
         if(index >= 0)
-            _lobbies.splice(index, 1);
+            delete _lobbies[index];
     }
     
     function getLobbyCount()
