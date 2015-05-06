@@ -47,7 +47,7 @@ tddjs.namespace("client.map");
         if (isNaN(count))
             throw new TypeError("Parameter is not a number");
 
-        if (this._unitCount - count < 1)
+        if (_unitCount - count < 1)
             _unitCount = 1;
         else
             _unitCount -= count;
