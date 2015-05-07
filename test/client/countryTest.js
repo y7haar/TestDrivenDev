@@ -137,7 +137,7 @@ TestCase("CountryUnitsTest", {
 // Tastacaes for Player --> Owner of a country
 TestCase("CountryOwnerTest", {
     setUp: function () {
-        this.country1 = tddjs.client.map.country();
+        this.country1 = new tddjs.client.map.country();
         this.player1 = Object.create(tddjs.client.Player);
         this.player2 = Object.create(tddjs.client.Player);
   
