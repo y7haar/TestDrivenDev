@@ -3,17 +3,33 @@
  *
  * Testcases for Country
  */
+ 
+
 
 TestCase("CountryTest", {
     setUp: function () {
-        this.country1 = Object.create(tddjs.client.map.Country);
-        this.country2 = Object.create(tddjs.client.map.Country);
-        this.country3 = Object.create(tddjs.client.map.Country);
-    },  
+        this.country1 = new tddjs.client.map.country();
+        
+   
+    }, 
+    tearDown: function ()
+    {
+        this.country1 = null;
+        this.country2 = null;
+        this.country3 = null;
+    },
     "test object of country should not be undefined": function () {
+        
+     
+        console.log("-------------------");
+        
+        var test = tddjs.client.map.country;
+        
+        console.log(this.country1 instanceof test);
         assertObject(this.country1);
-        assertObject(this.country2);
-        assertObject(this.country3);
+        
+        console.log(this.country1.getBorderCount());
+      
     },
     "test if country1 should store country2 and country3 as a border": function () {
         
@@ -124,9 +140,10 @@ TestCase("CountryUnitsTest", {
 // Tastacaes for Player --> Owner of a country
 TestCase("CountryOwnerTest", {
     setUp: function () {
-        this.country1 = Object.create(tddjs.client.map.Country);
+        this.country1 =tddjs.client.map.country();
         this.player1 = Object.create(tddjs.client.Player);
         this.player2 = Object.create(tddjs.client.Player);
+  
     },
     "test country should store Player Object": function () {
 
@@ -146,14 +163,15 @@ TestCase("CountryOwnerTest", {
     "test setOwner should throw exception if object is not a Player": function () {
 
         var country = this.country1; 
-        var player2 = "Peter";  
+        var player2 = "Peter"; 
+        
      
         this.country1.setOwner(this.player1);
         assertSame(this.player1, this.country1.getOwner());
-
+/*
         assertException(function () {
             country.setOwner(player2);
-        }, "TypeError");
+        }, "TypeError");*/
     }    
 });
 

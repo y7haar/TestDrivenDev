@@ -2,12 +2,15 @@
 Source-Code for Country
  */
 
-
-(function()
+tddjs.namespace("client.map").country= Country;
+         
+function Country()
 {   
     var _border = [];
     var _unitCount = 1;
     var _owner; 
+    
+    
     
     function addBorder(aCountry)
     {
@@ -59,18 +62,20 @@ Source-Code for Country
     }
     
     function setOwner(aOwner)
-    {     
+    {    
         if(typeof aOwner != "object")
             throw new TypeError("setOwner expects a Player object as Parameter");
         _owner = aOwner;
+        
+       
     }
     
     function getOwner()
     {
         return _owner;
     }
-    
-    tddjs.namespace("client.map").Country = {    
+    /*
+    { 
     addBorder : addBorder,
     getBorderCount : getBorderCount,
     borders : borders,
@@ -83,8 +88,11 @@ Source-Code for Country
     setOwner : setOwner,
     getOwner : getOwner
     };
+    */
+   
+   this.addBorder = addBorder;
     
-}());
+};
 
     
   

@@ -1,6 +1,7 @@
 /* 
  * Source Code für Spieler
  */
+
 (function(){
  
     var name = "";
