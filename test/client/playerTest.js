@@ -5,7 +5,7 @@ TestCase("PlayerTest",
 {
     setUp: function () {
         this.player1 = Object.create(tddjs.client.Player);
-        this.country1 = new tddjs.client.map.Country();
+        this.country1 = Object.create(tddjs.client.map.Country);
     },
     
     "test Player Object should be created": function () {
@@ -29,12 +29,21 @@ TestCase("PlayerTest",
     
     "test Shouldnt be able to ask for Countries which arent countries": function() {
         var player = this.player1;
-        assertException(function(){ player.hasCountry({});},"Error");
+        assertException(function(){ player.hasCountry({});}, "TypeError");
     },
     
-    "test Should be able to add a Country": function() {
+    "test Should be able to add a Country and find it afterwards": function()
+    {
+        this.player1.addCountry(this.country1);
+        var x = this.player1.hasCountry(this.country1);
+        assertTrue(x);
+    },
+    
+    "test Shouldnt be able to add something thats not a Country": function()
+    {
         var player = this.player1;
-        player.addCountry();
-    }  
+        var test = 5;
+        assertException(function(){player.addCountry(test);});
+    }
 });
 
