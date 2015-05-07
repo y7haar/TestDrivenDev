@@ -5,9 +5,10 @@
 (function()
 {
     var _players = [];
-    var _maxPlayers;
-    var _id;
-    var _name;
+    var _maxPlayers = 4;
+    this._id = 0;
+    var _name = "GameLobby";
+    var _leader;
 
     
     function setId(aId)
@@ -15,7 +16,7 @@
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
-        _id = aId;
+        this._id = aId;
     }
 
     function addPlayer(aPlayer)
@@ -44,16 +45,25 @@
 
     function kickPlayer(aPlayer)
     {
-
         var index = _players.indexOf(aPlayer);
 
         if (index >= 0)
             _players.splice(index, 1);
+        
+        if(_leader === aPlayer && _players.length > 0)
+        {
+            _leader = _players[0];
+        }
+        
+        if(_leader === aPlayer && _players.length === 0)
+        {
+            _leader = null;
+        }
     }
     
     function getId()
     {
-        return _id;
+        return this._id;
     }
     
     function setName(aName)
@@ -68,7 +78,27 @@
     {
         return _name;
     }
+    
+    function _hasPlayer(aPlayer)
+    {
+        if(_players.indexOf(aPlayer) < 0)
+            return false;
+        
+        return true;
+    }
 
+    function setLeader(aLeader)
+    {
+        if(! _hasPlayer(aLeader))
+            throw new Error("Leader is not stored in Lobby");
+        
+        _leader = aLeader;
+    }
+    
+    function getLeader()
+    {
+        return _leader;
+    }
     
     tddjs.namespace("server.model").Lobby = {
         addPlayer: addPlayer,
@@ -78,7 +108,9 @@
         getId: getId,
         setId: setId,
         setName: setName,
-        getName: getName    
+        getName: getName,
+        setLeader: setLeader,
+        getLeader: getLeader
     };
 
 }());

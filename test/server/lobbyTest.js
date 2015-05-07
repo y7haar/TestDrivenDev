@@ -2,10 +2,11 @@
  *  Testcases for Lobby
  */
 
-TestCase("LobbyTest", {
+TestCase("LobbyPlayerTest", {
     
     setUp: function () {
         this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.lobby2 = Object.create(tddjs.server.model.Lobby);
         this.player1 = {};
         this.player2 = {};
         this.player3 = {};
@@ -25,11 +26,19 @@ TestCase("LobbyTest", {
        
        this.lobby.setId(1);
        assertEquals(1, this.lobby.getId());
+       
+       this.lobby2.setId(10);
+       assertEquals(1, this.lobby.getId());
+       assertEquals(10, this.lobby2.getId());
   },
   
     "test Lobby should store name": function () { 
         this.lobby.setName("TestLobby");
         assertEquals("TestLobby", this.lobby.getName());
+        
+        this.lobby2.setName("TestLobby2");
+        assertEquals("TestLobby", this.lobby.getName());
+        assertEquals("TestLobby2", this.lobby2.getName());
   },
   
       "test should throw Exception when name is no string": function () { 
@@ -107,5 +116,57 @@ TestCase("LobbyTest", {
 });
 
 
+TestCase("LobbyLeaderTest", {
+    
+    setUp: function () {
+        this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.player1 = {};
+        this.player2 = {};
+        this.player3 = {};
+        this.lobby.setMaxPlayers(4);
+    },
+    
+    tearDown: function () {
+        this.lobby.getPlayers().length = 0;
+    },
 
-
+   "test Lobby should store a lobby leader": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.setLeader(this.player1);
+        
+        assertSame(this.player1, this.lobby.getLeader());
+  },
+  
+     "test Lobby should throw an Exception if leader is not stored as player": function () { 
+        var player = this.player1;    
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.setLeader(player); }, "Error");
+  },
+  
+    "test Lobby should set player2 as new leader, after player1 is kicked": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.addPlayer(this.player3);
+        
+        this.lobby.setLeader(this.player1);
+        assertSame(this.player1, this.lobby.getLeader());
+        
+        this.lobby.kickPlayer(this.player1);
+        assertNotSame(this.player1, this.lobby.getLeader());
+        assertSame(this.player2, this.lobby.getLeader());
+  },
+  
+  "test Lobby should set leader null if all players are kicked": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        
+        this.lobby.setLeader(this.player1);
+        assertSame(this.player1, this.lobby.getLeader());
+        
+        this.lobby.kickPlayer(this.player1);
+        this.lobby.kickPlayer(this.player2);
+        assertNull(this.lobby.getLeader());
+  }
+  
+});

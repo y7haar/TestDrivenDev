@@ -29,8 +29,6 @@ TestCase("NameListGeneratorTest", {
          
         this.shuffled = this.nameListGenerator.getNameList();
         
-        console.log(this.shuffled);
-        
         /*
          *  tests if the array still holds every given element
          */
