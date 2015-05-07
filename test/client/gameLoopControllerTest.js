@@ -19,25 +19,21 @@ TestCase("GameLoopTests", {
         
         assertTrue(this.gameLoop instanceof tddjs.client.game.gameLoopController);
     },
-    "test object should store players, exception if not instance of Player": function () {
+    "test object should store 1 player, exception if not instance of Player": function () {
         
         var player1 = new tddjs.client.Player();
-        var player2 = new tddjs.client.Player();
         var fakePlayer = {name:'HansWurst'};
         
-        this.gameLoop.addPlayer(player1);
-        assertEquals(this.gameLoop.getPlayers(),[player1]);
-        this.gameLoop.addPlayer(player2);
-        assertEquals(this.gameLoop.getPlayers(),[player1,player2]);
-        
-        
+        this.gameLoop.setPlayer(player1);
+        assertSame(this.gameLoop.getPlayer(),player1);
+
         var gameLoop = this.gameLoop;
         
         assertExpection(function(){
-            gameLoop.addPlayer(fakePlayer);
+            gameLoop.setPlayer(fakePlayer);
         },"TypeError");
         
-        assertEquals(this.gameLoop.getPlayers(),[player1,player2]);          
+        assertEquals(this.gameLoop.getPlayer(),player1);          
     },
     "test gameloop should store a map, exception if not instance of Map": function () {
         
