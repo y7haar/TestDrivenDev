@@ -91,6 +91,16 @@ function Country()
     */
    
    this.addBorder = addBorder;
+   this.getBorderCount = getBorderCount;
+   this.borders = borders;
+   
+   this.getUnitCount = getUnitCount;
+   this.setUnitCount = setUnitCount;
+   this.addUnits = addUnits;
+   this.subUnits= subUnits;
+   
+   this.setOwner = setOwner;
+   this.getOwner = getOwner;   
     
 };
 
