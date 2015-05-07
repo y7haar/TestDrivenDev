@@ -3,3 +3,8 @@
  */
 
 
+tddjs.namespace("client.game").gameLoopController = gameLoopController;
+
+function gameLoopController()
+{
+}
