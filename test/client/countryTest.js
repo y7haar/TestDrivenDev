@@ -77,7 +77,7 @@ TestCase("CountryUnitsTest", {
     },
     "test if added Unit is number return excetion if not number": function () {
 
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(1, this.country1.getUnitCount());
 
         var country = this.country1;
         var obj = this.object;
@@ -87,19 +87,19 @@ TestCase("CountryUnitsTest", {
         }
         , "TypeError");
 
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(1, this.country1.getUnitCount());
     },
     "test substract x units to country return acctual unit count": function () {
 
         this.country1.addUnits(this.x);
-        assertEquals(21, this.country1.getUnitCount());
-        this.country1.subUnits(this.x);
         assertEquals(11, this.country1.getUnitCount());
+        this.country1.subUnits(this.x);
+        assertEquals(1, this.country1.getUnitCount());
 
     },
     "test if sub Unitcount is number return excetion if not number": function () {
 
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(1, this.country1.getUnitCount());
         var country = this.country1;
         var obj = this.object;
 
@@ -108,7 +108,7 @@ TestCase("CountryUnitsTest", {
         }
         , "TypeError");
 
-        assertEquals(11, this.country1.getUnitCount());
+        assertEquals(1, this.country1.getUnitCount());
     },
     "test Unit count should not fall under 1 after sub ": function () {
 
@@ -137,10 +137,15 @@ TestCase("CountryUnitsTest", {
 // Tastacaes for Player --> Owner of a country
 TestCase("CountryOwnerTest", {
     setUp: function () {
-        this.country1 =tddjs.client.map.country();
+        this.country1 = tddjs.client.map.country();
         this.player1 = Object.create(tddjs.client.Player);
         this.player2 = Object.create(tddjs.client.Player);
   
+    },
+    tearDown: function() {
+        this.country1 = null;
+        this.player1 = null;
+        this.player2 = null;
     },
     "test country should store Player Object": function () {
 
