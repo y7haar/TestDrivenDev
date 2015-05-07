@@ -20,15 +20,20 @@
     
     function hasCountry(searchedCountry)
     {
-
         if(typeof searchedCountry != "Country")
             throw new Error("Hey");
+    }
+    
+    function addCountry(addedCountry)
+    {
+        
     }
  
     tddjs.namespace("client").Player = {
         getName: getName,
         setName: setName,
-        hasCountry: hasCountry
+        hasCountry: hasCountry,
+        addCountry: addCountry
     };
 }());
 
