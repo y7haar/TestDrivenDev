@@ -162,7 +162,7 @@ TestCase("CountryOwnerTest", {
         assertSame(this.player2, this.country1.getOwner());
         assertNotSame(this.player1, this.country1.getOwner());
     },
-    "test setOwner should throw exception if object is not a Player": function () {
+    "test setOwner should throw exception if parameter is not a Player": function () {
 
         var country = this.country1; 
         var player2 = "Peter"; 
@@ -170,10 +170,12 @@ TestCase("CountryOwnerTest", {
      
         this.country1.setOwner(this.player1);
         assertSame(this.player1, this.country1.getOwner());
-/*
+        
+        assertTrue(this.country1.getOwner() instanceof tddjs.client.Player);
+        
         assertException(function () {
             country.setOwner(player2);
-        }, "TypeError");*/
+        }, "TypeError");
     }    
 });
 
