@@ -1,7 +1,7 @@
 /* 
  * Testcases für Map
  */
-TestCase("PlayerTest",
+TestCase("Map-Test",
 {
     setUp: function ()
     {
