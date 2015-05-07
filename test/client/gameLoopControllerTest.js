@@ -7,7 +7,7 @@ TestCase("GameLoopTests", {
         
     setUp: function () {
         
-        this.gameLoop =  Object.create(tddjs.client.game.gameLoopController);      
+        this.gameLoop =  new tddjs.client.game.gameLoopController();      
     
     },
 
