@@ -9,7 +9,8 @@
 TestCase("CountryTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
-        
+        this.country2 = new tddjs.client.map.country(); 
+        this.country3 = new tddjs.client.map.country(); 
    
     }, 
     tearDown: function ()
@@ -18,18 +19,10 @@ TestCase("CountryTest", {
         this.country2 = null;
         this.country3 = null;
     },
-    "test object of country should not be undefined": function () {
-        
-     
-        console.log("-------------------");
-        
-        var test = tddjs.client.map.country;
-        
-        console.log(this.country1 instanceof test);
+    "test object of country should not be undefined": function () {   
+
         assertObject(this.country1);
-        
-        console.log(this.country1.getBorderCount());
-      
+ 
     },
     "test if country1 should store country2 and country3 as a border": function () {
         
@@ -62,11 +55,15 @@ TestCase("CountryTest", {
 // Testcaes for Soldier --> Units of a Country
 TestCase("CountryUnitsTest", {
     setUp: function () {
-        this.country1 = Object.create(tddjs.client.map.Country);
+        this.country1 = new tddjs.client.map.country();
         this.x = 10;
         this.object = {};
         this.temp = 42;
-    },  
+    },
+    tearDown: function ()
+    {
+      this.country1 = null;  
+    },
     "test country return unitcount always should be 1 at creation": function () {
 
         assertEquals(1, this.country1.getUnitCount());
