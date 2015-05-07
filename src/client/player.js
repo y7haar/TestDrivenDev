@@ -27,14 +27,27 @@
     function addCountry(addedCountry)
     {
         if(typeof(addedCountry) !== "Country")
-            throw new TypeError("adden Object is not a Country");
+            throw new TypeError("added Object is not a Country");
+    }
+    
+    function removeCountry(removedCountry)
+    {
+        if(typeof(removedCountry) !== "Country")
+            throw new TypeError("removed Object is not a Country");
+    }
+    
+    function getCountryCount()
+    {
+        
     }
  
     tddjs.namespace("client").Player = {
         getName: getName,
         setName: setName,
         hasCountry: hasCountry,
-        addCountry: addCountry
+        addCountry: addCountry,
+        removeCountry: removeCountry,
+        getCountryCount: getCountryCount
     };
 }());
 
