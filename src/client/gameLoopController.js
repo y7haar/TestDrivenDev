@@ -7,7 +7,7 @@ tddjs.namespace("client.game").gameLoopController = gameLoopController;
 
 function gameLoopController()
 {
-    var _players = [];
+    var _player;
     var _map;
     
     function setMap(aMap)
@@ -22,21 +22,21 @@ function gameLoopController()
         return _map;
     }
     
-    function addPlayer(aPlayer)
+    function setPlayer(aPlayer)
     {
         if(aPlayer instanceof tddjs.client.Player)
             throw new TyperError("Parameter ist not instance of Player");
-        this._player.push(aPlayer);
+        this._player = aPlayer;
     }
     
-    function getPlayers()
+    function getPlayer()
     {
-        return this._players;
+        return this._player;
     }
     
     
     this.setMap = setMap;
     this.getMap = getMap;
-    this.addPlayer = addPlayer;
-    this.getPlayers = getPlayers;
+    this.setPlayer = setPlayer;
+    this.getPlayer = getPlayer;
 }
