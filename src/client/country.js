@@ -63,11 +63,9 @@ function Country()
     
     function setOwner(aOwner)
     {    
-        if(typeof aOwner != "object")
-            throw new TypeError("setOwner expects a Player object as Parameter");
+        if(aOwner instanceof tddjs.client.Player)
+            throw new TypeError("parameter ist not a instace of Player");
         _owner = aOwner;
-        
-       
     }
     
     function getOwner()
