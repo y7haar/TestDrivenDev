@@ -5,7 +5,7 @@ TestCase("PlayerTest",
 {
     setUp: function () {
         this.player1 = Object.create(tddjs.client.Player);
-        this.country1 = new tddjs.client.map.Country();
+        this.country1 = Object.create(tddjs.client.map.Country);
     },
     
     "test Player Object should be created": function () {
@@ -33,8 +33,14 @@ TestCase("PlayerTest",
     },
     
     "test Should be able to add a Country": function() {
+        this.player1.addCountry(this.country1);
+    },
+    
+    "test Shouldnt be able to add something thats not a Country": function()
+    {
         var player = this.player1;
-        player.addCountry();
-    }  
+        var test = 5;
+        assertException(function(){player.addCountry(test);});
+    }
 });
 
