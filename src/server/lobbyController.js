@@ -18,7 +18,7 @@
         if(index >= 0)
             _lobbies.splice(index, 1);
     }
-    
+    2
     function getLobbyCount()
     {
         return _lobbies.length;
