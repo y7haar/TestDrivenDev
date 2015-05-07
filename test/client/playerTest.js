@@ -62,6 +62,12 @@ TestCase("PlayerTest",
         assertTrue(this.player1.hasCountry(this.country2));
         this.player1.removeCountry(this.country1);
         assertFalse(this.player1.hasCountry(this.country2));
+    },
+    
+    "test Should be able to get a valid Country-Count": function()
+    {
+        var x = this.player1.getCountryCount();
+        assertTrue(x>0);
     }
 });
 
