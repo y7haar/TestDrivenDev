@@ -20,13 +20,14 @@
     
     function hasCountry(searchedCountry)
     {
-        if(typeof searchedCountry != "Country")
-            throw new Error("Hey");
+        if(typeof(searchedCountry) !== "Country")
+            throw new TypeError("searched Object is not a Country");
     }
     
     function addCountry(addedCountry)
     {
-        
+        if(typeof(addedCountry) !== "Country")
+            throw new TypeError("adden Object is not a Country");
     }
  
     tddjs.namespace("client").Player = {
