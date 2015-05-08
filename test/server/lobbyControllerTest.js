@@ -106,6 +106,21 @@ TestCase("LobbyControllerTest", {
         
         var lobbyController = this.lobbyController;
         assertException(function() {lobbyController.removeLobby("asd");}, "TypeError");
+  },
+  
+  "test lobbyController should manage and provide the next available Id": function () { 
+      assertEquals(0, this.lobbyController.getNextId());
+      assertEquals(1, this.lobbyController.getNextId());
+      
+      this.lobbyController.addLobby(this.lobby1);
+      this.lobbyController.addLobby(this.lobby2);
+      
+      assertEquals(2, this.lobbyController.getNextId());
+      
+      this.lobbyController.removeLobby(this.lobby1);
+      assertEquals(1, this.lobbyController.getNextId());
+      
+      assertEquals(3, this.lobbyController.getNextId());
   }
   
 });
