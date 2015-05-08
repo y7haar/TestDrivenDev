@@ -38,7 +38,7 @@ function gameLoopController()
     {
         if(!(oountry1 instanceof tddjs.client.map.country))
             throw new TypeError("Parameter1 ist not instance of Country");
-        else if(!(oountry1 instanceof tddjs.client.map.country))
+        else if(!(oountry2 instanceof tddjs.client.map.country))
             throw new TypeError("Parameter2 ist not instance of Country");
         
         if(country1.borders(country2) && country2.borders(country1)) return true;
