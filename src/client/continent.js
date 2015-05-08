@@ -7,6 +7,24 @@ tddjs.namespace("client.map").continent = continent;
 function continent()
 {
     var _country = [];
+    var _unitBonus;
+    
+    function setUnitBonus(number)
+    {
+        if(isNaN(number))
+            throw new TypeError("Parameter ist not a Number.");
+        else if ( number < 0)
+            throw new Error("Parameter is < then 0 ");
+        
+        _unitBonus = number;
+    }
+    
+    function getUnitBonus()
+    {
+      
+        
+        return _unitBonus;
+    }
 
     function addCountry(aCountry)
     {
@@ -32,6 +50,8 @@ function continent()
     {
         return _country;
     }
+    
+    
 
 
     this.addCountry = addCountry;
