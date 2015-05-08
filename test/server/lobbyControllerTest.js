@@ -5,10 +5,10 @@
 TestCase("LobbyControllerTest", {
     
     setUp: function () {
-      this.lobbyController = Object.create(tddjs.server.controller.LobbyController);
-      this.lobby1 = Object.create(tddjs.server.model.Lobby);
-      this.lobby2 = Object.create(tddjs.server.model.Lobby);
-      this.lobby5 = Object.create(tddjs.server.model.Lobby);
+      this.lobbyController = new tddjs.server.controller.lobbyController();
+      this.lobby1 = new tddjs.server.model.lobby();
+      this.lobby2 = new tddjs.server.model.lobby();
+      this.lobby5 = new tddjs.server.model.lobby();
       
       this.lobby1.setId(0);
       this.lobby2.setId(1);
@@ -23,6 +23,11 @@ TestCase("LobbyControllerTest", {
         this.lobbyController.removeLobby(this.lobby1);
         this.lobbyController.removeLobby(this.lobby2);
         this.lobbyController.removeLobby(this.lobby5);
+        
+        delete this.lobby1;
+        delete this.lobby2;
+        delete this.lobby5;
+        delete this.lobbyController;
     },
 
   "test object of LobbyController should not be undefined": function () { 

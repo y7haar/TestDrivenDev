@@ -5,7 +5,7 @@
 TestCase("NameListGeneratorTest", {
     
     setUp: function () {
-        this.nameListGenerator = Object.create(tddjs.server.controller.NameListGenerator);
+        this.nameListGenerator = new tddjs.server.controller.nameListGenerator();
         this.initialArray = [1, 2, 3, 4];
     },
     

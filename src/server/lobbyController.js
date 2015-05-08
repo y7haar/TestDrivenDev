@@ -2,7 +2,9 @@
  * Source-Code for LobbyController
  */
 
-(function()
+tddjs.namespace("server.controller").lobbyController =  lobbyController;
+
+function lobbyController()
 {
     var _lobbies = [];
     var _count = 0;
@@ -16,8 +18,6 @@
 
         _lobbies[index] = aLobby;
         _count++;
-        
-        console.log("array add: " + _lobbies);
     }
     
     function removeLobby(aLobby)
@@ -30,7 +30,8 @@
             _count--;
         }
     }
-    2
+    
+    
     function getLobbyCount()
     {
         return _count;
@@ -43,9 +44,7 @@
     
     
     function getLobbyById(aId)
-    {  
-        console.log("array: " + _lobbies);
-        
+    {      
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
@@ -57,13 +56,11 @@
         return lobby;
     }
     
-    tddjs.namespace("server.controller").LobbyController = {
-        addLobby: addLobby,
-        removeLobby: removeLobby,
-        getLobbyCount: getLobbyCount,
-        getLobbies: getLobbies,
-        getLobbyById: getLobbyById
+        this.addLobby =  addLobby;
+        this.removeLobby = removeLobby;
         
-    };
-}());
-
+        this.getLobbyCount = getLobbyCount;
+        this.getLobbies = getLobbies;
+        
+        this.getLobbyById = getLobbyById;
+};

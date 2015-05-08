@@ -2,11 +2,13 @@
  *  Source-Code for Lobby
  */
 
-(function()
+tddjs.namespace("server.model").lobby =  lobby;
+
+function lobby()
 {
     var _players = [];
     var _maxPlayers = 4;
-    this._id = 0;
+    var _id = 0;
     var _name = "GameLobby";
     var _leader;
 
@@ -16,7 +18,7 @@
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
-        this._id = aId;
+        _id = aId;
     }
 
     function addPlayer(aPlayer)
@@ -63,7 +65,7 @@
     
     function getId()
     {
-        return this._id;
+        return _id;
     }
     
     function setName(aName)
@@ -100,18 +102,15 @@
         return _leader;
     }
     
-    tddjs.namespace("server.model").Lobby = {
-        addPlayer: addPlayer,
-        getPlayers: getPlayers,
-        setMaxPlayers: setMaxPlayers,
-        kickPlayer: kickPlayer,
-        getId: getId,
-        setId: setId,
-        setName: setName,
-        getName: getName,
-        setLeader: setLeader,
-        getLeader: getLeader
-    };
-
-}());
+    this.addPlayer = addPlayer;
+    this.getPlayers = getPlayers;
+    this.setMaxPlayers = setMaxPlayers;
+    this.kickPlayer = kickPlayer;
+    this.getId = getId;
+    this.setId = setId;
+    this.setName = setName;
+    this.getName = getName;
+    this.setLeader = setLeader;
+    this.getLeader = getLeader;
+};
 
