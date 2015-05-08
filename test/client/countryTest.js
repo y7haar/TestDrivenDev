@@ -70,7 +70,7 @@ TestCase("CountryNameTest", {
 
         assertFunction(this.country1.setName);
         assertFunction(this.country1.getName);
-        
+
         var name = "Uganda";
         var fakeName = {name: "Guantemala"};
         var country = this.country1;
