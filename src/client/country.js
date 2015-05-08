@@ -95,7 +95,21 @@ function country()
     }
     
     function getOwner()
-    {     
+    {
+        if (typeof _owner == "undefined")
+        {
+            throw {
+                name: "initError",
+                level: "FatalError",
+                message: "Parameter is undefined, call country.setOwner before.",
+                htmlMessage: "Error detected. Please contact support.",
+                toString: function () {
+                    return this.name + ": " + this.message;
+                }
+            };
+        }
+
+
         return _owner;
     }
     /*

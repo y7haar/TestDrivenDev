@@ -192,6 +192,12 @@ TestCase("CountryOwnerTest", {
         this.player2 = null;
     },
     "test country should store Player Object": function () {
+        
+        var country = this.country1;
+        
+         assertException(function () {
+            country.getOwner();
+        }, "initError");
 
         this.country1.setOwner(this.player1);
         assertSame(this.player1, this.country1.getOwner());
