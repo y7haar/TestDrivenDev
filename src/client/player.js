@@ -23,19 +23,19 @@ function player(){
     
     function hasCountry(searchedCountry)
     {
-        if(typeof(searchedCountry) != "Country")
+        if(! (searchedCountry instanceof tddjs.client.map.country))
             throw new TypeError("searched Object is not a Country");
     }
     
     function addCountry(addedCountry)
     {
-        if(typeof(addedCountry) != "Country")
+        if(! (addedCountry instanceof tddjs.client.map.country))
             throw new TypeError("added Object is not a Country");
     }
     
     function removeCountry(removedCountry)
     {
-        if(typeof(removedCountry) != "Country")
+        if(! (removedCountry instanceof tddjs.client.map.country))
             throw new TypeError("removed Object is not a Country");
     }
     
@@ -45,12 +45,12 @@ function player(){
     }
  
   
-        this.getName = getName;
-        this.setName= setName;
-        this.hasCountry = hasCountry;
-        this.addCountry = addCountry;
-        this.removeCountry = removeCountry;
-        this.getCountryCount = getCountryCount;
+    this.getName = getName;
+    this.setName = setName;
+    this.hasCountry = hasCountry;
+    this.addCountry = addCountry;
+    this.removeCountry = removeCountry;
+    this.getCountryCount = getCountryCount;
  
 };
 
