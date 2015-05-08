@@ -171,7 +171,7 @@ TestCase("CountryOwnerTest", {
         this.country1.setOwner(this.player1);
         assertSame(this.player1, this.country1.getOwner());
         
-        assertTrue(this.country1.getOwner() instanceof tddjs.client.Player);
+        assertTrue(this.country1.getOwner() instanceof tddjs.client.player);
         
         assertException(function () {
             country.setOwner(player2);
