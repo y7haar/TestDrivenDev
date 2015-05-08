@@ -8,7 +8,7 @@ function lobby()
 {
     var _players = [];
     var _maxPlayers = 4;
-    this._id = 0;
+    var _id = 0;
     var _name = "GameLobby";
     var _leader;
 
@@ -18,7 +18,7 @@ function lobby()
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
-        this._id = aId;
+        _id = aId;
     }
 
     function addPlayer(aPlayer)
@@ -65,7 +65,7 @@ function lobby()
     
     function getId()
     {
-        return this._id;
+        return _id;
     }
     
     function setName(aName)
