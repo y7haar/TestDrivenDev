@@ -34,12 +34,16 @@ TestCase("LobbyControllerTest", {
         assertObject(this.lobbyController);
   },
   
-    "test lobbyController should store lobby1 and lobby2": function () { 
+    "test lobbyController should store lobby1 and lobby2, Exception if parameter is not a Lobby": function () { 
         assertEquals(0, this.lobbyController.getLobbyCount());
         this.lobbyController.addLobby(this.lobby1);
          assertEquals(1, this.lobbyController.getLobbyCount());
          this.lobbyController.addLobby(this.lobby2);
          assertEquals(2, this.lobbyController.getLobbyCount());
+         
+         var lobbyController = this.lobbyController;
+         
+        assertException(function() { lobbyController.addLobby(5); }, "TypeError");
   },
   
    "test lobbyController should return a specific Lobby by Id ": function () { 
