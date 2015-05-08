@@ -24,7 +24,14 @@ TestCase("CountryTest", {
         assertObject(this.country1);
  
     },
-    "test if country1 should store country2 and country3 as a border": function () {
+    "test country1 should store other countrys, exception if not a Country": function () {
+        
+        var fakeCountry = {name:"Franzaken"};
+        var country = this.country1;
+        
+        assertException(function(){
+            country.addBorder(fakeCountry);
+        },"TypeError");
         
         assertEquals(0, this.country1.getBorderCount());
         this.country1.addBorder(this.country2);
