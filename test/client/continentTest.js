@@ -69,7 +69,7 @@ TestCase("ContinentTest", {
         assertNotSame(this.country2, this.continent1.getCountry("TakatukaLand"));
         
     },    
-    "test if contrys are in Continent1": function () {
+    "test if countrys are in Continent1": function () {
         
         assertFunction(this.continent1.hasCountryByObject);
         assertFunction(this.continent1.hasCountryByName);
