@@ -61,32 +61,33 @@ TestCase("CountryBorderTest", {
 TestCase("CountryNameTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
-    }, 
+    },
     tearDown: function ()
     {
         this.country1 = null;
-    }, 
+    },
     "test country shoulde store name as a String": function () {
-        
+
         assertFunction(this.country1.setName);
         assertFunction(this.country1.getName);
-        
+
         var name = "Uganda";
-        var fakeName = {name:"Guantemala"};
+        var fakeName = {name: "Guantemala"};
         var country = this.country1;
-        
-        assertNoException(function(){
+
+        assertNoException(function () {
             country.setName(name);
         });
-        assertException(function(){
-            country.setName(fakeName);
-        },"TypeError");
         
-        assertEquals(name,this.country1.getName());
+        assertException(function () {
+            country.setName(fakeName);
+        }, "TypeError");
+
+        assertEquals(name, this.country1.getName());
         name = "Bangladesh";
-        this.country.setName(name);
-        assertEquals(name,this.country1.getName());       
-    
+        this.country1.setName(name);
+        assertEquals(name, this.country1.getName());
+
     }
 });
 
