@@ -6,7 +6,7 @@
  
 
 
-TestCase("CountryTest", {
+TestCase("CountryBorderTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
         this.country2 = new tddjs.client.map.country(); 
@@ -21,8 +21,7 @@ TestCase("CountryTest", {
     },
     "test object of country should not be undefined": function () {   
 
-        assertObject(this.country1);
- 
+        assertObject(this.country1); 
     },
     "test country1 should store other countrys, exception if not a Country": function () {
         
@@ -58,6 +57,39 @@ TestCase("CountryTest", {
         assertFalse(this.country1.borders(this.country3));
     }
 });
+// testcaes for Country name
+TestCase("CountryNameTest", {
+    setUp: function () {
+        this.country1 = new tddjs.client.map.country();
+    }, 
+    tearDown: function ()
+    {
+        this.country1 = null;
+    }, 
+    "test country shoulde store name as a String": function () {
+        
+        assertFunction(this.country1.setName);
+        assertFunction(this.country1.getName);
+        
+        var name = "Uganda";
+        var fakeName = {name:"Guantemala"};
+        var country = this.country1;
+        
+        assertNoException(function(){
+            country.setName(name);
+        });
+        assertException(function(){
+            country.setName(fakeName);
+        },"TypeError");
+        
+        assertEquals(name,this.country1.getName());
+        name = "Bangladesh";
+        this.country.setName(name);
+        assertEquals(name,this.country1.getName());       
+    
+    }
+});
+
 
 // Testcaes for Soldier --> Units of a Country
 TestCase("CountryUnitsTest", {
