@@ -6,7 +6,7 @@ tddjs.namespace("client.map").continent = continent;
 
 function continent()
 {
-    var _countrys = [];
+    var _countrys = {};
     var _unitBonus;
 
     function setUnitBonus(number)
@@ -49,7 +49,7 @@ function continent()
 
     function getCountryCount()
     {
-        return _countrys.length;
+        return Object.keys(_countrys).length;
     }
 
     function hasCountryByObject(aCountry)
