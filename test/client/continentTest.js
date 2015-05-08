@@ -28,7 +28,7 @@ TestCase("ContinentTest", {
 
         assertFunction(this.continent1.getCountrys);
         assertFunction(this.continent1.getCountryCount);
-        assserFunction(this.continent1.addCountry);
+        assertFunction(this.continent1.addCountry);
         assertfunciton(this.continent1.getCountry);
         
         assertEquals([],this.continent1.getCountrys());
