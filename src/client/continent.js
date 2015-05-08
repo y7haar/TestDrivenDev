@@ -52,7 +52,8 @@ function continent()
     }
     
     
-
+    this.setUnitBonus = setUnitBonus;
+    this.getUnitBonus = getUnitBonus;
 
     this.addCountry = addCountry;
     this.getCountryCount = getCountryCount;
