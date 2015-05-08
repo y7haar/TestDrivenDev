@@ -16,17 +16,7 @@ function continent()
             throw new TypeError("Parameter ist not a Number.");
         }
         else if (number < 0)
-        {
-            throw {
-                name: "initError",
-                level: "FatalError",
-                message: "Parameter is undefined, call continent.setUnitBonus before.",
-                htmlMessage: "Error detected. Please contact support.",
-                toString: function () {
-                    return this.name + ": " + this.message;
-                }
-            };
-        }
+            throw new Error("Parameter is under 0");      
 
         _unitBonus = number;
     }
@@ -71,7 +61,7 @@ function continent()
     {
         if(hasCountryByName(aCountryName))
             return _countrys[aCountryName];
-        else return false;
+        else return null;
     }
 
     function getCountrys()
