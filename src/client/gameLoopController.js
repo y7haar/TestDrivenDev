@@ -32,8 +32,8 @@ function gameLoopController()
     function getPlayer()
     {
         return this._player;
-    }
-    
+    }    
+
     function isAttackPosible(country1,country2)
     {
         if(!(oountry1 instanceof tddjs.client.map.country))
@@ -44,8 +44,8 @@ function gameLoopController()
         if(country1.borders(country2) && country2.borders(country1)) return true;
         
         else return false;
-    }    
-    
+    }
+   
     this.setMap = setMap;
     this.getMap = getMap;
     this.setPlayer = setPlayer;
