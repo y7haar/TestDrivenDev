@@ -2,7 +2,9 @@
  *  Source-Code for Lobby
  */
 
-(function()
+tddjs.namespace("server.model").lobby =  lobby;
+
+function lobby()
 {
     var _players = [];
     var _maxPlayers = 4;
@@ -100,18 +102,15 @@
         return _leader;
     }
     
-    tddjs.namespace("server.model").Lobby = {
-        addPlayer: addPlayer,
-        getPlayers: getPlayers,
-        setMaxPlayers: setMaxPlayers,
-        kickPlayer: kickPlayer,
-        getId: getId,
-        setId: setId,
-        setName: setName,
-        getName: getName,
-        setLeader: setLeader,
-        getLeader: getLeader
-    };
-
-}());
+    this.addPlayer = addPlayer;
+    this.getPlayers = getPlayers;
+    this.setMaxPlayers = setMaxPlayers;
+    this.kickPlayer = kickPlayer;
+    this.getId = getId;
+    this.setId = setId;
+    this.setName = setName;
+    this.getName = getName;
+    this.setLeader = setLeader;
+    this.getLeader = getLeader;
+};
 
