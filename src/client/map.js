@@ -1,10 +1,14 @@
 /* 
  * Sourcecode für Karte
  */
-(function(){
-tddjs.namespace("client").Map = {
+
+tddjs.namespace("client.map").map = map;
+
+function map()
+{
+    var _continente = {};    
+  
+}
     
-};
-}());
 
 
