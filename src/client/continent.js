@@ -23,7 +23,9 @@ function continent()
 
     function hasCountry(aCountry)
     {
-        return false;
+        if(_country.indexOf(aCountry) >= 0)
+            return true;
+        else return false;
     }
 
     function getCountrys()
