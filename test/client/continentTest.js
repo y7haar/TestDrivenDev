@@ -35,10 +35,10 @@ TestCase("ContinentTest", {
         assertFunction(this.continent1.addCountry);
         assertFunction(this.continent1.getCountry);
         
-        assertEquals([],this.continent1.getCountrys());
+        assertEquals(this.countryContainer,this.continent1.getCountrys());
         assertEquals(0,this.continent1.getCountryCount());
+       
         
-
         this.countryContainer[this.country1.getName()] = this.country1; 
         this.continent1.addCountry(this.country1);
         assertEquals(this.countryContainer, this.continent1.getCountrys());
@@ -53,7 +53,7 @@ TestCase("ContinentTest", {
         this.continent1.addCountry(this.country3);
         assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
-        
+    
         var fakeCountry = {name:'Deutschland'};
         var continent = this.continent1;
         
@@ -65,7 +65,7 @@ TestCase("ContinentTest", {
         assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
         
-        assertSame(this.country1,this.continent1.getCountry(this.country.getName()));
+        assertSame(this.country1,this.continent1.getCountry(this.country1.getName()));
         assertNotSame(this.country2, this.continent1.getCountry("TakatukaLand"));
         
     },    
