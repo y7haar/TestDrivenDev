@@ -70,13 +70,13 @@ TestCase("ContinentTest", {
         
         var continent = this.continent1;
         assertNoException(function(){continent.setUnitBonus(5);});
-        assertEquals(5,this.cntinent1.getUnitBonus);
+        assertEquals(5,this.continent1.getUnitBonus);
         
         assertException(function(){
             continent.setUnitbonus(-200);
         },"Error");
        
-        assertEquals(5,this.cntinent1.getUnitBonus);
+        assertEquals(5,this.continent1.getUnitBonus);
     }
 
 });
