@@ -53,7 +53,7 @@ TestCase("ContinentTest", {
         this.continent1.addCountry(this.country3);
         assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
-    
+
         var fakeCountry = {name:'Deutschland'};
         var continent = this.continent1;
         
