@@ -42,8 +42,9 @@ function continent()
     {
         if (!(aCountry instanceof tddjs.client.map.country))
             throw new TypeError("Parameter ist not instance of Country");
-
-        _country.push(aCountry);
+        
+        var countryName = aCountry.getName();
+        _country[countryName] = aCountry;
     }
 
     function getCountryCount()
@@ -51,12 +52,26 @@ function continent()
         return _country.length;
     }
 
-    function hasCountry(aCountry)
+    function hasCountryByObject(aCountry)
     {
         if (_country.indexOf(aCountry) >= 0)
             return true;
         else
             return false;
+    }
+    
+    function hasCountryByName(aCountryName)
+    {
+        if(typeof _country[aCountryName] != "undefined")
+            return true;
+        else return false;
+    }
+    
+    function getCountry(aCountryName)
+    {
+        if(hasCountryByName(aCountryName))
+            return _country[aCountryName];
+        else return false;
     }
 
     function getCountrys()
@@ -71,6 +86,8 @@ function continent()
     this.addCountry = addCountry;
     this.getCountryCount = getCountryCount;
     this.getCountrys = getCountrys;
-    this.hasCountry = hasCountry;
+    this.hasCountryByObject = hasCountryByObject;
+    this.hasCountryByName = hasCountryByName;
+    this.getCountry = getCountry;
 
 };
