@@ -2,35 +2,36 @@
 Source-Code for Continent
  */
 
+tddjs.namespace("client.map").continent = continent;
 
-(function()
+function continent()
 {
-    var _Country = [];
-    
+    var _country = [];
+
     function addCountry(aCountry)
     {
-      _Country.push(aCountry);
+        _country.push(aCountry);
     }
-    
+
     function getCountryCount()
     {
-       return _Country.length;
+        return _country.length;
     }
-    
+
     function hasCountry(aCountry)
     {
-       return false;
+        return false;
     }
-    
+
     function getCountrys()
     {
-        return _Country;
+        return _country;
     }
-    
-    tddjs.namespace("client.map").Continent = {
-        addCountry: addCountry,
-        getCountryCount: getCountryCount,
-        getCountrys: getCountrys,
-        hasCountry: hasCountry
-    };    
-}());
+
+
+    this.addCountry = addCountry;
+    this.getCountryCount = getCountryCount;
+    this.getCountrys = getCountrys;
+    this.hasCountry = hasCountry;
+  
+};
