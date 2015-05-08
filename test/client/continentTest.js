@@ -21,7 +21,7 @@ TestCase("ContinentTest", {
 
         assertObject(this.continent1);
     },
-    "test if Continent1 stores country objects": function () {
+    "test if Continent1 stores country objects,exception if not country instance": function () {
 
         assertEquals([],this.continent1.getCountrys());
         assertEquals(0,this.continent1.getCountryCount());
@@ -37,6 +37,18 @@ TestCase("ContinentTest", {
         this.continent1.addCountry(this.country3);
         assertEquals([this.country1,this.country2, this.country3], this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
+        
+        var fakeCountry = {name:'Deutschland'};
+        var continent = this.continent1;
+        
+        assertException(function(){
+            continent.addCountry(fakeCountry);
+        },"TypeError");
+        
+        //is array still the same after trying to add a fakeCountry object
+        assertEquals([this.country1,this.country2, this.country3], this.continent1.getCountrys());
+        assertEquals(3,this.continent1.getCountryCount());
+        
     },    
     "test if contrys are in Continent1": function () {
         
