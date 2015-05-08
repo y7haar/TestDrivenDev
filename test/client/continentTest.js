@@ -63,20 +63,22 @@ TestCase("ContinentTest", {
     "test setter/getter of unitBonus": function () {
         
         assertNotUndefined(this.continent1.setUnitBonus);
-        assertFunction(this.continent1.setUnitBonus);
-        
+        assertFunction(this.continent1.setUnitBonus);        
         assertNotUndefined(this.continent1.getUnitBonus);
         assertFunction(this.continent1.getUnitBonus);
         
         var continent = this.continent1;
+        
+        assertException(function(){continent.getUnitBonus();},"Error");
+        
         assertNoException(function(){continent.setUnitBonus(5);});
-        assertEquals(5,this.continent1.getUnitBonus);
+        assertEquals(5,this.continent1.getUnitBonus());
         
         assertException(function(){
             continent.setUnitbonus(-200);
         },"Error");
        
-        assertEquals(5,this.continent1.getUnitBonus);
+        assertEquals(5,this.continent1.getUnitBonus());
     }
 
 });
