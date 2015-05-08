@@ -54,7 +54,7 @@ function continent()
 
     function hasCountryByObject(aCountry)
     {
-        if (_countrys.indexOf(aCountry) >= 0)
+        if (Object.keys(_countrys).indexOf(aCountry.getName()) >= 0)
             return true;
         else
             return false;
