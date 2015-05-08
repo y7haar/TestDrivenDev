@@ -8,29 +8,41 @@ function continent()
 {
     var _country = [];
     var _unitBonus;
-    
+
     function setUnitBonus(number)
     {
-        if(isNaN(number))
+        if (isNaN(number))
+        {           
             throw new TypeError("Parameter ist not a Number.");
-        else if ( number < 0)
-            throw new Error("Parameter is < then 0 ");
-        
+        }
+        else if (number < 0)
+        {
+            throw {
+                name: "initError",
+                level: "FatalError",
+                message: "Parameter is undefined, call continent.setUnitBonus before.",
+                htmlMessage: "Error detected. Please contact support.",
+                toString: function () {
+                    return this.name + ": " + this.message;
+                }
+            };
+        }
+
         _unitBonus = number;
     }
-    
+
     function getUnitBonus()
     {
-      
-        
+        if (typeof _unitBonus == "undefined")
+            throw new Error("unitBonus is undefined, call setUnitBonus before");
         return _unitBonus;
     }
 
     function addCountry(aCountry)
     {
-        if(!(aCountry instanceof tddjs.client.map.country))
+        if (!(aCountry instanceof tddjs.client.map.country))
             throw new TypeError("Parameter ist not instance of Country");
-        
+
         _country.push(aCountry);
     }
 
@@ -41,17 +53,18 @@ function continent()
 
     function hasCountry(aCountry)
     {
-        if(_country.indexOf(aCountry) >= 0)
+        if (_country.indexOf(aCountry) >= 0)
             return true;
-        else return false;
+        else
+            return false;
     }
 
     function getCountrys()
     {
         return _country;
     }
-    
-    
+
+
     this.setUnitBonus = setUnitBonus;
     this.getUnitBonus = getUnitBonus;
 
@@ -59,5 +72,5 @@ function continent()
     this.getCountryCount = getCountryCount;
     this.getCountrys = getCountrys;
     this.hasCountry = hasCountry;
-  
+
 };
