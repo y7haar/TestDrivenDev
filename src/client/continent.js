@@ -6,7 +6,7 @@ tddjs.namespace("client.map").continent = continent;
 
 function continent()
 {
-    var _country = [];
+    var _countrys = [];
     var _unitBonus;
 
     function setUnitBonus(number)
@@ -44,17 +44,17 @@ function continent()
             throw new TypeError("Parameter ist not instance of Country");
         
         var countryName = aCountry.getName();
-        _country[countryName] = aCountry;
+        _countrys[countryName] = aCountry;
     }
 
     function getCountryCount()
     {
-        return _country.length;
+        return _countrys.length;
     }
 
     function hasCountryByObject(aCountry)
     {
-        if (_country.indexOf(aCountry) >= 0)
+        if (_countrys.indexOf(aCountry) >= 0)
             return true;
         else
             return false;
@@ -62,7 +62,7 @@ function continent()
     
     function hasCountryByName(aCountryName)
     {
-        if(typeof _country[aCountryName] != "undefined")
+        if(typeof _countrys[aCountryName] != "undefined")
             return true;
         else return false;
     }
@@ -70,13 +70,13 @@ function continent()
     function getCountry(aCountryName)
     {
         if(hasCountryByName(aCountryName))
-            return _country[aCountryName];
+            return _countrys[aCountryName];
         else return false;
     }
 
     function getCountrys()
     {
-        return _country;
+        return _countrys;
     }
 
 
