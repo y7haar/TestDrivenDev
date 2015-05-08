@@ -5,8 +5,8 @@
 TestCase("LobbyPlayerTest", {
     
     setUp: function () {
-        this.lobby = Object.create(tddjs.server.model.Lobby);
-        this.lobby2 = Object.create(tddjs.server.model.Lobby);
+        this.lobby = new tddjs.server.model.lobby();
+        this.lobby2 = new tddjs.server.model.lobby();
         this.player1 = {};
         this.player2 = {};
         this.player3 = {};
@@ -14,6 +14,12 @@ TestCase("LobbyPlayerTest", {
     
     tearDown: function () {
         this.lobby.getPlayers().length = 0;
+        
+        delete this.lobby;
+        delete this.lobby2;
+        delete this.player1;
+        delete this.player2;
+        delete this.player3;
     },
 
   "test object of Lobby should not be undefined": function () { 
@@ -119,7 +125,7 @@ TestCase("LobbyPlayerTest", {
 TestCase("LobbyLeaderTest", {
     
     setUp: function () {
-        this.lobby = Object.create(tddjs.server.model.Lobby);
+        this.lobby = new tddjs.server.model.lobby();
         this.player1 = {};
         this.player2 = {};
         this.player3 = {};
@@ -128,6 +134,11 @@ TestCase("LobbyLeaderTest", {
     
     tearDown: function () {
         this.lobby.getPlayers().length = 0;
+        delete this.lobby;
+        delete this.lobby2;
+        delete this.player1;
+        delete this.player2;
+        delete this.player3;
     },
 
    "test Lobby should store a lobby leader": function () { 
