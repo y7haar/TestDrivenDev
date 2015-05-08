@@ -11,17 +11,23 @@ function lobbyController()
     
     function addLobby(aLobby)
     {
+        if(!(aLobby instanceof tddjs.server.model.lobby))
+            throw new TypeError("Parameter is not a Lobby");
+        
         var index = aLobby.getId();
 
-        if(typeof _lobbies[index] !== "undefined")
+        if(typeof _lobbies[index] != "undefined")
             throw new Error("Index already in use");
-
+        
         _lobbies[index] = aLobby;
         _count++;
     }
     
     function removeLobby(aLobby)
     {
+        if(!(aLobby instanceof tddjs.server.model.lobby))
+            throw new TypeError("Parameter is not a Lobby");
+        
         var index = _lobbies.indexOf(aLobby);
         
         if(index >= 0)
