@@ -63,8 +63,8 @@ function Country()
     
     function setOwner(aOwner)
     {    
-        if(aOwner instanceof tddjs.client.Player)
-            throw new TypeError("parameter ist not a instace of Player");
+        if(!(aOwner instanceof tddjs.client.Player))
+            throw new TypeError("parameter is not a instace of Player");
         _owner = aOwner;
     }
     
