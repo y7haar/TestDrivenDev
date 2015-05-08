@@ -19,8 +19,8 @@ TestCase("CountryBorderTest", {
         this.country2 = null;
         this.country3 = null;
     },
-    "test object of country should not be undefined": function () {   
-
+    "test object of country should not be undefined": function () {  
+            
         assertObject(this.country1); 
     },
     "test country1 should store other countrys, exception if not a Country": function () {

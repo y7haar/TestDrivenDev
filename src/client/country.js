@@ -127,20 +127,20 @@ function country()
     getOwner : getOwner
     };
     */
-   this.setName = setName;
-   this.getName = getName;
-   
-   this.addBorder = addBorder;
-   this.getBorderCount = getBorderCount;
-   this.borders = borders;
-   
-   this.getUnitCount = getUnitCount;
-   this.setUnitCount = setUnitCount;
-   this.addUnits = addUnits;
-   this.subUnits= subUnits;
-   
-   this.setOwner = setOwner;
-   this.getOwner = getOwner;   
+    this.setName = setName;
+    this.getName = getName;
+
+    this.addBorder = addBorder;
+    this.getBorderCount = getBorderCount;
+    this.borders = borders;
+
+    this.getUnitCount = getUnitCount;
+    this.setUnitCount = setUnitCount;
+    this.addUnits = addUnits;
+    this.subUnits = subUnits;
+
+    this.setOwner = setOwner;
+    this.getOwner = getOwner;   
     
 };
 
