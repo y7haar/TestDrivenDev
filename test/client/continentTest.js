@@ -68,10 +68,9 @@ TestCase("ContinentTest", {
         assertNotUndefined(this.continent1.getUnitBonus);
         assertFunction(this.continent1.getUnitBonus);
         
-        assertNoException(this.continent1.setUnitBonus(5));
-        assertEquals(5,this.cntinent1.getUnitBonus);
-        
         var continent = this.continent1;
+        assertNoException(function(){continent.setUnitBonus(5);});
+        assertEquals(5,this.cntinent1.getUnitBonus);
         
         assertException(function(){
             continent.setUnitbonus(-200);
