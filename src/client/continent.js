@@ -10,6 +10,9 @@ function continent()
 
     function addCountry(aCountry)
     {
+        if(!(aCountry instanceof tddjs.client.map.country))
+            throw new TypeError("Parameter ist not instance of Country");
+        
         _country.push(aCountry);
     }
 
