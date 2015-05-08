@@ -12,7 +12,7 @@ function gameLoopController()
     
     function setMap(aMap)
     {
-        if(aMap instanceof tddjs.client.Map)
+        if(!(aMap instanceof tddjs.client.Map))
             throw new TypeError("Parameter ist not instance of Map");
         this._map = aMap;
     }
@@ -24,8 +24,8 @@ function gameLoopController()
     
     function setPlayer(aPlayer)
     {
-        if(aPlayer instanceof tddjs.client.Player)
-            throw new TyperError("Parameter ist not instance of Player");
+        if(!(aPlayer instanceof tddjs.client.Player))
+            throw new TypeError("Parameter ist not instance of Player");
         this._player = aPlayer;
     }
     
@@ -34,6 +34,17 @@ function gameLoopController()
         return this._player;
     }
     
+    function isAttackPosible(country1,country2)
+    {
+        if(!(oountry1 instanceof tddjs.client.map.country))
+            throw new TypeError("Parameter1 ist not instance of Country");
+        else if(!(oountry1 instanceof tddjs.client.map.country))
+            throw new TypeError("Parameter2 ist not instance of Country");
+        
+        if(country1.borders(country2) && country2.borders(country1)) return true;
+        
+        else return false;
+    }    
     
     this.setMap = setMap;
     this.getMap = getMap;
