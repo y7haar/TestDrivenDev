@@ -12,7 +12,6 @@ TestCase("ContinentTest", {
         this.continent1 = new tddjs.client.map.continent();
     },
     tearDown: function () {
-
         this.country1 = null;
         this.country2 = null;
         this.country3 = null;
@@ -22,17 +21,25 @@ TestCase("ContinentTest", {
 
         assertObject(this.continent1);
     },
-    "test if Continent1 should store country1, country2 and country3": function () {
+    "test if Continent1 stores country objects": function () {
 
-        assertEquals(0, this.continent1.getCountryCount());
+        assertEquals([],this.continent1.getCountrys());
+        assertEquals(0,this.continent1.getCountryCount());
+        
         this.continent1.addCountry(this.country1);
-        assertEquals(1, this.continent1.getCountryCount());
+        assertEquals([this.country1], this.continent1.getCountrys());
+        assertEquals(1,this.continent1.getCountryCount());
+
         this.continent1.addCountry(this.country2);
-        assertEquals(2, this.continent1.getCountryCount());
+        assertEquals([this.country1,this.country2], this.continent1.getCountrys());
+        assertEquals(2,this.continent1.getCountryCount());
+
         this.continent1.addCountry(this.country3);
-        assertEquals(3, this.continent1.getCountryCount());
-    },
+        assertEquals([this.country1,this.country2, this.country3], this.continent1.getCountrys());
+        assertEquals(3,this.continent1.getCountryCount());
+    },    
     "test if contrys are in Continent1": function () {
+        
         assertTrue(this.continent1.hasCountry(this.country1));
         assertTrue(this.continent1.hasCountry(this.country2));
         assertTrue(this.continent1.hasCountry(this.country3));
