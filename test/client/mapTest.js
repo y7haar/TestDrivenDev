@@ -48,6 +48,7 @@ TestCase("MapTest",
     {
         assertNotUndefinded(this.map1);
         assertObject(this.map1);
+        assertTrue(this.map1 instanceof tddjs.client.map.map);
     }  
 });
 

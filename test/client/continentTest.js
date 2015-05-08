@@ -111,6 +111,28 @@ TestCase("ContinentTest", {
         },"TypeError");
        
         assertEquals(5,this.continent1.getUnitBonus());
+    },
+    "test setter/getter for Continent Name": function () {
+        
+        assertNotUndefined(this.continent1.setName);
+        assertFunction(this.continent1.setName);        
+        assertNotUndefined(this.continent1.getName);
+        assertFunction(this.continent1.getName);
+        
+        var continent = this.continent1;
+        
+        assertException(function(){continent.getName();},"initError");
+        
+        assertNoException(function(){continent.setName("Europa");});
+        assertEquals("Europa",this.continent1.getName());
+              
+        assertException(function(){
+            continent.setName(1337);
+        },"TypeError");
+       
+        assertEquals("Europa",this.continent1.getName());
     }
+    
+    
 
 });
