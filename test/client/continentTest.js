@@ -75,8 +75,12 @@ TestCase("ContinentTest", {
         assertEquals(5,this.continent1.getUnitBonus());
         
         assertException(function(){
-            continent.setUnitbonus(-200);
-        },"Error");
+            continent.setUnitBonus(-1);
+        },"initError");
+        
+         assertException(function(){
+            continent.setUnitBonus("Holla die Waldfee");
+        },"TypeError");
        
         assertEquals(5,this.continent1.getUnitBonus());
     }
