@@ -2,18 +2,31 @@
 Source-Code for Country
  */
 
-tddjs.namespace("client.map").country= Country;
+tddjs.namespace("client.map").country= country;
          
-function Country()
+function country()
 {   
     var _border = [];
     var _unitCount = 1;
-    var _owner; 
+    var _owner;
+    var _name = "";
     
+    function setName(aName)
+    {
+        if(typeof aName !== "string")
+            throw new TypeError("Parameter is not a String.");
+        _name = aName;            
+    }
     
-    
+    function getName()
+    {
+        return _name;
+    }
+
     function addBorder(aCountry)
     {
+        if(!(aCountry instanceof tddjs.client.map.country))
+            throw new TypeError("Parameter is not instance of country.");
         _border.push(aCountry);
     }
 
@@ -87,6 +100,8 @@ function Country()
     getOwner : getOwner
     };
     */
+   this.setName = setName;
+   this.getName = getName;
    
    this.addBorder = addBorder;
    this.getBorderCount = getBorderCount;
