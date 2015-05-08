@@ -58,7 +58,26 @@ TestCase("ContinentTest", {
         assertTrue(this.continent1.hasCountry(this.country1));
         assertFalse(this.continent1.hasCountry(this.country2));
         assertTrue(this.continent1.hasCountry(this.country3));
+    },
+    
+    "test setter/getter of unitBonus": function () {
+        
+        assertNotUndefined(this.continent1.setUnitBonus);
+        assertFunction(this.continent1.setUnitBonus);
+        
+        assertNotUndefined(this.continent1.getUnitBonus);
+        assertFunction(this.continent1.getUnitBonus);
+        
+        assertNoException(this.continent1.setUnitBonus(5));
+        assertEquals(5,this.cntinent1.getUnitBonus);
+        
+        var continent = this.continent1;
+        
+        assertException(function(){
+            continent.setUnitbonus(-200);
+        },"Error");
+       
+        assertEquals(5,this.cntinent1.getUnitBonus);
     }
-
 
 });
