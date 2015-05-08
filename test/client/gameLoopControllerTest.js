@@ -54,7 +54,7 @@ TestCase("GameLoopTests", {
         
         assertSame(this.gameLoop.getMap(), this.map);           
     },    
-    "test return true if a attack is possible false if not": function () { 
+    "test return true if a attack is possible false if not,Typeerror if not country obj": function () { 
         
         this.gameLoop.setMap(this.map);
         this.gameLoop.setPlayer(this.player1);
@@ -64,9 +64,12 @@ TestCase("GameLoopTests", {
         var c3 = new tddjs.client.map.country();
         
         c1.addBorder(c2);
-        c2.addBorder(c1);       
+        c2.addBorder(c1);
+        c2.addBorder(c3);
+        c3.addBorder(c2);
         
         assertTrue(this.gameLoop.isAttackPossible(c1,c2));
+        assertFalse(this.gameLoop.isAttackPossible(c1, c3));
            
     }
   
