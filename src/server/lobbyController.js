@@ -58,7 +58,9 @@ function lobbyController()
     
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
+        
         this.getLobbyCount = getLobbyCount;
         this.getLobbies = getLobbies;
+        
         this.getLobbyById = getLobbyById;
 };
