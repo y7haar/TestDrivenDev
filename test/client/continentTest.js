@@ -13,12 +13,16 @@ TestCase("ContinentTest", {
         this.country3 = new tddjs.client.map.country();
         this.country3.setName("Guantemala");
         this.continent1 = new tddjs.client.map.continent();
+        
+        this.countryContainer = {};
+        
     },
     tearDown: function () {
         this.country1 = null;
         this.country2 = null;
         this.country3 = null;
         this.continent = null;
+        this.countryContainer = null;
     },
     "test object of Continent should not be undefined": function () {
 
@@ -29,21 +33,25 @@ TestCase("ContinentTest", {
         assertFunction(this.continent1.getCountrys);
         assertFunction(this.continent1.getCountryCount);
         assertFunction(this.continent1.addCountry);
-        assertfunciton(this.continent1.getCountry);
+        assertFunction(this.continent1.getCountry);
         
         assertEquals([],this.continent1.getCountrys());
         assertEquals(0,this.continent1.getCountryCount());
         
+
+        this.countryContainer[this.country1.getName()] = this.country1; 
         this.continent1.addCountry(this.country1);
-        assertEquals([this.country1], this.continent1.getCountrys());
+        assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(1,this.continent1.getCountryCount());
-
+        
+        this.countryContainer[this.country2.getName()] = this.country2; 
         this.continent1.addCountry(this.country2);
-        assertEquals([this.country1,this.country2], this.continent1.getCountrys());
+        assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(2,this.continent1.getCountryCount());
-
+        
+        this.countryContainer[this.country3.getName()] = this.country3; 
         this.continent1.addCountry(this.country3);
-        assertEquals([this.country1,this.country2, this.country3], this.continent1.getCountrys());
+        assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
         
         var fakeCountry = {name:'Deutschland'};
@@ -54,7 +62,7 @@ TestCase("ContinentTest", {
         },"TypeError");
         
         //is array still the same after trying to add a fakeCountry object
-        assertEquals([this.country1,this.country2, this.country3], this.continent1.getCountrys());
+        assertEquals(this.countryContainer, this.continent1.getCountrys());
         assertEquals(3,this.continent1.getCountryCount());
         
         assertSame(this.country1,this.continent1.getCountry(this.country.getName()));
@@ -64,7 +72,7 @@ TestCase("ContinentTest", {
     "test if contrys are in Continent1": function () {
         
         assertFunction(this.continent1.hasCountryByObject);
-        assertFunciton(this.continent1.hasCountryByName);
+        assertFunction(this.continent1.hasCountryByName);
         
         
         this.continent1.addCountry(this.country1);
