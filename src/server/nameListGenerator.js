@@ -1,7 +1,10 @@
 /* 
  *  Source-Code for NameListGenerator
  */
-(function ()
+
+tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
+
+function nameListGenerator()
 {
         var _nameList = [];
         
@@ -31,12 +34,10 @@
             }
         }
     
-        tddjs.namespace("server.controller").NameListGenerator = {
-            setNameList: setNameList,
-            getNameList: getNameList,
-            shuffleNameList: shuffleNameList
-        };
+        this.setNameList = setNameList;
+        this.getNameList = getNameList;
+        this.shuffleNameList = shuffleNameList;
     
-}());
+};
 
 
