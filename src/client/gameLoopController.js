@@ -50,4 +50,6 @@ function gameLoopController()
     this.getMap = getMap;
     this.setPlayer = setPlayer;
     this.getPlayer = getPlayer;
+    this.isAttackPossible = isAttackPossible;
+    
 }
