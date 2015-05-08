@@ -43,10 +43,11 @@ TestCase("LobbyControllerTest", {
          
          var lobbyController = this.lobbyController;
          
-        assertException(function() { lobbyController.addLobby(5); }, "TypeError");
+         console.log("#####################");
+         assertException(function() {lobbyController.addLobby("asd");}, "TypeError");
   },
   
-   "test lobbyController should return a specific Lobby by Id ": function () { 
+   "test lobbyController should return a specific Lobby by Id": function () { 
         this.lobbyController.addLobby(this.lobby1);
         this.lobbyController.addLobby(this.lobby2);
         
@@ -85,7 +86,7 @@ TestCase("LobbyControllerTest", {
         assertException(function() { lobbyController.addLobby(lobby1); }, "Error");
   },
   
-        "test lobbyController should hold a reference to lobby1 and remove lobby2": function () { 
+        "test lobbyController should hold a reference to lobby1 and remove lobby2, Exception at removing if parameter is no Lobby": function () { 
         assertNotSame(this.lobby1, this.lobbyController.getLobbies()[0]);
         assertNotSame(this.lobby1, this.lobbyController.getLobbies()[1]);
         assertNotSame(this.lobby2, this.lobbyController.getLobbies()[0]);
@@ -102,6 +103,9 @@ TestCase("LobbyControllerTest", {
         this.lobbyController.removeLobby(this.lobby2);
         assertNotSame(this.lobby2, this.lobbyController.getLobbies()[1]);
         assertEquals(1, this.lobbyController.getLobbyCount());
+        
+        var lobbyController = this.lobbyController;
+        assertException(function() {lobbyController.removeLobby("asd");}, "TypeError");
   }
   
 });
