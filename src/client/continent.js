@@ -24,7 +24,17 @@ function continent()
     function getUnitBonus()
     {
         if (typeof _unitBonus == "undefined")
-            throw new Error("unitBonus is undefined, call setUnitBonus before");
+        {
+            throw {
+                name: "initError",
+                level: "FatalError",
+                message: "Parameter is undefined, call continent.setUnitBonus before.",
+                htmlMessage: "Error detected. Please contact support.",
+                toString: function () {
+                    return this.name + ": " + this.message;
+                }
+            };
+        }
         return _unitBonus;
     }
 

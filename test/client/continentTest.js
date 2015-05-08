@@ -97,7 +97,7 @@ TestCase("ContinentTest", {
         
         var continent = this.continent1;
         
-        assertException(function(){continent.getUnitBonus();},"Error");
+        assertException(function(){continent.getUnitBonus();},"initError");
         
         assertNoException(function(){continent.setUnitBonus(5);});
         assertEquals(5,this.continent1.getUnitBonus());
