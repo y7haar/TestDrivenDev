@@ -52,8 +52,8 @@ TestCase("ContinentTest", {
     },    
     "test if contrys are in Continent1": function () {
         
-        this.continent.addCountry(this.country1);
-        this.continent.addCountry(this.country3);
+        this.continent1.addCountry(this.country1);
+        this.continent1.addCountry(this.country3);
         
         assertTrue(this.continent1.hasCountry(this.country1));
         assertFalse(this.continent1.hasCountry(this.country2));
