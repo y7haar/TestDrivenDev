@@ -4,9 +4,9 @@
 TestCase("PlayerTest",
 {
     setUp: function () {
-        this.player1 = Object.create(tddjs.client.Player);
-        this.country1 = Object.create(tddjs.client.map.Country);
-        this.country2 = Object.create(tddjs.client.map.Country);
+        this.player1 = new tddjs.client.player();
+        this.country1 = new tddjs.client.map.country();
+        this.country2 = new tddjs.client.map.country();
     },
     
     "test Player Object should be created": function () {
