@@ -17,7 +17,7 @@ function map()
     
     function hasContinent(aContinentName)
     {
-        if(Object.keys(_continents).indexOf(aContinentName))
+        if(Object.keys(_continents).indexOf(aContinentName) >= 0)
             return true;
         else return false;
     }
