@@ -41,5 +41,7 @@ function ajax()
     this.setRequestHeader = setRequestHeader;
     
     this.responseText = "";
+    this.readyState = 0;
+    this.status = 0;
 }
 
