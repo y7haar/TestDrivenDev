@@ -57,21 +57,23 @@ TestCase("AjaxStubGETTest", {
     "test should throw Exception if status is not 200 and readystate not 4": function () {  
         this.xhr.open(this.method, this.url, this.async);
         this.xhr.send();
-        this.xhr.readystate = 1;
+        this.xhr.readyState = 1;
         this.xhr.status = 0;
         
         var xhr = this.xhr;
         
         assertNoException(function() {xhr.onreadystatechange();});
 
-        this.xhr.readystate = 4;
+        this.xhr.readyState = 4;
         this.xhr.status = 0;
         
         var xhr = this.xhr;
         
+        console.log(this.xhr);
+        
         assertException(function() {xhr.onreadystatechange();}, "Error");
         
-        this.xhr.readystate = 4;
+        this.xhr.readyState = 4;
         this.xhr.status = 200;
         
         var xhr = this.xhr;
