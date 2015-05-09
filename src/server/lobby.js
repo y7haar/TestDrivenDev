@@ -9,6 +9,7 @@ function lobby()
     var _players = [];
     var _maxPlayers = 4;
     var _id = 0;
+    var _isIdSet = false;
     var _name = "GameLobby";
     var _leader;
 
@@ -18,7 +19,16 @@ function lobby()
         if(isNaN(aId))
             throw new TypeError("Parameter is not a number");
         
+        if(_isIdSet)
+            throw new Error("Id was already set, it is not allowed to change the id when setted once before");
+        
         _id = aId;
+        _isIdSet = true;
+    }
+    
+    function getId()
+    {
+        return _id;
     }
 
     function addPlayer(aPlayer)
@@ -61,11 +71,6 @@ function lobby()
         {
             _leader = null;
         }
-    }
-    
-    function getId()
-    {
-        return _id;
     }
     
     function setName(aName)
