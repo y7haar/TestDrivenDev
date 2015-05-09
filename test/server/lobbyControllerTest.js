@@ -126,6 +126,13 @@ TestCase("LobbyControllerTest", {
       assertEquals(3, this.lobbyController.getNextId());
       
       console.log(this.lobbyController.getLobbies());
+  },
+  
+  "test lobbyController should provide a getInstance-method and always return the same Object": function () { 
+      this.lobbyController1 = tddjs.server.controller.lobbyController.getInstance();
+      this.lobbyController2 = tddjs.server.controller.lobbyController.getInstance();
+      
+      assertSame(this.lobbyController1, this.lobbyController2);
   }
   
 });
