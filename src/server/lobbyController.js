@@ -18,6 +18,7 @@ function lobbyController()
 {
     var _lobbies = [];
     var _count = 0;
+    var _nextId = 0;
     
     function addLobby(aLobby)
     {
@@ -72,12 +73,10 @@ function lobbyController()
     
     function getNextId()
     {
-        var id = _lobbies.indexOf(undefined);
+        var currentId = _nextId;
+        _nextId++;
         
-        if(id < 0)
-            id = _lobbies.length;
-        
-        return id;
+        return currentId;
     }
     
         this.addLobby =  addLobby;
