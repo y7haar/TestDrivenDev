@@ -17,14 +17,14 @@ TestCase("LobbyFactoryTest", {
   },
   
    "test factory should provide getter for new unique instances of Lobby with correct Id": function () { 
-        assertFunction(this.lobbyFactory.getNewLobby());
-
+        var currentId = tddjs.server.controller.lobbyController.getInstance().getNextId(); 
+       
         this.lobby1 = this.lobbyFactory.getNewLobby();
         this.lobby2 = this.lobbyFactory.getNewLobby();
         
         assertNotSame(this.lobby1, this.lobby2);
-        assertEquals(1, this.lobby1.getId());
-        assertEquals(2, this.lobby2.getId());
+        assertEquals(currentId + 1, this.lobby1.getId());
+        assertEquals(currentId + 2, this.lobby2.getId());
   }
   
 });
