@@ -3,12 +3,23 @@
  */
 
 tddjs.namespace("server.controller").lobbyController =  lobbyController;
+tddjs.namespace("server.controller.lobbyController").getInstance =  getInstance;
+
+
+var _lobbyControllerInstance = null;
+
+function getInstance()
+{
+    if(_lobbyControllerInstance === null)
+        _lobbyControllerInstance = new tddjs.server.controller.lobbyController();
+    return _lobbyControllerInstance;
+}
 
 function lobbyController()
 {
     var _lobbies = [];
     var _count = 0;
-    var _instance = null;
+   // var _instance = null;
     
     function addLobby(aLobby)
     {
@@ -71,13 +82,13 @@ function lobbyController()
         return id;
     }
     
-    function getInstance()
-    {
-        if(_instance === null)
-            _instance = new tddjs.server.controller.lobbyController();
-        
-        return _instance;
-    }
+//    function getInstance()
+//    {
+//        if(_instance === null)
+//            _instance = new tddjs.server.controller.lobbyController();
+//        
+//        return _instance;
+//    }
     
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
@@ -88,5 +99,5 @@ function lobbyController()
         this.getLobbyById = getLobbyById;
         this.getNextId = getNextId;
         
-        this.getInstance = getInstance;
+        //this.getInstance = getInstance;
 };
