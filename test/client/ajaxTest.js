@@ -18,10 +18,10 @@ TestCase("AjaxStubTest", {
     },
     
     "test fake xhr should have all important XMLHttpRequest functions": function () {  
-        assertFunction(this.xhr.open());
-        assertFunction(this.xhr.onreadystatechange());
-        assertFunction(this.xhr.send());
-        assertFunction(this.xhr.setRequestHeader());
+        assertFunction(this.xhr.open);
+        assertFunction(this.xhr.onreadystatechange);
+        assertFunction(this.xhr.send);
+        assertFunction(this.xhr.setRequestHeader);
     }
     
 });
