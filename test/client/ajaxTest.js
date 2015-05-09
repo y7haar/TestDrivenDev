@@ -23,6 +23,8 @@ TestCase("AjaxStubTest", {
         assertFunction(this.xhr.setRequestHeader);
         
         assertNotUndefined(this.xhr.responseText);
+        assertNotUndefined(this.xhr.readyState);
+        assertNotUndefined(this.xhr.status);
     }
 });
 
