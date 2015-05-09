@@ -3,25 +3,42 @@
  */
 
 tddjs.namespace("server.controller").lobbyController =  lobbyController;
+tddjs.namespace("server.controller.lobbyController").getInstance =  getInstance;
+
+var _lobbyControllerInstance = null;
+
+function getInstance()
+{
+    if(_lobbyControllerInstance === null)
+        _lobbyControllerInstance = new tddjs.server.controller.lobbyController();
+    return _lobbyControllerInstance;
+}
 
 function lobbyController()
 {
     var _lobbies = [];
     var _count = 0;
+    var _nextId = 0;
     
     function addLobby(aLobby)
     {
+        if(!(aLobby instanceof tddjs.server.model.lobby))
+            throw new TypeError("Parameter is not a Lobby");
+        
         var index = aLobby.getId();
 
-        if(typeof _lobbies[index] !== "undefined")
+        if(typeof _lobbies[index] != "undefined")
             throw new Error("Index already in use");
-
+        
         _lobbies[index] = aLobby;
         _count++;
     }
     
     function removeLobby(aLobby)
     {
+        if(!(aLobby instanceof tddjs.server.model.lobby))
+            throw new TypeError("Parameter is not a Lobby");
+        
         var index = _lobbies.indexOf(aLobby);
         
         if(index >= 0)
@@ -30,7 +47,6 @@ function lobbyController()
             _count--;
         }
     }
-    
     
     function getLobbyCount()
     {
@@ -41,8 +57,7 @@ function lobbyController()
     {
         return _lobbies;
     }
-    
-    
+
     function getLobbyById(aId)
     {      
         if(isNaN(aId))
@@ -56,6 +71,14 @@ function lobbyController()
         return lobby;
     }
     
+    function getNextId()
+    {
+        var currentId = _nextId;
+        _nextId++;
+        
+        return currentId;
+    }
+    
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
         
@@ -63,4 +86,6 @@ function lobbyController()
         this.getLobbies = getLobbies;
         
         this.getLobbyById = getLobbyById;
+        this.getNextId = getNextId;
+
 };
