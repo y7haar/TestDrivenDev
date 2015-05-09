@@ -46,6 +46,10 @@ TestCase("AjaxStubGETTest", {
         
         assertNoException(function() { xhr.open("GET", "/url", true); });
         assertNoException(function() { xhr.send(); });
+        
+        xhr = new tddjs.stubs.ajax();
+        
+        assertException(function() { xhr.send(); }, "Error");
     }
     
 });
