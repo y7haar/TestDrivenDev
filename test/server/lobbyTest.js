@@ -29,13 +29,19 @@ TestCase("LobbyPlayerTest", {
     "test Lobby should store Id": function () { 
        this.lobby.setId(2);
        assertEquals(2, this.lobby.getId());
-       
-       this.lobby.setId(1);
-       assertEquals(1, this.lobby.getId());
-       
+
        this.lobby2.setId(10);
-       assertEquals(1, this.lobby.getId());
+       assertEquals(2, this.lobby.getId());
        assertEquals(10, this.lobby2.getId());
+  },
+  
+  "test setting the lobby id should only be allowed once, otherwise throw an exception": function () { 
+       this.lobby.setId(2);
+       assertEquals(2, this.lobby.getId());
+       
+       var lobby = this.lobby;
+       
+       assertException(function() { lobby.setId(3); }, "Error");
   },
   
     "test Lobby should store name": function () { 
