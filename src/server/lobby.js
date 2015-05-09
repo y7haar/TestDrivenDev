@@ -54,6 +54,11 @@ function lobby()
             _players.pop();
         }
     }
+    
+    function _getMaxPlayers()
+    {
+        return _players.length;
+    }
 
     function kickPlayer(aPlayer)
     {
@@ -107,15 +112,41 @@ function lobby()
         return _leader;
     }
     
+    function serialize()
+    {
+        var id = getId();
+        var name = getName();
+        var maxPlayers = _getMaxPlayers();
+        var leader = getLeader().getName();
+        
+        var lobbyObj = {
+            id: id,
+            name: name,
+            maxPlayers: maxPlayers,
+            leader: leader
+        };
+        
+        var json = JSON.stringify(lobbyObj);
+        
+        console.log(json);
+        
+        return json;
+    }
+    
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
     this.setMaxPlayers = setMaxPlayers;
     this.kickPlayer = kickPlayer;
+    
     this.getId = getId;
     this.setId = setId;
+    
     this.setName = setName;
     this.getName = getName;
+    
     this.setLeader = setLeader;
     this.getLeader = getLeader;
+    
+    this.serialize = serialize;
 };
 
