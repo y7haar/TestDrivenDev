@@ -37,7 +37,6 @@ function lobbyController()
         }
     }
     
-    
     function getLobbyCount()
     {
         return _count;
@@ -47,8 +46,7 @@ function lobbyController()
     {
         return _lobbies;
     }
-    
-    
+
     function getLobbyById(aId)
     {      
         if(isNaN(aId))
@@ -62,6 +60,16 @@ function lobbyController()
         return lobby;
     }
     
+    function getNextId()
+    {
+        var id = _lobbies.indexOf(undefined);
+        
+        if(id < 0)
+            id = _lobbies.length;
+        
+        return id;
+    }
+    
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
         
@@ -69,4 +77,5 @@ function lobbyController()
         this.getLobbies = getLobbies;
         
         this.getLobbyById = getLobbyById;
+        this.getNextId = getNextId;
 };
