@@ -7,9 +7,9 @@ TestCase("LobbyPlayerTest", {
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
         this.lobby2 = new tddjs.server.model.lobby();
-        this.player1 = {};
-        this.player2 = {};
-        this.player3 = {};
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
     },
     
     tearDown: function () {
@@ -132,16 +132,15 @@ TestCase("LobbyLeaderTest", {
     
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
-        this.player1 = {};
-        this.player2 = {};
-        this.player3 = {};
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
         this.lobby.setMaxPlayers(4);
     },
     
     tearDown: function () {
         this.lobby.getPlayers().length = 0;
         delete this.lobby;
-        delete this.lobby2;
         delete this.player1;
         delete this.player2;
         delete this.player3;
@@ -185,5 +184,48 @@ TestCase("LobbyLeaderTest", {
         this.lobby.kickPlayer(this.player2);
         assertNull(this.lobby.getLeader());
   }
+  
+});
+
+
+TestCase("LobbyServerTest", {
+    
+    setUp: function () {
+        this.lobby = new tddjs.server.model.lobby();
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
+        this.lobby.setMaxPlayers(4);
+    },
+    
+    tearDown: function () {
+        this.lobby.getPlayers().length = 0;
+        delete this.lobby;
+        delete this.player1;
+        delete this.player2;
+        delete this.player3;
+    },
+
+   "test Lobby should have a serialize method that returns a json string": function () { 
+       this.player1.setName("Bob");
+       this.player2.setName("Hanswurst");
+       
+       this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.setLeader(this.player1);
+        this.lobby.setMaxPlayers(2);
+        this.lobby.setId(42);
+        this.lobby.setName("TestLobby");
+
+        var json = this.lobby.serialize();
+        json = JSON.parse(json);
+        
+        assertEquals(2, json.maxPlayers);
+        assertEquals("TestLobby", json.name);
+        assertEquals(42, json.id);
+        assertEquals("Bob", json.leader);
+  }
+  
+     
   
 });
