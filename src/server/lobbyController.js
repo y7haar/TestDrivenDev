@@ -8,6 +8,7 @@ function lobbyController()
 {
     var _lobbies = [];
     var _count = 0;
+    var _instance = null;
     
     function addLobby(aLobby)
     {
@@ -70,6 +71,14 @@ function lobbyController()
         return id;
     }
     
+    function getInstance()
+    {
+        if(_instance === null)
+            _instance = new tddjs.server.controller.lobbyController();
+        
+        return _instance;
+    }
+    
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
         
@@ -78,4 +87,6 @@ function lobbyController()
         
         this.getLobbyById = getLobbyById;
         this.getNextId = getNextId;
+        
+        this.getInstance = getInstance;
 };
