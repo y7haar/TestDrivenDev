@@ -110,17 +110,22 @@ TestCase("LobbyControllerTest", {
   
   "test lobbyController should manage and provide the next available Id": function () { 
       assertEquals(0, this.lobbyController.getNextId());
-      assertEquals(1, this.lobbyController.getNextId());
+      assertEquals(0, this.lobbyController.getNextId());
       
       this.lobbyController.addLobby(this.lobby1);
       this.lobbyController.addLobby(this.lobby2);
       
       assertEquals(2, this.lobbyController.getNextId());
       
-      this.lobbyController.removeLobby(this.lobby1);
-      assertEquals(1, this.lobbyController.getNextId());
+      this.lobbyController.removeLobby(this.lobby2);
+      
+      console.log(this.lobbyController.getLobbies());
+      
+      assertEquals(0, this.lobbyController.getNextId());
       
       assertEquals(3, this.lobbyController.getNextId());
+      
+      console.log(this.lobbyController.getLobbies());
   }
   
 });
