@@ -133,6 +133,8 @@ TestCase("LobbyControllerTest", {
       this.lobbyController2 = tddjs.server.controller.lobbyController.getInstance();
       
       assertSame(this.lobbyController1, this.lobbyController2);
+      this.lobbyController1.addLobby(this.lobby1);
+      assertEquals(this.lobbyController1.getLobbyCount(), this.lobbyController2.getLobbyCount());
   }
   
 });
