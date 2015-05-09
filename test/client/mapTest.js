@@ -79,8 +79,8 @@ TestCase("MapTest",
         
         assertEquals({Europa:this.continent1},this.map1.getContinents());
         
-        assertTrue(this.map1.hasContinent(this.continent1));
-        assertFalse(this.map1.hasContinent(this.continent2));
+        assertTrue(this.map1.hasContinent(this.continent1.getName()));
+        assertFalse(this.map1.hasContinent(this.continent2.getName()));
         
     } 
 });

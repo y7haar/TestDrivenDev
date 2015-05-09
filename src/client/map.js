@@ -10,12 +10,16 @@ function map()
     
     function addContinent(aContinent)
     {
+        if(!(aContinent instanceof tddjs.client.map.continent))
+            throw new TypeError("Parameter ist not instance of Continent");
         _continents[aContinent.getName()] = aContinent;
     }
     
-    function hasContinent(aContinent)
+    function hasContinent(aContinentName)
     {
-        
+        if(Object.keys(_continents).indexOf(aContinentName))
+            return true;
+        else return false;
     }
     
     function getContinents()
