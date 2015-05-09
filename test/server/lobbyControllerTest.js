@@ -5,7 +5,7 @@
 TestCase("LobbyControllerTest", {
     
     setUp: function () {
-      this.lobbyController = new tddjs.server.controller.lobbyController();
+      this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
       this.lobby1 = new tddjs.server.model.lobby();
       this.lobby2 = new tddjs.server.model.lobby();
       this.lobby5 = new tddjs.server.model.lobby();
@@ -110,7 +110,7 @@ TestCase("LobbyControllerTest", {
   
   "test lobbyController should manage and provide the next available Id": function () { 
       assertEquals(0, this.lobbyController.getNextId());
-      assertEquals(0, this.lobbyController.getNextId());
+      assertEquals(1, this.lobbyController.getNextId());
       
       this.lobbyController.addLobby(this.lobby1);
       this.lobbyController.addLobby(this.lobby2);
@@ -119,13 +119,8 @@ TestCase("LobbyControllerTest", {
       
       this.lobbyController.removeLobby(this.lobby2);
       
-      console.log(this.lobbyController.getLobbies());
-      
-      assertEquals(0, this.lobbyController.getNextId());
-      
       assertEquals(3, this.lobbyController.getNextId());
-      
-      console.log(this.lobbyController.getLobbies());
+      assertEquals(4, this.lobbyController.getNextId());
   },
   
   "test lobbyController should provide a getInstance-method and always return the same Object": function () { 
