@@ -13,10 +13,6 @@ TestCase("LobbyControllerTest", {
       this.lobby1.setId(0);
       this.lobby2.setId(1);
       this.lobby5.setId(5);
-      
-      console.log(this.lobby1.getId());
-      console.log(this.lobby2.getId());
-      console.log(this.lobby5.getId());
     },
     
     tearDown: function(){
@@ -42,8 +38,6 @@ TestCase("LobbyControllerTest", {
          assertEquals(2, this.lobbyController.getLobbyCount());
          
          var lobbyController = this.lobbyController;
-         
-         console.log("#####################");
          assertException(function() {lobbyController.addLobby("asd");}, "TypeError");
   },
   
