@@ -63,7 +63,22 @@ TestCase("MapTest",
         assertFunction(this.map1.hasContinent);
         assertFunction(this.map1.getContinents);
         
-        this.map1.addContinent(this.continent1);
+        var map = this.map1;
+        var continent1 = this.continent1;
+        
+        assertNoException(function(){
+            map.addContinent(continent1);
+        });
+ 
+        assertEquals({Europa:this.continent1},this.map1.getContinents());        
+        
+        var fakeContinent ={name:"Nordpol", getName:function(){return name}};
+        assertException(function(){
+            map.addContinent(fakeContinent);
+        },"TypeError");
+        
+        assertEquals({Europa:this.continent1},this.map1.getContinents());        
+        
     } 
 });
 
