@@ -84,13 +84,19 @@ TestCase("AjaxStubGETTest", {
     },
     
     "test open and send should change readystate / status": function () {  
-        this.xhrObject.open();
-        assertEquals(1, this.xhrObject.readystate);
+        var a = this.xhrObject.open(this.method, this.url, this.async)();
+        
+        console.log(a);
+        
+        assertTrue(this.xhr.open.called);
+        assertEquals(1, this.xhrObject.readyState);
         assertEquals(0, this.xhrObject.status);
+        assertTrue(this.xhrObject.onreadystatechange.called);
         
         this.xhrObject.send();
-        assertEquals(4, this.xhrObject.readystate);
+        assertEquals(4, this.xhrObject.readyState);
         assertEquals(200, this.xhrObject.status);
+        assertTrue(this.xhrObject.onreadystatechange.called);
     }
     
 });

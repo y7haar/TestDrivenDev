@@ -11,15 +11,19 @@ function ajax()
     
     function open(method, url, async)
     {
-        if(arguments.length != 3)
-            throw new Error("All parameters must be setted");
+        console.log(this);
+        
+        this.setReadyState(1);
+        status = 0;
     }
     
     function send(data)
     {
+        this.setReadyState(4);
+        status = 200;
     }
     
-    function onreadystatechange()
+    function onreadystatechanged()
     {
     }
     
@@ -30,13 +34,15 @@ function ajax()
     
     function setReadyState(aState)
     {
-        this.readyState = aState;
+        console.log(this);
+        
+        readyState = aState;
         this.onreadystatechange();
     }
     
     this.open = stubFn(open);
     this.send = stubFn(send);
-    this.onreadystatechange = stubFn(onreadystatechange);
+    this.onreadystatechange = stubFn(onreadystatechanged);
     this.setReadyState = setReadyState;
     this.setRequestHeader = setRequestHeader;
     
