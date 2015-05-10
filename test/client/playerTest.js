@@ -76,16 +76,10 @@ TestCase("PlayerTest",
         assertFalse(this.player1.hasCountryByName("Lorna"));
     },
     
-    "test Shouldnt be able to remove a Country that has not been added": function() {
-        var player = this.player1;
-        var country2 = this.country2;
-        assertException(function(){player.removeCountry(country2);}, "Error");
-    },
-    
     "test Shouldnt be able to get a Country thats not added": function()
     {
         var player = this.player1;
-        assertException(function(){player.getCountry("Lorna");}, "TypeError");
+        assertNull(player.getCountry("Lorna"));
     },
     
     "test Should be able to get the asked country that has been added": function()
