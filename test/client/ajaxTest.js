@@ -5,8 +5,6 @@
 TestCase("AjaxStubTest", {
     setUp: function () {
         this.xhrObject = new tddjs.stubs.ajax();
-        //this.ajax = {};
-        //this.ajax.create = stubFn(this.xhr);
     }, 
     tearDown: function ()
     {
@@ -33,20 +31,10 @@ TestCase("AjaxStubTest", {
 TestCase("AjaxStubGETTest", {
     setUp: function () {
         this.xhrObject = new tddjs.stubs.ajax();
-        //this.ajax = {};
-        //this.ajax.create = stubFn(this.xhr);
-        
-        /*
-        this.xhrObject = this.ajax.create();
-        this.xhrObject.open = stubFn(this.xhrObject.open);
-        this.xhrObject.send = stubFn(this.xhrObject.send);
-        this.xhrObject.onreadystatechange = stubFn(this.xhrObject.onreadystatechange);
-        */
         
         this.url = "/url";
         this.method = "GET";
         this.async = true;
-
     }, 
     tearDown: function ()
     {
@@ -55,8 +43,10 @@ TestCase("AjaxStubGETTest", {
     
     "test if functions are called in correct order and parameters are set correctly --> everything is ok": function () {  
         this.xhrObject.open(this.method, this.url, this.async);
-        assertTrue(this.xhrObject.open.called);
-        assertEquals([this.method, this.url, this.async], this.xhrObject.open.args);
+        assertTrue(this.xhrObject.isOpenCalled());
+        
+        var xhrObject = this.xhrObject;
+        assertException(function() { xhrObject.open("bla"); }, "Error");
         
         this.xhrObject.send();
         assertTrue(this.xhrObject.isOpenCalled());
