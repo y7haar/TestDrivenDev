@@ -95,6 +95,10 @@ TestCase("MapTest",
         assertFalse(this.map1.getContinents()["Asien"].hasCountryByName("Country3"));
                 
         assertEquals("undefined",typeof this.map1.getContinents()["Europa"].getCountrys()["fakeCountry"]);                
+    },
+    
+    "test Should be able to get a correct Continent-Count": function() {
+        assertFunction(this.map1.getContinentCount);
     }
 });
 
