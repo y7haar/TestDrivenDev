@@ -27,10 +27,15 @@ function map()
         return _continents;
     }
     
+    function getContinentCount()
+    {
+        return 0;
+    }
+    
     this.addContinent = addContinent;
     this.hasContinent = hasContinent;
     this.getContinents = getContinents;
-  
+    this.getContinentCount = getContinentCount;
 }
     
 
