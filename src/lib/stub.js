@@ -1,4 +1,6 @@
 /*jslint indent: 2*/
+
+
 function stubFn(returnValue) {
   var fn = function () {
     fn.called = true;
