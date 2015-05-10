@@ -42,11 +42,39 @@ function ajax()
         this.onreadystatechange();
     }
     
+    function isOpenCalled()
+    {
+        var called = _isOpenCalled;
+        _isOpenCalled = false;
+        
+        return called;
+    }
+    
+    function isSendCalled()
+    {
+        var called = _isSendCalled;
+        _isSendCalled = false;
+        
+        return called;
+    }
+    
+    function isOnreadystatechangeCalled()
+    {
+        var called = _isOnreadystatechangeCalled;
+        _isOnreadystatechangeCalled = false;
+        
+        return called;
+    }
+    
     this.open = open;
     this.send = send;
     this.onreadystatechange  = onreadystatechange;
     this.setReadyState = setReadyState;
     this.setRequestHeader = setRequestHeader;
+    
+    this.isOpenCalled = isOpenCalled;
+    this.isSendCalled = isSendCalled;
+    this.isOnreadystatechangeCalled = isOnreadystatechangeCalled;
     
     this.responseText = "";
     this.readyState = readyState;
