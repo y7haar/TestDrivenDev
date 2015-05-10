@@ -31,7 +31,7 @@ function player(){
     
     function hasCountryByName(countryName)
     {
-        if(! (countryName instanceof string))
+        if(typeof countryName !== "string")
             throw new TypeError("searched Name is not a String");
         return false;
     }
@@ -52,6 +52,16 @@ function player(){
     {
         return 0;
     }
+    
+    function getCountry(countryName)
+    {
+        return null;
+    }
+    
+    function getCountrys()
+    {
+        return countrys;
+    }
  
   
     this.getName = getName;
@@ -61,6 +71,8 @@ function player(){
     this.addCountry = addCountry;
     this.removeCountry = removeCountry;
     this.getCountryCount = getCountryCount;
+    this.getCountry = getCountry;
+    this.getCountrys = getCountrys;
  
 };
 
