@@ -16,7 +16,7 @@ function player(){
     
     function setName(newName)
     {
-        if(typeof(newName) != "string")
+        if(typeof(newName) !== "string")
             throw new TypeError("Not a String");
         
         name = newName;
@@ -26,36 +26,50 @@ function player(){
     {
         if(! (searchedCountry instanceof tddjs.client.map.country))
             throw new TypeError("searched Object is not a Country");
-        return false;
+        
+        if (typeof countrys[searchedCountry.getName()] !== "undefined" )
+            return true;
+        else
+            return false;
     }
     
     function hasCountryByName(countryName)
     {
         if(typeof countryName !== "string")
             throw new TypeError("searched Name is not a String");
-        return false;
+        
+        if(typeof countrys[countryName] !== "undefined")
+            return true;
+        else return false;
     }
     
     function addCountry(addedCountry)
     {
         if(! (addedCountry instanceof tddjs.client.map.country))
             throw new TypeError("added Object is not a Country");
+        var countryName = addedCountry.getName();
+        countrys[countryName] = addedCountry;
     }
     
     function removeCountry(removedCountry)
     {
         if(! (removedCountry instanceof tddjs.client.map.country))
             throw new TypeError("removed Object is not a Country");
+        
+        var countryName = removedCountry.getName();
+        countrys[countryName] = "undefined";
     }
     
     function getCountryCount()
     {
-        return 0;
+        return Object.keys(countrys).length;
     }
     
     function getCountry(countryName)
     {
-        return null;
+        if(hasCountryByName(countryName))
+            return countrys[countryName];
+        else return null;
     }
     
     function getCountrys()
