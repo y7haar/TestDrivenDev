@@ -5,6 +5,9 @@
 TestCase("AjaxStubTest", {
     setUp: function () {
         this.xhr = new tddjs.stubs.ajax();
+        this.ajax = {};
+        this.ajax.create = stubFn(this.xhr);
+        this.xhrObject = this.ajax.create();
     }, 
     tearDown: function ()
     {
@@ -13,6 +16,7 @@ TestCase("AjaxStubTest", {
     
     "test xhr object should not be undefined": function () {  
         assertObject(this.xhr);
+        assertObject(this.ajax.create());
         assertTrue(this.xhr instanceof tddjs.stubs.ajax);
     },
     
@@ -31,6 +35,10 @@ TestCase("AjaxStubTest", {
 TestCase("AjaxStubGETTest", {
     setUp: function () {
         this.xhr = new tddjs.stubs.ajax();
+        this.ajax = {};
+        this.ajax.create = stubFn(this.xhr);
+        this.xhrObject = this.ajax.create();
+        
         this.url = "/url";
         this.method = "GET";
         this.async = true;
@@ -41,44 +49,38 @@ TestCase("AjaxStubGETTest", {
         delete this.xhr;
     },
     
-    "test if functions are called in correct order and parameters are set correctly": function () {  
-        var xhr = this.xhr;
+    "test if functions are called in correct order and parameters are set correctly --> everything is ok": function () {  
+        this.xhrObject.open(this.method, this.url, this.async);
+        assertTrue(this.xhrObject.open.called);
+        assertEquals([this.method, this.url, this.async], this.xhrObject.open.args);
         
-        assertException(function() { xhr.open(); }, "Error");
-        
-        assertNoException(function() { xhr.open("GET", "/url", true); });
-        assertNoException(function() { xhr.send(); });
-        
-        xhr = new tddjs.stubs.ajax();
-        
-        assertException(function() { xhr.send(); }, "Error");
+        this.xhrObject.send();
+        assertTrue(this.xhrObject.open.called);
+        assertTrue(this.xhrObject.send.called);
     },
     
-    "test should throw Exception if status is not 200 and readystate not 4": function () {  
-        this.xhr.open(this.method, this.url, this.async);
-        this.xhr.send();
-        this.xhr.readyState = 1;
-        this.xhr.status = 0;
+    "test if functions are called in correct order and parameters are set correctly --> send before open": function () {  
+        this.xhrObject.send();
+        assertFalse(this.xhrObject.open.called);
+        assertTrue(this.xhrObject.send.called);
         
-        var xhr = this.xhr;
+        this.xhrObject.open(this.method, this.url, this.async);
+        assertTrue(this.xhrObject.open.called);
+        assertEquals([this.method, this.url, this.async], this.xhrObject.open.args);
+    },
+    
+     "test if functions are called in correct order and parameters are set correctly --> incorrect params": function () {  
+        this.xhrObject.open(this.method, this.url);
+        assertTrue(this.xhrObject.open.called);
+        assertNotEquals([this.method, this.url, this.async], this.xhrObject.open.args);
+    },
+    
+    "test onreadystate should be called when readystate changed": function () {  
+        this.xhrObject.setReadyState(2);
+        assertTrue(this.xhrObject.onreadystatechange.called);
         
-        assertNoException(function() {xhr.onreadystatechange();});
-
-        this.xhr.readyState = 4;
-        this.xhr.status = 0;
-        
-        var xhr = this.xhr;
-        
-        console.log(this.xhr);
-        
-        assertException(function() {xhr.onreadystatechange();}, "Error");
-        
-        this.xhr.readyState = 4;
-        this.xhr.status = 200;
-        
-        var xhr = this.xhr;
-        
-        assertNoException(function() {xhr.onreadystatechange();});
+        this.xhrObject.setReadyState(3);
+        assertTrue(this.xhrObject.onreadystatechange.called);
     }
     
 });
