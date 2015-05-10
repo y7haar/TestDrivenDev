@@ -6,28 +6,21 @@ tddjs.namespace("stubs").ajax = ajax;
 
 function ajax()
 {
-    var _openCalled = false;
-    var _sendCalled = false;
+    var readyState = 0;
+    var status = 0;
     
     function open(method, url, async)
     {
         if(arguments.length != 3)
             throw new Error("All parameters must be setted");
-        
-        _openCalled = true;
     }
     
     function send(data)
     {
-        if(! _openCalled)
-            throw new Error("Open method must be called before send");
-        
-        _sendCalled = true;
     }
     
     function onreadystatechange()
     {
-        
     }
     
     function setRequestHeader(header, value)
@@ -35,13 +28,20 @@ function ajax()
         
     }
     
-    this.open = open;
-    this.send = send;
-    this.onreadystatechange = onreadystatechange;
+    function setReadyState(aState)
+    {
+        this.readyState = aState;
+        this.onreadystatechange();
+    }
+    
+    this.open = stubFn(open);
+    this.send = stubFn(send);
+    this.onreadystatechange = stubFn(onreadystatechange);
+    this.setReadyState = setReadyState;
     this.setRequestHeader = setRequestHeader;
     
     this.responseText = "";
-    this.readyState = 0;
-    this.status = 0;
+    this.readyState = readyState;
+    this.status = status;
 }
 
