@@ -97,8 +97,18 @@ TestCase("MapTest",
         assertEquals("undefined",typeof this.map1.getContinents()["Europa"].getCountrys()["fakeCountry"]);                
     },
     
-    "test Should be able to get a correct Continent-Count": function() {
+    "test Should be able to get a correct Continent-Count": function()
+    {
         assertFunction(this.map1.getContinentCount);
+        
+        var x =  this.map1.getContinentCount();
+        assertTrue(x === 0);
+        this.map1.addContinent(this.continent1);
+        x =  this.map1.getContinentCount();
+        assertTrue(x === 1);
+        this.map1.addContinent(this.continent2);
+        x =  this.map1.getContinentCount();
+        assertTrue(x === 2);
     }
 });
 
