@@ -27,6 +27,8 @@ function ajax()
         _isSendCalled = true;
         this.setReadyState(4);
         this.status = 200;
+        
+        this.responseText = "success";
     }
     
     function onreadystatechange()
