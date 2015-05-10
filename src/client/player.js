@@ -31,6 +31,8 @@ function player(){
     
     function hasCountryByName(countryName)
     {
+        if(! (countryName instanceof string))
+            throw new TypeError("searched Name is not a String");
         return false;
     }
     
