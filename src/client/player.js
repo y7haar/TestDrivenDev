@@ -112,6 +112,11 @@ function player()
         id = settedId;
         idIsSetted = true;
     }
+    
+    function serialize()
+    {
+        
+    }
   
     this.getName = getName;
     this.setName = setName;
@@ -126,4 +131,5 @@ function player()
     this.setColor = setColor;
     this.getId = getId;
     this.setId = setId;
+    this.serialize = serialize;
 };
