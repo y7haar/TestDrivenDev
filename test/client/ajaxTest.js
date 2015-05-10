@@ -55,50 +55,60 @@ TestCase("AjaxStubGETTest", {
     
     "test if functions are called in correct order and parameters are set correctly --> send before open": function () {  
         this.xhrObject.send();
-        assertFalse(this.xhrObject.open.called);
-        assertTrue(this.xhrObject.send.called);
+        assertFalse(this.xhrObject.isOpenCalled());
+        assertTrue(this.xhrObject.isSendCalled());
         
         this.xhrObject.open(this.method, this.url, this.async);
-        assertTrue(this.xhrObject.open.called);
-        assertEquals([this.method, this.url, this.async], this.xhrObject.open.args);
+        assertTrue(this.xhrObject.isOpenCalled());
+        
+        var xhrObject = this.xhrObject;
+        assertNoException(function() { xhrObject.open("GET", "/url", true); });
     },
     
      "test if functions are called in correct order and parameters are set correctly --> incorrect params": function () {  
-        this.xhrObject.open(this.method, this.url);
-        assertTrue(this.xhrObject.open.called);
-        assertNotEquals([this.method, this.url, this.async], this.xhrObject.open.args);
+        try
+        {
+            this.xhrObject.open(this.method, this.url);
+            assertTrue(this.xhrObject.isOpenCalled());
+        }
+        
+        catch(e){}
+        
+        var xhrObject = this.xhrObject;
+        assertException(function() { xhrObject.open("bla"); }, "Error");
     },
     
     "test onreadystate should be called when readystate changed": function () {  
         this.xhrObject.setReadyState(2);
-        assertTrue(this.xhrObject.onreadystatechange.called);
+        assertTrue(this.xhrObject.isOnreadystatechangeCalled());
         
         this.xhrObject.setReadyState(3);
-        assertTrue(this.xhrObject.onreadystatechange.called);
+        assertTrue(this.xhrObject.isOnreadystatechangeCalled());
     },
     
     "test open and send should change readystate / status": function () { 
         
-        this.xhrObject.open(this.method, this.url, this.async)(); 
+        this.xhrObject.open(this.method, this.url, this.async); 
         
-        assertTrue(this.xhrObject.open.called);
+        assertTrue(this.xhrObject.isOpenCalled());
         assertEquals(1, this.xhrObject.readyState);
         assertEquals(0, this.xhrObject.status);
-        assertTrue(this.xhrObject.onreadystatechange.called);
+        assertTrue(this.xhrObject.isOnreadystatechangeCalled());
         
         this.xhrObject.send();
         assertEquals(4, this.xhrObject.readyState);
         assertEquals(200, this.xhrObject.status);
-        assertTrue(this.xhrObject.onreadystatechange.called);
+        assertTrue(this.xhrObject.isOnreadystatechangeCalled());
     }
     
 });
 
 TestCase("AjaxStubPOSTTest", {
     setUp: function () {
-        this.xhrObject= new tddjs.stubs.ajax();
+        this.xhrObject = new tddjs.stubs.ajax();
+        
         this.url = "/url";
-        this.method = "POST";
+        this.method = "GET";
         this.async = true;
         
         this.header = "content-type:";

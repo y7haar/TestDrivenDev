@@ -6,28 +6,27 @@ tddjs.namespace("stubs").ajax = ajax;
 
 function ajax()
 {
-    var readyState = 0;
-    var status = 0;
     var _isSendCalled = false;
     var _isOpenCalled = false;
     var _isOnreadystatechangeCalled = false;
     
     function open(method, url, async)
     {
+        _isOpenCalled= true;
+        
         if(arguments.length != 3)
             throw new Error("All arguments must be setted");
-        
-        _isOpenCalled= true;
+
         console.log(this);        
         this.setReadyState(1);
-        status = 0;
+        this.status = 0;
     }
     
     function send(data)
     {
         _isSendCalled = true;
         this.setReadyState(4);
-        status = 200;
+        this.status = 200;
     }
     
     function onreadystatechange()
@@ -41,7 +40,7 @@ function ajax()
     
     function setReadyState(aState)
     {      
-        readyState = aState;
+        this.readyState = aState;
         this.onreadystatechange();
     }
     
@@ -80,7 +79,7 @@ function ajax()
     this.isOnreadystatechangeCalled = isOnreadystatechangeCalled;
     
     this.responseText = "";
-    this.readyState = readyState;
-    this.status = status;
+    this.readyState = 0;
+    this.status = 0;
 }
 
