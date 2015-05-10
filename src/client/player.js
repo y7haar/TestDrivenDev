@@ -57,7 +57,7 @@ function player(){
             throw new TypeError("removed Object is not a Country");
         
         var countryName = removedCountry.getName();
-        countrys[countryName] = "undefined";
+        delete countrys[countryName];
     }
     
     function getCountryCount()
