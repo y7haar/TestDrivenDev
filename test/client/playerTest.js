@@ -82,6 +82,17 @@ TestCase("PlayerTest",
         assertException(function(){player.removeCountry(country2);}, "Error");
     },
     
+    "test Shouldnt be able to get a Country thats not added": function()
+    {
+        var player = this.player1;
+        assertException(function(){player.getCountry("Lorna");}, "TypeError");
+    },
+    
+    "test Should be able to get the asked country that has been added": function()
+    {
+        assertEquals(this.country1, this.player1.getCountry("Aranonda"));
+    },
+    
     "test Should be able to get a valid Country-Count": function()
     {
         var x = this.player1.getCountryCount();
