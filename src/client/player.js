@@ -22,10 +22,16 @@ function player(){
         name = newName;
     }
     
-    function hasCountry(searchedCountry)
+    function hasCountryByObject(searchedCountry)
     {
         if(! (searchedCountry instanceof tddjs.client.map.country))
             throw new TypeError("searched Object is not a Country");
+        return false;
+    }
+    
+    function hasCountryByName(countryName)
+    {
+        return false;
     }
     
     function addCountry(addedCountry)
@@ -48,7 +54,8 @@ function player(){
   
     this.getName = getName;
     this.setName = setName;
-    this.hasCountry = hasCountry;
+    this.hasCountryByObject = hasCountryByObject;
+    this.hasCountryByName = hasCountryByName;
     this.addCountry = addCountry;
     this.removeCountry = removeCountry;
     this.getCountryCount = getCountryCount;
