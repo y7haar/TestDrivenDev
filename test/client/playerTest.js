@@ -108,11 +108,17 @@ TestCase("PlayerTest",
     
     "test Should be able to set and get only valid Hex-Values for Colors": function()
     {
-        assertFunction(this.player1.getColor());
-        assertFunction(this.player1.setColor());
+        assertFunction(this.player1.getColor);
+        assertFunction(this.player1.setColor);
         
         this.player1.setColor("#FFFFFF");
-        asserEquals("#FFFFFF", this.player1.getColor());
+        assertEquals("#FFFFFF", this.player1.getColor());
+    },
+    
+    "test Should be able to set and get the player-Id. Id should be only able to get set once": function()
+    {
+        assertFunction(this.player1.setId);
+        assertFunction(this.player1.getId);
     }
 });
 
