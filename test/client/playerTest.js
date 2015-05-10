@@ -76,7 +76,7 @@ TestCase("PlayerTest",
         assertFalse(this.player1.hasCountryByName("Lorna"));
     },
     
-    "test Shouldnt be able to remove a Country that has net been added": function() {
+    "test Shouldnt be able to remove a Country that has not been added": function() {
         var player = this.player1;
         var country2 = this.country2;
         assertException(function(){player.removeCountry(country2);}, "Error");
@@ -90,7 +90,8 @@ TestCase("PlayerTest",
     
     "test Should be able to get the asked country that has been added": function()
     {
-        assertEquals(this.country1, this.player1.getCountry("Aranonda"));
+        this.player1.addCountry(this.country1);
+        assertSame(this.country1, this.player1.getCountry("Aranonda"));
     },
     
     "test Should be able to get a valid Country-Count": function()
@@ -102,7 +103,13 @@ TestCase("PlayerTest",
     "test Should be able to get a correct CountryCount": function()
     {
         var x = this.player1.getCountryCount();
+        assertTrue(x === 0);
+        this.player1.addCountry(this.country1);
+        x = this.player1.getCountryCount();
         assertTrue(x === 1);
+        this.player1.addCountry(this.country2);
+        x = this.player1.getCountryCount();
+        assertTrue(x === 2);
     }
 });
 
