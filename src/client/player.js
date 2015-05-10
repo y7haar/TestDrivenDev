@@ -105,7 +105,12 @@ function player()
     
     function setId(settedId)
     {
+        if(isNaN(settedId))
+            throw new TypeError("Id has to be a Number");
+        if(idIsSetted)
+            throw new Error("Cant set Id more than Once");
         id = settedId;
+        idIsSetted = true;
     }
   
     this.getName = getName;
