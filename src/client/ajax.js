@@ -14,6 +14,9 @@ function ajax()
     
     function open(method, url, async)
     {
+        if(arguments.length != 3)
+            throw new Error("All arguments must be setted");
+        
         _isOpenCalled= true;
         console.log(this);        
         this.setReadyState(1);
