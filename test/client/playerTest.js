@@ -125,6 +125,11 @@ TestCase("PlayerTest",
         var player =this.player1;
         assertException(function(){player.setId("Fisch");}, "TypeError");
         assertException(function(){player.setId(2);}, "Error");
+    },
+    
+    "test Should be able to serialize a Player correctly": function()
+    {
+        assertFunction(this.player1.serialize());
     }
 });
 
