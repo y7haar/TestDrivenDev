@@ -4,10 +4,14 @@
 
 tddjs.namespace("client").player = player;
 
-function player(){
+function player()
+{
  
     var countrys = {};
     var name = "";
+    var id;
+    var idIsSetted = false;
+    var color = "#000000";
     
     function getName()
     {
@@ -77,6 +81,32 @@ function player(){
         return countrys;
     }
  
+    function getColor()
+    {
+        return color;
+    }
+    
+    function setColor(settedColor)
+    {
+        if(isHexaColor(settedColor))
+        color = settedColor;
+    }
+    
+    function isHexaColor(sNum)
+    {
+        return (typeof sNum === "string") && sNum.length === 6 
+         && ! isNaN( parseInt(sNum, 16) );
+    }
+    
+    function getId()
+    {
+        return id;
+    }
+    
+    function setId(settedId)
+    {
+        id = settedId;
+    }
   
     this.getName = getName;
     this.setName = setName;
@@ -87,6 +117,9 @@ function player(){
     this.getCountryCount = getCountryCount;
     this.getCountry = getCountry;
     this.getCountrys = getCountrys;
- 
+    this.getColor = getColor;
+    this.setColor = setColor;
+    this.getId = getId;
+    this.setId = setId;
 };
 
