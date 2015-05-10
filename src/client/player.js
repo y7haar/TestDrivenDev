@@ -122,4 +122,3 @@ function player()
     this.getId = getId;
     this.setId = setId;
 };
-
