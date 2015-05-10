@@ -115,10 +115,16 @@ TestCase("PlayerTest",
         assertEquals("#FFFFFF", this.player1.getColor());
     },
     
-    "test Should be able to set and get the player-Id. Id should be only able to get set once": function()
+    "test Should be able to set and get the player-Id as Number. Id should be only able to get set once": function()
     {
         assertFunction(this.player1.setId);
         assertFunction(this.player1.getId);
+        
+        this.player1.setId(1);
+        assertTrue(this.player1.getId() === 1);
+        var player =this.player1;
+        assertException(function(){player.setId("Fisch");}, "TypeError");
+        assertException(function(){player.setId(2);}, "Error");
     }
 });
 
