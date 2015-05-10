@@ -6,7 +6,9 @@ TestCase("PlayerTest",
     setUp: function () {
         this.player1 = new tddjs.client.player();
         this.country1 = new tddjs.client.map.country();
+        this.country1.setName("Aranonda");
         this.country2 = new tddjs.client.map.country();
+        this.country2.setName("Lorna");
     },
     
     "test Player Object should be created": function () {
@@ -28,10 +30,11 @@ TestCase("PlayerTest",
         assertException(function(){player.setName(player);},"TypeError");
     },
     
-    "test Shouldnt be able to ask for Countries which arent countries": function()
+    "test Shouldnt be able to ask for Countries which arent countries or country-Names": function()
     {
         var player = this.player1;
-        assertException(function(){ player.hasCountry({});}, "TypeError");
+        assertException(function(){ player.hasCountryByObject({});}, "TypeError");
+        assertException(function(){ player.hasCountryByName({});}, "TypeError");
     },
     
     "test Shouldnt be able to add something thats not a Country": function()
@@ -43,9 +46,11 @@ TestCase("PlayerTest",
     
     "test Should be able to add a Country and find it afterwards": function()
     {
-        assertFalse(this.player1.hasCountry(this.country1));
+        assertFalse(this.player1.hasCountryByName("Aranonda"));
+        assertFalse(this.player1.hasCountryByObject(this.country1));
         this.player1.addCountry(this.country1);
-        assertTrue(this.player1.hasCountry(this.country1));
+        assertTrue(this.player1.hasCountryByObject(this.country1));
+        assertTrue(this.player1.hasCountryByName("Aranonda"));
     },
     
     "test Shouldnt be able to remove something thats not a Country": function()
@@ -56,19 +61,25 @@ TestCase("PlayerTest",
         assertException(function(){player.removeCountry(player);},"TypeError");
     },
     
+    "test Shouldnt be able to find country that has not been added yet": function(){
+        assertFalse(this.player1.hasCountryByObject(this.country2));
+        assertFalse(this.player1.hasCountryByName("Lorna"));
+    },
+    
     "test Should be able to add and remove a Country. A removed Country should not be found": function()
     {
-        assertFalse(this.player1.hasCountry(this.country2));
         this.player1.addCountry(this.country2);
-        assertTrue(this.player1.hasCountry(this.country2));
+        assertTrue(this.player1.hasCountryByObject(this.country2));
+        assertTrue(this.player1.hasCountryByName("Lorna"));
         this.player1.removeCountry(this.country2);
-        assertFalse(this.player1.hasCountry(this.country2));
+        assertFalse(this.player1.hasCountryByObject(this.country2));
+        assertFalse(this.player1.hasCountryByName("Lorna"));
     },
     
     "test Shouldnt be able to remove a Country that has net been added": function() {
         var player = this.player1;
-        var country2 = this.country2
-        assertException(function(){player.removeCountry(country2)}, "Error");
+        var country2 = this.country2;
+        assertException(function(){player.removeCountry(country2);}, "Error");
     },
     
     "test Should be able to get a valid Country-Count": function()
