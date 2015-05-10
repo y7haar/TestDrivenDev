@@ -6,6 +6,7 @@ tddjs.namespace("client").player = player;
 
 function player(){
  
+    var countrys = {};
     var name = "";
     
     function getName()
@@ -41,7 +42,7 @@ function player(){
     
     function getCountryCount()
     {
-        
+        return 0;
     }
  
   
