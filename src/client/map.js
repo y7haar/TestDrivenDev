@@ -29,7 +29,7 @@ function map()
     
     function getContinentCount()
     {
-        return 0;
+        return Object.keys(_continents).length;;
     }
     
     this.addContinent = addContinent;
