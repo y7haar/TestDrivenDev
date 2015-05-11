@@ -207,10 +207,16 @@ TestCase("LobbyServerTest", {
     },
 
    "test Lobby should have a serialize method that returns a json string": function () { 
-       this.player1.setName("Bob");
-       this.player2.setName("Hanswurst");
-       
-       this.lobby.addPlayer(this.player1);
+        this.player1.setName("Bob");
+        this.player2.setName("Hanswurst");
+        
+        this.player1.setId(1);
+        this.player2.setId(2);
+        
+        this.player1.setColor("#FFFFFF");
+        this.player2.setColor("#000000");
+
+        this.lobby.addPlayer(this.player1);
         this.lobby.addPlayer(this.player2);
         this.lobby.setLeader(this.player1);
         this.lobby.setMaxPlayers(2);
@@ -219,11 +225,43 @@ TestCase("LobbyServerTest", {
 
         var json = this.lobby.serialize();
         json = JSON.parse(json);
+
+        assertObject(json);
         
+        assertNumber(json.maxPlayers);
         assertEquals(2, json.maxPlayers);
+        
+        assertString(json.name);
         assertEquals("TestLobby", json.name);
+        
+        assertNumber(json.id);
         assertEquals(42, json.id);
-        assertEquals("Bob", json.leader);
+        
+        assertNumber(json.leader);
+        assertEquals(1, json.leader);
+        
+        assertArray(json.players);
+        assertObject(json.players[0]);
+        assertObject(json.players[1]);
+        
+        assertNumber(json.players[0].id);
+        assertEquals(1, json.players[0].id);
+        
+        assertString(json.players[0].name);
+        assertEquals("Bob", json.players[0].name);
+        
+        assertString(json.players[0].color);
+        assertEquals("#FFFFFF", json.players[0].color);
+        
+        assertNumber(json.players[1].id);
+        assertEquals(2, json.players[1].id);
+        
+        assertString(json.players[1].name);
+        assertEquals("Hanswurst", json.players[1].name);
+        
+        assertString(json.players[1].color);
+        assertEquals("#000000", json.players[1].color);
+        
   }
   
      
