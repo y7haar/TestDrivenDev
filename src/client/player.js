@@ -88,14 +88,19 @@ function player()
     
     function setColor(settedColor)
     {
-        if(isHexaColor(settedColor))
-        color = settedColor;
-    }
-    
-    function isHexaColor(sNum)
-    {
-        return (typeof sNum === "string") && sNum.length === 6 
-         && ! isNaN( parseInt(sNum, 16) );
+        if(typeof settedColor !== "string")
+            throw new TypeError("Setted Color is not a String");
+        
+        if(settedColor.charAt(0) !== '#')
+            throw new Error("Color doesnt start with a #");
+        
+        if(settedColor.length !== 7)
+            throw new Error("Color not long enough");
+        
+        if(settedColor.match(/^#[\da-f]{3}([\da-f]{3}|)$/i))
+            color = settedColor;
+        else
+            throw new Error("This is not a valid Hexa-Color");
     }
     
     function getId()
@@ -115,7 +120,17 @@ function player()
     
     function serialize()
     {
+        var id = getId();
+        var name = getName();
+        var color = getColor();
         
+        var playerObject = {
+            id: id,
+            name: name,
+            color: color
+        };
+        
+        return JSON.stringify(playerObject);
     }
   
     this.getName = getName;
