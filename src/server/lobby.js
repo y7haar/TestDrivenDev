@@ -117,13 +117,29 @@ function lobby()
         var id = getId();
         var name = getName();
         var maxPlayers = _getMaxPlayers();
-        var leader = getLeader().getName();
+        var leader = getLeader().getId();
+        
+        var playersObj = [];
+        var players = getPlayers();
+        
+        for(var i = 0;i < players.length;++i)
+        {
+            var player = {
+                id: players[i].getId(),
+                name: players[i].getName(),
+                color: players[i].getColor()
+            };
+            
+            playersObj[i] = player;
+        }
         
         var lobbyObj = {
             id: id,
             name: name,
             maxPlayers: maxPlayers,
-            leader: leader
+            leader: leader,
+            
+            players: playersObj
         };
         
         var json = JSON.stringify(lobbyObj);
