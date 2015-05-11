@@ -113,6 +113,14 @@ TestCase("PlayerTest",
         
         this.player1.setColor("#FFFFFF");
         assertEquals("#FFFFFF", this.player1.getColor());
+        var player = this.player1;
+        assertException(function(){player.setColor(125);}, "TypeError");
+        assertException(function(){player.setColor("#FFFFF");}, "Error");
+        assertException(function(){player.setColor("#FFFFFFF");}, "Error");
+        assertException(function(){player.setColor("FFFFFF");}, "Error");
+        assertException(function(){player.setColor("*000000");}, "Error");
+        assertException(function(){player.setColor("#-900000");}, "Error");
+        assertException(function(){player.setColor("#FF!FFF");}, "Error");
     },
     
     "test Should be able to set and get the player-Id as Number. Id should be only able to get set once": function()
@@ -129,7 +137,19 @@ TestCase("PlayerTest",
     
     "test Should be able to serialize a Player correctly": function()
     {
-        assertFunction(this.player1.serialize());
+        assertFunction(this.player1.serialize);
+        
+        this.player1.setId(2);
+        this.player1.setName("Ranol");
+        this.player1.serialize("#FFFFFF");
+        
+        var json = this.player1.serialize();
+        json = JSON.parse(json);
+        
+        assertObject(json);
+        assertEquals(2, json.id);
+        assertEquals("Ranol", json.name);
+        assertEquals("#FFFFFF", json.color);
     }
 });
 
