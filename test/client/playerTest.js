@@ -119,7 +119,7 @@ TestCase("PlayerTest",
         assertException(function(){player.setColor("#FFFFFFF");}, "Error");
         assertException(function(){player.setColor("FFFFFF");}, "Error");
         assertException(function(){player.setColor("*000000");}, "Error");
-        assertException(function(){player.setColor("#-900000");}, "Error");
+        assertException(function(){player.setColor("#-90000");}, "Error");
         assertException(function(){player.setColor("#FF!FFF");}, "Error");
     },
     
@@ -141,7 +141,7 @@ TestCase("PlayerTest",
         
         this.player1.setId(2);
         this.player1.setName("Ranol");
-        this.player1.serialize("#FFFFFF");
+        this.player1.setColor("#FFFFFF");
         
         var json = this.player1.serialize();
         json = JSON.parse(json);
