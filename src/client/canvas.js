@@ -19,6 +19,18 @@ function updateGame(){
 }
 function drawGame(){
     clear();
+    drawMap();
+    drawUI();
+}
+
+function drawMap(){
+    ctx.fillStyle = "#0f0";
+    ctx.fillRect(ctx.canvas.width/2-50,ctx.canvas.height/2-50,100,100);
+}
+
+function drawUI(){
+    ctx.fillStyle = "#f00";
+    ctx.fillRect(0,ctx.canvas.height-15,ctx.canvas.width,15);
 }
 
 function clear(){
