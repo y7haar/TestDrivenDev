@@ -4,13 +4,14 @@
 
 var canvas;
 var ctx;
-var val=0.0;
+
 
 
 
 var mainloop = function() {
         updateGame();
         drawGame();
+        window.requestAnimationFrame(mainloop);
     };
 
 function updateGame(){
