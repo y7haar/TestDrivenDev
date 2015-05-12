@@ -4,6 +4,7 @@
 
 var canvas;
 var ctx;
+var gameLoop =  new tddjs.client.game.gameLoopController();
 
 
 
