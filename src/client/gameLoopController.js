@@ -34,7 +34,7 @@ function gameLoopController()
         return this._player;
     }    
 
-    function isAttackPosible(country1,country2)
+    function isAttackPossible(country1,country2)
     {
         if(!(oountry1 instanceof tddjs.client.map.country))
             throw new TypeError("Parameter1 ist not instance of Country");
