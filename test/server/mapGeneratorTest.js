@@ -6,7 +6,7 @@
 TestCase("MapGeneratorTest", {
     
     setUp: function () {
-        this.mapGenerator = new tddjs.server.controller.nameListGenerator();
+        this.mapGenerator = new tddjs.server.controller.mapGenerator();
     },
     
     tearDown: function () {
@@ -14,6 +14,6 @@ TestCase("MapGeneratorTest", {
     },
     
     "test object of MapGenerator should not be undefined": function () { 
-       assertObject(this.MPGenerator);
+       assertObject(this.mapGenerator);
     }
 });
