@@ -6,5 +6,5 @@ tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
 
 function mapGenerator()
 {
-    
+
 };
