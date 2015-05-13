@@ -1,7 +1,6 @@
 /* 
  * Source-code for eventSourceStubTest
- * this code simulate the EventSource Object of the browser
- * so it is possible to use it without a server that is responding. 
+ * this code tests the simulation of the EventSource Object 
  */
 
 TestCase("eventSourceStubTest", {
