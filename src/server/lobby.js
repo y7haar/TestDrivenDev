@@ -144,8 +144,6 @@ function lobby()
         
         var json = JSON.stringify(lobbyObj);
         
-        console.log(json);
-        
         return json;
     }
     

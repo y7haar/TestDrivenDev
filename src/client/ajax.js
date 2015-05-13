@@ -26,7 +26,6 @@ function ajax()
         if(typeof async !== "boolean")
             throw new TypeError("Async must be a boolean");
 
-        console.log(this);        
         this.setReadyState(1);
         this.status = 0;
     }
