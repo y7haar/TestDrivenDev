@@ -26,9 +26,9 @@ function eventSource()
         console.log("EventSource::onopen: "+event);
     }
     
-    this.onopen = onopen;
-    this.onmessage = onmessage;
-    this.onerror = onerror;
+    this.onopen = stubFn(onopen);
+    this.onmessage = stubFn(onmessage);
+    this.onerror = stubFn(onerror);
 };
 
 
