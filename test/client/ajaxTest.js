@@ -37,6 +37,15 @@ TestCase("AjaxStubParameterValidationTest", {
         delete this.xhrObject;
     },
     
+    "test should throw Exception if not 3 parameters are setted in open method": function () {  
+        var xhr = this.xhrObject;
+        assertException(function() { xhr.open(); }, "Error");
+        assertException(function() { xhr.open("GET"); }, "Error");
+        assertException(function() { xhr.open("GET", "/url"); }, "Error");
+        
+        assertNoException(function() { xhr.open("GET", "/url", false); });
+    },
+    
     "test should throw Exception if url parameter of open is not a string": function () {  
         var xhr = this.xhrObject;
         assertException(function() { xhr.open("GET", 1, true); }, "TypeError");
@@ -68,13 +77,9 @@ TestCase("AjaxStubGETTest", {
     
     "test if functions are called in correct order and parameters are set correctly --> everything is ok": function () {  
         this.xhrObject.open(this.method, this.url, this.async);
-        assertTrue(this.xhrObject.isOpenCalled());
-        
-        var xhrObject = this.xhrObject;
-        assertException(function() { xhrObject.open("bla"); }, "Error");
+        assertTrue(this.xhrObject.isOpenCalled());     
         
         this.xhrObject.send();
-        assertTrue(this.xhrObject.isOpenCalled());
         assertTrue(this.xhrObject.isSendCalled());
     },
     
