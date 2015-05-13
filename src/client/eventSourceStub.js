@@ -5,10 +5,30 @@
  */
 
 tddjs.namespace("stubs").eventSourceStub = eventSource;
+tddjs.namespace("stubs").eventSourceStub.CLOSED = 2;
+tddjs.namespace("stubs").eventSourceStub.CONNECTING = 0;
+tddjs.namespace("stubs").eventSourceStub.OPEN = 1;
 
 function eventSource()
 {
+    function onmessage(event)
+    {
+        console.log("EventSource::onmessage: "+event);
+    }
     
+    function onerror(event)
+    {
+        console.log("EventSource::onerror: "+event);
+    }
+    
+    function onopen(event)
+    {
+        console.log("EventSource::onopen: "+event);
+    }
+    
+    this.onopen = onopen;
+    this.onmessage = onmessage;
+    this.onerror = onerror;
 };
 
 
