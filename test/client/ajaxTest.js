@@ -28,6 +28,31 @@ TestCase("AjaxStubTest", {
     }
 });
 
+TestCase("AjaxStubParameterValidationTest", {
+    setUp: function () {
+        this.xhrObject = new tddjs.stubs.ajax();
+    }, 
+    tearDown: function ()
+    {
+        delete this.xhrObject;
+    },
+    
+    "test should throw Exception if url parameter of open is not a string": function () {  
+        var xhr = this.xhrObject;
+        assertException(function() { xhr.open("GET", 1, true); }, "TypeError");
+    },
+    
+    "test should throw Exception if method parameter of open is not a string": function () {  
+        var xhr = this.xhrObject;
+        assertException(function() { xhr.open(true, "/url", true); }, "TypeError");
+    },
+    
+    "test should throw Exception if async parameter of open is not a boolean": function () {  
+        var xhr = this.xhrObject;
+        assertException(function() { xhr.open("GET", "/url", 15); }, "TypeError");
+    }
+});
+
 TestCase("AjaxStubGETTest", {
     setUp: function () {
         this.xhrObject = new tddjs.stubs.ajax();
@@ -120,9 +145,5 @@ TestCase("AjaxStubPOSTTest", {
     tearDown: function ()
     {
         delete this.xhr;
-    },
-    
-    "test if functions are called in correct order and parameters are set correctly": function () {  
-        
     }
 });
