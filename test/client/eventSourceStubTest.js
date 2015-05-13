@@ -19,9 +19,9 @@ TestCase("eventSourceStubTest", {
     },
     
     "test onmessage, onerror and onopen function should not be undefined": function () {  
-        assertNotUndefinded(this.eventSourceObject.onmessage());
-        assertNotUndefinded(this.eventSourceObject.onerror());
-        assertNotUndefinded(this.eventSourceObject.onopen());
+        assertNotUndefined(this.eventSourceObject.onmessage);
+        assertNotUndefined(this.eventSourceObject.onerror);
+        assertNotUndefined(this.eventSourceObject.onopen);
         //console.log(this.eventSourceObject);
     },
     
