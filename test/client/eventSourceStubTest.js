@@ -25,11 +25,15 @@ TestCase("eventSourceStubTest", {
         //console.log(this.eventSourceObject);
     },
     
-     "test constants CONNECTING 0 , OPEN 1 and CLOSED 2 should retrn right values": function () {  
+    "test constants CONNECTING 0 , OPEN 1 and CLOSED 2 should retrn right values": function () {  
         assertEquals(0,tddjs.stubs.eventSourceStub.CONNECTING);
         assertEquals(1,tddjs.stubs.eventSourceStub.OPEN);
         assertEquals(2,tddjs.stubs.eventSourceStub.CLOSED);
-        //console.log(this.eventSourceObject);
+    },
+    "test events shoulde be called == return true": function () {  
+        assertTrue(this.eventSourceObject.onmessage.called);
+        assertTrue(this.eventSourceObject.onmessage.called);
+        assertTrue(this.eventSourceObject.onmessage.called);
     }
    
     
