@@ -36,6 +36,9 @@ function mapGenerator()
     
     function generateMap()
     {
+        if(typeof(_grid.cellGrid) === "undefined")
+            throw new Error("Didnt set grid before");
+        
         return new tddjs.client.map.map();
     }
     
