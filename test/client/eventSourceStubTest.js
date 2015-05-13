@@ -12,7 +12,7 @@ TestCase("eventSourceStubTest", {
         delete this.eventSourceObject;
     },
     
-    "test xhr object should not be undefined": function () {  
+    "test eventSource object should not be undefined": function () {  
         assertObject(this.eventSourceObject);
         assertTrue(this.eventSourceObject instanceof tddjs.stubs.eventSourceStub);
     }
