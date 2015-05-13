@@ -23,17 +23,32 @@ TestCase("eventSourceStubTest", {
         assertTrue(this.eventSourceObject instanceof tddjs.stubs.eventSourceStub);
     },
     
-    "test onmessage, onerror and onopen function should not be undefined": function () {  
+    "test onmessage, onerror and onopen should not be undefined but null": function () {  
         assertNotUndefined(this.eventSourceObject.onmessage);
         assertNotUndefined(this.eventSourceObject.onerror);
         assertNotUndefined(this.eventSourceObject.onopen);
+        
+        assertEquals(null, this.eventSourceObject.onmessage);
+        assertEquals(null, this.eventSourceObject.onerror);
+        assertEquals(null, this.eventSourceObject.onopen);
     },
     
     "test constants CONNECTING 0 , OPEN 1 and CLOSED 2 should retrn right values": function () {  
         assertEquals(0,tddjs.stubs.eventSourceStub.CONNECTING);
         assertEquals(1,tddjs.stubs.eventSourceStub.OPEN);
         assertEquals(2,tddjs.stubs.eventSourceStub.CLOSED);
-    }   
+    },
+    "test eventSource shoulde have addEventListner function": function () {  
+        
+        assertNotUndefined(this.eventSourceObject.addEventListner);
+    },
+    "test addEventListner shoulde add new eventListner": function () {  
+        
+        this.eventSourceObject.addEventListner("newEvent", function(e){           
+            
+        },false);
+    }
+    
 });
 
 
