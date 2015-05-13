@@ -8,6 +8,7 @@ function map()
 {
     var _continents = {};
     
+    //Grind möglicherweise benötigt zum anzeigen [][] country
     function addContinent(aContinent)
     {
         if(!(aContinent instanceof tddjs.client.map.continent))
