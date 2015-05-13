@@ -9,7 +9,6 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator = new tddjs.server.controller.mapGenerator();
         this.x = 5;
         this.y = 5;
-        this.map = this.mapGenerator.generateMap();
     },
     
     tearDown: function () {
@@ -34,14 +33,24 @@ TestCase("MapGeneratorTest", {
         assertObject(this.mapGenerator.getMapGrid());
     },
     
-    "test generateMap() should return a Map-Object":  function(){
+    "test generateMap() should return a Map-Object":  function()
+    {
+        this.mapGenerator.setGridSize(10,10);
+        var map = this.mapGenerator.generateMap();
         assertFunction(this.mapGenerator.generateMap);
-        assertObject(this.map);
-        assertTrue(this.map instanceof tddjs.client.map.map);
+        assertObject(map);
+        assertTrue(map instanceof tddjs.client.map.map);
+    },
+    
+    "test Shouldnt be able to generate a Map without setting a grid first": function(){
+        var gen = this.mapGenerator;
+        assertException(function(){gen.generateMap();}, "Error");
     },
     
     "test generateMap should return a map-object with atleast one continent": function()
     {
-        assertTrue(this.map.getContinentCount() > 0);
+        this.mapGenerator.setGridSize(10,10);
+        var map = this.mapGenerator.generateMap();
+        assertTrue(map.getContinentCount() > 0);
     }
 });
