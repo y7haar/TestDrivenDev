@@ -16,6 +16,15 @@ function ajax()
         
         if(arguments.length != 3)
             throw new Error("All arguments must be setted");
+        
+        if(typeof method !== "string")
+            throw new TypeError("Method must be a string");
+        
+        if(typeof url !== "string")
+            throw new TypeError("Url must be a string");
+        
+        if(typeof async !== "boolean")
+            throw new TypeError("Async must be a boolean");
 
         console.log(this);        
         this.setReadyState(1);
