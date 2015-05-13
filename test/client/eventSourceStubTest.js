@@ -31,9 +31,21 @@ TestCase("eventSourceStubTest", {
         assertEquals(2,tddjs.stubs.eventSourceStub.CLOSED);
     },
     "test events shoulde be called == return true": function () {  
+        assertFalse(this.eventSourceObject.onmessage.called);
+        assertFalse(this.eventSourceObject.onopen.called);
+        assertFalse(this.eventSourceObject.onerror.called);
+        
+        var event = {msg:"some Message from Server"};
+        
+        this.eventSourceObject.onmessage(event);
+        this.eventSourceObject.onmessage(event);
+        this.eventSourceObject.onmessage(event);
+        
         assertTrue(this.eventSourceObject.onmessage.called);
-        assertTrue(this.eventSourceObject.onmessage.called);
-        assertTrue(this.eventSourceObject.onmessage.called);
+        assertTrue(this.eventSourceObject.onopen.called);
+        assertTrue(this.eventSourceObject.onerror.called);
+        
+        
     }
    
     
