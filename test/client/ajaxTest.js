@@ -175,5 +175,37 @@ TestCase("AjaxStubPOSTTest", {
         assertTrue(this.xhrObject.isOnreadystatechangeCalled());
         
         assertEquals(0, this.xhrObject.responseText.length);
+    },
+    
+    "test xhr Object should store setted headers": function () { 
+        this.xhrObject.setRequestHeader("Content-Type", "plain/text");
+        assertTrue(this.xhrObject.isSetRequestHeaderCalled());
+        
+        this.xhrObject.setRequestHeader("Content-Length", "88");
+        assertTrue(this.xhrObject.isSetRequestHeaderCalled());
+        
+        assertNotUndefined(this.xhrObject.getRequestHeader("Content-Type"));
+        assertEquals("plain/text", this.xhrObject.getRequestHeader("Content-Type"));
+        assertTrue(this.xhrObject.isGetRequestHeaderCalled());
+        
+        assertNotUndefined(this.xhrObject.getRequestHeader("Content-Length"));
+        assertEquals("88", this.xhrObject.getRequestHeader("Content-Length"));
+        assertTrue(this.xhrObject.isGetRequestHeaderCalled());
+    },
+    
+    "test xhr Object should override a header with same name": function () { 
+        this.xhrObject.setRequestHeader("Content-Type", "plain/text");
+        assertTrue(this.xhrObject.isSetRequestHeaderCalled());
+        
+        assertNotUndefined(this.xhrObject.getRequestHeader("Content-Type"));
+        assertEquals("plain/text", this.xhrObject.getRequestHeader("Content-Type"));
+        assertTrue(this.xhrObject.isGetRequestHeaderCalled());
+        
+        this.xhrObject.setRequestHeader("Content-Type", "application/json");
+        assertTrue(this.xhrObject.isSetRequestHeaderCalled());
+        
+        assertNotUndefined(this.xhrObject.getRequestHeader("Content-Type"));
+        assertEquals("application/json", this.xhrObject.getRequestHeader("Content-Type"));
+        assertTrue(this.xhrObject.isGetRequestHeaderCalled());
     }
 });
