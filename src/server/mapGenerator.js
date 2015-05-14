@@ -42,9 +42,25 @@ function mapGenerator()
         return new tddjs.client.map.map();
     }
     
+    function initCountries()
+    {
+        if(typeof(_grid.cellGrid) === "undefined")
+            throw new Error("Didnt set grid before");
+        
+        for(var i = 0; i < getMapWidth(); i++)
+        {
+            for(var j = 0; j < getMapHeight(); j++)           
+            {
+                _grid.cellGrid[i][j] = new tddjs.client.map.country();
+                _grid.cellGrid[i][j].id = -1;
+            }
+        }
+    }
+    
     this.setGridSize = setGridSize;
     this.getMapGrid = getMapGrid;
     this.getMapWidth = getMapWidth;
     this.getMapHeight = getMapHeight;
     this.generateMap = generateMap;
+    this.initCountries = initCountries;
 };
