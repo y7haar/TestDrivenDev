@@ -1,5 +1,5 @@
 /* 
- * Source-Code für Border zur Maperstellung
+ * Testfall für Border
  */
 
 TestCase("BorderTest", {
