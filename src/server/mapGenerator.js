@@ -49,7 +49,7 @@ function mapGenerator()
         
         for(var i = 0; i < getMapWidth(); i++)
         {
-            for(var j = 0; i < getMapHeight(); j++)           
+            for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
             }
