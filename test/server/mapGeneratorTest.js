@@ -51,10 +51,11 @@ TestCase("MapGeneratorTest", {
     
     "test After initCountries every gridCell should contain a country with id -1": function()
     {
+        this.mapGenerator.setGridSize(10,10);
         this.mapGenerator.initCountries();
-        for(var i = 0; i < this.mapGenerator.getMapWidth; i++)
+        for(var i = 0; i < this.mapGenerator.getMapWidth(); i++)
         {
-            for(var j = 0; j > this.mapGenerator.getMapHeight; j++)
+            for(var j = 0; j > this.mapGenerator.getMapHeight(); j++)
                 assertTrue(this.mapGenerator.getMapGrid()[i][j].getName() === -1);
         }
     },
