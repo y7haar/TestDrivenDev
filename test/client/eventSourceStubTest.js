@@ -14,7 +14,8 @@
 
 TestCase("eventSourceStubTest", {
     setUp: function () {
-        this.eventSourceObject = new tddjs.stubs.eventSourceStub();
+        this.url = "someURL";
+        this.eventSourceObject = new tddjs.stubs.eventSourceStub(this.url);
     }, 
     tearDown: function ()
     {
@@ -35,7 +36,10 @@ TestCase("eventSourceStubTest", {
         assertEquals(null, this.eventSourceObject.onerror);
         assertEquals(null, this.eventSourceObject.onopen);
     },
-    
+     "test eventSource shoulde store url ": function () {
+         
+         assertEquals(this.url,this.eventSourceObject.getURL());     
+    },    
     "test constants CONNECTING 0 , OPEN 1 and CLOSED 2 should retrn right values": function () {  
         assertEquals(0,tddjs.stubs.eventSourceStub.CONNECTING);
         assertEquals(1,tddjs.stubs.eventSourceStub.OPEN);
@@ -47,18 +51,14 @@ TestCase("eventSourceStubTest", {
     },
     "test addEventListner shoulde add new eventListner": function () {  
         
-        var eventFunction = function(e)
-        {
-            return e;
-        };
+        var eventFunction = function(e){return e;};
         
         this.eventSourceObject.addEventListner("newEvent",eventFunction,false); 
         assertNotUndefined(this.eventSourceObject.onnewevent);
         
         var fakeEvent = "fakeEvent";
         assertEquals(fakeEvent, this.eventSourceObject.onnewevent(fakeEvent));
-    }
-    
+    }    
 });
 
 
