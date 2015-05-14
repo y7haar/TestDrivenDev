@@ -55,8 +55,12 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initCountries();
         for(var i = 0; i < this.mapGenerator.getMapWidth(); i++)
         {
-            for(var j = 0; j > this.mapGenerator.getMapHeight(); j++)
-                assertTrue(this.mapGenerator.getMapGrid()[i][j].getName() === -1);
+            for(var j = 0; j < this.mapGenerator.getMapHeight(); j++)
+            {
+                var grid = this.mapGenerator.getMapGrid();
+                assertTrue(grid.cellGrid[i][j] instanceof(tddjs.client.map.country));
+                assertTrue(grid.cellGrid[i][j].id === -1);
+            }
         }
     },
     
