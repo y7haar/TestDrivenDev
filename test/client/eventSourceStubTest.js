@@ -3,10 +3,13 @@
  * this code tests the simulation of the EventSource Object 
  */
 // to be deleted only for testing
+
         console.log("_______________________");
         var test = new EventSource("someURL1");     
         console.log(test);        
         console.log("___________________");
+        
+        
 
 
 TestCase("eventSourceStubTest", {
@@ -49,10 +52,7 @@ TestCase("eventSourceStubTest", {
             return e;
         };
         
-        this.eventSourceObject.addEventListner("newEvent",eventFunction,false);
-        assertTrue(this.eventSourceObject.addEventListner.called);
-        assertEquals(["newEvent",eventFunction,false],this.eventSourceObject.addEventListner.args);
-        
+        this.eventSourceObject.addEventListner("newEvent",eventFunction,false); 
         assertNotUndefined(this.eventSourceObject.onnewevent);
         
         var fakeEvent = "fakeEvent";
