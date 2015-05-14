@@ -42,7 +42,24 @@ TestCase("MapGeneratorTest", {
         assertTrue(map instanceof tddjs.client.map.map);
     },
     
-    "test Shouldnt be able to generate a Map without setting a grid first": function(){
+    "test Shouldnt be able to initialize Countries without setting a grid first": function()
+    {
+        var gen = this.mapGenerator;
+        assertFunction(this.mapGenerator.initCountries);
+        assertException(function(){gen.initCountries();}, "Error");
+    },
+    
+    "test After initCountries every gridCell should contain a country with id -1": function()
+    {
+        this.mapGenerator.initCountries();
+        for(var i = 0; i < this.mapGenerator.getMapWidth; i++)
+        {
+            for(var j = 0; j > this.mapGenerator.getMapHeight; j++)
+                assertTrue(this.mapGenerator.getMapGrid()[i][j].getName() === -1);
+        }
+    },
+    
+    "test Shouldnt be able to generate a Map without doing the neccessary steps first": function(){
         var gen = this.mapGenerator;
         assertException(function(){gen.generateMap();}, "Error");
     },
