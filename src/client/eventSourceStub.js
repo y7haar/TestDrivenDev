@@ -13,13 +13,14 @@ function eventSource()
 {
     function addEventListner(eventName, eventFunction, useCapture)
     {
-        
+        var name = "on"+eventName.toLowerCase();
+        this[name] = eventFunction;  
     }
     
     this.onopen = null;
     this.onmessage = null;
     this.onerror = null;
-    this.addEventListner = stubFn(addEventListner);
+    this.addEventListner = addEventListner;
 };
 
 
