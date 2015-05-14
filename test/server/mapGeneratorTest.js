@@ -35,7 +35,7 @@ TestCase("MapGeneratorTest", {
     
     "test generateMap() should return a Map-Object":  function()
     {
-        this.mapGenerator.setGridSize(10,10);
+        this.mapGenerator.setGridSize(7,7);
         var map = this.mapGenerator.generateMap();
         assertFunction(this.mapGenerator.generateMap);
         assertObject(map);
@@ -51,7 +51,7 @@ TestCase("MapGeneratorTest", {
     
     "test After initCountries every gridCell should contain a country with id -1": function()
     {
-        this.mapGenerator.setGridSize(10,10);
+        this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
         for(var i = 0; i < this.mapGenerator.getMapWidth(); i++)
         {
@@ -64,6 +64,11 @@ TestCase("MapGeneratorTest", {
         }
     },
     
+    "test After initBorders every possible Border should have been created": function()
+    {
+        assertFunktion(this.mapGenerator.initBorders);
+    },
+    
     "test Shouldnt be able to generate a Map without doing the neccessary steps first": function(){
         var gen = this.mapGenerator;
         assertException(function(){gen.generateMap();}, "Error");
@@ -71,7 +76,7 @@ TestCase("MapGeneratorTest", {
     
     "test generateMap should return a map-object with atleast one continent": function()
     {
-        this.mapGenerator.setGridSize(10,10);
+        this.mapGenerator.setGridSize(7,7);
         var map = this.mapGenerator.generateMap();
         assertTrue(map.getContinentCount() > 0);
     }
