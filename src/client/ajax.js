@@ -9,6 +9,11 @@ function ajax()
     var _isSendCalled = false;
     var _isOpenCalled = false;
     var _isOnreadystatechangeCalled = false;
+    var _isGetRequestHeaderCalled = false;
+    var _isSetRequestHeaderCalled = false;
+    
+    var _method = "";
+    var _headers = {};
     
     function open(method, url, async)
     {
@@ -26,6 +31,7 @@ function ajax()
         if(typeof async !== "boolean")
             throw new TypeError("Async must be a boolean");
 
+        _method = method; 
         this.setReadyState(1);
         this.status = 0;
     }
@@ -36,7 +42,8 @@ function ajax()
         this.setReadyState(4);
         this.status = 200;
         
-        this.responseText = "success";
+        if(_method == "GET")
+            this.responseText = "success";
     }
     
     function onreadystatechange()
@@ -46,6 +53,16 @@ function ajax()
     
     function setRequestHeader(header, value)
     {        
+        _isSetRequestHeaderCalled = true;
+        
+        _headers[header] = value;
+    }
+    
+    function getRequestHeader(header)
+    {
+        _isGetRequestHeaderCalled = true;
+        
+        return _headers[header];
     }
     
     function setReadyState(aState)
@@ -78,15 +95,36 @@ function ajax()
         return called;
     }
     
+    function isSetRequestHeaderCalled()
+    {
+        var called = _isSetRequestHeaderCalled;
+        _isSetRequestHeaderCalled = false;
+        
+        return called;
+    }
+    
+    function isGetRequestHeaderCalled()
+    {
+        var called = _isGetRequestHeaderCalled;
+        _isGetRequestHeaderCalled = false;
+        
+        return called;
+    }
+    
     this.open = open;
     this.send = send;
     this.onreadystatechange  = onreadystatechange;
     this.setReadyState = setReadyState;
+    
     this.setRequestHeader = setRequestHeader;
+    this.getRequestHeader = getRequestHeader;
     
     this.isOpenCalled = isOpenCalled;
     this.isSendCalled = isSendCalled;
     this.isOnreadystatechangeCalled = isOnreadystatechangeCalled;
+    this.isGetRequestHeaderCalled = isGetRequestHeaderCalled;
+    this.isSetRequestHeaderCalled = isSetRequestHeaderCalled;
+    
     
     this.responseText = "";
     this.readyState = 0;
