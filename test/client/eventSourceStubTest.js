@@ -44,9 +44,19 @@ TestCase("eventSourceStubTest", {
     },
     "test addEventListner shoulde add new eventListner": function () {  
         
-        this.eventSourceObject.addEventListner("newEvent", function(e){           
-            
-        },false);
+        var eventFunction = function(e)
+        {
+            return e;
+        };
+        
+        this.eventSourceObject.addEventListner("newEvent",eventFunction,false);
+        assertTrue(this.eventSourceObject.addEventListner.called);
+        assertEquals(["newEvent",eventFunction,false],this.eventSourceObject.addEventListner.args);
+        
+        assertNotUndefined(this.eventSourceObject.onnewevent);
+        
+        var fakeEvent = "fakeEvent";
+        assertEquals(fakeEvent, this.eventSourceObject.onnewevent(fakeEvent));
     }
     
 });
