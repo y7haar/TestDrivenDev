@@ -52,6 +52,7 @@ function mapGenerator()
             for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
+                _grid.cellGrid[i][j].id = -1;
             }
         }
     }
