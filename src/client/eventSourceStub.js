@@ -11,24 +11,16 @@ tddjs.namespace("stubs").eventSourceStub.OPEN = 1;
 
 function eventSource()
 {
-    function onmessage(event)
+    function addEventListner(eventName, eventFunction, useCapture)
     {
-        console.log("EventSource::onmessage: "+event);
+        var name = "on"+eventName.toLowerCase();
+        this[name] = eventFunction;  
     }
     
-    function onerror(event)
-    {
-        console.log("EventSource::onerror: "+event);
-    }
-    
-    function onopen(event)
-    {
-        console.log("EventSource::onopen: "+event);
-    }
-    
-    this.onopen = stubFn(onopen);
-    this.onmessage = stubFn(onmessage);
-    this.onerror = stubFn(onerror);
+    this.onopen = null;
+    this.onmessage = null;
+    this.onerror = null;
+    this.addEventListner = addEventListner;
 };
 
 
