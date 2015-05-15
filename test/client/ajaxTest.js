@@ -42,6 +42,19 @@ TestCase("AjaxFacadeStubTest", {
         this.ajax.post();
         assertTrue(xhr.isOpenCalled());
  
+    },
+    
+    "test ajax facade should call xhr setHeader method and set correct headers if headers are setted": function () {  
+        var xhr = this.ajax.getXmlHttpRequest();
+        
+        this.ajax.setHeader("Content-Type", "text/plain");
+        assertTrue(xhr.isSetHeadersCalled());
+        assertEquals(this.ajax.getHeader("Content-Type"), xhr.getHeader("Content-Type"));
+        
+        this.ajax.setHeader("Content-Type", "application/json");
+        assertTrue(xhr.isSetHeadersCalled());
+        assertEquals(this.ajax.getHeader("Content-Type"), xhr.getHeader("Content-Type"));
+ 
     }
 });
 
