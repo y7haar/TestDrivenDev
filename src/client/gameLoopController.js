@@ -3,7 +3,7 @@
  */
 
 
-tddjs.namespace("client.game").gameLoopController = gameLoopController;
+tddjs.namespace("client").gameLoopController = gameLoopController;
 
 function gameLoopController()
 {
