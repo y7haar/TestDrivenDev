@@ -14,7 +14,25 @@ function ajax()
         return _xhr;
     }
     
+    function get()
+    {
+        
+    }
+    
+    function post()
+    {
+        
+    }
+    
+    function setHeader()
+    {
+        
+    }
+    
     this.getXmlHttpRequest = getXmlHttpRequest;
+    this.get = get;
+    this.post = post;
+    this.setHeader = setHeader;
     
 };
 
