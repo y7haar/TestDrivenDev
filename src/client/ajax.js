@@ -16,12 +16,12 @@ function ajax()
     
     function get()
     {
-        
+        _xhr.open("GET", "/url", true);
     }
     
     function post()
     {
-        
+        _xhr.open("POST", "/url", true);
     }
     
     function setHeader()
