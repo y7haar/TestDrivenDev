@@ -80,7 +80,12 @@ TestCase("stateTest", {
         assertTrue(this.placing instanceof tddjs.client.abstractState);
         assertTrue(this.moving instanceof tddjs.client.abstractState);
         assertTrue(this.attacking instanceof tddjs.client.abstractState);
-        assertTrue(this.waiting instanceof tddjs.client.abstractState);       
+        assertTrue(this.waiting instanceof tddjs.client.abstractState);
+        
+        assertFalse(this.placing instanceof tddjs.client.movingState);
+        assertFalse(this.moving instanceof tddjs.client.attackingState);
+        assertFalse(this.attacking instanceof tddjs.client.waitingState);
+        assertFalse(this.waiting instanceof tddjs.client.placingState); 
     },
     
     "test states should have all functions": function () {
@@ -130,6 +135,9 @@ TestCase("stateTest", {
         assertFunction(this.placing.endPlacingPhase);
         assertFunction(this.placing.getUpdates);
         assertFunction(this.placing.isMoveLegal);
+        
+        
+        
      }
     
     
