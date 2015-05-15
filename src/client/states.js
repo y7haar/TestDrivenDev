@@ -10,6 +10,7 @@ tddjs.namespace("client").placeingState = placeingState;
 tddjs.namespace("client").attackingState = attackingState;
 tddjs.namespace("client").movingState = movingState;
 tddjs.namespace("client").waitingState = waitingState;
+tddjs.namespace("client").abstractState = state;
 
 function state()
 {
