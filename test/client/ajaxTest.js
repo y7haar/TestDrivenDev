@@ -31,6 +31,17 @@ TestCase("AjaxFacadeStubTest", {
         assertFunction(this.ajax.get);
         assertFunction(this.ajax.post);
         assertFunction(this.ajax.setHeader);
+    },
+    
+    "test ajax facade should call xhr open method when GET or POST request is called": function () {  
+        var xhr = this.ajax.getXmlHttpRequest();
+        
+        this.ajax.get();
+        assertTrue(xhr.isOpenCalled());
+        
+        this.ajax.post();
+        assertTrue(xhr.isOpenCalled());
+ 
     }
 });
 
