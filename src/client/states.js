@@ -16,14 +16,15 @@ function state()
 {
     
 }
-state.prototype.placeUnits= null;
-state.prototype.endPlaceingPhase= null;
+state.prototype.placeUnits = null;
+state.prototype.endPlaceingPhase = null;
 state.prototype.attack = null;
 state.prototype.endAttackingPhase = null;
-state.prototype.moveUnits= null;
-state.prototype.endMoveingPhase= null;
-state.prototype.getUpdates= null;
-state.prototype.isMoveLegal= null;
+state.prototype.moveUnits = null;
+state.prototype.endMovingPhase = null;
+state.prototype.endWaitingPhase = null;
+state.prototype.getUpdates = null;
+state.prototype.isMoveLegal = null;
 
 function placeingState()
 {
