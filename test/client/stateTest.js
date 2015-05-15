@@ -29,14 +29,14 @@ TestCase("stateTest", {
     },
      "test states should be instanace of theire state and prototype": function () {  
         assertTrue(this.placeing instanceof tddjs.client.placeingState);
-        assertTrue(this.moving instanceof tddjs.client.moveingState);
+        assertTrue(this.moving instanceof tddjs.client.movingState);
         assertTrue(this.attacking instanceof tddjs.client.attackingState);
-        assertTrue(this.waiting instanceof tddjs.client.waitingingState);
+        assertTrue(this.waiting instanceof tddjs.client.waitingState);
         
-        assertTrue(this.placeing instanceof tddjs.client.state);
-        assertTrue(this.moving instanceof tddjs.client.state);
-        assertTrue(this.attacking instanceof tddjs.client.state);
-        assertTrue(this.waiting instanceof tddjs.client.state);       
+        assertTrue(this.placeing instanceof tddjs.client.abstractState);
+        assertTrue(this.moving instanceof tddjs.client.abstractState);
+        assertTrue(this.attacking instanceof tddjs.client.abstractState);
+        assertTrue(this.waiting instanceof tddjs.client.abstractState);       
     }
     
 });
