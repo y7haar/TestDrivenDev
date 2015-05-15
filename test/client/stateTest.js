@@ -8,7 +8,7 @@
 TestCase("stateTest", {
     setUp: function () {
         
-        this.placeing = new tddjs.client.placeingState();
+        this.placing = new tddjs.client.placingState();
         this.moving = new tddjs.client.movingState();
         this.attacking = new tddjs.client.attackingState();
         this.waiting = new tddjs.client.waitingState();
@@ -16,24 +16,24 @@ TestCase("stateTest", {
     }, 
     tearDown: function ()
     {
-        this.placeing = null;
+        this.placing = null;
         this.moving = null;
         this.attacking = null;
         this.waiting = null;
     },    
     "test states should not be undefined": function () {  
-        assertNotUndefined(this.placeing);
+        assertNotUndefined(this.placing);
         assertNotUndefined(this.moving);
         assertNotUndefined(this.attacking);
         assertNotUndefined(this.waiting);
     },
      "test states should be instanace of theire state and prototype": function () {  
-        assertTrue(this.placeing instanceof tddjs.client.placeingState);
+        assertTrue(this.placing instanceof tddjs.client.placingState);
         assertTrue(this.moving instanceof tddjs.client.movingState);
         assertTrue(this.attacking instanceof tddjs.client.attackingState);
         assertTrue(this.waiting instanceof tddjs.client.waitingState);
         
-        assertTrue(this.placeing instanceof tddjs.client.abstractState);
+        assertTrue(this.placing instanceof tddjs.client.abstractState);
         assertTrue(this.moving instanceof tddjs.client.abstractState);
         assertTrue(this.attacking instanceof tddjs.client.abstractState);
         assertTrue(this.waiting instanceof tddjs.client.abstractState);       
@@ -41,15 +41,15 @@ TestCase("stateTest", {
     
     "test states should have all functions": function () {
         
-        assertNotUndefined(this.placeing.placeUnits);
-        assertNotUndefined(this.placeing.endPlaceingPhase);
-        assertNotUndefined(this.placeing.attack);
-        assertNotUndefined(this.placeing.endAttackingPhase);
-        assertNotUndefined(this.placeing.moveUnits);
-        assertNotUndefined(this.placeing.endMovingPhase);
-        assertNotUndefined(this.placeing.endWaitingPhase);
-        assertNotUndefined(this.placeing.getUpdates);
-        assertNotUndefined(this.placeing.isMoveLegal);
+        assertNotUndefined(this.placing.placeUnits);
+        assertNotUndefined(this.placing.endPlaceingPhase);
+        assertNotUndefined(this.placing.attack);
+        assertNotUndefined(this.placing.endAttackingPhase);
+        assertNotUndefined(this.placing.moveUnits);
+        assertNotUndefined(this.placing.endMovingPhase);
+        assertNotUndefined(this.placing.endWaitingPhase);
+        assertNotUndefined(this.placing.getUpdates);
+        assertNotUndefined(this.placing.isMoveLegal);
 
         assertNotUndefined(this.attacking.placeUnits);
         assertNotUndefined(this.attacking.endPlaceingPhase);
@@ -80,7 +80,13 @@ TestCase("stateTest", {
         assertNotUndefined(this.waiting.endWaitingPhase);
         assertNotUndefined(this.waiting.getUpdates);
         assertNotUndefined(this.waiting.isMoveLegal);           
-    }
+    },
+    "test placing state should implement relevant functions": function () {
+        assertFunction(this.placing.placeUnits);
+        assertFunction(this.placing.endPlacing);
+        assertFunction(this.placing.placeUnits);
+        assertFunction(this.placing.placeUnits);
+     }
     
     
 });
