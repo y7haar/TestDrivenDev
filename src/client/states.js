@@ -6,7 +6,7 @@
  */
 
 
-tddjs.namespace("client").placeingState = placeingState;
+tddjs.namespace("client").placingState = placingState;
 tddjs.namespace("client").attackingState = attackingState;
 tddjs.namespace("client").movingState = movingState;
 tddjs.namespace("client").waitingState = waitingState;
@@ -26,12 +26,33 @@ state.prototype.endWaitingPhase = null;
 state.prototype.getUpdates = null;
 state.prototype.isMoveLegal = null;
 
-function placeingState()
+function placingState()
 {
-    
+   function placeUnits()
+   {
+       
+   }
+   
+   function endPlacingPhase()
+   {
+       
+   }
+   function getUpdates()
+   {
+       
+   }
+   function isMoveLegal()
+   {
+       
+   }
+   
+   this.placeUnits = placeUnits;
+   this.endPlacingPhase = endPlacingPhase;
+   this.getUpdates = getUpdates;
+   this.isMoveLegal = isMoveLegal;
 }
-placeingState.prototype = new state();
-placeingState.prototype.constructor = placeingState;
+placingState.prototype = new state();
+placingState.prototype.constructor = placingState;
 
 function attackingState()
 {
