@@ -6,7 +6,7 @@
  *  Testcases for Ajax Stub
  */
 
-TestCase("AjaxStubTest", {
+TestCase("AjaxFacadeStubTest", {
     setUp: function () {
         this.ajax = new tddjs.stubs.ajax();
     }, 
@@ -25,7 +25,12 @@ TestCase("AjaxStubTest", {
         
         assertObject(xhr);
         assertTrue(xhr instanceof tddjs.stubs.ajax.xmlHttpRequest);
-        
+    },
+    
+    "test ajax facade should have a GET and POST method to perform requests and a method to set headers": function () {  
+        assertFunction(this.ajax.get);
+        assertFunction(this.ajax.post);
+        assertFunction(this.ajax.setHeader);
     }
 });
 
