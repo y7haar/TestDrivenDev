@@ -24,7 +24,7 @@ function ajax()
         _xhr.open("POST", "/url", true);
     }
     
-    function setHeader()
+    function setRequestHeader()
     {
         
     }
@@ -32,7 +32,7 @@ function ajax()
     this.getXmlHttpRequest = getXmlHttpRequest;
     this.get = get;
     this.post = post;
-    this.setHeader = setHeader;
+    this.setRequestHeader = setRequestHeader;
     
 };
 

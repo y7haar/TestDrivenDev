@@ -30,7 +30,7 @@ TestCase("AjaxFacadeStubTest", {
     "test ajax facade should have a GET and POST method to perform requests and a method to set headers": function () {  
         assertFunction(this.ajax.get);
         assertFunction(this.ajax.post);
-        assertFunction(this.ajax.setHeader);
+        assertFunction(this.ajax.setRequestHeader);
     },
     
     "test ajax facade should call xhr open method when GET or POST request is called": function () {  
@@ -47,13 +47,13 @@ TestCase("AjaxFacadeStubTest", {
     "test ajax facade should call xhr setHeader method and set correct headers if headers are setted": function () {  
         var xhr = this.ajax.getXmlHttpRequest();
         
-        this.ajax.setHeader("Content-Type", "text/plain");
-        assertTrue(xhr.isSetHeadersCalled());
-        assertEquals(this.ajax.getHeader("Content-Type"), xhr.getHeader("Content-Type"));
+        this.ajax.setRequestHeader("Content-Type", "text/plain");
+        assertTrue(xhr.isSetRequestHeaderCalled());
+        assertEquals(this.ajax.getRequestHeader("Content-Type"), xhr.getRequestHeader("Content-Type"));
         
-        this.ajax.setHeader("Content-Type", "application/json");
-        assertTrue(xhr.isSetHeadersCalled());
-        assertEquals(this.ajax.getHeader("Content-Type"), xhr.getHeader("Content-Type"));
+        this.ajax.setRequestHeader("Content-Type", "application/json");
+        assertTrue(xhr.isSetRequestHeaderCalled());
+        assertEquals(this.ajax.getRequestHeader("Content-Type"), xhr.getRequestHeader("Content-Type"));
  
     }
 });
