@@ -83,9 +83,9 @@ TestCase("stateTest", {
     },
     "test placing state should implement relevant functions": function () {
         assertFunction(this.placing.placeUnits);
-        assertFunction(this.placing.endPlacing);
-        assertFunction(this.placing.placeUnits);
-        assertFunction(this.placing.placeUnits);
+        assertFunction(this.placing.endPlacingPhase);
+        assertFunction(this.placing.getUpdates);
+        assertFunction(this.placing.isMoveLegal);
      }
     
     
