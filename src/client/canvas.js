@@ -5,7 +5,7 @@
 var canvas;
 var ctx;
 //var gameLoop =  new tddjs.client.game.gameLoopController();
-var mapGen = new tddjs.server.controller.mapGenerator();
+var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map;
 
 
@@ -69,7 +69,7 @@ function init(){
         }
     }
 }
-function init_map(){
+function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
     mapGen.initCountries();
     map = mapGen.getMapGrid();
