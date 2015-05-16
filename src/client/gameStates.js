@@ -20,6 +20,7 @@ state.prototype.placeUnits = null;
 state.prototype.attack = null;
 state.prototype.moveUnits = null;
 state.prototype.isMoveLegal = null;
+state.prototype.toString = null;
 
 function placingState()
 {
