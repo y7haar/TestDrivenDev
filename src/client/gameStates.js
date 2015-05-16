@@ -17,7 +17,7 @@ function state()
     
 }
 state.prototype.placeUnits = null;
-state.prototype.endPlaceingPhase = null;
+state.prototype.endPlacingPhase = null;
 state.prototype.attack = null;
 state.prototype.endAttackingPhase = null;
 state.prototype.moveUnits = null;
