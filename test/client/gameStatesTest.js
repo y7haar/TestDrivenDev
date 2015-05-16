@@ -205,10 +205,8 @@ TestCase("stateTest", {
         
         assertNoException(function(){
             placing.isMoveLegal(map,availableUnits,validMove);
-        });        
-        
-        console.log("Map: ------------");
-        console.log(this.map1.getContinents());
+        });      
+
         assertTrue(this.placing.isMoveLegal(this.map1,availableUnits,validMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongContinentMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongCountryMove));
