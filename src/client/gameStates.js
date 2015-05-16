@@ -17,12 +17,8 @@ function state()
     
 }
 state.prototype.placeUnits = null;
-state.prototype.endPlacingPhase = null;
 state.prototype.attack = null;
-state.prototype.endAttackingPhase = null;
 state.prototype.moveUnits = null;
-state.prototype.endMovingPhase = null;
-state.prototype.endWaitingPhase = null;
 state.prototype.isMoveLegal = null;
 
 function placingState()
@@ -30,13 +26,7 @@ function placingState()
    function placeUnits()
    {
        
-   }
-   
-   function endPlacingPhase()
-   {
-       
-   }
-   
+   }   
    function toString()
    {
        return "placingState";
@@ -73,7 +63,6 @@ function placingState()
    }
    
    this.placeUnits = placeUnits;
-   this.endPlacingPhase = endPlacingPhase;
    this.isMoveLegal = isMoveLegal;
    this.toString = toString;
 }
