@@ -97,7 +97,7 @@ TestCase("stateTest", {
     "test states should have all functions": function () {
         
         assertNotUndefined(this.placing.placeUnits);
-        assertNotUndefined(this.placing.endPlaceingPhase);
+        assertNotUndefined(this.placing.endPlacingPhase);
         assertNotUndefined(this.placing.attack);
         assertNotUndefined(this.placing.endAttackingPhase);
         assertNotUndefined(this.placing.moveUnits);
@@ -106,7 +106,7 @@ TestCase("stateTest", {
         assertNotUndefined(this.placing.isMoveLegal);
 
         assertNotUndefined(this.attacking.placeUnits);
-        assertNotUndefined(this.attacking.endPlaceingPhase);
+        assertNotUndefined(this.attacking.endPlacingPhase);
         assertNotUndefined(this.attacking.attack);
         assertNotUndefined(this.attacking.endAttackingPhase);
         assertNotUndefined(this.attacking.moveUnits);
@@ -115,7 +115,7 @@ TestCase("stateTest", {
         assertNotUndefined(this.attacking.isMoveLegal);
 
         assertNotUndefined(this.moving.placeUnits);
-        assertNotUndefined(this.moving.endPlaceingPhase);
+        assertNotUndefined(this.moving.endPlacingPhase);
         assertNotUndefined(this.moving.attack);
         assertNotUndefined(this.moving.endAttackingPhase);
         assertNotUndefined(this.moving.moveUnits);
@@ -124,7 +124,7 @@ TestCase("stateTest", {
         assertNotUndefined(this.moving.isMoveLegal);
 
         assertNotUndefined(this.waiting.placeUnits);
-        assertNotUndefined(this.waiting.endPlaceingPhase);
+        assertNotUndefined(this.waiting.endPlacingPhase);
         assertNotUndefined(this.waiting.attack);
         assertNotUndefined(this.waiting.endAttackingPhase);
         assertNotUndefined(this.waiting.moveUnits);
@@ -136,9 +136,11 @@ TestCase("stateTest", {
         assertFunction(this.placing.placeUnits);
         assertFunction(this.placing.endPlacingPhase);
         assertFunction(this.placing.isMoveLegal);
+        assertFunction(this.placing.toString);
         
         assertEquals("placingState", this.placing.toString());
         
+        //isMoveLegal test
         var validMove= {
           type:'placing',
           unitCount:1,
@@ -208,6 +210,12 @@ TestCase("stateTest", {
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongOwnerMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongTypeMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));
+        
+        //endPlacingPahse test
+        assertTrue(this.placing instanceof tddjs.client.placingState);
+        this.placing.endPlacingPhase();
+        
+        
      },
      "test attacking state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
