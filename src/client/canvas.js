@@ -24,10 +24,12 @@ function drawGame(){
     drawMap();
     drawUI();
 }
-var border=50;
+
+var border=50; //25 an jeder seite
+var bottom=50; //insg 75 unten frei für menü etc
 function drawMap(){
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
-    var h = (ctx.canvas.height-border-map.cellGrid[0].length)/map.cellGrid[0].length;
+    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
@@ -39,10 +41,15 @@ function drawMap(){
         }
     }
 }
-
 function drawUI(){
-    ctx.fillStyle = "#f00";
-    ctx.fillRect(0,ctx.canvas.height-15,ctx.canvas.width,15);
+    ctx.fillStyle = "#00f";
+    ctx.fillRect(0,ctx.canvas.height-border/2,ctx.canvas.width,border/2);
+    ctx.fillRect(0,0,ctx.canvas.width,border/2);
+    ctx.fillRect(0,0,border/2,ctx.canvas.height);
+    ctx.fillRect(ctx.canvas.width-border/2,0,border/2,ctx.canvas.height);
+    
+    ctx.fillStyle = "#96f";
+    ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
 }
 
 function clear(){
