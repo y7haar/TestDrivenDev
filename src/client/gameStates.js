@@ -23,7 +23,6 @@ state.prototype.endAttackingPhase = null;
 state.prototype.moveUnits = null;
 state.prototype.endMovingPhase = null;
 state.prototype.endWaitingPhase = null;
-state.prototype.getUpdates = null;
 state.prototype.isMoveLegal = null;
 
 function placingState()
@@ -34,10 +33,6 @@ function placingState()
    }
    
    function endPlacingPhase()
-   {
-       
-   }
-   function getUpdates()
    {
        
    }
