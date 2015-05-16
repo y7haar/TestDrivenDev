@@ -190,7 +190,7 @@ TestCase("stateTest", {
         
         assertException(function(){
             placing.isMoveLegal();
-        },'Error');
+        },'TypeError');
         
         assertException(function(){
             placing.isMoveLegal({},availableUnits,validMove);
