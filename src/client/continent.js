@@ -72,7 +72,7 @@ function continent()
     {
         if(hasCountryByName(aCountryName))
             return _countrys[aCountryName];
-        else return "undefined";
+        else return ;
     }
 
     function getCountrys()
