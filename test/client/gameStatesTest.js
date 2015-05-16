@@ -60,6 +60,9 @@ TestCase("stateTest", {
         this.continent2.addCountry(this.c6);
         //Borders-------------------------------
         this.c1.addBorder(this.c2);
+        //add continets to map -----------------
+        this.map1.addContinent(this.continent1);
+        this.map1.addContinent(this.continent2);
     }, 
     tearDown: function ()
     {
@@ -204,6 +207,8 @@ TestCase("stateTest", {
             placing.isMoveLegal(map,availableUnits,validMove);
         });        
         
+        console.log("Map: ------------");
+        console.log(this.map1.getContinents());
         assertTrue(this.placing.isMoveLegal(this.map1,availableUnits,validMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongContinentMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongCountryMove));
