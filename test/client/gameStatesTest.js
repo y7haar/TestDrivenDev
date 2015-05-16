@@ -48,7 +48,7 @@ TestCase("stateTest", {
         this.c4.setOwner(this.player2);
         
         this.c5 = new tddjs.client.map.country();
-        this.c5.setName("Country5");
+        this.c5.setName("Country5");            
         this.c5.setOwner(this.player2);
         
         this.c6 = new tddjs.client.map.country();
@@ -59,7 +59,7 @@ TestCase("stateTest", {
         this.continent2.addCountry(this.c5);
         this.continent2.addCountry(this.c6);
         //Borders-------------------------------
-        this.c1.addBorder(c2);
+        this.c1.addBorder(this.c2);
     }, 
     tearDown: function ()
     {
@@ -138,7 +138,70 @@ TestCase("stateTest", {
         assertFunction(this.placing.endPlacingPhase);
         assertFunction(this.placing.getUpdates);
         assertFunction(this.placing.isMoveLegal);
-    
+        
+        var availableUnits = 4;
+        
+        var validMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+        var wrongOwnerMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Hanswurst',
+          continent: 'Europa',
+          country: 'Country1'
+        }; 
+        var wrongContinentMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Asien',
+          country: 'Country1'
+        };        
+        var wrongCountryMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country4'
+        };
+        var wrongTypeMove= {
+          type:'winGame',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+         var wrongUnitCountMove= {
+          type:'winGame',
+          unitCount:80,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+        
+        var placing = this.placing;
+        var map = this.map1;
+        
+        assertException(function(){
+            placing.isMoveLegal();
+        },'Error');
+        
+        assertNoException(function(){
+            placing.isMoveLegal(map,availableUnits,validMove);
+        });
+        
+        
+        assertTrue(this.placing.isMoveLegal(this.map1,availableUnits,validMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongContinentMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongCountryMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongOwnerMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongTypeMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));
      },
      "test attacking state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
