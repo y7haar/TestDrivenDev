@@ -197,7 +197,7 @@ TestCase("stateTest", {
         },'TypeError');
         
         assertException(function(){
-            placing.isMoveLegal(map,"4",validMove);
+            placing.isMoveLegal(map,"4asd",validMove);
         },'TypeError');
         
         assertNoException(function(){
