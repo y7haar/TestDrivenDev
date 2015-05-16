@@ -139,7 +139,7 @@ TestCase("stateTest", {
         assertFunction(this.placing.getUpdates);
         assertFunction(this.placing.isMoveLegal);
         
-        var availableUnits = 4;
+        assertEquals("placingState", this.placing.toString());
         
         var validMove= {
           type:'placing',
@@ -186,15 +186,23 @@ TestCase("stateTest", {
         
         var placing = this.placing;
         var map = this.map1;
+        var availableUnits = 4;
         
         assertException(function(){
             placing.isMoveLegal();
         },'Error');
         
+        assertException(function(){
+            placing.isMoveLegal({},availableUnits,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            placing.isMoveLegal(map,"4",validMove);
+        },'TypeError');
+        
         assertNoException(function(){
             placing.isMoveLegal(map,availableUnits,validMove);
-        });
-        
+        });        
         
         assertTrue(this.placing.isMoveLegal(this.map1,availableUnits,validMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongContinentMove));
