@@ -74,7 +74,6 @@ function placingState()
    
    this.placeUnits = placeUnits;
    this.endPlacingPhase = endPlacingPhase;
-   this.getUpdates = getUpdates;
    this.isMoveLegal = isMoveLegal;
    this.toString = toString;
 }
