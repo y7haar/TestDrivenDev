@@ -84,7 +84,7 @@ TestCase("MapTest",
         assertTrue(this.map1.hasContinent(this.continent1.getName()));
         assertFalse(this.map1.hasContinent(this.continent2.getName()));     
     },
-    "test it shoulde be possible to navigate from map to a specific country": function()
+    "test it shoulde be possible to ": function()
     {
         this.map1.addContinent(this.continent1);
         this.map1.addContinent(this.continent2);
@@ -103,8 +103,8 @@ TestCase("MapTest",
         assertFalse(this.map1.getContinent("Europa").hasCountryByName("Country4"));
         
         assertTrue(this.map1.getContinent("Asien").hasCountryByName("Country6"));
-        assertFalse(this.map1.getContinents("Asien").hasCountryByName("Country3"));
-                
+        assertFalse(this.map1.getContinent("Asien").hasCountryByName("Country3"));
+    
         assertEquals("undefined",typeof this.map1.getContinent("Europa").getCountry("fakeCountry"));  
     },
     
