@@ -23,7 +23,6 @@ state.prototype.endAttackingPhase = null;
 state.prototype.moveUnits = null;
 state.prototype.endMovingPhase = null;
 state.prototype.endWaitingPhase = null;
-state.prototype.getUpdates = null;
 state.prototype.isMoveLegal = null;
 
 function placingState()
@@ -37,19 +36,46 @@ function placingState()
    {
        
    }
-   function getUpdates()
+   
+   function toString()
    {
-       
+       return "placingState";
    }
-   function isMoveLegal()
+   
+   function isMoveLegal(currentMap, unitCount, move)
    {
+       if(!(currentMap instanceof tddjs.client.map.map))
+           throw new TypeError("given Map is not instance of Map");
+       
+       if(isNaN(unitCount))
+           throw new TypeError("given unitCount is not a Number");
+       
+       if(move.type !== 'placing')
+           return false;
+    
+       if(move.unitCount > unitCount)
+           return false;
+ 
+       //test if Continent exists 
+       if(! currentMap.hasContinent(move.continent))
+           return false;
+       else
+       {
+           //test if Country not exists on the Continent in moveObject 
+           if(! currentMap.getContinent(move.continent).hasCountryByName(move.country))
+               return false;
+           //test if the player dont own the given Country    
+           else if(currentMap.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
+               return false;
+           else return true;
+       }
        
    }
    
    this.placeUnits = placeUnits;
    this.endPlacingPhase = endPlacingPhase;
-   this.getUpdates = getUpdates;
    this.isMoveLegal = isMoveLegal;
+   this.toString = toString;
 }
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;

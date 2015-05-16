@@ -67,6 +67,7 @@ TestCase("ContinentTest", {
         
         assertSame(this.country1,this.continent1.getCountry(this.country1.getName()));
         assertNotSame(this.country2, this.continent1.getCountry("TakatukaLand"));
+        assertUndefined(this.continent1.getCountry("TakatukaLand"));
         
     },    
     "test if countrys are in Continent1": function () {

@@ -27,6 +27,12 @@ function map()
     {
         return _continents;
     }
+    function getContinent(continentName)
+    {
+        if(hasContinent(continentName))
+            return _continents[continentName];
+        
+    }
     
     function getContinentCount()
     {
@@ -37,6 +43,7 @@ function map()
     this.hasContinent = hasContinent;
     this.getContinents = getContinents;
     this.getContinentCount = getContinentCount;
+    this.getContinent = getContinent;
 }
     
 
