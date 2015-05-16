@@ -62,6 +62,7 @@ TestCase("MapTest",
         assertFunction(this.map1.addContinent);
         assertFunction(this.map1.hasContinent);
         assertFunction(this.map1.getContinents);
+        assertFunction(this.map1.getContinent);
         
         var map = this.map1;
         var continent1 = this.continent1;
@@ -78,6 +79,7 @@ TestCase("MapTest",
         },"TypeError");
         
         assertEquals({Europa:this.continent1},this.map1.getContinents());
+        assertEquals(this.continent1, this.map1.getContinent('Europa'));
         
         assertTrue(this.map1.hasContinent(this.continent1.getName()));
         assertFalse(this.map1.hasContinent(this.continent2.getName()));     
@@ -94,7 +96,16 @@ TestCase("MapTest",
         assertTrue(this.map1.getContinents()["Asien"].hasCountryByName("Country6"));
         assertFalse(this.map1.getContinents()["Asien"].hasCountryByName("Country3"));
                 
-        assertEquals("undefined",typeof this.map1.getContinents()["Europa"].getCountrys()["fakeCountry"]);                
+        assertEquals("undefined",typeof this.map1.getContinents()["Europa"].getCountrys()["fakeCountry"]);
+        
+        assertEquals(this.c1, this.map1.getContinent("Europa").getCountry("Country1"));
+        assertTrue(this.map1.getContinent("Europa").hasCountryByName("Country2"));
+        assertFalse(this.map1.getContinent("Europa").hasCountryByName("Country4"));
+        
+        assertTrue(this.map1.getContinent("Asien").hasCountryByName("Country6"));
+        assertFalse(this.map1.getContinents("Asien").hasCountryByName("Country3"));
+                
+        assertEquals("undefined",typeof this.map1.getContinent("Europa").getCountry("fakeCountry"));  
     },
     
     "test Should be able to get a correct Continent-Count": function()
