@@ -100,21 +100,25 @@ TestCase("stateTest", {
         assertNotUndefined(this.placing.attack);
         assertNotUndefined(this.placing.moveUnits);
         assertNotUndefined(this.placing.isMoveLegal);
+        assertNotUndefined(this.placing.toString);
 
         assertNotUndefined(this.attacking.placeUnits);
         assertNotUndefined(this.attacking.attack);
         assertNotUndefined(this.attacking.moveUnits);
         assertNotUndefined(this.attacking.isMoveLegal);
-
+        assertNotUndefined(this.attacking.toString);
+        
         assertNotUndefined(this.moving.placeUnits);
         assertNotUndefined(this.moving.attack);
         assertNotUndefined(this.moving.moveUnits);
         assertNotUndefined(this.moving.isMoveLegal);
-
+        assertNotUndefined(this.moving.toString);
+        
         assertNotUndefined(this.waiting.placeUnits);
         assertNotUndefined(this.waiting.attack);
         assertNotUndefined(this.waiting.moveUnits);
-        assertNotUndefined(this.waiting.isMoveLegal);           
+        assertNotUndefined(this.waiting.isMoveLegal);
+        assertNotUndefined(this.waiting.toString);
     },
     "test placing state should implement relevant functions": function () {
         assertFunction(this.placing.placeUnits);
@@ -197,7 +201,7 @@ TestCase("stateTest", {
      "test attacking state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
         assertFunction(this.attacking.isMoveLegal);
-        
+        assertFunction(this.attacking.toString);
         var validMove = {
             type: 'attack',
             from: {
@@ -287,9 +291,11 @@ TestCase("stateTest", {
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
         assertFunction(this.moving.isMoveLegal);
+        assertFunction(this.moving.toString);
 
     },    
     "test waiting state should implement relevant functions": function () {
+       assertFunction(this.waiting.toString);
     }
     
 });
