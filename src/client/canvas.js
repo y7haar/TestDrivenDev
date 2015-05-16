@@ -4,7 +4,9 @@
 
 var canvas;
 var ctx;
-var gameLoop =  new tddjs.client.game.gameLoopController();
+//var gameLoop =  new tddjs.client.game.gameLoopController();
+var mapGen = new tddjs.server.controller.mapGenerator();
+var map;
 
 
 
@@ -12,21 +14,30 @@ var gameLoop =  new tddjs.client.game.gameLoopController();
 var mainloop = function() {
         updateGame();
         drawGame();
-        window.requestAnimationFrame(mainloop);
     };
 
 function updateGame(){
-    
+    window.requestAnimationFrame(mainloop);
 }
 function drawGame(){
     clear();
     drawMap();
     drawUI();
 }
-
+var border=50;
 function drawMap(){
-    ctx.fillStyle = "#0f0";
-    ctx.fillRect(ctx.canvas.width/2-50,ctx.canvas.height/2-50,100,100);
+    var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
+    var h = (ctx.canvas.height-border-map.cellGrid[0].length)/map.cellGrid[0].length;
+    
+    for(x=0;x<map.cellGrid.length;x++){
+        for(y=0;y<map.cellGrid[0].length;y++){
+            ctx.strokeStyle="#f00";
+            ctx.fillStyle = "#0f0";
+            ctx.lineWidth="1";
+            ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+            ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+        }
+    }
 }
 
 function drawUI(){
@@ -46,7 +57,13 @@ function init(){
        ctx = canvas.getContext("2d");
        if (ctx) {
             clear();
+            init_map();
             window.requestAnimationFrame(mainloop);
         }
     }
+}
+function init_map(){
+    mapGen.setGridSize(15,15);
+    mapGen.initCountries();
+    map = mapGen.getMapGrid();
 }
