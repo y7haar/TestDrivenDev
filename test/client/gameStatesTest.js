@@ -232,6 +232,7 @@ TestCase("stateTest", {
         assertFunction(this.attacking.isMoveLegal);
         assertFunction(this.placing.endPhase);
         assertFunction(this.attacking.toString);
+        
         var validMove = {
             type: 'attack',
             from: {
@@ -339,8 +340,23 @@ TestCase("stateTest", {
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongTypeMove));
         
         // attacking tests
-        assertFalse(this.attacking.attack(this.map1,wrongTypeMove));
-        assertTrue(this.attacking.attack(this.map1,validMove));
+        
+        var url = "/someURL";
+        
+        assertException(function(){
+            attacking.attack(map,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            attacking.attack(map,validMove,{url:"someURL"});
+        },'TypeError');
+        
+        assertNoException(function(){
+            attacking.attack(map,validMove,url);
+        });
+        
+        assertFalse(this.attacking.attack(this.map1,wrongTypeMove, url));
+        assertTrue(this.attacking.attack(this.map1,validMove, url));
     },
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
