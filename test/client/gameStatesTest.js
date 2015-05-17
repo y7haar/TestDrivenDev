@@ -3,7 +3,7 @@
  *  this code test the statePattern from gameLoopController
  *  there are 4 states PlaceingState, AttackingState, MovingState, WaitingState
  */
-     
+
 TestCase("stateTest", {
     setUp: function () {
         
@@ -189,7 +189,7 @@ TestCase("stateTest", {
         },'TypeError');
         
         assertException(function(){
-            placing.isMoveLegal(map1,availableUnits,"place somewhere units");
+            placing.isMoveLegal(map,availableUnits,"place units somehwere");
         },'TypeError');
         
         assertException(function(){
@@ -208,6 +208,21 @@ TestCase("stateTest", {
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));
         
         //placeUnits test
+        
+        var url = "/someURL";
+        
+        assertException(function(){
+            placing.placeUnits(map,availableUnits,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            placing.placeUnits(map,availableUnits,validMove,{url:"someURL"});
+        },'TypeError');
+        
+        assertNoException(function(){
+            placing.placeUnits(map,availableUnits,validMove,url);
+        },'TypeError');
+        
         assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove));
         assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));       
         
@@ -315,12 +330,17 @@ TestCase("stateTest", {
             attacking.isMoveLegal(map,validMove);
         });      
         
+        //isMove legal test
         assertTrue(this.attacking.isMoveLegal(this.map1, validMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongBorderMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongContinentMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongCountryMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongOwnerMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongTypeMove));
+        
+        // attacking tests
+        assertFalse(this.attacking.attack(this.map1,wrongTypeMove));
+        assertTrue(this.attacking.attack(this.map1,validMove));
     },
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
