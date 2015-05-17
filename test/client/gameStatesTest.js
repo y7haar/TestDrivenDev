@@ -233,6 +233,8 @@ TestCase("stateTest", {
         assertFunction(this.attacking.endPhase);
         assertFunction(this.attacking.toString);
         
+        assertEquals("attackingState", this.attacking.toString());
+        
         var validMove = {
             type: 'attack',
             from: {
