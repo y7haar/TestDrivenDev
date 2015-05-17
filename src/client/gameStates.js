@@ -20,6 +20,7 @@ state.prototype.placeUnits = null;
 state.prototype.attack = null;
 state.prototype.moveUnits = null;
 state.prototype.isMoveLegal = null;
+state.prototype.endPhase = null;
 state.prototype.toString = null;
 
 function placingState()
@@ -28,10 +29,13 @@ function placingState()
    {
        if(!isMoveLegal(currentMap, unitCount, move))
            return false;
-       // ajax POST to server       
-       
-       return true;
-   }   
+       // ajax POST to server with the move, server should validate the move then trigger eventSource event       
+   }
+   
+   function endPhase()
+   {
+       //ajax Post to server that player want to end this Phase 
+   }
    function toString()
    {
        return "placingState";
@@ -59,7 +63,7 @@ function placingState()
            //test if Country not exists on the Continent in moveObject 
            if(! currentMap.getContinent(move.continent).hasCountryByName(move.country))
                return false;
-           //test if the player dont own the given Country    
+           //test if the player dont own the Country    
            else if(currentMap.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
                return false;
            else return true;
@@ -69,6 +73,7 @@ function placingState()
    this.placeUnits = placeUnits;
    this.isMoveLegal = isMoveLegal;
    this.toString = toString;
+   this.endPhase = endPhase;
 }
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;
