@@ -49,6 +49,9 @@ function placingState()
        if(isNaN(unitCount))
            throw new TypeError("given unitCount is not a Number");
        
+       if(typeof move !== 'object')
+           throw new TypeError("given Move is not in right Format");
+       
        if(move.type !== 'placing')
            return false;
     
