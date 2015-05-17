@@ -93,6 +93,83 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.initBorders();}, "Error");
     },
     
+    "test Should be able to collect all current countries": function()
+    {
+        assertFunction(this.mapGenerator.collectAllCountries);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var size = this.mapGenerator.collectAllCountries().length;
+        assertTrue(size >= 0);
+        assertTrue(size === 42);
+    },
+    
+    "test Should be able to collect all neighbor countries of a countrie": function()
+    {
+        assertFunction(this.mapGenerator.collectNeighborCountries);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[0][0]);
+        assertTrue(neighbors.length === 3);
+        neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[1][1]);
+        assertTrue(neighbors.length === 8);
+        //GGF genau überprüfen noch
+    },
+    
+     "test Should be able to call collectCountrie-Functions without neccassary initialisisations": function()
+    {
+        var country = new tddjs.client.map.country();
+        var gen = this.mapGenerator;
+        assertException(function(){gen.collectAllCountries();}, "Error");
+        assertException(function(){gen.collectNeighborCountries(country);}, "Error");
+        gen.setGridSize(7,6);
+        assertException(function(){gen.collectAllCountries();}, "Error");
+        assertException(function(){gen.collectNeighborCountries(country);}, "Error");
+        gen.initCountries();
+        assertException(function(){gen.collectAllCountries();}, "Error");
+        assertException(function(){gen.collectNeighborCountries(country);}, "Error");
+        gen.initBorders();
+        assertNoException(function(){gen.collectAllCountries();});
+        assertNoException(function(){gen.collectNeighborCountries(country);});
+    },
+    
+    "test Shouldnt be able to call CollectNeighbors with something thats not a country": function()
+    {
+        var gen = this.mapGenerator;
+        var x = 5;
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var country = new tddjs.client.map.country();
+        assertException(function(){gen.collectNeighborCountries(x);}, "TypeError");
+        assertNoException(function(){gen.collectNeighborCountries(country);});
+    },
+    
+    "test Should have generated bigger countries after Combination": function()
+    {
+        assertFunction(this.mapGenerator.combineCountryCells);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        this.mapGenerator.combineCountryCells();
+        var size = this.mapGenerator.collectAllCountries().length;
+        assertTrue(size < 42);
+        //GGF noch mehr
+    },
+    
+    "test Shouldnt be able to call Combination without neccessary steps first": function()
+    {
+        var gen = this.mapGenerator;
+        assertException(function(){gen.combineCountryCells();},"Error");
+        this.mapGenerator.setGridSize(7,6);
+        assertException(function(){gen.combineCountryCells();},"Error");
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.combineCountryCells();},"Error");
+        this.mapGenerator.initBorders();
+        assertNoException(function(){gen.combineCountryCells();});
+    },
+    
     "test Shouldnt be able to generate a Map without doing the neccessary steps first": function()
     {
         var gen = this.mapGenerator;
