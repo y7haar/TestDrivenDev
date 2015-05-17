@@ -19,13 +19,15 @@ TestCase("MapGeneratorTest", {
        assertObject(this.mapGenerator);
     },
     
-    "test if MapGenerator can set a GridSize": function() {
+    "test if MapGenerator can set a  correct GridSize": function() {
         assertFunction(this.mapGenerator.setGridSize);
         assertFunction(this.mapGenerator.getMapHeight);
         assertFunction(this.mapGenerator.getMapWidth);
         this.mapGenerator.setGridSize(this.x,this.y);
         assertEquals(this.mapGenerator.getMapWidth(),this.x);
         assertEquals(this.mapGenerator.getMapHeight(),this.y);
+        var gen = this.mapGenerator;
+        assertException(function(){gen.setGridSize(-5,2);},"Error");
     },
     
     "test grid should be a object": function()
@@ -64,12 +66,35 @@ TestCase("MapGeneratorTest", {
         }
     },
     
-    "test After initBorders every possible Border should have been created": function()
+    "test After initBorders every possible Border should have been created correctly": function()
     {
-        assertFunktion(this.mapGenerator.initBorders);
+        assertFunction(this.mapGenerator.initBorders);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var borders = this.mapGenerator.getMapGrid().borders;
+        assertTrue(borders.length === 71);
+        
+        for(var i = 0; i < borders.length; i++)
+        {
+            assertTrue(borders[i] instanceof tddjs.client.map.border);
+            assertTrue(borders[i].getLeftCountry !== borders[i].getRigthCountry);
+        }
     },
     
-    "test Shouldnt be able to generate a Map without doing the neccessary steps first": function(){
+    "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
+    {
+        var gen = this.mapGenerator;
+        assertException(function(){gen.initBorders();}, "Error");
+        gen.setGridSize(7,6);
+        assertException(function(){gen.initBorders();}, "Error");
+        gen.initCountries();
+        assertNoException(function(){gen.initBorders();});
+        assertException(function(){gen.initBorders();}, "Error");
+    },
+    
+    "test Shouldnt be able to generate a Map without doing the neccessary steps first": function()
+    {
         var gen = this.mapGenerator;
         assertException(function(){gen.generateMap();}, "Error");
     },
