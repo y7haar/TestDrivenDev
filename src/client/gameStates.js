@@ -27,6 +27,8 @@ function placingState()
 {
    function placeUnits(currentMap, unitCount, move, url)
    {
+       if(typeof url !== 'string')
+           throw new TypeError("given url is not a String");
        if(!isMoveLegal(currentMap, unitCount, move))
            return false;
        // ajax POST to server with the move, server should validate the move then trigger eventSource event       
