@@ -152,6 +152,17 @@ function mapGenerator()
         return newArray;
     }
     
+    function collectNeighborCountries(country)
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(country instanceof tddjs.client.map.country))
+            throw new TypeError("Given value is not a country");
+        
+        var countries = [];
+        return countries;
+    }
+    
     //Kombiniert Länder zu größeren Ländern
     function combineCountryCells()
     {
@@ -165,6 +176,7 @@ function mapGenerator()
     this.getMapHeight = getMapHeight;
     
     this.collectAllCountries = collectAllCountries;
+    this.collectNeighborCountries = collectNeighborCountries;
     
     this.generateMap = generateMap;
     this.initCountries = initCountries;
