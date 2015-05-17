@@ -189,6 +189,10 @@ TestCase("stateTest", {
         },'TypeError');
         
         assertException(function(){
+            placing.isMoveLegal(map1,availableUnits,"place somewhere units");
+        },'TypeError');
+        
+        assertException(function(){
             placing.isMoveLegal(map,"4asd",validMove);
         },'TypeError');
         
@@ -205,9 +209,7 @@ TestCase("stateTest", {
         
         //placeUnits test
         assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove));
-        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));
-        
-        
+        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));       
         
      },
      "test attacking state should implement relevant functions": function () {
@@ -293,7 +295,26 @@ TestCase("stateTest", {
                 country: 'Country3'
             }
         };
-
+        
+        var attacking = this.attacking;
+        var map = this.map1;
+        
+        assertException(function(){
+            attacking.isMoveLegal();
+        },'TypeError');
+        
+        assertException(function(){
+            attacking.isMoveLegal({},validMove);
+        },'TypeError');    
+        
+        assertException(function(){
+            attacking.isMoveLegal(map1,"attack somewhere");
+        },'TypeError');   
+        
+        assertNoException(function(){
+            attacking.isMoveLegal(map,validMove);
+        });      
+        
         assertTrue(this.attacking.isMoveLegal(this.map1, validMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongBorderMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, wrongContinentMove));
