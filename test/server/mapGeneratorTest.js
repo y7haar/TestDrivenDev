@@ -64,23 +64,30 @@ TestCase("MapGeneratorTest", {
         }
     },
     
-    "test After initBorders every possible Border should have been created": function()
+    "test After initBorders every possible Border should have been created correctly": function()
     {
         assertFunction(this.mapGenerator.initBorders);
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        assertTrue(this.mapGenerator.getMapGrid().borders.length === 71);
+        var borders = this.mapGenerator.getMapGrid().borders;
+        assertTrue(borders.length === 71);
+        
+        for(var i = 0; i < borders.length; i++)
+        {
+            assertTrue(borders[i] instanceof tddjs.client.map.border);
+            assertTrue(borders[i].getLeftCountry !== borders[i].getRigthCountry);
+        }
     },
     
     "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
     {
         var gen = this.mapGenerator;
         assertException(function(){gen.initBorders();}, "Error");
-        gen.setGrid(7,6);
+        gen.setGridSize(7,6);
         assertException(function(){gen.initBorders();}, "Error");
         gen.initCountries();
-        assertNoException(function(){gen.initBorders();}, "Error");
+        assertNoException(function(){gen.initBorders();});
         gen.initBorders();
         assertException(function(){gen.initBorders();}, "Error");
     },
