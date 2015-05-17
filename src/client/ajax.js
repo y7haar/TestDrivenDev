@@ -29,10 +29,16 @@ function ajax()
         
     }
     
+    function getRequestHeader()
+    {
+        
+    }
+    
     this.getXmlHttpRequest = getXmlHttpRequest;
     this.get = get;
     this.post = post;
     this.setRequestHeader = setRequestHeader;
+    this.getRequestHeader = getRequestHeader;
     
 };
 
