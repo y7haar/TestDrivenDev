@@ -59,6 +59,7 @@ TestCase("stateTest", {
         this.continent2.addCountry(this.c6);
         //Borders-------------------------------
         this.c1.addBorder(this.c2);
+        this.c2.addBorder(this.c1);
         //add continets to map -----------------
         this.map1.addContinent(this.continent1);
         this.map1.addContinent(this.continent2);
