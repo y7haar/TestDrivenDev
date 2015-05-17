@@ -111,7 +111,7 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[0][0]);
-        assertEquals(2, neighbors.length);
+        assertEquals(2, neighbors.length );
         neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[1][1]);
         assertEquals(4, neighbors.length);
         //GGF genau überprüfen noch
@@ -144,6 +144,33 @@ TestCase("MapGeneratorTest", {
         var country = new tddjs.client.map.country();
         assertException(function(){gen.collectNeighborCountries(x);}, "TypeError");
         assertNoException(function(){gen.collectNeighborCountries(country);});
+    },
+    
+    "test mergeIntoCountry should combine two countries into one": function()
+    {
+        assertFunction(this.mapGenerator.mergeIntoCountrie);
+        //TODO
+    },
+    
+    "test Shouldn´t be able to call merge with something thats not a country\n\
+     or without neccassary steps before it": function()
+    {
+        var gen = this.mapGenerator;
+        var x =5;
+        var country = new tddjs.client.map.country();
+        var country2 = new tddjs.client.map.country();
+        
+        assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
+        this.mapGenerator.setGridSize(7,6);
+        assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
+        this.mapGenerator.initBorders();
+        
+        assertException(function(){gen.mergeIntoCountry(x,x);}, "TypeError");
+        assertException(function(){gen.mergeIntoCountry(country,x);}, "TypeError");
+        assertException(function(){gen.mergeIntoCountry(x,country);}, "TypeError");
+        assertException(function(){gen.mergeIntoCountry(country,country);}, "Error");
     },
     
     "test Should have generated bigger countries after Combination": function()
