@@ -221,10 +221,10 @@ TestCase("stateTest", {
         
         assertNoException(function(){
             placing.placeUnits(map,availableUnits,validMove,url);
-        },'TypeError');
+        });
         
-        assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove));
-        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));       
+        assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove,url));
+        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove,url));       
         
      },
      "test attacking state should implement relevant functions": function () {
