@@ -100,29 +100,34 @@ TestCase("stateTest", {
         assertNotUndefined(this.placing.attack);
         assertNotUndefined(this.placing.moveUnits);
         assertNotUndefined(this.placing.isMoveLegal);
+        assertNotUndefined(this.placing.endPhase);
         assertNotUndefined(this.placing.toString);
 
         assertNotUndefined(this.attacking.placeUnits);
         assertNotUndefined(this.attacking.attack);
         assertNotUndefined(this.attacking.moveUnits);
         assertNotUndefined(this.attacking.isMoveLegal);
+        assertNotUndefined(this.attacking.endPhase);
         assertNotUndefined(this.attacking.toString);
         
         assertNotUndefined(this.moving.placeUnits);
         assertNotUndefined(this.moving.attack);
         assertNotUndefined(this.moving.moveUnits);
         assertNotUndefined(this.moving.isMoveLegal);
+        assertNotUndefined(this.moving.endPhase);
         assertNotUndefined(this.moving.toString);
         
         assertNotUndefined(this.waiting.placeUnits);
         assertNotUndefined(this.waiting.attack);
         assertNotUndefined(this.waiting.moveUnits);
         assertNotUndefined(this.waiting.isMoveLegal);
+        assertNotUndefined(this.waiting.endPhase);
         assertNotUndefined(this.waiting.toString);
     },
     "test placing state should implement relevant functions": function () {
         assertFunction(this.placing.placeUnits);
         assertFunction(this.placing.isMoveLegal);
+        assertFunction(this.placing.endPhase);
         assertFunction(this.placing.toString);
         
         assertEquals("placingState", this.placing.toString());
@@ -203,10 +208,12 @@ TestCase("stateTest", {
         assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));
         
         
+        
      },
      "test attacking state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
         assertFunction(this.attacking.isMoveLegal);
+        assertFunction(this.placing.endPhase);
         assertFunction(this.attacking.toString);
         var validMove = {
             type: 'attack',
@@ -297,6 +304,7 @@ TestCase("stateTest", {
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
         assertFunction(this.moving.isMoveLegal);
+        assertFunction(this.placing.endPhase);
         assertFunction(this.moving.toString);
 
     },    
