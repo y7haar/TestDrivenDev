@@ -66,10 +66,27 @@ TestCase("MapGeneratorTest", {
     
     "test After initBorders every possible Border should have been created": function()
     {
-        assertFunktion(this.mapGenerator.initBorders);
+        assertFunction(this.mapGenerator.initBorders);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        assertTrue(this.mapGenerator.getMapGrid().borders.length === 71);
     },
     
-    "test Shouldnt be able to generate a Map without doing the neccessary steps first": function(){
+    "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
+    {
+        var gen = this.mapGenerator;
+        assertException(function(){gen.initBorders();}, "Error");
+        gen.setGrid(7,6);
+        assertException(function(){gen.initBorders();}, "Error");
+        gen.initCountries();
+        assertNoException(function(){gen.initBorders();}, "Error");
+        gen.initBorders();
+        assertException(function(){gen.initBorders();}, "Error");
+    },
+    
+    "test Shouldnt be able to generate a Map without doing the neccessary steps first": function()
+    {
         var gen = this.mapGenerator;
         assertException(function(){gen.generateMap();}, "Error");
     },
