@@ -6,7 +6,9 @@ tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
 
 function mapGenerator()
 {
+    //Gewissermaßen die Welt
     var _grid = {};
+    //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
     var calledInitBorders = false;
     
@@ -41,6 +43,7 @@ function mapGenerator()
         return arr;
     }
     
+    //Theoretisch gehört hier die Endabfertigung rein
     function generateMap()
     {
         if(typeof(_grid.cellGrid) === "undefined")
@@ -108,6 +111,48 @@ function mapGenerator()
         }
     }
     
+    //Sammelt alle Länder
+    function collectAllCountries()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        
+        var countries = [];
+        
+        //Länder hinzufügen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+            countries.push(_grid.borders[i].getLeftCountry());
+            countries.push(_grid.borders[i].getRigthCountry());
+        }
+        //Duplikate entfernen
+        countries = removeDuplicates(countries);
+        return countries;
+    }
+    
+    //Hilfsmethode um Duplikate in Listen zu vermeiden vll später verbessern
+    function removeDuplicates(array)
+    {
+        var newArray = [];
+        
+        for(var i = 0; i < array.length; i++)
+        {
+            var value = array[i];
+            var double = false;
+            
+            for(var j = 0; j < newArray.length; j++)
+            {
+                if(newArray[j] === value)
+                    double = true;
+            }
+            
+            if(!double)
+                newArray.push(value);
+        }
+        return newArray;
+    }
+    
+    //Kombiniert Länder zu größeren Ländern
     function combineCountryCells()
     {
         if(!calledInitBorders)
@@ -118,6 +163,9 @@ function mapGenerator()
     this.getMapGrid = getMapGrid;
     this.getMapWidth = getMapWidth;
     this.getMapHeight = getMapHeight;
+    
+    this.collectAllCountries = collectAllCountries;
+    
     this.generateMap = generateMap;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
