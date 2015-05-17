@@ -227,10 +227,10 @@ TestCase("stateTest", {
         assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove,url));       
         
      },
-     "test attacking state should implement relevant functions": function () {
+     "test att state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
         assertFunction(this.attacking.isMoveLegal);
-        assertFunction(this.placing.endPhase);
+        assertFunction(this.attacking.endPhase);
         assertFunction(this.attacking.toString);
         
         var validMove = {
