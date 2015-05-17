@@ -19,13 +19,15 @@ TestCase("MapGeneratorTest", {
        assertObject(this.mapGenerator);
     },
     
-    "test if MapGenerator can set a GridSize": function() {
+    "test if MapGenerator can set a  correct GridSize": function() {
         assertFunction(this.mapGenerator.setGridSize);
         assertFunction(this.mapGenerator.getMapHeight);
         assertFunction(this.mapGenerator.getMapWidth);
         this.mapGenerator.setGridSize(this.x,this.y);
         assertEquals(this.mapGenerator.getMapWidth(),this.x);
         assertEquals(this.mapGenerator.getMapHeight(),this.y);
+        var gen = this.mapGenerator;
+        assertException(function(){gen.setGridSize(-5,2);},"Error");
     },
     
     "test grid should be a object": function()
@@ -88,7 +90,6 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.initBorders();}, "Error");
         gen.initCountries();
         assertNoException(function(){gen.initBorders();});
-        gen.initBorders();
         assertException(function(){gen.initBorders();}, "Error");
     },
     
