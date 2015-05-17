@@ -7,9 +7,11 @@ tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
 function mapGenerator()
 {
     var _grid = {};
+    var calledInitCountries = false;
     
     function setGridSize(x,y){
         _grid.cellGrid = createArray(x,y);
+        calledInitCountries = false;
     }
     
     function getMapGrid(){
@@ -42,6 +44,7 @@ function mapGenerator()
         return new tddjs.client.map.map();
     }
     
+    //Belegt jede Zelle mit einem neuen Land
     function initCountries()
     {
         if(typeof(_grid.cellGrid) === "undefined")
@@ -55,6 +58,17 @@ function mapGenerator()
                 _grid.cellGrid[i][j].id = -1;
             }
         }
+        
+        calledInitCountries = true;
+    }
+    
+    //Erzeugt die alle Borders
+    function initBorders()
+    {
+        if(!calledInitCountries)
+            throw new Error("Didnt call required Functions before");
+        else
+        calledInitCountries = false;
     }
     
     this.setGridSize = setGridSize;
@@ -63,4 +77,5 @@ function mapGenerator()
     this.getMapHeight = getMapHeight;
     this.generateMap = generateMap;
     this.initCountries = initCountries;
+    this.initBorders = initBorders;
 };
