@@ -24,9 +24,13 @@ state.prototype.toString = null;
 
 function placingState()
 {
-   function placeUnits()
+   function placeUnits(currentMap, unitCount, move, url)
    {
+       if(!isMoveLegal(currentMap, unitCount, move))
+           return false;
+       // ajax POST to server       
        
+       return true;
    }   
    function toString()
    {
@@ -61,8 +65,7 @@ function placingState()
            else return true;
        }
        
-   }
-   
+   }   
    this.placeUnits = placeUnits;
    this.isMoveLegal = isMoveLegal;
    this.toString = toString;
