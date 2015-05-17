@@ -324,7 +324,7 @@ TestCase("stateTest", {
         },'TypeError');    
         
         assertException(function(){
-            attacking.isMoveLegal(map1,"attack somewhere");
+            attacking.isMoveLegal(map,"attack somewhere");
         },'TypeError');   
         
         assertNoException(function(){
