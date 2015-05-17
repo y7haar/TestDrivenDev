@@ -12,6 +12,8 @@ function mapGenerator()
     var calledInitCountries = false;
     var calledInitBorders = false;
     
+    var GRID_CELL_COMBINES_PER_COUNTRY =2.5;
+    
     function setGridSize(x,y)
     {
         if(x <= 0 || y <= 0)
@@ -152,6 +154,7 @@ function mapGenerator()
         return newArray;
     }
     
+    //Sammelt Nachbarländer eines Landes
     function collectNeighborCountries(country)
     {
         if(!calledInitBorders)
@@ -160,6 +163,18 @@ function mapGenerator()
             throw new TypeError("Given value is not a country");
         
         var countries = [];
+        
+         //Länder hinzufügen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+            if(_grid.borders[i].getLeftCountry() === country)
+                countries.push(_grid.borders[i].getRigthCountry());
+            
+            if(_grid.borders[i].getRigthCountry() === country)
+                countries.push(_grid.borders[i].getLeftCountry());
+        }
+        //Duplikate entfernen
+        countries = removeDuplicates(countries);
         return countries;
     }
     
@@ -168,6 +183,9 @@ function mapGenerator()
     {
         if(!calledInitBorders)
             throw new Error("There are no Borders to work with yet");
+        
+        //Kombinationswert
+        var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
     }
     
     this.setGridSize = setGridSize;
