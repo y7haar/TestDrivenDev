@@ -8,6 +8,7 @@ function mapGenerator()
 {
     var _grid = {};
     var calledInitCountries = false;
+    var calledInitBorders = false;
     
     function setGridSize(x,y)
     {
@@ -15,6 +16,7 @@ function mapGenerator()
             throw new Error("A Grid is not allowed to be zero Width or Height");
         _grid.cellGrid = createArray(x,y);
         calledInitCountries = false;
+        calledInitBorders = false;
     }
     
     function getMapGrid(){
@@ -102,7 +104,14 @@ function mapGenerator()
                 }
             }
             calledInitCountries = false;
+            calledInitBorders = true;
         }
+    }
+    
+    function combineCountryCells()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
     }
     
     this.setGridSize = setGridSize;
@@ -112,4 +121,5 @@ function mapGenerator()
     this.generateMap = generateMap;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
+    this.combineCountryCells = combineCountryCells;
 };
