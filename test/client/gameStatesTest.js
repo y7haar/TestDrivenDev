@@ -196,7 +196,13 @@ TestCase("stateTest", {
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongCountryMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongOwnerMove));
         assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongTypeMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));         
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));
+        
+        //placeUnits test
+        assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove));
+        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove));
+        
+        
      },
      "test attacking state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
@@ -281,12 +287,12 @@ TestCase("stateTest", {
             }
         };
 
-        assertTrue(this.attacking.isMoveLegal(this.map1), validMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongBorderMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongContinentMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongCountryMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongOwnerMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongTypeMove);
+        assertTrue(this.attacking.isMoveLegal(this.map1, validMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongBorderMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongContinentMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongCountryMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongOwnerMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongTypeMove));
     },
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
