@@ -85,6 +85,35 @@ placingState.prototype.constructor = placingState;
 
 function attackingState()
 {
+    function attack(currentMap, move, url)
+    {
+        
+    }
+    function isMoveLegal(currentMap, move)
+    {
+        if(!(currentMap instanceof tddjs.client.map.map))
+           throw new TypeError("given Map is not instance of Map");
+       
+       if(typeof move !== 'object')
+           throw new TypeError("given Move is not in right Format");
+       
+       if(move.type !== 'attack')
+           return false;
+        
+    }
+    function toString()
+    {
+        return "attackingState";
+    }
+    function endPhase()
+    {
+        
+    }
+    
+    this.attack = attack;
+    this.isMoveLegal = isMoveLegal;
+    this.endPhase = endPhase;
+    this.toString = toString;   
     
 }
 attackingState.prototype = new state();
@@ -92,7 +121,7 @@ attackingState.prototype.constructor = attackingState;
 
 function movingState()
 {
-    
+   
 }
 movingState.prototype = new state();
 movingState.prototype.constructor = movingState;
