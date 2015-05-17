@@ -148,7 +148,7 @@ TestCase("MapGeneratorTest", {
     
     "test mergeIntoCountry should combine two countries into one": function()
     {
-        assertFunction(this.mapGenerator.mergeIntoCountrie);
+        assertFunction(this.mapGenerator.mergeIntoCountry);
         //TODO
     },
     
