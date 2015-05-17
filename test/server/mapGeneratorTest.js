@@ -101,7 +101,7 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initBorders();
         var size = this.mapGenerator.collectAllCountries().length;
         assertTrue(size >= 0);
-        assertTrue(size === 42);
+        assertEquals(42, size);
     },
     
     "test Should be able to collect all neighbor countries of a countrie": function()
@@ -111,9 +111,9 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[0][0]);
-        assertTrue(neighbors.length === 3);
+        assertEquals(2, neighbors.length);
         neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[1][1]);
-        assertTrue(neighbors.length === 8);
+        assertEquals(4, neighbors.length);
         //GGF genau überprüfen noch
     },
     
