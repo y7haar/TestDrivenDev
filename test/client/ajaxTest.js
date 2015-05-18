@@ -74,7 +74,7 @@ TestCase("AjaxFacadeStubTest", {
         assertTrue(this.xhrStub.isOpenCalled());
         assertEquals(["GET", "/url", true], this.xhrStub.openArgs);
         assertTrue(this.xhrStub.isSendCalled());
-        assertEquals([], this.xhrStub.sendArgs);
+        assertEquals([null], this.xhrStub.sendArgs);
         
         var options = {
             method: "POST",
