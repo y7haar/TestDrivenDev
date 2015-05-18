@@ -12,7 +12,6 @@ tddjs.namespace("stubs.ajax").request = request;
 
 function create()
 {
-    console.log("CREATE");
     return new XMLHttpRequest();
 }
 
@@ -23,6 +22,11 @@ function setRequestHeaders(xhr, headers)
         if(headers.hasOwnProperty(header))
             xhr.setRequestHeader(header, headers[header]);
     }
+}
+
+function isRequestSuccessfull(status)
+{
+    return status >= 200 && status < 300;
 }
 
 function get(url, options)
