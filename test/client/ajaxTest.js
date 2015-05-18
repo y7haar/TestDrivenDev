@@ -63,7 +63,7 @@ TestCase("AjaxFacadeStubTest", {
         assertNoException(function() { ajax.request("/url"); } );
     },
     
-     "test request should call xhr open method with correct parameters": function () {  
+     "test request should call xhr open method with correct parameters and send method with data if data is provided": function () {  
         var ajax = tddjs.stubs.ajax;
         
         var options = {
@@ -73,13 +73,18 @@ TestCase("AjaxFacadeStubTest", {
         ajax.request("/url", options);
         assertTrue(this.xhrStub.isOpenCalled());
         assertEquals(["GET", "/url", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals([], this.xhrStub.sendArgs);
         
         var options = {
-            method: "POST"
+            method: "POST",
+            data: "BigData"
         };
         
         ajax.request("/url2", options);
         assertEquals(["POST", "/url2", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals(["BigData"], this.xhrStub.sendArgs);
     }
 });
 
