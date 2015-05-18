@@ -109,7 +109,7 @@ TestCase("AjaxFacadeStubTest", {
         assertEquals(["SomeData"], this.xhrStub.sendArgs);
     },
     
-     "testajax facade should set headers correctly on get / post in xhr object": function () {  
+     "test ajax facade should set headers correctly on get / post in xhr object": function () {  
         var ajax = tddjs.stubs.ajax;
         
         var options = {
@@ -131,6 +131,22 @@ TestCase("AjaxFacadeStubTest", {
         
         ajax.post("/url", options);
         assertEquals("application/json", this.xhrStub.getRequestHeader("Content-Type"));
+    },
+    
+    "test ajax facade should be able to set multiple headers": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+         var options = {
+            headers:{
+                "Content-Type": "application/json",
+                "Content-Length": "348"
+            },
+            data: "data"
+        };
+        
+        ajax.post("/url", options);
+        assertEquals("application/json", this.xhrStub.getRequestHeader("Content-Type"));
+        assertEquals("348", this.xhrStub.getRequestHeader("Content-Length"));
     }
 });
 
