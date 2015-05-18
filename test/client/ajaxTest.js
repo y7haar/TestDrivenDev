@@ -41,19 +41,14 @@ TestCase("AjaxFacadeStubTest", {
         assertNoException (function() {tddjs.stubs.ajax.post("/url"); });
     },
     
-    "test get and post method should call xhr create method and request method in facade": function () {  
+    "test get and post method should call xhr create method": function () {  
         var ajax = tddjs.stubs.ajax;
         
         ajax.get("/url");
         assertTrue(ajax.create.called);
-//        assertTrue(ajax.request.called);
-//        assertEquals(ajax.get.args, ajax.request.args);
 
         ajax.post("/url");
         assertTrue(ajax.create.called);
-//        assertTrue(ajax.request.called);
-//        assertEquals(ajax.post.args, ajax.request.args);
-        
     },
     
     "test request should throw Exception if parameter are invalid": function () {  
