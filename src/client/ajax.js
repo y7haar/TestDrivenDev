@@ -41,6 +41,7 @@ function request(url, options)
     
     var xhr = tddjs.stubs.ajax.create();
     xhr.open(options.method || "GET", url, true);
+    xhr.send(options.data || null);
 }
 
 }());
