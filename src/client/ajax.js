@@ -3,11 +3,15 @@
  */
 
 
-tddjs.namespace("stubs").ajax = ajax;
-
-function ajax()
-{
+(function(){
     
-};
+tddjs.namespace("stubs.ajax").create = create;
 
+function create()
+{
+    return new XMLHttpRequest();
+}
+
+
+}());
 
