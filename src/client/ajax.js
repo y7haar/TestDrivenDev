@@ -20,8 +20,6 @@ function get(url)
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
     
-    var xhr = tddjs.stubs.ajax.create();
-    
     tddjs.stubs.ajax.request(url);
 }
 
@@ -30,8 +28,6 @@ function post(url)
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
     
-    var xhr = tddjs.stubs.ajax.create();
-    
     tddjs.stubs.ajax.request(url);
 }
 
@@ -39,6 +35,8 @@ function request(url)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
+    
+    var xhr = tddjs.stubs.ajax.create();
 }
 
 }());
