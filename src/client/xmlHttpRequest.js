@@ -12,16 +12,13 @@ function xmlHttpRequest()
     var _isGetRequestHeaderCalled = false;
     var _isSetRequestHeaderCalled = false;
     
-    var _sendArgs = [];
-    var _openArgs = [];
-    
     var _method = "";
     var _headers = {};
     
     function open(method, url, async)
     {
         _isOpenCalled= true;
-        _openArgs = arguments;
+        this.openArgs = arguments;
         
         if(arguments.length != 3)
             throw new Error("All arguments must be setted");
@@ -43,7 +40,7 @@ function xmlHttpRequest()
     function send(data)
     {
         _isSendCalled = true;
-        _sendArgs = arguments;
+        this.sendArgs = arguments;
         
         this.setReadyState(4);
         this.status = 200;
@@ -131,6 +128,8 @@ function xmlHttpRequest()
     this.isGetRequestHeaderCalled = isGetRequestHeaderCalled;
     this.isSetRequestHeaderCalled = isSetRequestHeaderCalled;
     
+    this.sendArgs = [];
+    this.openArgs = [];
     
     this.responseText = "";
     this.readyState = 0;
