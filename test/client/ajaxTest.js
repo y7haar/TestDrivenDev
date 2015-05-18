@@ -9,7 +9,7 @@ TestCase("AjaxFacadeStubTest", {
         this.ajaxCreate = ajax.create;
         this.xhrStub = new ajax.xmlHttpRequest();
         ajax.create = stubFn(this.xhrStub);
-        
+
 
     }, 
     tearDown: function ()
@@ -61,6 +61,17 @@ TestCase("AjaxFacadeStubTest", {
         
         assertException(function() { ajax.request(2); }, "TypeError");
         assertNoException(function() { ajax.request("/url"); } );
+    },
+    
+     "test request should call xhr open method with correct parameters": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        var options = {
+            method: "GET"
+        };
+        
+        ajax.request("/url", options);
+        assertTrue(this.xhrStub.isOpenCalled());
     }
 });
 
