@@ -12,6 +12,7 @@ tddjs.namespace("stubs.ajax").request = request;
 
 function create()
 {
+    console.log("CREATE");
     return new XMLHttpRequest();
 }
 
@@ -37,6 +38,7 @@ function request(url)
         throw new TypeError("URL must be setted");
     
     var xhr = tddjs.stubs.ajax.create();
+    xhr.open("GET", "bla", true);
 }
 
 }());
