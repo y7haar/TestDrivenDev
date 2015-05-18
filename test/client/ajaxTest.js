@@ -107,6 +107,30 @@ TestCase("AjaxFacadeStubTest", {
         assertEquals(["POST", "/url", true], this.xhrStub.openArgs);
         assertTrue(this.xhrStub.isSendCalled());
         assertEquals(["SomeData"], this.xhrStub.sendArgs);
+    },
+    
+     "testajax facade should set headers correctly on get / post in xhr object": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        var options = {
+            headers:{
+                "Accept-Charset": "utf-8"
+            }    
+        };
+        
+        ajax.get("/url", options);
+        assertEquals("utf-8", this.xhrStub.getRequestHeader("Accept-Charset"));
+        
+        
+         var options = {
+            headers:{
+                "Content-Type": "application/json"
+            },
+            data: "data"
+        };
+        
+        ajax.post("/url", options);
+        assertEquals("application/json", this.xhrStub.getRequestHeader("Content-Type"));
     }
 });
 
