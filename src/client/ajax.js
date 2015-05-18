@@ -16,20 +16,26 @@ function create()
     return new XMLHttpRequest();
 }
 
-function get(url)
+function get(url, options)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
     
-    tddjs.stubs.ajax.request(url);
+    options = tddjs.extend({}, options);
+    options.method = "GET";
+    
+    tddjs.stubs.ajax.request(url, options);
 }
 
-function post(url)
+function post(url, options)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
     
-    tddjs.stubs.ajax.request(url);
+    options = tddjs.extend({}, options);
+    options.method = "POST";
+    
+    tddjs.stubs.ajax.request(url, options);
 }
 
 function request(url, options)
