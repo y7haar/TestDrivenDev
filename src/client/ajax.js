@@ -8,6 +8,7 @@
 tddjs.namespace("stubs.ajax").create = create;
 tddjs.namespace("stubs.ajax").get = get;
 tddjs.namespace("stubs.ajax").post = post;
+tddjs.namespace("stubs.ajax").request = request;
 
 function create()
 {
@@ -20,6 +21,8 @@ function get(url)
         throw new TypeError("URL must be setted");
     
     var xhr = tddjs.stubs.ajax.create();
+    
+    tddjs.stubs.ajax.request(url);
 }
 
 function post(url)
@@ -28,8 +31,14 @@ function post(url)
         throw new TypeError("URL must be setted");
     
     var xhr = tddjs.stubs.ajax.create();
+    
+    tddjs.stubs.ajax.request(url);
 }
 
+function request(url)
+{
+    
+}
 
 }());
 
