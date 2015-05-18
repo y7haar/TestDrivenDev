@@ -32,13 +32,15 @@ function post(url)
     tddjs.stubs.ajax.request(url);
 }
 
-function request(url)
+function request(url, options)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
     
+    options = tddjs.extend({}, options);
+    
     var xhr = tddjs.stubs.ajax.create();
-    xhr.open("GET", "bla", true);
+    xhr.open(options.method || "GET", url, true);
 }
 
 }());
