@@ -16,6 +16,15 @@ function create()
     return new XMLHttpRequest();
 }
 
+function setRequestHeaders(xhr, headers)
+{
+    for(var header in headers)
+    {
+        if(headers.hasOwnProperty(header))
+            xhr.setRequestHeader(header, headers[header]);
+    }
+}
+
 function get(url, options)
 {
     if(typeof url !== "string")
@@ -46,6 +55,8 @@ function request(url, options)
     options = tddjs.extend({}, options);
     
     var xhr = tddjs.stubs.ajax.create();
+    setRequestHeaders(xhr, options.headers);
+
     xhr.open(options.method || "GET", url, true);
     xhr.send(options.data || null);
 }
