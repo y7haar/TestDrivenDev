@@ -37,7 +37,8 @@ function post(url)
 
 function request(url)
 {
-    
+    if(typeof url !== "string")
+        throw new TypeError("URL must be setted");
 }
 
 }());
