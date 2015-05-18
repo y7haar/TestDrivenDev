@@ -18,12 +18,16 @@ function get(url)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
+    
+    var xhr = tddjs.stubs.ajax.create();
 }
 
 function post(url)
 {
     if(typeof url !== "string")
         throw new TypeError("URL must be setted");
+    
+    var xhr = tddjs.stubs.ajax.create();
 }
 
 
