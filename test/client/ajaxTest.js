@@ -90,7 +90,7 @@ TestCase("AjaxFacadeStubTest", {
     "test get method should call open / send method in xhr with correct params": function () {  
         var ajax = tddjs.stubs.ajax;
         
-        ajax.get("/url");
+        ajax.get("/niceUrl");
         
         assertTrue(this.xhrStub.isOpenCalled());
         assertEquals(["GET", "/niceUrl", true], this.xhrStub.openArgs);
