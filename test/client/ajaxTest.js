@@ -55,6 +55,13 @@ TestCase("AjaxFacadeStubTest", {
         assertTrue(ajax.request.called);
         assertEquals(ajax.post.args, ajax.request.args);
         
+    },
+    
+    "test request should throw Exception if parameter are invalid": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        assertException(function() {ajax.request(2)}, "TypeError");
+        assertNoException(function() {ajax.request("/url")});
     }
 });
 
