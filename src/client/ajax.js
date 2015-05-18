@@ -7,7 +7,7 @@ tddjs.namespace("stubs").ajax = ajax;
 
 function ajax()
 {
-    var _xhr = new tddjs.stubs.ajax.XMLHttpRequest();
+    var _xhr = new tddjs.stubs.ajax.xmlHttpRequest();
     
     function getXmlHttpRequest()
     {

@@ -2,9 +2,9 @@
  *  Source-Code for Ajax-Stub
  */
 
-tddjs.namespace("stubs.ajax").XMLHttpRequest = XMLHttpRequest;
+tddjs.namespace("stubs.ajax").xmlHttpRequest = xmlHttpRequest;
 
-function XMLHttpRequest()
+function xmlHttpRequest()
 {
     var _isSendCalled = false;
     var _isOpenCalled = false;
