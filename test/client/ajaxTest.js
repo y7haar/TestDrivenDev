@@ -72,6 +72,14 @@ TestCase("AjaxFacadeStubTest", {
         
         ajax.request("/url", options);
         assertTrue(this.xhrStub.isOpenCalled());
+        assertEquals(["GET", "/url", true], this.xhrStub.openArgs);
+        
+        var options = {
+            method: "POST"
+        };
+        
+        ajax.request("/url2", options);
+        assertEquals(["POST", "/url", true], this.xhrStub.openArgs);
     }
 });
 
