@@ -24,7 +24,7 @@ TestCase("AjaxFacadeStubTest", {
         var xhr = this.ajax.getXmlHttpRequest();
         
         assertObject(xhr);
-        assertTrue(xhr instanceof tddjs.stubs.ajax.xmlHttpRequest);
+        assertTrue(xhr instanceof tddjs.stubs.ajax.XMLHttpRequest);
     },
     
     "test ajax facade should have a GET and POST method to perform requests and a method to set / get headers": function () {  

@@ -7,7 +7,7 @@ tddjs.namespace("stubs").ajax = ajax;
 
 function ajax()
 {
-    var _xhr = new tddjs.stubs.ajax.xmlHttpRequest();
+    var _xhr = new tddjs.stubs.ajax.XMLHttpRequest();
     
     function getXmlHttpRequest()
     {
@@ -24,14 +24,14 @@ function ajax()
         _xhr.open("POST", "/url", true);
     }
     
-    function setRequestHeader()
+    function setRequestHeader(header, value)
     {
-        
+        _xhr.setRequestHeader(header, value);
     }
     
-    function getRequestHeader()
+    function getRequestHeader(header)
     {
-        
+        return _xhr.getRequestHeader(header);
     }
     
     this.getXmlHttpRequest = getXmlHttpRequest;

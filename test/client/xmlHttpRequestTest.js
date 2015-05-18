@@ -4,7 +4,7 @@
 
 TestCase("AjaxStubTest", {
     setUp: function () {
-        this.xhrObject = new tddjs.stubs.ajax.xmlHttpRequest();
+        this.xhrObject = new tddjs.stubs.ajax.XMLHttpRequest();
     }, 
     tearDown: function ()
     {
@@ -13,7 +13,7 @@ TestCase("AjaxStubTest", {
     
     "test xhr object should not be undefined": function () {  
         assertObject(this.xhrObject);
-        assertTrue(this.xhrObject instanceof tddjs.stubs.ajax.xmlHttpRequest);
+        assertTrue(this.xhrObject instanceof tddjs.stubs.ajax.XMLHttpRequest);
     },
     
     "test fake xhr should have all important XMLHttpRequest functions and member attributes": function () {  
@@ -38,7 +38,7 @@ TestCase("AjaxStubTest", {
 
 TestCase("AjaxStubParameterValidationTest", {
     setUp: function () {
-        this.xhrObject = new tddjs.stubs.ajax.xmlHttpRequest();
+        this.xhrObject = new tddjs.stubs.ajax.XMLHttpRequest();
     }, 
     tearDown: function ()
     {
@@ -72,7 +72,7 @@ TestCase("AjaxStubParameterValidationTest", {
 
 TestCase("AjaxStubGETTest", {
     setUp: function () {
-        this.xhrObject = new tddjs.stubs.ajax.xmlHttpRequest();
+        this.xhrObject = new tddjs.stubs.ajax.XMLHttpRequest();
         
         this.url = "/url";
         this.method = "GET";
@@ -137,7 +137,7 @@ TestCase("AjaxStubGETTest", {
 
 TestCase("AjaxStubPOSTTest", {
     setUp: function () {
-        this.xhrObject = new tddjs.stubs.ajax.xmlHttpRequest();
+        this.xhrObject = new tddjs.stubs.ajax.XMLHttpRequest();
         
         this.url = "/url";
         this.method = "POST";
