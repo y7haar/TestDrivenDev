@@ -13,7 +13,10 @@ TestCase("AjaxFacadeStubTest", {
     
     "test facade should provide a create method to get a xhr object": function () {  
         assertFunction(tddjs.stubs.ajax.create);
-        assertTrue(tddjs.stubs.ajax.create() instanceof tddjs.stubs.xmlHttpRequest);
+        
+        var xhr = tddjs.stubs.ajax.create();
+        
+        assertTrue(xhr instanceof tddjs.stubs.ajax.xmlHttpRequest);
     },
 });
 
