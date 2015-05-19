@@ -127,7 +127,6 @@ TestCase("AjaxStubGETTest", {
         
         this.xhrObject.send();
         assertEquals(4, this.xhrObject.readyState);
-        assertEquals(200, this.xhrObject.status);
         assertTrue(this.xhrObject.isOnreadystatechangeCalled());
         
         assertTrue(this.xhrObject.responseText.length > 0);
@@ -171,7 +170,6 @@ TestCase("AjaxStubPOSTTest", {
         
         this.xhrObject.send();
         assertEquals(4, this.xhrObject.readyState);
-        assertEquals(200, this.xhrObject.status);
         assertTrue(this.xhrObject.isOnreadystatechangeCalled());
         
         assertEquals(0, this.xhrObject.responseText.length);

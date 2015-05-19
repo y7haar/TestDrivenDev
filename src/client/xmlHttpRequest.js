@@ -43,7 +43,6 @@ function xmlHttpRequest()
         this.sendArgs = arguments;
         
         this.setReadyState(4);
-        this.status = 200;
         
         if(_method === "GET")
             this.responseText = "success";
