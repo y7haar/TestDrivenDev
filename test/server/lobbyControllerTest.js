@@ -10,9 +10,43 @@ TestCase("LobbyControllerTest", {
       this.lobby2 = new tddjs.server.model.lobby();
       this.lobby5 = new tddjs.server.model.lobby();
       
+      this.player1 = new tddjs.client.player();
+      this.player2 = new tddjs.client.player();
+      this.player3 = new tddjs.client.player();
+      this.player4 = new tddjs.client.player();
+      
+      this.player1.setId(1);
+      this.player2.setId(2);
+      this.player3.setId(3);
+      this.player4.setId(4);
+      
+      this.player1.setName("P1");
+      this.player2.setName("P2");
+      this.player3.setName("P3");
+      this.player4.setName("P4");
+      
+      this.player1.setColor("#000000");
+      this.player2.setColor("#111111");
+      this.player3.setColor("#222222");
+      this.player4.setColor("#333333");
+      
       this.lobby1.setId(0);
       this.lobby2.setId(1);
       this.lobby5.setId(5);
+      
+      this.lobby1.setName("L1");
+      this.lobby2.setName("L2");
+      
+      this.lobby1.addPlayer(this.player1);
+      this.lobby1.addPlayer(this.player2);
+      this.lobby2.addPlayer(this.player3);
+      this.lobby2.addPlayer(this.player4);
+      
+      this.lobby1.setLeader(this.player1);
+      this.lobby2.setLeader(this.player4);
+      
+      this.lobby1.setMaxPlayers(2);
+      this.lobby2.setMaxPlayers(3);
     },
     
     tearDown: function(){
@@ -124,6 +158,24 @@ TestCase("LobbyControllerTest", {
       assertSame(this.lobbyController1, this.lobbyController2);
       this.lobbyController1.addLobby(this.lobby1);
       assertEquals(this.lobbyController1.getLobbyCount(), this.lobbyController2.getLobbyCount());
+  },
+  
+  "test lobbyController should provide a serialize-method and return an array of serialized lobbies": function () { 
+      // cleanup because of singleton
+      this.lobbyController.getLobbies().length = 0;
+      
+      this.lobbyController.addLobby(this.lobby1);
+      this.lobbyController.addLobby(this.lobby2);
+      
+      var json = this.lobbyController.serialize();
+      json = JSON.parse(json);
+      
+      assertArray(json);
+      assertEquals(2, json.length);
+      assertObject(json[0]);
+      assertObject(json[1]);
+      
+      // TODO check for correct serialization
   }
   
 });
