@@ -204,9 +204,22 @@ function mapGenerator()
         
     }
     
+    //Entfernt nicht mehr benötigte Borders
     function removeCircularAndDuplicateBorders()
     {
+        if(!calledInitBorders)
+            throw new Error("There are not borders to work with yet");
         
+        var oldBorders = _grid.borders;
+        _grid.borders = [];
+        
+        for(var i = 0; i < _grid.borders; i++)
+        {
+            var current = oldBorders.pop();
+            
+            if(current.getLeftBorder() !== current.getRigthBorder())
+                _grid.borders.push(current);
+        }
     }
     
     this.setGridSize = setGridSize;
