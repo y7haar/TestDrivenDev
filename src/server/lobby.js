@@ -57,7 +57,7 @@ function lobby()
     
     function _getMaxPlayers()
     {
-        return _players.length;
+        return _maxPlayers;
     }
 
     function kickPlayer(aPlayer)
