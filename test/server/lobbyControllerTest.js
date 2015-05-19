@@ -181,7 +181,7 @@ TestCase("LobbyControllerTest", {
       
       // L1
       assertEquals("L1", json[0].name);
-      assertEquals(1, json[0].id);
+      assertEquals(0, json[0].id);
       assertEquals(2, json[0].maxPlayers);
       assertEquals(1, json[0].leader);
       
@@ -196,10 +196,10 @@ TestCase("LobbyControllerTest", {
       assertEquals("#111111", json[0].players[1].color);
       
       // L2
-      assertEquals("L2", json[0].name);
-      assertEquals(2, json[0].id);
-      assertEquals(3, json[0].maxPlayers);
-      assertEquals(4, json[0].leader);
+      assertEquals("L2", json[1].name);
+      assertEquals(1, json[1].id);
+      assertEquals(3, json[1].maxPlayers);
+      assertEquals(4, json[1].leader);
       
       // P1
       assertEquals("P3", json[1].players[0].name);
