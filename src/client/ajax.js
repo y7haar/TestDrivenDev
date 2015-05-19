@@ -66,7 +66,7 @@ function request(url, options)
     xhr.onreadystatechange = function(){   
         if(xhr.readyState === 4)
         {
-            if(isRequestSuccessfull(xhr.status))
+            if(isRequestSuccessfull(xhr.status) && typeof options.onSuccess === "function")
             {
                 options.onSuccess(xhr);
             }
