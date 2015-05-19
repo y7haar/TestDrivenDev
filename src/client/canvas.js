@@ -36,7 +36,7 @@ function drawMap(){
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             ctx.strokeStyle="#f00";
-            ctx.fillStyle = "#0f0";
+            ctx.fillStyle = "#552700";
             ctx.fillStyle=map.cellGrid[x][y].color;
             ctx.lineWidth="1";
             ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
@@ -45,13 +45,14 @@ function drawMap(){
     }
 }
 function drawUI(){
-    ctx.fillStyle = "#00f";
+    
+    ctx.fillStyle = "#D49B6A";
     ctx.fillRect(0,ctx.canvas.height-border/2,ctx.canvas.width,border/2);
     ctx.fillRect(0,0,ctx.canvas.width,border/2);
     ctx.fillRect(0,0,border/2,ctx.canvas.height);
     ctx.fillRect(ctx.canvas.width-border/2,0,border/2,ctx.canvas.height);
     
-    ctx.fillStyle = "#96f";
+    ctx.fillStyle = "#FFD1AA";
     ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
     
     /*draw buttons*/
