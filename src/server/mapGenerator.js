@@ -17,7 +17,7 @@ function mapGenerator()
     function setGridSize(x,y)
     {
         if(x <= 0 || y <= 0)
-            throw new Error("A Grid is not allowed to be zero Width or Height");
+            throw new Error("A Grid is not allowed to be zero or less Width or Height");
         _grid.cellGrid = createArray(x,y);
         calledInitCountries = false;
         calledInitBorders = false;
@@ -204,6 +204,11 @@ function mapGenerator()
         
     }
     
+    function removeCircularAndDuplicateBorders()
+    {
+        
+    }
+    
     this.setGridSize = setGridSize;
     this.getMapGrid = getMapGrid;
     this.getMapWidth = getMapWidth;
@@ -217,4 +222,5 @@ function mapGenerator()
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;
     this.mergeIntoCountry = mergeIntoCountry;
+    this.removeCircularAndDuplicateBorders = removeCircularAndDuplicateBorders;
 };
