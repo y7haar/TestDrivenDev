@@ -4,14 +4,13 @@
  *  there are 4 states PlaceingState, AttackingState, MovingState, WaitingState
  */
 
-
 TestCase("stateTest", {
     setUp: function () {
         
         this.placing = new tddjs.client.placingState();
         this.moving = new tddjs.client.movingState();
         this.attacking = new tddjs.client.attackingState();
-        this.waiting = new tddjs.client.waitingState();
+        this.waiting = new tddjs.client.waitingState();       
         
         // map for testing
         this.map1 = new tddjs.client.map.map();
@@ -48,7 +47,7 @@ TestCase("stateTest", {
         this.c4.setOwner(this.player2);
         
         this.c5 = new tddjs.client.map.country();
-        this.c5.setName("Country5");
+        this.c5.setName("Country5");            
         this.c5.setOwner(this.player2);
         
         this.c6 = new tddjs.client.map.country();
@@ -59,7 +58,12 @@ TestCase("stateTest", {
         this.continent2.addCountry(this.c5);
         this.continent2.addCountry(this.c6);
         //Borders-------------------------------
-        this.c1.addBorder(c2);
+        this.c1.addBorder(this.c2);
+        this.c2.addBorder(this.c1);
+        //add continets to map -----------------
+        this.map1.addContinent(this.continent1);
+        this.map1.addContinent(this.continent2);
+        
     }, 
     tearDown: function ()
     {
@@ -94,57 +98,143 @@ TestCase("stateTest", {
     "test states should have all functions": function () {
         
         assertNotUndefined(this.placing.placeUnits);
-        assertNotUndefined(this.placing.endPlaceingPhase);
         assertNotUndefined(this.placing.attack);
-        assertNotUndefined(this.placing.endAttackingPhase);
         assertNotUndefined(this.placing.moveUnits);
-        assertNotUndefined(this.placing.endMovingPhase);
-        assertNotUndefined(this.placing.endWaitingPhase);
-        assertNotUndefined(this.placing.getUpdates);
         assertNotUndefined(this.placing.isMoveLegal);
+        assertNotUndefined(this.placing.endPhase);
+        assertNotUndefined(this.placing.toString);
 
         assertNotUndefined(this.attacking.placeUnits);
-        assertNotUndefined(this.attacking.endPlaceingPhase);
         assertNotUndefined(this.attacking.attack);
-        assertNotUndefined(this.attacking.endAttackingPhase);
         assertNotUndefined(this.attacking.moveUnits);
-        assertNotUndefined(this.attacking.endMovingPhase);
-        assertNotUndefined(this.attacking.endWaitingPhase);
-        assertNotUndefined(this.attacking.getUpdates);
         assertNotUndefined(this.attacking.isMoveLegal);
-
+        assertNotUndefined(this.attacking.endPhase);
+        assertNotUndefined(this.attacking.toString);
+        
         assertNotUndefined(this.moving.placeUnits);
-        assertNotUndefined(this.moving.endPlaceingPhase);
         assertNotUndefined(this.moving.attack);
-        assertNotUndefined(this.moving.endAttackingPhase);
         assertNotUndefined(this.moving.moveUnits);
-        assertNotUndefined(this.moving.endMovingPhase);
-        assertNotUndefined(this.moving.endWaitingPhase);
-        assertNotUndefined(this.moving.getUpdates);
         assertNotUndefined(this.moving.isMoveLegal);
-
+        assertNotUndefined(this.moving.endPhase);
+        assertNotUndefined(this.moving.toString);
+        
         assertNotUndefined(this.waiting.placeUnits);
-        assertNotUndefined(this.waiting.endPlaceingPhase);
         assertNotUndefined(this.waiting.attack);
-        assertNotUndefined(this.waiting.endAttackingPhase);
         assertNotUndefined(this.waiting.moveUnits);
-        assertNotUndefined(this.waiting.endMovingPhase);
-        assertNotUndefined(this.waiting.endWaitingPhase);
-        assertNotUndefined(this.waiting.getUpdates);
-        assertNotUndefined(this.waiting.isMoveLegal);           
+        assertNotUndefined(this.waiting.isMoveLegal);
+        assertNotUndefined(this.waiting.endPhase);
+        assertNotUndefined(this.waiting.toString);
     },
     "test placing state should implement relevant functions": function () {
         assertFunction(this.placing.placeUnits);
-        assertFunction(this.placing.endPlacingPhase);
-        assertFunction(this.placing.getUpdates);
         assertFunction(this.placing.isMoveLegal);
-    
+        assertFunction(this.placing.endPhase);
+        assertFunction(this.placing.toString);
+        
+        assertEquals("placingState", this.placing.toString());
+
+        //isMoveLegal test
+        var validMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+        var wrongOwnerMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Hanswurst',
+          continent: 'Europa',
+          country: 'Country1'
+        }; 
+        var wrongContinentMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Asien',
+          country: 'Country1'
+        };        
+        var wrongCountryMove= {
+          type:'placing',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country4'
+        };
+        var wrongTypeMove= {
+          type:'winGame',
+          unitCount:1,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+         var wrongUnitCountMove= {
+          type:'winGame',
+          unitCount:80,
+          player: 'Peter',
+          continent: 'Europa',
+          country: 'Country1'
+        };
+        
+        var placing = this.placing;
+        var map = this.map1;
+        var availableUnits = 4;
+        
+        assertException(function(){
+            placing.isMoveLegal();
+        },'TypeError');
+        
+        assertException(function(){
+            placing.isMoveLegal({},availableUnits,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            placing.isMoveLegal(map,availableUnits,"place units somehwere");
+        },'TypeError');
+        
+        assertException(function(){
+            placing.isMoveLegal(map,"4asd",validMove);
+        },'TypeError');
+        
+        assertNoException(function(){
+            placing.isMoveLegal(map,availableUnits,validMove);
+        });      
+
+        assertTrue(this.placing.isMoveLegal(this.map1,availableUnits,validMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongContinentMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongCountryMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongOwnerMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongTypeMove));
+        assertFalse(this.placing.isMoveLegal(this.map1,availableUnits,wrongUnitCountMove));
+        
+        //placeUnits test
+        
+        var url = "/someURL";
+        
+        assertException(function(){
+            placing.placeUnits(map,availableUnits,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            placing.placeUnits(map,availableUnits,validMove,{url:"someURL"});
+        },'TypeError');
+        
+        assertNoException(function(){
+            placing.placeUnits(map,availableUnits,validMove,url);
+        });
+        
+        assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove,url));
+        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove,url));       
+        
      },
-     "test attacking state should implement relevant functions": function () {
+     "test att state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
-        assertFunction(this.attacking.endAttackingPhase);
-        assertFunction(this.attacking.getUpdates);
         assertFunction(this.attacking.isMoveLegal);
+        assertFunction(this.attacking.endPhase);
+        assertFunction(this.attacking.toString);
+        
+        assertEquals("attackingState", this.attacking.toString());
         
         var validMove = {
             type: 'attack',
@@ -224,24 +314,62 @@ TestCase("stateTest", {
                 country: 'Country3'
             }
         };
-
-        assertTrue(this.attacking.isMoveLegal(this.map1), validMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongBorderMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongContinentMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongCountryMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongOwnerMove);
-        assertFalse(this.attacking.isMoveLegal(this.map1), wrongTypeMove);
+        
+        var attacking = this.attacking;
+        var map = this.map1;
+        
+        assertException(function(){
+            attacking.isMoveLegal();
+        },'TypeError');
+        
+        assertException(function(){
+            attacking.isMoveLegal({},validMove);
+        },'TypeError');    
+        
+        assertException(function(){
+            attacking.isMoveLegal(map,"attack somewhere");
+        },'TypeError');   
+        
+        assertNoException(function(){
+            attacking.isMoveLegal(map,validMove);
+        });      
+        
+        //isMove legal test
+        assertTrue(this.attacking.isMoveLegal(this.map1, validMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongBorderMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongContinentMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongCountryMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongOwnerMove));
+        assertFalse(this.attacking.isMoveLegal(this.map1, wrongTypeMove));
+        
+        // attacking tests
+        
+        var url = "/someURL";
+        
+        assertException(function(){
+            attacking.attack(map,validMove);
+        },'TypeError');
+        
+        assertException(function(){
+            attacking.attack(map,validMove,{url:"someURL"});
+        },'TypeError');
+        
+        assertNoException(function(){
+            attacking.attack(map,validMove,url);
+        });
+        
+        assertFalse(this.attacking.attack(this.map1,wrongTypeMove, url));
+        assertTrue(this.attacking.attack(this.map1,validMove, url));
     },
     "test moving state should implement relevant functions": function () {
         assertFunction(this.moving.moveUnits);
-        assertFunction(this.moving.endMovingPhase);
-        assertFunction(this.moving.getUpdates);
         assertFunction(this.moving.isMoveLegal);
+        assertFunction(this.placing.endPhase);
+        assertFunction(this.moving.toString);
 
     },    
     "test waiting state should implement relevant functions": function () {
-        assertFunction(this.waiting.endWaitingPhase);
-        assertFunction(this.waiting.getUpdates);
+       assertFunction(this.waiting.toString);
     }
     
 });

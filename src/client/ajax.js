@@ -1,133 +1,69 @@
 /* 
- *  Source-Code for Ajax-Stub
+ *  Source-Code for AJAX Facade
  */
 
-tddjs.namespace("stubs").ajax = ajax;
 
-function ajax()
+(function(){
+    
+tddjs.namespace("stubs.ajax").create = create;
+tddjs.namespace("stubs.ajax").get = get;
+tddjs.namespace("stubs.ajax").post = post;
+tddjs.namespace("stubs.ajax").request = request;
+
+function create()
 {
-    var _isSendCalled = false;
-    var _isOpenCalled = false;
-    var _isOnreadystatechangeCalled = false;
-    var _isGetRequestHeaderCalled = false;
-    var _isSetRequestHeaderCalled = false;
-    
-    var _method = "";
-    var _headers = {};
-    
-    function open(method, url, async)
-    {
-        _isOpenCalled= true;
-        
-        if(arguments.length != 3)
-            throw new Error("All arguments must be setted");
-        
-        if(typeof method !== "string")
-            throw new TypeError("Method must be a string");
-        
-        if(typeof url !== "string")
-            throw new TypeError("Url must be a string");
-        
-        if(typeof async !== "boolean")
-            throw new TypeError("Async must be a boolean");
-
-        _method = method; 
-        this.setReadyState(1);
-        this.status = 0;
-    }
-    
-    function send(data)
-    {
-        _isSendCalled = true;
-        this.setReadyState(4);
-        this.status = 200;
-        
-        if(_method === "GET")
-            this.responseText = "success";
-    }
-    
-    function onreadystatechange()
-    {
-        _isOnreadystatechangeCalled = true;
-    }
-    
-    function setRequestHeader(header, value)
-    {        
-        _isSetRequestHeaderCalled = true;
-        
-        _headers[header] = value;
-    }
-    
-    function getRequestHeader(header)
-    {
-        _isGetRequestHeaderCalled = true;
-        
-        return _headers[header];
-    }
-    
-    function setReadyState(aState)
-    {      
-        this.readyState = aState;
-        this.onreadystatechange();
-    }
-    
-    function isOpenCalled()
-    {
-        var called = _isOpenCalled;
-        _isOpenCalled = false;
-        
-        return called;
-    }
-    
-    function isSendCalled()
-    {
-        var called = _isSendCalled;
-        _isSendCalled = false;
-        
-        return called;
-    }
-    
-    function isOnreadystatechangeCalled()
-    {
-        var called = _isOnreadystatechangeCalled;
-        _isOnreadystatechangeCalled = false;
-        
-        return called;
-    }
-    
-    function isSetRequestHeaderCalled()
-    {
-        var called = _isSetRequestHeaderCalled;
-        _isSetRequestHeaderCalled = false;
-        
-        return called;
-    }
-    
-    function isGetRequestHeaderCalled()
-    {
-        var called = _isGetRequestHeaderCalled;
-        _isGetRequestHeaderCalled = false;
-        
-        return called;
-    }
-    
-    this.open = open;
-    this.send = send;
-    this.onreadystatechange  = onreadystatechange;
-    this.setReadyState = setReadyState;
-    
-    this.setRequestHeader = setRequestHeader;
-    this.getRequestHeader = getRequestHeader;
-    
-    this.isOpenCalled = isOpenCalled;
-    this.isSendCalled = isSendCalled;
-    this.isOnreadystatechangeCalled = isOnreadystatechangeCalled;
-    this.isGetRequestHeaderCalled = isGetRequestHeaderCalled;
-    this.isSetRequestHeaderCalled = isSetRequestHeaderCalled;
-    
-    
-    this.responseText = "";
-    this.readyState = 0;
-    this.status = 0;
+    return new XMLHttpRequest();
 }
+
+function setRequestHeaders(xhr, headers)
+{
+    for(var header in headers)
+    {
+        if(headers.hasOwnProperty(header))
+            xhr.setRequestHeader(header, headers[header]);
+    }
+}
+
+function isRequestSuccessfull(status)
+{
+    return status >= 200 && status < 300;
+}
+
+function get(url, options)
+{
+    if(typeof url !== "string")
+        throw new TypeError("URL must be setted");
+    
+    options = tddjs.extend({}, options);
+    options.method = "GET";
+    
+    tddjs.stubs.ajax.request(url, options);
+}
+
+function post(url, options)
+{
+    if(typeof url !== "string")
+        throw new TypeError("URL must be setted");
+    
+    options = tddjs.extend({}, options);
+    options.method = "POST";
+    
+    tddjs.stubs.ajax.request(url, options);
+}
+
+function request(url, options)
+{
+    if(typeof url !== "string")
+        throw new TypeError("URL must be setted");
+    
+    options = tddjs.extend({}, options);
+    
+    var xhr = tddjs.stubs.ajax.create();
+    setRequestHeaders(xhr, options.headers);
+
+    xhr.open(options.method || "GET", url, true);
+    xhr.send(options.data || null);
+}
+
+}());
 
