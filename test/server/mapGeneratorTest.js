@@ -191,17 +191,18 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.mergeIntoCountry(country1, country2);
         this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country2);
+        
         this.mapGenerator.mergeIntoCountry(country4,country3);
         this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
-        this.mapGenerator.mergeIntoCountry(country2, country4);
+        
+        this.mapGenerator.mergeIntoCountry(country2, country3);
         this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], country3);
         
-        this.mapGenerator.removeCircularAndDuplicateBorders();
-        assertEquals(this.mapGenerator.collectAllCountries(), 39);
+        assertEquals(this.mapGenerator.collectAllCountries().length, 39);
     },
     
     "test Shouldn´t be able to call merge with something thats not a country\n\
@@ -233,8 +234,29 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initBorders();
         this.mapGenerator.combineCountryCells();
         var size = this.mapGenerator.collectAllCountries().length;
-        assertTrue(size < 42);
+        assertEquals(16 ,size);
+        
+        var countries = this.mapGenerator.collectAllCountries();
+        
+        for(var i = 0; i < countries.length; i++)
+        {
+            assertTrue(countries[i].id >= 1);
+        }
         //GGF noch mehr
+    },
+    
+    "test Random": function()
+    {
+        var a = [];
+        a.push(5);
+        a.push(4);
+        a.push(3);
+        for(var i = 0; i <1000; i++)
+        {
+            var random = Math.round(Math.random()*(a.length-1));
+            assertTrue(random >= 0);
+            assertTrue(random < a.length);
+        }
     },
     
     "test Shouldnt be able to call Combination without neccessary steps first": function()
