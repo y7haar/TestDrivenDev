@@ -144,14 +144,22 @@ TestCase("AjaxFacadeStubTest", {
         assertEquals("348", this.xhrStub.getRequestHeader("Content-Length"));
     },
     
-    "test ajax facade should call xhr onreadystatechange on get / post": function () {  
+    "test ajax facade should now call given method on onreadystatechange on get / post after success": function () {  
         var ajax = tddjs.stubs.ajax;
         
-        ajax.get("/url");
-        assertTrue(this.xhrStub.isOnreadystatechangeCalled());
+        var options = {
+            onSuccess: stubFn()
+        };
         
-        ajax.post("/url");
-        assertTrue(this.xhrStub.isOnreadystatechangeCalled());
+        ajax.get("/url", options);
+        assertTrue(options.onSuccess.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(200, this.xhrStub.status);
+        
+        ajax.post("/url", options);
+        assertTrue(options.onSuccess.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(200, this.xhrStub.status);
     }
 });
 
