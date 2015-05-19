@@ -34,7 +34,6 @@ function xmlHttpRequest()
 
         _method = method; 
         this.setReadyState(1);
-        this.status = 0;
     }
     
     function send(data)
