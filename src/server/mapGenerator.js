@@ -196,12 +196,40 @@ function mapGenerator()
         winnerCountry = getRandom(collectAllCountries());
         loserCountry = getRandom(collectNeighborCountries(winnerCountry));
         
-        
+        mergeIntoCountry(loserCountry, winnerCountry);
+        removeCirculateAndDuplicateBorders();
     }
     
     function mergeIntoCountry(country, targetCountry)
     {
+        if(!calledInitBorders)
+            throw new Error("There are no borders to work with yet");
         
+        if(!(country instanceof tddjs.client.map.country) || !(targetCountry instanceof tddjs.client.map.country))
+            throw new TypeError("Can only work with countries");
+        
+        if(country === targetCountry)
+            throw new Error("Cannot merge one country into himself");
+        
+        //Borders umbelegen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+           var border = _grid.borders[i];
+           if(border.getLeftCountry() === country)
+                border.setLeftCountry(targetCountry);
+            
+           if(border.getRigthCountry() === country)
+               border.setRigthCountry(targetCountry);
+        }
+        
+        for(var width = 0; width < getMapWidth(); width++)
+        {
+            for(var height = 0; height < getMapHeight(); height++)
+            {
+                if(_grid.cellGrid[width][height] === country)
+                    _grid.cellGrid[width][height] = targetCountry;
+            }
+        }
     }
     
     //Entfernt nicht mehr benötigte Borders
@@ -211,13 +239,14 @@ function mapGenerator()
             throw new Error("There are not borders to work with yet");
         
         var oldBorders = _grid.borders;
+        var length = _grid.borders.length;
         _grid.borders = [];
         
-        for(var i = 0; i < _grid.borders; i++)
+        for(var i = 0; i < length; i++)
         {
             var current = oldBorders.pop();
             
-            if(current.getLeftBorder() !== current.getRigthBorder())
+            if(current.getLeftCountry() !== current.getRigthCountry())
                 _grid.borders.push(current);
         }
     }
