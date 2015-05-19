@@ -167,6 +167,8 @@ TestCase("LobbyControllerTest", {
       this.lobbyController.addLobby(this.lobby1);
       this.lobbyController.addLobby(this.lobby2);
       
+      assertFunction(this.lobbyController.serialize);
+      
       var json = this.lobbyController.serialize();
       json = JSON.parse(json);
       
@@ -174,6 +176,10 @@ TestCase("LobbyControllerTest", {
       assertEquals(2, json.length);
       assertObject(json[0]);
       assertObject(json[1]);
+      
+      // No tests for type --> is already tested in lobby / player tests
+      
+      
       
       // TODO check for correct serialization
   }
