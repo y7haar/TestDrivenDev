@@ -50,7 +50,21 @@ function drawUI(){
     
     ctx.fillStyle = "#96f";
     ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
+    
+    
+    drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
 }
+
+function drawButton(x,y,str){
+    ctx.fillStyle= "#000";
+    ctx.strokeStyle="#fff";
+    ctx.font = "20px Arial"
+    ctx.fillRect(x,y,ctx.measureText(str).width+10,30);
+    ctx.strokeRect(x,y,ctx.measureText(str).width+10,30);
+    ctx.fillStyle= "#fff";
+    ctx.fillText(str,x+5,y+20);
+}
+
 
 function clear(){
     ctx.fillStyle = "#ebebeb";
