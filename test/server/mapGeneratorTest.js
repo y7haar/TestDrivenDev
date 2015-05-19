@@ -77,7 +77,7 @@ TestCase("MapGeneratorTest", {
         for(var i = 0; i < borders.length; i++)
         {
             assertTrue(borders[i] instanceof tddjs.client.map.border);
-            assertTrue(borders[i].getLeftCountry !== borders[i].getRigthCountry);
+            assertTrue(borders[i].getLeftCountry() !== borders[i].getRigthCountry());
         }
     },
     
@@ -160,6 +160,7 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initBorders();
         assertEquals(71, this.mapGenerator.getMapGrid().borders.length);
         this.mapGenerator.mergeIntoCountry(this.mapGenerator.getMapGrid().cellGrid[0][0],this.mapGenerator.getMapGrid().cellGrid[0][1]);
+        this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(70, this.mapGenerator.getMapGrid().borders.length);
     },
     
@@ -188,10 +189,13 @@ TestCase("MapGeneratorTest", {
         var country4 = this.mapGenerator.getMapGrid().cellGrid[1][0];
         
         this.mapGenerator.mergeIntoCountry(country1, country2);
+        this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country2);
         this.mapGenerator.mergeIntoCountry(country4,country3);
+        this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
         this.mapGenerator.mergeIntoCountry(country2, country4);
+        this.mapGenerator.removeCircularAndDuplicateBorders();
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], country3);
