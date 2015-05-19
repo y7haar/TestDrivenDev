@@ -91,8 +91,8 @@ function init(){
        if (ctx) {
             clear();
             init_map();
-            button[0]=new tddjs.client.ui.button(15,15,"button-class",ctx);
-            button[1]=new tddjs.client.ui.button(15,45,"button-class 2",ctx);
+            button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"button-class",ctx);
+            button[1]=new tddjs.client.ui.button(150,ctx.canvas.height-65,"button-class 2",ctx);
             window.requestAnimationFrame(mainloop);
             canvas.addEventListener('mousemove', onCanvasMouseMove, false);
             canvas.addEventListener('mousedown', onCanvasMouseDown, false);
