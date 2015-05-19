@@ -146,6 +146,7 @@ TestCase("AjaxFacadeStubTest", {
     
     "test ajax facade should now call given method on onreadystatechange on get / post after success": function () {  
         var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 200;
         
         var options = {
             onSuccess: stubFn()
