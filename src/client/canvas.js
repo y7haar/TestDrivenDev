@@ -92,6 +92,7 @@ function init(){
             clear();
             init_map();
             button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"button-class",ctx);
+            button[0].click=click_test;
             button[1]=new tddjs.client.ui.button(150,ctx.canvas.height-65,"button-class 2",ctx);
             window.requestAnimationFrame(mainloop);
             canvas.addEventListener('mousemove', onCanvasMouseMove, false);
@@ -120,10 +121,17 @@ function onCanvasMouseDown(oEvent) {
         }
     }
     
+    for (var i in button)
+       if(button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY))
+           button[i].click();
+    
     drawGame();
 }
 
 /*Test*/
+function click_test(){
+    alert("andere methode...");
+}
 function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
     mapGen.initCountries();
