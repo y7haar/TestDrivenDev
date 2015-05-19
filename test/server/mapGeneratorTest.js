@@ -72,7 +72,7 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var borders = this.mapGenerator.getMapGrid().borders;
-        assertTrue(borders.length === 71);
+        assertEquals(71, borders.length);
         
         for(var i = 0; i < borders.length; i++)
         {
@@ -158,9 +158,9 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        assertEquals(this.mapGenerator.getMapGrid().borders.length, 71);
+        assertEquals(71, this.mapGenerator.getMapGrid().borders.length);
         this.mapGenerator.mergeIntoCountry(this.mapGenerator.getMapGrid().cellGrid[0][0],this.mapGenerator.getMapGrid().cellGrid[0][1]);
-        assertEquals(this.mapGenerator.getMapGrid().borders.length, 70);
+        assertEquals(70, this.mapGenerator.getMapGrid().borders.length);
     },
     
     "test Cant remove borders if there arent one created yet": function()
