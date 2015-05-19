@@ -181,7 +181,7 @@ function mapGenerator()
     //Wählt ein zufälliges Element
     function getRandom(countries)
     {
-        var random = Math.round(Math.random()*countries.length);
+        var random = Math.round(Math.random()*(countries.length-1));
         return countries[random];
     }
     
@@ -193,11 +193,24 @@ function mapGenerator()
         //Kombinationswert
         var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
         
-        winnerCountry = getRandom(collectAllCountries());
-        loserCountry = getRandom(collectNeighborCountries(winnerCountry));
-        
-        mergeIntoCountry(loserCountry, winnerCountry);
-        removeCirculateAndDuplicateBorders();
+        //
+        for(var i = 0; i < combineCount; i++)
+        {
+            //Zielland
+            winnerCountry = getRandom(collectAllCountries());
+            //Aufgelöstes Land
+            loserCountry = getRandom(collectNeighborCountries(winnerCountry));
+
+            //Falls das gleiche Land erwischt wird
+            if(winnerCountry === loserCountry)
+            {
+                i--;
+                continue;
+            }
+
+            mergeIntoCountry(loserCountry, winnerCountry);
+            removeCircularAndDuplicateBorders();
+        }
     }
     
     function mergeIntoCountry(country, targetCountry)
