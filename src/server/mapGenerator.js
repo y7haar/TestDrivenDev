@@ -211,6 +211,9 @@ function mapGenerator()
             mergeIntoCountry(loserCountry, winnerCountry);
             removeCircularAndDuplicateBorders();
         }
+        var countries = collectAllCountries();
+        for(var x = 0; x < countries.length; x++)
+            countries[x].id = x+1;
     }
     
     function mergeIntoCountry(country, targetCountry)
