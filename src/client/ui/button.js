@@ -19,6 +19,10 @@ function button(x,y,str,ctx){
         return hover;
     }
     
+    function click(){
+        alert("CLICK");
+    }
+    
     function draw(){
         ctx.fillStyle= "#000";
         ctx.strokeStyle="#fff";
@@ -38,4 +42,5 @@ function button(x,y,str,ctx){
     
     this.draw=draw;
     this.isCoordOnButton=isCoordOnButton;
+    this.click=click;
 }
