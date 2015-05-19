@@ -135,7 +135,7 @@ function onCanvasMouseDown(oEvent) {
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
-                map.cellGrid[x][y].selected=true;
+                map.cellGrid[x][y].selected=!map.cellGrid[x][y].selected;
         }
     }
     
@@ -154,4 +154,11 @@ function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
     mapGen.initCountries();
     map = mapGen.getMapGrid();
+    
+    for(x=0;x<map.cellGrid.length;x++){
+        for(y=0;y<map.cellGrid[0].length;y++){
+            map.cellGrid[x][y].selected=false;
+            map.cellGrid[x][y].color="#552700";
+        }
+    }
 }
