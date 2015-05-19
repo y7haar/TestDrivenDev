@@ -161,6 +161,17 @@ TestCase("AjaxFacadeStubTest", {
         assertTrue(options.onSuccess.called);
         assertEquals(4, this.xhrStub.readyState);
         assertEquals(200, this.xhrStub.status);
+    },
+    
+    "test ajax facade should not throw Error if onSuccess method is not given": function () {  
+        var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 200;
+        
+        var options = {
+        };
+        
+        assertNoException(function() { ajax.get("/url", options); });
+        assertNoException(function() { ajax.post("/url", options); });
     }
 });
 
