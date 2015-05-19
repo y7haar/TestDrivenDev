@@ -163,6 +163,28 @@ TestCase("AjaxFacadeStubTest", {
         assertEquals(200, this.xhrStub.status);
     },
     
+     "test ajax facade should not call success method on onreadystatechange on get / post after failure, but call onFailure": function () {  
+        var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 500;
+        
+        var options = {
+            onSuccess: stubFn(),
+            onFailure: stubFn()
+        };
+        
+        ajax.get("/url", options);
+        assertFalse(options.onSuccess.called);
+        assertTrue(options.onFailure.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(500, this.xhrStub.status);
+        
+        ajax.post("/url", options);
+        assertFalse(options.onSuccess.called);
+        assertTrue(options.onFailure.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(500, this.xhrStub.status);
+    },
+    
     "test ajax facade should not throw Error if onSuccess method is not given": function () {  
         var ajax = tddjs.stubs.ajax;
         this.xhrStub.status = 200;
