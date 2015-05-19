@@ -26,7 +26,7 @@ function setRequestHeaders(xhr, headers)
 
 function isRequestSuccessfull(status)
 {
-    return status >= 200 && status < 300;
+    return (status >= 200 && status < 300);
 }
 
 function get(url, options)
@@ -62,6 +62,18 @@ function request(url, options)
     setRequestHeaders(xhr, options.headers);
 
     xhr.open(options.method || "GET", url, true);
+    
+    xhr.onreadystatechange = function(){   
+        if(xhr.readyState === 4)
+        {
+            if(isRequestSuccessfull(xhr.status))
+            {
+                options.onSuccess(xhr);
+            }
+                
+        }
+    };
+    
     xhr.send(options.data || null);
 }
 
