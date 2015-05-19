@@ -2,7 +2,6 @@
  * Tests for MapGenerator
  */
 
-
 TestCase("MapGeneratorTest", {
     
     setUp: function () {
@@ -110,11 +109,18 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
+        
         var neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[0][0]);
         assertEquals(2, neighbors.length );
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], neighbors.pop());
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], neighbors.pop());
+        
         neighbors = this.mapGenerator.collectNeighborCountries(this.mapGenerator.getMapGrid().cellGrid[1][1]);
         assertEquals(4, neighbors.length);
-        //GGF genau überprüfen noch
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][2], neighbors.pop());
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[2][1], neighbors.pop());
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], neighbors.pop());
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], neighbors.pop());
     },
     
      "test Should be able to call collectCountrie-Functions without neccassary initialisisations": function()
@@ -146,10 +152,52 @@ TestCase("MapGeneratorTest", {
         assertNoException(function(){gen.collectNeighborCountries(country);});
     },
     
+    "test If Borders are useless for the map generation, they have to be removed": function()
+    {
+        assertFunction(this.mapGenerator.removeCircularAndDuplicateBorders);
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        assertEquals(this.mapGenerator.getMapGrid().borders.length, 71);
+        this.mapGenerator.mergeIntoCountry(this.mapGenerator.getMapGrid().cellGrid[0][0],this.mapGenerator.getMapGrid().cellGrid[0][1]);
+        assertEquals(this.mapGenerator.getMapGrid().borders.length, 70);
+    },
+    
+    "test Cant remove borders if there arent one created yet": function()
+    {
+        var gen = this.mapGenerator;
+        assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");
+        this.mapGenerator.setGridSize(7,6);
+        assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");
+        this.mapGenerator.initBorders();
+        assertNoException(function(){gen.removeCircularAndDuplicateBorders();});     
+    },
+    
     "test mergeIntoCountry should combine two countries into one": function()
     {
         assertFunction(this.mapGenerator.mergeIntoCountry);
-        //TODO
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        var country1 = this.mapGenerator.getMapGrid().cellGrid[0][0];
+        var country2 = this.mapGenerator.getMapGrid().cellGrid[0][1];
+        var country3 = this.mapGenerator.getMapGrid().cellGrid[1][1];
+        var country4 = this.mapGenerator.getMapGrid().cellGrid[1][0];
+        
+        this.mapGenerator.mergeIntoCountry(country1, country2);
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country2);
+        this.mapGenerator.mergeIntoCountry(country4,country3);
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
+        this.mapGenerator.mergeIntoCountry(country2, country4);
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country3);
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
+        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], country3);
+        
+        this.mapGenerator.removeCircularAndDuplicateBorders();
+        assertEquals(this.mapGenerator.collectAllCountries(), 39);
     },
     
     "test Shouldn´t be able to call merge with something thats not a country\n\
