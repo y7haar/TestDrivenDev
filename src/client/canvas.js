@@ -27,6 +27,7 @@ function drawGame(){
     drawUI();
 }
 
+/*draw methoden*/
 var border=50; //25 an jeder seite
 var bottom=50; //insg 75 unten frei für menü etc
 function drawMap(){
@@ -60,25 +61,6 @@ function drawUI(){
     for (var i in button)
        button[i].draw();
 }
-
-function drawButton(x,y,str){ //wird noch entfernt!
-    ctx.fillStyle= "#000";
-    ctx.strokeStyle="#fff";
-    ctx.font = "20px Arial";
-    
-    if(mouse_x >= x && mouse_x <= ctx.measureText(str).width+x
-            && mouse_y >= y && mouse_y <= 20+y)
-    {
-        ctx.fillStyle = "#0f0";
-    }
-    
-    ctx.fillRect(x,y,ctx.measureText(str).width+10,30);
-    ctx.strokeRect(x,y,ctx.measureText(str).width+10,30);
-    ctx.fillStyle= "#fff";
-    ctx.fillText(str,x+5,y+20);
-}
-
-
 function clear(){
     ctx.fillStyle = "#ebebeb";
     ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
@@ -148,7 +130,14 @@ function onCanvasMouseDown(oEvent) {
 
 /*Test*/
 function click_test(){
-    alert("andere methode...");
+    var count=0;
+    for(x=0;x<map.cellGrid.length;x++){
+        for(y=0;y<map.cellGrid[0].length;y++){
+            if(map.cellGrid[x][y].selected)
+                count++;
+        }
+    }
+    alert(count+" selected!");
 }
 function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
