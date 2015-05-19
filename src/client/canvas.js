@@ -7,7 +7,7 @@ var ctx;
 //var gameLoop =  new tddjs.client.game.gameLoopController();
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map;
-var mouse_x,mouse_y;
+
 var button=[];
 
 
@@ -54,10 +54,10 @@ function drawUI(){
     ctx.fillStyle = "#96f";
     ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
     
-    
-    drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
-    for(i=0;i<button.length;++i)
-        button[i].draw();
+    /*draw buttons*/
+    //drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
+    for (var i in button)
+       button[i].draw();
 }
 
 function drawButton(x,y,str){ //wird noch entfernt!
@@ -102,8 +102,8 @@ function init(){
 
 /*Event-Listener*/
 function onCanvasMouseMove(oEvent) {
-    mouse_x = oEvent.offsetX;
-    mouse_y = oEvent.offsetY;   
+    for (var i in button)
+       button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
     drawGame();
 }
 function onCanvasMouseDown(oEvent) {
