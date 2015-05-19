@@ -18,6 +18,7 @@ function xmlHttpRequest()
     function open(method, url, async)
     {
         _isOpenCalled= true;
+        this.openArgs = arguments;
         
         if(arguments.length != 3)
             throw new Error("All arguments must be setted");
@@ -33,14 +34,14 @@ function xmlHttpRequest()
 
         _method = method; 
         this.setReadyState(1);
-        this.status = 0;
     }
     
     function send(data)
     {
         _isSendCalled = true;
+        this.sendArgs = arguments;
+        
         this.setReadyState(4);
-        this.status = 200;
         
         if(_method === "GET")
             this.responseText = "success";
@@ -125,6 +126,8 @@ function xmlHttpRequest()
     this.isGetRequestHeaderCalled = isGetRequestHeaderCalled;
     this.isSetRequestHeaderCalled = isSetRequestHeaderCalled;
     
+    this.sendArgs = [];
+    this.openArgs = [];
     
     this.responseText = "";
     this.readyState = 0;

@@ -2,59 +2,203 @@
  *  TestCases for AJAX Facade Stub
  */
 
-/* 
- *  Testcases for Ajax Stub
- */
-
 TestCase("AjaxFacadeStubTest", {
     setUp: function () {
-        this.ajax = new tddjs.stubs.ajax();
+        var ajax = tddjs.stubs.ajax;
+        
+        this.ajaxCreate = ajax.create;
+        this.xhrStub = new ajax.xmlHttpRequest();
+        ajax.create = stubFn(this.xhrStub);
+
+
     }, 
     tearDown: function ()
     {
-        delete this.ajax;
+        var ajax = tddjs.stubs.ajax;
+        ajax.create = this.ajaxCreate;
     },
     
-    "test ajax object should not be undefined and instanceof ajax": function () {  
-        assertObject(this.ajax);
-        assertTrue(this.ajax instanceof tddjs.stubs.ajax);
+    "test facade should provide a create method to get a xhr object with important functions": function () {  
+        assertFunction(tddjs.stubs.ajax.create);
+        var xhr = tddjs.stubs.ajax.create();
+        
+        assertFunction(xhr.open);
+        assertFunction(xhr.send);
+        assertFunction(xhr.setRequestHeader);
     },
     
-    "test ajax facade should hold an instance of xhr object": function () {  
-        var xhr = this.ajax.getXmlHttpRequest();
+    "test facade should provide a method to perform a get request and url must be setted": function () {  
+        assertFunction(tddjs.stubs.ajax.get);
+        assertException (function() {tddjs.stubs.ajax.get(); }, "TypeError");
         
-        assertObject(xhr);
-        assertTrue(xhr instanceof tddjs.stubs.ajax.xmlHttpRequest);
+        assertNoException (function() {tddjs.stubs.ajax.get("/url"); });
     },
     
-    "test ajax facade should have a GET and POST method to perform requests and a method to set headers": function () {  
-        assertFunction(this.ajax.get);
-        assertFunction(this.ajax.post);
-        assertFunction(this.ajax.setRequestHeader);
+    "test facade should provide a method to perform a post request and url must be setted": function () {  
+        assertFunction(tddjs.stubs.ajax.post);
+        assertException (function() {tddjs.stubs.ajax.post(); }, "TypeError");
+        
+        assertNoException (function() {tddjs.stubs.ajax.post("/url"); });
     },
     
-    "test ajax facade should call xhr open method when GET or POST request is called": function () {  
-        var xhr = this.ajax.getXmlHttpRequest();
+    "test get and post method should call xhr create method": function () {  
+        var ajax = tddjs.stubs.ajax;
         
-        this.ajax.get();
-        assertTrue(xhr.isOpenCalled());
-        
-        this.ajax.post();
-        assertTrue(xhr.isOpenCalled());
- 
+        ajax.get("/url");
+        assertTrue(ajax.create.called);
+
+        ajax.post("/url");
+        assertTrue(ajax.create.called);
     },
     
-    "test ajax facade should call xhr setHeader method and set correct headers if headers are setted": function () {  
-        var xhr = this.ajax.getXmlHttpRequest();
+    "test request should throw Exception if parameter are invalid": function () {  
+        var ajax = tddjs.stubs.ajax;
         
-        this.ajax.setRequestHeader("Content-Type", "text/plain");
-        assertTrue(xhr.isSetRequestHeaderCalled());
-        assertEquals(this.ajax.getRequestHeader("Content-Type"), xhr.getRequestHeader("Content-Type"));
+        assertException(function() { ajax.request(2); }, "TypeError");
+        assertNoException(function() { ajax.request("/url"); } );
+    },
+    
+     "test request should call xhr open method with correct parameters and send method with data if data is provided": function () {  
+        var ajax = tddjs.stubs.ajax;
         
-        this.ajax.setRequestHeader("Content-Type", "application/json");
-        assertTrue(xhr.isSetRequestHeaderCalled());
-        assertEquals(this.ajax.getRequestHeader("Content-Type"), xhr.getRequestHeader("Content-Type"));
- 
+        var options = {
+            method: "GET"
+        };
+        
+        ajax.request("/url", options);
+        assertTrue(this.xhrStub.isOpenCalled());
+        assertEquals(["GET", "/url", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals([null], this.xhrStub.sendArgs);
+        
+        var options = {
+            method: "POST",
+            data: "BigData"
+        };
+        
+        ajax.request("/url2", options);
+        assertEquals(["POST", "/url2", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals(["BigData"], this.xhrStub.sendArgs);
+    },
+    
+    "test get method should call open / send method in xhr with correct params": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        ajax.get("/niceUrl");
+        
+        assertTrue(this.xhrStub.isOpenCalled());
+        assertEquals(["GET", "/niceUrl", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals([null], this.xhrStub.sendArgs);
+    },
+    
+     "test post method should call open / send method in xhr with correct params": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        ajax.post("/url", { data: "SomeData" } );
+        
+        assertTrue(this.xhrStub.isOpenCalled());
+        assertEquals(["POST", "/url", true], this.xhrStub.openArgs);
+        assertTrue(this.xhrStub.isSendCalled());
+        assertEquals(["SomeData"], this.xhrStub.sendArgs);
+    },
+    
+     "test ajax facade should set headers correctly on get / post in xhr object": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+        var options = {
+            headers:{
+                "Accept-Charset": "utf-8"
+            }    
+        };
+        
+        ajax.get("/url", options);
+        assertEquals("utf-8", this.xhrStub.getRequestHeader("Accept-Charset"));
+        
+        
+         var options = {
+            headers:{
+                "Content-Type": "application/json"
+            },
+            data: "data"
+        };
+        
+        ajax.post("/url", options);
+        assertEquals("application/json", this.xhrStub.getRequestHeader("Content-Type"));
+    },
+    
+    "test ajax facade should be able to set multiple headers": function () {  
+        var ajax = tddjs.stubs.ajax;
+        
+         var options = {
+            headers:{
+                "Content-Type": "application/json",
+                "Content-Length": "348"
+            },
+            data: "data"
+        };
+        
+        ajax.post("/url", options);
+        assertEquals("application/json", this.xhrStub.getRequestHeader("Content-Type"));
+        assertEquals("348", this.xhrStub.getRequestHeader("Content-Length"));
+    },
+    
+    "test ajax facade should now call given method on onreadystatechange on get / post after success": function () {  
+        var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 200;
+        
+        var options = {
+            onSuccess: stubFn()
+        };
+        
+        ajax.get("/url", options);
+        assertTrue(options.onSuccess.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(200, this.xhrStub.status);
+        
+        ajax.post("/url", options);
+        assertTrue(options.onSuccess.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(200, this.xhrStub.status);
+    },
+    
+     "test ajax facade should not call success method on onreadystatechange on get / post after failure, but call onFailure": function () {  
+        var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 500;
+        
+        var options = {
+            onSuccess: stubFn(),
+            onFailure: stubFn()
+        };
+        
+        ajax.get("/url", options);
+        assertFalse(options.onSuccess.called);
+        assertTrue(options.onFailure.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(500, this.xhrStub.status);
+        
+        ajax.post("/url", options);
+        assertFalse(options.onSuccess.called);
+        assertTrue(options.onFailure.called);
+        assertEquals(4, this.xhrStub.readyState);
+        assertEquals(500, this.xhrStub.status);
+    },
+    
+    "test ajax facade should not throw Error if onSuccess / onFailure method is not given": function () {  
+        var ajax = tddjs.stubs.ajax;
+        this.xhrStub.status = 200;
+        
+        var options = {
+        };
+        
+        assertNoException(function() { ajax.get("/url", options); });
+        assertNoException(function() { ajax.post("/url", options); });
+        
+        this.xhrStub.status = 500;
+        
+        assertNoException(function() { ajax.get("/url", options); });
+        assertNoException(function() { ajax.post("/url", options); });
     }
 });
 
