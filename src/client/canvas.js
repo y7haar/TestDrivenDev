@@ -7,6 +7,7 @@ var ctx;
 //var gameLoop =  new tddjs.client.game.gameLoopController();
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map;
+var mouse_x,mouse_y;
 
 
 
@@ -17,7 +18,7 @@ var mainloop = function() {
     };
 
 function updateGame(){
-    window.requestAnimationFrame(mainloop);
+    //window.requestAnimationFrame(mainloop);
 }
 function drawGame(){
     clear();
@@ -59,6 +60,15 @@ function drawButton(x,y,str){
     ctx.fillStyle= "#000";
     ctx.strokeStyle="#fff";
     ctx.font = "20px Arial"
+    
+    console.log("x: "+mouse_x+" | y: "+mouse_y);
+    console.log("--->x: "+x+" | y: "+y);
+    if(mouse_x >= x && mouse_x <= ctx.measureText(str).width+x
+            && mouse_y >= y && mouse_y <= 20+y)
+    {
+        ctx.fillStyle = "#0f0";
+    }
+    
     ctx.fillRect(x,y,ctx.measureText(str).width+10,30);
     ctx.strokeRect(x,y,ctx.measureText(str).width+10,30);
     ctx.fillStyle= "#fff";
@@ -80,8 +90,14 @@ function init(){
             clear();
             init_map();
             window.requestAnimationFrame(mainloop);
+            canvas.addEventListener('mousemove', onCanvasMouseMove, false);
         }
     }
+}
+function onCanvasMouseMove(oEvent) {
+    mouse_x = oEvent.offsetX;
+    mouse_y = oEvent.offsetY;   
+    drawGame();
 }
 function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
