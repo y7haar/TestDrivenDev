@@ -167,6 +167,8 @@ TestCase("LobbyControllerTest", {
       this.lobbyController.addLobby(this.lobby1);
       this.lobbyController.addLobby(this.lobby2);
       
+      assertFunction(this.lobbyController.serialize);
+      
       var json = this.lobbyController.serialize();
       json = JSON.parse(json);
       
@@ -175,7 +177,39 @@ TestCase("LobbyControllerTest", {
       assertObject(json[0]);
       assertObject(json[1]);
       
-      // TODO check for correct serialization
+      // No tests for type --> is already tested in lobby / player tests
+      
+      // L1
+      assertEquals("L1", json[0].name);
+      assertEquals(0, json[0].id);
+      assertEquals(2, json[0].maxPlayers);
+      assertEquals(1, json[0].leader);
+      
+      // P1
+      assertEquals("P1", json[0].players[0].name);
+      assertEquals(1, json[0].players[0].id);
+      assertEquals("#000000", json[0].players[0].color);
+      
+      // P2
+      assertEquals("P2", json[0].players[1].name);
+      assertEquals(2, json[0].players[1].id);
+      assertEquals("#111111", json[0].players[1].color);
+      
+      // L2
+      assertEquals("L2", json[1].name);
+      assertEquals(1, json[1].id);
+      assertEquals(3, json[1].maxPlayers);
+      assertEquals(4, json[1].leader);
+      
+      // P1
+      assertEquals("P3", json[1].players[0].name);
+      assertEquals(3, json[1].players[0].id);
+      assertEquals("#222222", json[1].players[0].color);
+      
+      // P2
+      assertEquals("P4", json[1].players[1].name);
+      assertEquals(4, json[1].players[1].id);
+      assertEquals("#333333", json[1].players[1].color);
   }
   
 });

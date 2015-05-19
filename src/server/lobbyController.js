@@ -79,6 +79,28 @@ function lobbyController()
         return currentId;
     }
     
+    function serialize()
+    {
+        var lobbies = [];
+        
+        for(var i=0;i < _lobbies.length;++i)
+        {
+            var lobby = _lobbies[i];
+            
+            if(typeof lobby === "undefined")
+                continue;
+            
+            var lobbyObj= lobby.serializeAsObject();
+            lobbies.push(lobbyObj);
+        }
+        
+        var lobbiesJson = JSON.stringify(lobbies);
+        
+        console.log(lobbiesJson);
+        
+        return lobbiesJson;
+    }
+    
         this.addLobby =  addLobby;
         this.removeLobby = removeLobby;
         
@@ -87,5 +109,7 @@ function lobbyController()
         
         this.getLobbyById = getLobbyById;
         this.getNextId = getNextId;
+        
+        this.serialize = serialize;
 
 };

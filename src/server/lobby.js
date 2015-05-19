@@ -57,7 +57,7 @@ function lobby()
     
     function _getMaxPlayers()
     {
-        return _players.length;
+        return _maxPlayers;
     }
 
     function kickPlayer(aPlayer)
@@ -113,6 +113,12 @@ function lobby()
     }
     
     function serialize()
+    {   
+        var json = JSON.stringify(serializeAsObject());
+        return json;
+    }
+    
+    function serializeAsObject()
     {
         var id = getId();
         var name = getName();
@@ -142,9 +148,7 @@ function lobby()
             players: playersObj
         };
         
-        var json = JSON.stringify(lobbyObj);
-        
-        return json;
+        return lobbyObj;
     }
     
     this.addPlayer = addPlayer;
@@ -162,5 +166,6 @@ function lobby()
     this.getLeader = getLeader;
     
     this.serialize = serialize;
+    this.serializeAsObject = serializeAsObject;
 };
 
