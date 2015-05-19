@@ -106,6 +106,23 @@ function init(){
 function onCanvasMouseMove(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
+   var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
+    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
+    
+    for(x=0;x<map.cellGrid.length;x++){
+        for(y=0;y<map.cellGrid[0].length;y++){
+            if(oEvent.offsetX>=x+(x*w)+border/2
+                    && oEvent.offsetX<=x+(x*w)+border/2+w
+                    && oEvent.offsetY>=y+(y*h)+border/2
+                    && oEvent.offsetY<=y+(y*h)+border/2+h)
+                map.cellGrid[x][y].color="#bbb";
+            else
+                map.cellGrid[x][y].color="#552700";
+            if(map.cellGrid[x][y].selected)
+                map.cellGrid[x][y].color="#fff";
+                
+        }
+    }
     drawGame();
 }
 function onCanvasMouseDown(oEvent) {
@@ -118,7 +135,7 @@ function onCanvasMouseDown(oEvent) {
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
-                map.cellGrid[x][y].color="#fff";
+                map.cellGrid[x][y].selected=true;
         }
     }
     
