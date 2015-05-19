@@ -70,6 +70,11 @@ function request(url, options)
             {
                 options.onSuccess(xhr);
             }
+            
+            else if(! isRequestSuccessfull(xhr.status) && typeof options.onFailure === "function")
+            {
+                options.onFailure(xhr);
+            }
                 
         }
     };
