@@ -8,6 +8,7 @@ var ctx;
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map;
 var mouse_x,mouse_y;
+var button=[];
 
 
 
@@ -55,9 +56,11 @@ function drawUI(){
     
     
     drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
+    for(i=0;i<button.length;++i)
+        button[i].draw();
 }
 
-function drawButton(x,y,str){
+function drawButton(x,y,str){ //wird noch entfernt!
     ctx.fillStyle= "#000";
     ctx.strokeStyle="#fff";
     ctx.font = "20px Arial";
@@ -80,7 +83,7 @@ function clear(){
     ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
 }
 
-
+/*Main-Init()*/
 function init(){
     canvas = document.getElementById('game');
     if (canvas && canvas.getContext) {
@@ -88,12 +91,16 @@ function init(){
        if (ctx) {
             clear();
             init_map();
+            button[0]=new tddjs.client.ui.button(15,15,"button-class",ctx);
+            button[1]=new tddjs.client.ui.button(15,45,"button-class 2",ctx);
             window.requestAnimationFrame(mainloop);
             canvas.addEventListener('mousemove', onCanvasMouseMove, false);
             canvas.addEventListener('mousedown', onCanvasMouseDown, false);
         }
     }
 }
+
+/*Event-Listener*/
 function onCanvasMouseMove(oEvent) {
     mouse_x = oEvent.offsetX;
     mouse_y = oEvent.offsetY;   
@@ -115,6 +122,8 @@ function onCanvasMouseDown(oEvent) {
     
     drawGame();
 }
+
+/*Test*/
 function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
     mapGen.initCountries();
