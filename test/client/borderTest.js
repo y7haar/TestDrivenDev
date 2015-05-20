@@ -19,14 +19,19 @@ TestCase("BorderTest", {
         assertObject(this.border);
     },
     
-    "test A Left and Right Country should be able to be set and get": function()
+    "test Border should have the needed Functions": function()
     {
         assertFunction(this.border.setLeftCountry);
         assertFunction(this.border.setRigthCountry);
         assertFunction(this.border.getLeftCountry);
         assertFunction(this.border.getRigthCountry);
+    },
+    
+    "test A Left and Right Country should be able to be set and get": function()
+    {
         this.border.setLeftCountry(this.country1);
         this.border.setRigthCountry(this.country2);
+        
         assertEquals(this.border.getLeftCountry(), this.country1);
         assertEquals(this.border.getRigthCountry(), this.country2);
     },
@@ -35,6 +40,7 @@ TestCase("BorderTest", {
     {
         var x = 5;
         var border1 = this.border;
+        
         assertException(function(){border1.setLeftBorder(x);}, "TypeError");
         assertException(function(){border1.setRigthBorder(x);}, "TypeError");
     }
