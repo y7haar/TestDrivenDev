@@ -142,6 +142,8 @@ function click_test(){
 function init_map(){ //nur zum testen
     mapGen.setGridSize(15,15);
     mapGen.initCountries();
+    mapGen.initBorders();
+    mapGen.combineCountryCells();
     map = mapGen.getMapGrid();
     
     for(x=0;x<map.cellGrid.length;x++){
