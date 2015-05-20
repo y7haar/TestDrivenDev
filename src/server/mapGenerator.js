@@ -8,17 +8,21 @@ function mapGenerator()
 {
     //Gewissermaßen die Welt
     var _grid = {};
+    
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
     var calledInitBorders = false;
     
-    var GRID_CELL_COMBINES_PER_COUNTRY =2.5;
+    var GRID_CELL_COMBINES_PER_COUNTRY = 2.5;
     
+    //Setzt das Grid neu
     function setGridSize(x,y)
     {
         if(x <= 0 || y <= 0)
             throw new Error("A Grid is not allowed to be zero or less Width or Height");
+        
         _grid.cellGrid = createArray(x,y);
+        
         calledInitCountries = false;
         calledInitBorders = false;
     }
@@ -26,9 +30,11 @@ function mapGenerator()
     function getMapGrid(){
         return _grid;
     }
+    
     function getMapWidth(){
         return _grid.cellGrid.length;
     }
+    
     function getMapHeight(){
         return _grid.cellGrid[0].length;
     }
@@ -59,6 +65,7 @@ function mapGenerator()
     {
         if(typeof(_grid.cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
+        
         //Auf gesamter Breite
         for(var i = 0; i < getMapWidth(); i++)
         {   //Auf gesamter Höhe
@@ -77,40 +84,40 @@ function mapGenerator()
     {
         if(!calledInitCountries)
             throw new Error("Didnt call required Functions before");
-        else
+        
+        //Array erzeugen
+        _grid.borders = [];
+        
+        //Auf gesamter Breite
+        for(var x = 0; x < getMapWidth(); x++)
         {
-            //Array erzeugen
-            _grid.borders = [];
-            //Auf gesamter Breite
-            for(var x = 0; x < getMapWidth(); x++)
+            //Auf gesamter Höhe
+            for(var y = 0; y < getMapHeight(); y++)
             {
-                //Auf gesamter Höhe
-                for(var y = 0; y < getMapHeight(); y++)
-                {
-                    var nextX = x+1;
-                    var nextY = y+1;
+                var nextX = x+1;
+                var nextY = y+1;
                     
-                    //Rechtsliegende Border hinzufügen
-                    if(nextX < getMapWidth())
-                    {
-                        var border = new tddjs.client.map.border();
-                        border.setLeftCountry(_grid.cellGrid[x][y]);
-                        border.setRigthCountry(_grid.cellGrid[nextX][y]);
-                        _grid.borders.push(border);
-                    }
-                    //Obere Border hinzufügen
-                    if(nextY < getMapHeight())
-                    {
-                        var border = new tddjs.client.map.border();
-                        border.setLeftCountry(_grid.cellGrid[x][y]);
-                        border.setRigthCountry(_grid.cellGrid[x][nextY]);
-                        _grid.borders.push(border);
-                    }
+                //Rechtsliegende Border hinzufügen
+                if(nextX < getMapWidth())
+                {
+                    var border = new tddjs.client.map.border();
+                    border.setLeftCountry(_grid.cellGrid[x][y]);
+                    border.setRigthCountry(_grid.cellGrid[nextX][y]);
+                    _grid.borders.push(border);
+                }
+                //Obere Border hinzufügen
+                if(nextY < getMapHeight())
+                {
+                    var border = new tddjs.client.map.border();
+                    border.setLeftCountry(_grid.cellGrid[x][y]);
+                    border.setRigthCountry(_grid.cellGrid[x][nextY]);
+                    _grid.borders.push(border);
                 }
             }
-            calledInitCountries = false;
-            calledInitBorders = true;
         }
+        
+        calledInitCountries = false;
+        calledInitBorders = true;
     }
     
     //Sammelt alle Länder
@@ -127,6 +134,7 @@ function mapGenerator()
             countries.push(_grid.borders[i].getLeftCountry());
             countries.push(_grid.borders[i].getRigthCountry());
         }
+        
         //Duplikate entfernen
         countries = removeDuplicates(countries);
         return countries;
@@ -185,6 +193,7 @@ function mapGenerator()
         return countries[random];
     }
     
+    //Kombiniert Länder zufällig
     function combineCountryCells()
     {
         if(!calledInitBorders)
@@ -216,6 +225,7 @@ function mapGenerator()
             countries[x].id = x+1;
     }
     
+    //Verbindet ein Land in ein anderes
     function mergeIntoCountry(country, targetCountry)
     {
         if(!calledInitBorders)
@@ -238,6 +248,7 @@ function mapGenerator()
                border.setRigthCountry(targetCountry);
         }
         
+        //Länderfelder umlegen
         for(var width = 0; width < getMapWidth(); width++)
         {
             for(var height = 0; height < getMapHeight(); height++)
@@ -262,11 +273,13 @@ function mapGenerator()
         {
             var current = oldBorders.pop();
             
+            //Nur pushen wenn angrenzendes Land nicht gleich
             if(current.getLeftCountry() !== current.getRigthCountry())
                 _grid.borders.push(current);
         }
     }
     
+    //Funktionsdeklaration
     this.setGridSize = setGridSize;
     this.getMapGrid = getMapGrid;
     this.getMapWidth = getMapWidth;
