@@ -1,23 +1,26 @@
 /* 
  * Source Code für Spieler
  */
-
 tddjs.namespace("client").player = player;
 
 function player()
 {
- 
+    //Länder des Spielers
     var countrys = {};
+    
+    //Werte
     var name = "";
     var id;
     var idIsSetted = false;
     var color = "#000000";
     
+    //Holt den Namen
     function getName()
     {
        return name; 
     }
     
+    //Setzt den Namen
     function setName(newName)
     {
         if(typeof(newName) !== "string")
@@ -26,6 +29,7 @@ function player()
         name = newName;
     }
     
+    //Überprüft anhand eines Objects ob der Spieler es besitzt
     function hasCountryByObject(searchedCountry)
     {
         if(! (searchedCountry instanceof tddjs.client.map.country))
@@ -37,6 +41,7 @@ function player()
             return false;
     }
     
+    //Überprüft anhand eines Namens ob der Spieler es besitzt
     function hasCountryByName(countryName)
     {
         if(typeof countryName !== "string")
@@ -46,15 +51,18 @@ function player()
             return true;
         else return false;
     }
-    
+   
+    //Fügt ein Land hinzu
     function addCountry(addedCountry)
     {
         if(! (addedCountry instanceof tddjs.client.map.country))
             throw new TypeError("added Object is not a Country");
+        
         var countryName = addedCountry.getName();
         countrys[countryName] = addedCountry;
     }
     
+    //Entfernt ein Land
     function removeCountry(removedCountry)
     {
         if(! (removedCountry instanceof tddjs.client.map.country))
@@ -64,11 +72,13 @@ function player()
         delete countrys[countryName];
     }
     
+    //Anzahl der Länder die der Spieler besitzt
     function getCountryCount()
     {
         return Object.keys(countrys).length;
     }
     
+    //Holt Land anhand des Namens
     function getCountry(countryName)
     {
         if(hasCountryByName(countryName))
@@ -76,26 +86,30 @@ function player()
         else return null;
     }
     
+    //Holt alle Länder
     function getCountrys()
     {
         return countrys;
     }
  
+    //Holt die Farbe
     function getColor()
     {
         return color;
     }
     
+    //Setzt nur gültige Hex-Farben
     function setColor(settedColor)
     {
         if(typeof settedColor !== "string")
             throw new TypeError("Setted Color is not a String");
         
-        if(settedColor.charAt(0) !== '#')
-            throw new Error("Color doesnt start with a #");
+        //Scheint unnötig jetzt
+        //if(settedColor.charAt(0) !== '#')
+            //throw new Error("Color doesnt start with a #");
         
-        if(settedColor.length !== 7)
-            throw new Error("Color not long enough");
+        //if(settedColor.length !== 7)
+            //throw new Error("Color not long enough");
         
         if(settedColor.match(/^#[\da-f]{3}([\da-f]{3}|)$/i))
             color = settedColor;
@@ -103,21 +117,25 @@ function player()
             throw new Error("This is not a valid Hexa-Color");
     }
     
+    //Holt die Id des Spielers
     function getId()
     {
         return id;
     }
     
+    //Setzt die Spieler-id kann nur einmal aufgerufen werden
     function setId(settedId)
     {
         if(isNaN(settedId))
             throw new TypeError("Id has to be a Number");
         if(idIsSetted)
             throw new Error("Cant set Id more than Once");
+        
         id = settedId;
         idIsSetted = true;
     }
     
+    //Serialisiert das Object
     function serialize()
     {
         var id = getId();
