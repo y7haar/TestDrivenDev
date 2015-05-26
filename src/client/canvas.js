@@ -95,8 +95,10 @@ function init(){
 function onCanvasMouseMove(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
-   var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
+    var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
+    
+    var cache_id;
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
@@ -104,9 +106,15 @@ function onCanvasMouseMove(oEvent) {
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
+            {
                 map.cellGrid[x][y].hover=true;
+                cache_id=map.cellGrid[x][y].id;
+            }
             else
-                map.cellGrid[x][y].hover=false;
+            {
+                if(map.cellGrid[x][y].id !== cache_id)
+                    map.cellGrid[x][y].hover=false;
+            }
         }
     }
     drawGame();
