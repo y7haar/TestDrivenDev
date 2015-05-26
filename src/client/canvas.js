@@ -40,8 +40,9 @@ function drawMap(){
             ctx.fillStyle = "#552700";
             ctx.fillStyle=map.cellGrid[x][y].color;
             ctx.lineWidth="1";
-            ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
-            ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+            ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+            if(map.cellGrid[x][y].selected)
+                ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
         }
     }
 }
@@ -97,12 +98,9 @@ function onCanvasMouseMove(oEvent) {
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
-                map.cellGrid[x][y].color="#bbb";
+                map.cellGrid[x][y].hover=true;
             else
-                map.cellGrid[x][y].color="#552700";
-            if(map.cellGrid[x][y].selected)
-                map.cellGrid[x][y].color="#fff";
-                
+                map.cellGrid[x][y].hover=false;
         }
     }
     drawGame();
@@ -149,7 +147,9 @@ function init_map(){ //nur zum testen
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             map.cellGrid[x][y].selected=false;
-            map.cellGrid[x][y].color="#552700";
+            map.cellGrid[x][y].hover=false;
+            map.cellGrid[x][y].color="#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
         }
     }
+    console.log(mapGen.getMapGrid());
 }
