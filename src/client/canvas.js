@@ -41,6 +41,12 @@ function drawMap(){
             ctx.fillStyle=map.cellGrid[x][y].color;
             ctx.lineWidth="1";
             ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+            
+            if(map.cellGrid[x][y].hover){
+                ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+
+            }
             if(map.cellGrid[x][y].selected)
                 ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
         }
