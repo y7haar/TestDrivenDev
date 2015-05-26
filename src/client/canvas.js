@@ -36,7 +36,7 @@ function drawMap(){
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
-            ctx.strokeStyle="#f00";
+            ctx.strokeStyle="#000";
             ctx.fillStyle = "#552700";
             ctx.fillStyle=map.cellGrid[x][y].color;
             ctx.lineWidth="1";
@@ -47,9 +47,43 @@ function drawMap(){
                 ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
             }
+            
+            drawMapBorder(x,y,w,h);
+            
             if(map.cellGrid[x][y].selected)
-                ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+                console.log("f");
+                //ctx.strokeStyle="#f00";
+                //ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
         }
+    }
+}
+function drawMapBorder(x,y,w,h){
+    ctx.strokeStyle="#000";
+    if(x>0 && y>0){
+        ctx.strokeStyle="#00f";
+        if(map.cellGrid[x][y].id !== map.cellGrid[x-1][y].id)
+        {
+            ctx.beginPath();
+            ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+            ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
+            ctx.stroke();
+        }
+        if(map.cellGrid[x][y].id !== map.cellGrid[x][y-1].id)
+        {
+            ctx.beginPath();
+            ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+            ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
+            ctx.stroke();
+        }
+    }
+    else{
+        ctx.strokeStyle="#0f0";
+        ctx.beginPath();
+        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+        ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
+        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+        ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
+        ctx.stroke();
     }
 }
 function drawUI(){
@@ -165,5 +199,5 @@ function init_map(){ //nur zum testen
             map.cellGrid[x][y].color="#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
         }
     }
-    console.log(mapGen.getMapGrid());
+    console.log(map);
 }
