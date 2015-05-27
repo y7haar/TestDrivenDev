@@ -36,13 +36,54 @@ function drawMap(){
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
-            ctx.strokeStyle="#f00";
+            ctx.strokeStyle="#000";
             ctx.fillStyle = "#552700";
             ctx.fillStyle=map.cellGrid[x][y].color;
             ctx.lineWidth="1";
-            ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
-            ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+            ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+            
+            if(map.cellGrid[x][y].hover){
+                ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+
+            }
+            
+            drawMapBorder(x,y,w,h);
+            
+            if(map.cellGrid[x][y].selected)
+                console.log("f");
+                //ctx.strokeStyle="#f00";
+                //ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
         }
+    }
+}
+function drawMapBorder(x,y,w,h){
+    ctx.strokeStyle="#000";
+    if(x>0 && y>0){
+        ctx.strokeStyle="#00f";
+        if(map.cellGrid[x][y].id !== map.cellGrid[x-1][y].id)
+        {
+            ctx.beginPath();
+            ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+            ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
+            ctx.stroke();
+        }
+        if(map.cellGrid[x][y].id !== map.cellGrid[x][y-1].id)
+        {
+            ctx.beginPath();
+            ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+            ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
+            ctx.stroke();
+        }
+    }
+    else{
+        ctx.strokeStyle="#0f0";
+        ctx.beginPath();
+        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+        ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
+        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+        ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
+        ctx.stroke();
     }
 }
 function drawUI(){
@@ -88,8 +129,10 @@ function init(){
 function onCanvasMouseMove(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
-   var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
+    var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
+    
+    var cache_id;
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
@@ -97,12 +140,15 @@ function onCanvasMouseMove(oEvent) {
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
-                map.cellGrid[x][y].color="#bbb";
+            {
+                map.cellGrid[x][y].hover=true;
+                cache_id=map.cellGrid[x][y].id;
+            }
             else
-                map.cellGrid[x][y].color="#552700";
-            if(map.cellGrid[x][y].selected)
-                map.cellGrid[x][y].color="#fff";
-                
+            {
+                if(map.cellGrid[x][y].id !== cache_id)
+                    map.cellGrid[x][y].hover=false;
+            }
         }
     }
     drawGame();
@@ -149,7 +195,9 @@ function init_map(){ //nur zum testen
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             map.cellGrid[x][y].selected=false;
-            map.cellGrid[x][y].color="#552700";
+            map.cellGrid[x][y].hover=false;
+            map.cellGrid[x][y].color="#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
         }
     }
+    console.log(map);
 }
