@@ -26,6 +26,7 @@ TestCase("MapGeneratorTest", {
         assertFunction(this.mapGenerator.collectAllCountries);
         assertFunction(this.mapGenerator.collectNeighborCountries);
         assertFunction(this.mapGenerator.removeCircularAndDuplicateBorders);
+        assertFunction(this.mapGenerator.combineCountryCells);
     },
     
      "test grid should be a object": function()
@@ -67,21 +68,35 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.initCountries();}, "Error");
     },
     
-    //Änderungsbedarf
-    "test After initCountries every gridCell should contain a country with id -1": function()
+    "test After initCountries every gridCell should contain a country": function()
     {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
+        var grid = this.mapGenerator.getMapGrid();
         
-        for(var i = 0; i < this.mapGenerator.getMapWidth(); i++)
-        {
-            for(var j = 0; j < this.mapGenerator.getMapHeight(); j++)
-            {
-                var grid = this.mapGenerator.getMapGrid();
-                assertTrue(grid.cellGrid[i][j] instanceof(tddjs.client.map.country));
-                assertTrue(grid.cellGrid[i][j].id === -1);
-            }
-        }
+        assertTrue(grid.cellGrid[0][0] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[1][0] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[0][1] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[3][3] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[6][5] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[5][6] instanceof(tddjs.client.map.country));
+        assertTrue(grid.cellGrid[6][6] instanceof(tddjs.client.map.country));
+    },
+    
+    "test After initCountries every gridCell should contain a contry with id -1": function()
+    {
+        this.mapGenerator.setGridSize(7,7);
+        this.mapGenerator.initCountries();
+        var grid = this.mapGenerator.getMapGrid();
+        
+        assertEquals(1,  grid.cellGrid[0][0].id === -1);
+        assertEquals(1,  grid.cellGrid[1][0].id === -1);
+        assertEquals(1,  grid.cellGrid[0][1].id === -1);
+        assertEquals(1,  grid.cellGrid[3][3].id === -1);
+        assertEquals(1,  grid.cellGrid[5][5].id === -1);
+        assertEquals(1,  grid.cellGrid[6][6].id === -1);
+        assertEquals(1,  grid.cellGrid[5][6].id === -1);
+        assertEquals(1,  grid.cellGrid[6][5].id === -1);
     },
     
     "test After initBorders every possible Border should have been created correctly": function()
@@ -93,15 +108,24 @@ TestCase("MapGeneratorTest", {
         var borders = this.mapGenerator.getMapGrid().borders;
         
         assertEquals(71, borders.length);
-        
-        for(var i = 0; i < borders.length; i++)
-        {
-            assertTrue(borders[i] instanceof tddjs.client.map.border);
-            assertTrue(borders[i].getLeftCountry() !== borders[i].getRigthCountry());
-        }
+        assertTrue(borders[0] instanceof tddjs.client.map.border);
+        assertTrue(borders[42] instanceof tddjs.client.map.border);
+        assertTrue(borders[70] instanceof tddjs.client.map.border);
     },
     
-    //Trennen?
+    "test Should only create valid borders": function ()
+    {
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        var borders = this.mapGenerator.getMapGrid().borders;
+        
+        assertTrue(borders[0].getLeftCountry() !== borders[0].getRigthCountry());
+        assertTrue(borders[42].getLeftCountry() !== borders[42].getRigthCountry());
+        assertTrue(borders[70].getLeftCountry() !== borders[70].getRigthCountry());
+    },
+    
     "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
     {
         var gen = this.mapGenerator;
@@ -111,9 +135,15 @@ TestCase("MapGeneratorTest", {
         gen.setGridSize(7,6);
         assertException(function(){gen.initBorders();}, "Error");
         
+    },
+    
+    "test Should be able to call initBorders once": function()
+    {
+        var gen = this.mapGenerator;
+        gen.setGridSize(7,6);
         gen.initCountries();
-        assertNoException(function(){gen.initBorders();});
         
+        assertNoException(function(){gen.initBorders();});
         assertException(function(){gen.initBorders();}, "Error");
     },
     
@@ -129,7 +159,6 @@ TestCase("MapGeneratorTest", {
         assertEquals(42, size);
     },
     
-    //Noch was zu tun?
     "test Should be able to collect all neighbor countries of a countrie": function()
     {
         this.mapGenerator.setGridSize(7,6);
@@ -150,25 +179,53 @@ TestCase("MapGeneratorTest", {
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], neighbors2.pop());
     },
     
-    //Trennen?
-     "test Should be able to call collectCountrie-Functions without neccassary initialisisations": function()
+     "test Shouldnt be able to call collectAllCountries without neccassary initialisisations": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.collectAllCountries();}, "Error");
+        
+        gen.setGridSize(7,6);
+        assertException(function(){gen.collectAllCountries();}, "Error");
+        
+        gen.initCountries();
+        assertException(function(){gen.collectAllCountries();}, "Error");    
+    },
+    
+    "test Shouldnt be able to call collectNeigbourCountries without initialisation": function()
     {
         var country = new tddjs.client.map.country();
         var gen = this.mapGenerator;
         
-        assertException(function(){gen.collectAllCountries();}, "Error");
         assertException(function(){gen.collectNeighborCountries(country);}, "Error");
         
         gen.setGridSize(7,6);
-        assertException(function(){gen.collectAllCountries();}, "Error");
         assertException(function(){gen.collectNeighborCountries(country);}, "Error");
         
         gen.initCountries();
-        assertException(function(){gen.collectAllCountries();}, "Error");
         assertException(function(){gen.collectNeighborCountries(country);}, "Error");
+    },
+    
+    "test Should be able to call collectAllCountries after initialisation": function()
+    {
+        var gen = this.mapGenerator;
         
+        gen.setGridSize(7,6);
+        gen.initCountries();
         gen.initBorders();
+        
         assertNoException(function(){gen.collectAllCountries();});
+    },
+    
+    "test Should be able to call collectNeigbourCountries after initialisation": function()
+    {
+        var country = new tddjs.client.map.country();
+        var gen = this.mapGenerator;
+       
+        gen.setGridSize(7,6);
+        gen.initCountries();
+        gen.initBorders();
+        
         assertNoException(function(){gen.collectNeighborCountries(country);});
     },
     
@@ -176,10 +233,11 @@ TestCase("MapGeneratorTest", {
     {
         var gen = this.mapGenerator;
         var x = 5;
+        var country = new tddjs.client.map.country();
+        
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var country = new tddjs.client.map.country();
         
         assertException(function(){gen.collectNeighborCountries(x);}, "TypeError");
         assertNoException(function(){gen.collectNeighborCountries(country);});
@@ -197,8 +255,7 @@ TestCase("MapGeneratorTest", {
         assertEquals(70, this.mapGenerator.getMapGrid().borders.length);
     },
     
-    //Trennen?
-    "test Cant remove borders if there arent one created yet": function()
+    "test Cant remove useless borders if there arent one created yet": function()
     {
         var gen = this.mapGenerator;
         
@@ -208,12 +265,20 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");
         
         this.mapGenerator.initCountries();
-        assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");
-        
-        this.mapGenerator.initBorders();
-        assertNoException(function(){gen.removeCircularAndDuplicateBorders();});     
+        assertException(function(){gen.removeCircularAndDuplicateBorders();}, "Error");     
     },
     
+    "test Can remove useless Borders if they are created": function()
+    {
+        var gen = this.mapGenerator;
+        
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.removeCircularAndDuplicateBorders();});
+    },
+     
     "test mergeIntoCountry should combine two countries into one": function()
     {
         this.mapGenerator.setGridSize(7,6);
@@ -225,12 +290,13 @@ TestCase("MapGeneratorTest", {
         var country4 = this.mapGenerator.getMapGrid().cellGrid[1][0];
         
         this.mapGenerator.mergeIntoCountry(country1, country2);
-        this.mapGenerator.removeCircularAndDuplicateBorders();
+        this.mapGenerator.removeCircularAndDuplicateBorders();   
         
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country2);
         
         this.mapGenerator.mergeIntoCountry(country4,country3);
         this.mapGenerator.removeCircularAndDuplicateBorders();
+        
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
         
         this.mapGenerator.mergeIntoCountry(country2, country3);
@@ -242,12 +308,9 @@ TestCase("MapGeneratorTest", {
         assertEquals(this.mapGenerator.collectAllCountries().length, 39);
     },
     
-    //Trennen
-    "test Shouldn´t be able to call merge with something thats not a country\n\
-     or without neccassary steps before it": function()
+    "test Shouldn´t be able to call merge without initialisation": function()
     {
         var gen = this.mapGenerator;
-        var x =5;
         var country = new tddjs.client.map.country();
         var country2 = new tddjs.client.map.country();
         
@@ -257,8 +320,30 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
         
         this.mapGenerator.initCountries();
-        assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
+        assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");    
+    },
+    
+    "test Should be able to call merge after initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        var country = new tddjs.client.map.country();
+        var country2 = new tddjs.client.map.country();
         
+        this.mapGenerator.setGridSize(7,6);    
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.mergeIntoCountry(country,country2);});
+    },
+    
+    "test Should only able to call mergeCountries with valid countries": function()
+    {
+        var x =5;
+        var country = new tddjs.client.map.country();
+        var gen =this.mapGenerator;
+        
+        this.mapGenerator.setGridSize(7,6);    
+        this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         
         assertException(function(){gen.mergeIntoCountry(x,x);}, "TypeError");
@@ -267,43 +352,33 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.mergeIntoCountry(country,country);}, "Error");
     },
     
-    //Trennen
     "test Should have generated bigger countries after Combination": function()
     {
-        assertFunction(this.mapGenerator.combineCountryCells);
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         this.mapGenerator.combineCountryCells();
         
         var size = this.mapGenerator.collectAllCountries().length;
+        
         assertEquals(16 ,size);
+    },
+    
+    "test Countries should have a id after Combination": function()
+    {
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        this.mapGenerator.combineCountryCells();
         
         var countries = this.mapGenerator.collectAllCountries();
         
-        for(var i = 0; i < countries.length; i++)
-        {
-            assertTrue(countries[i].id >= 1);
-        }
-        //GGF noch mehr
+        assertTrue(countries[0].id >= 1);
+        assertTrue(countries[5].id >= 1);
+        assertTrue(countries[10].id >= 1);
+        assertTrue(countries[15].id >= 1);
     },
     
-    //Entfernen/Ändern
-    "test Random": function()
-    {
-        var a = [];
-        a.push(5);
-        a.push(4);
-        a.push(3);
-        for(var i = 0; i <1000; i++)
-        {
-            var random = Math.round(Math.random()*(a.length-1));
-            assertTrue(random >= 0);
-            assertTrue(random < a.length);
-        }
-    },
-    
-    //Trennen?
     "test Shouldnt be able to call Combination without neccessary steps first": function()
     {
         var gen = this.mapGenerator;
@@ -314,9 +389,17 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.combineCountryCells();},"Error");
         
         this.mapGenerator.initCountries();
-        assertException(function(){gen.combineCountryCells();},"Error");
+        assertException(function(){gen.combineCountryCells();},"Error"); 
+    },
+    
+    "test Should be able to call Combination after initialisation": function()
+    {
+        var gen = this.mapGenerator;
         
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
+        
         assertNoException(function(){gen.combineCountryCells();});
     },
     
