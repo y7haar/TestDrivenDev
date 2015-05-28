@@ -1,65 +1,15 @@
 /* 
  * All tests for MapGenerator
  */
-
-TestCase("MapGeneratorTest", {
-    
-    setUp: function () {
+TestCase("MapGeneratorTest for private Functions", {
+    setUp: function ()
+    {
         this.mapGenerator = new tddjs.server.controller.mapGenerator();
-        this.x = 5;
-        this.y = 5;
+        this.x = 15;
+        this.y = 15;
     },
     
     tearDown: function () {},
-    
-    "test object of MapGenerator should not be undefined": function () { 
-       assertObject(this.mapGenerator);
-    },
-    
-    "test Object of MapGenerator should have the needed functions": function (){
-        assertFunction(this.mapGenerator.setGridSize);
-        assertFunction(this.mapGenerator.getMapHeight);
-        assertFunction(this.mapGenerator.getMapWidth);
-        assertFunction(this.mapGenerator.generateMap);
-        assertFunction(this.mapGenerator.initCountries);
-        assertFunction(this.mapGenerator.initBorders);
-        assertFunction(this.mapGenerator.collectAllCountries);
-        assertFunction(this.mapGenerator.collectNeighborCountries);
-        assertFunction(this.mapGenerator.removeCircularAndDuplicateBorders);
-        assertFunction(this.mapGenerator.combineCountryCells);
-    },
-    
-     "test grid should be a object": function()
-    {
-        assertObject(this.mapGenerator.getMapGrid());
-    },
-    
-    "test if MapGenerator can get a correct GridSize": function()
-    {            
-        this.mapGenerator.setGridSize(this.x,this.y);
-        
-        assertEquals(this.mapGenerator.getMapWidth(),this.x);
-        assertEquals(this.mapGenerator.getMapHeight(),this.y);     
-    },
-    
-    "test if MapGenerator can only set a correct GridSize": function()
-    {
-        var gen = this.mapGenerator;
-        
-        assertException(function(){gen.setGridSize(5,-2);},"Error");
-        assertException(function(){gen.setGridSize(-5,2);},"Error");
-        assertException(function(){gen.setGridSize(0,0);},"Error");
-    },
-    
-    "test generateMap() should return a Map-Object":  function()
-    {
-        this.mapGenerator.setGridSize(7,7);
-        
-        var map = this.mapGenerator.generateMap();
-        
-        assertObject(map);
-        assertTrue(map instanceof tddjs.client.map.map);
-    },
     
     "test Shouldnt be able to initialize Countries without setting a grid first": function()
     {
@@ -99,6 +49,11 @@ TestCase("MapGeneratorTest", {
         assertEquals(1,  grid.cellGrid[6][5].id === -1);
     },
     
+    "test After Initialisation every country should have the size 1": function()
+    {
+        
+    },
+    
     "test After initBorders every possible Border should have been created correctly": function()
     {
         this.mapGenerator.setGridSize(7,6);
@@ -133,8 +88,7 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.initBorders();}, "Error");
         
         gen.setGridSize(7,6);
-        assertException(function(){gen.initBorders();}, "Error");
-        
+        assertException(function(){gen.initBorders();}, "Error");     
     },
     
     "test Should be able to call initBorders once": function()
@@ -401,6 +355,78 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.initBorders();
         
         assertNoException(function(){gen.combineCountryCells();});
+    }
+}),
+
+TestCase("MapGeneratorTest", {
+    
+    setUp: function () {
+        this.mapGenerator = new tddjs.server.controller.mapGenerator();
+        this.x = 5;
+        this.y = 5;
+    },
+    
+    tearDown: function () {},
+    
+    "test object of MapGenerator should not be undefined": function () { 
+       assertObject(this.mapGenerator);
+    },
+    
+    "test Object of MapGenerator should have the needed functions": function (){
+        assertFunction(this.mapGenerator.setGridSize);
+        assertFunction(this.mapGenerator.getMapHeight);
+        assertFunction(this.mapGenerator.getMapWidth);
+        assertFunction(this.mapGenerator.generateMap);
+        assertFunction(this.mapGenerator.initCountries);
+        assertFunction(this.mapGenerator.initBorders);
+        assertFunction(this.mapGenerator.collectAllCountries);
+        assertFunction(this.mapGenerator.collectNeighborCountries);
+        assertFunction(this.mapGenerator.removeCircularAndDuplicateBorders);
+        assertFunction(this.mapGenerator.combineCountryCells);
+    },
+    
+     "test grid should be a object": function()
+    {
+        assertObject(this.mapGenerator.getMapGrid());
+    },
+    
+    "test if MapGenerator can get a correct GridSize": function()
+    {            
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        assertEquals(this.mapGenerator.getMapWidth(),this.x);
+        assertEquals(this.mapGenerator.getMapHeight(),this.y);     
+    },
+    
+    "test if MapGenerator can only set a correct GridSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setGridSize(5,-2);},"Error");
+        assertException(function(){gen.setGridSize(-5,2);},"Error");
+        assertException(function(){gen.setGridSize(0,0);},"Error");
+    },
+    
+    "test Should be able to get a Minimum-Countrysize": function()
+    {   
+        assertEquals(3, this.mapGenerator.getMinimumCountrySize());
+    },
+    
+    "test Should be able to set the Minimum-Countrysize": function()
+    {
+        this.mapGenerator.setMinimumCountrySize(4);
+        
+        assertEquals(4, this.mapGenerator.getMinimumCountrySize());
+    },
+    
+    "test generateMap() should return a Map-Object":  function()
+    {
+        this.mapGenerator.setGridSize(7,7);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertObject(map);
+        assertTrue(map instanceof tddjs.client.map.map);
     },
     
     //??
