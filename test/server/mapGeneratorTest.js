@@ -362,8 +362,8 @@ TestCase("MapGeneratorTest", {
     
     setUp: function () {
         this.mapGenerator = new tddjs.server.controller.mapGenerator();
-        this.x = 5;
-        this.y = 5;
+        this.x = 15;
+        this.y = 15;
     },
     
     tearDown: function () {},
@@ -419,9 +419,37 @@ TestCase("MapGeneratorTest", {
         assertEquals(4, this.mapGenerator.getMinimumCountrySize());
     },
     
+    "test Shouldnt be able to set invalid Minimum-Countrysize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumCountrySize("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumCountrySize(-10);}, "Error");
+    },
+    
+    "test Should be able to get a Maximum-Countrysize": function()
+    {   
+        assertEquals(3, this.mapGenerator.getMaximumCountrySize());
+    },
+    
+    "test Should be able to set the Maximum-Countrysize": function()
+    {
+        this.mapGenerator.setMaximumCountrySize(4);
+        
+        assertEquals(4, this.mapGenerator.getMaximumCountrySize());
+    },
+    
+    "test Shouldnt be able to set invalid Maximum-Countrysize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMaximumCountrySize("fff");}, "TypeError");
+        assertException(function(){gen.setMaximumCountrySize(-10);}, "Error");
+    },
+    
     "test generateMap() should return a Map-Object":  function()
     {
-        this.mapGenerator.setGridSize(7,7);
+        this.mapGenerator.setGridSize(this.x,this.y);
         
         var map = this.mapGenerator.generateMap();
         
@@ -439,7 +467,7 @@ TestCase("MapGeneratorTest", {
     
     "test generateMap should return a map-object with atleast one continent": function()
     {
-        this.mapGenerator.setGridSize(7,7);
+        this.mapGenerator.setGridSize(this.x,this.y);
         var map = this.mapGenerator.generateMap();
         
         assertTrue(map.getContinentCount() > 0);
