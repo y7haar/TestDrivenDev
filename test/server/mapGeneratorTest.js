@@ -412,10 +412,12 @@ TestCase("MapGeneratorTest", {
     "test if MapGenerator can only set a correct GridSize": function()
     {
         var gen = this.mapGenerator;
+        var x = "fff";
         
         assertException(function(){gen.setGridSize(5,-2);},"Error");
         assertException(function(){gen.setGridSize(-5,2);},"Error");
         assertException(function(){gen.setGridSize(0,0);},"Error");
+        assertException(function(){gen.setGridSize(x,x);},"TypeError");
     },
     
     "test Should be able to get a Minimum-Countrysize": function()
@@ -440,7 +442,7 @@ TestCase("MapGeneratorTest", {
     
     "test Should be able to get a Maximum-Countrysize": function()
     {   
-        assertEquals(3, this.mapGenerator.getMaximumCountrySize());
+        assertEquals(20, this.mapGenerator.getMaximumCountrySize());
     },
     
     "test Should be able to set the Maximum-Countrysize": function()
