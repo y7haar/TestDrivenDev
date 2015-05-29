@@ -13,11 +13,18 @@ function mapGenerator()
     var calledInitCountries = false;
     var calledInitBorders = false;
     
+    //Variablen für die Erstellung der Karte
     var GRID_CELL_COMBINES_PER_COUNTRY = 2.5;
+    
+    var minimumCountrySize = 3;
+    var maximumCountrySize = 20;
     
     //Setzt das Grid neu
     function setGridSize(x,y)
     {
+        if(isNaN(x) || isNaN(y))
+            throw new TypeError;
+        
         if(x <= 0 || y <= 0)
             throw new Error("A Grid is not allowed to be zero or less Width or Height");
         
@@ -37,6 +44,38 @@ function mapGenerator()
     
     function getMapHeight(){
         return _grid.cellGrid[0].length;
+    }
+    
+    function getMinimumCountrySize()
+    {
+        return minimumCountrySize;
+    }
+    
+    function setMinimumCountrySize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        minimumCountrySize = size;
+    }
+    
+    function getMaximumCountrySize()
+    {
+        return maximumCountrySize;
+    }
+    
+    function setMaximumCountrySize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        maximumCountrySize = size;
     }
     
     function createArray(length) {
@@ -73,6 +112,7 @@ function mapGenerator()
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
                 _grid.cellGrid[i][j].id = -1;
+                _grid.cellGrid[i][j].size = 1;
             }
         }
         
@@ -279,16 +319,21 @@ function mapGenerator()
         }
     }
     
+    //###############################################################################################################
     //Funktionsdeklaration
+    //############################################################################################################
     this.setGridSize = setGridSize;
     this.getMapGrid = getMapGrid;
     this.getMapWidth = getMapWidth;
     this.getMapHeight = getMapHeight;
+    this.getMinimumCountrySize = getMinimumCountrySize;
+    this.setMinimumCountrySize = setMinimumCountrySize;
+    this.getMaximumCountrySize = getMaximumCountrySize;
+    this.setMaximumCountrySize = setMaximumCountrySize;
+    this.generateMap = generateMap;
     
     this.collectAllCountries = collectAllCountries;
-    this.collectNeighborCountries = collectNeighborCountries;
-    
-    this.generateMap = generateMap;
+    this.collectNeighborCountries = collectNeighborCountries;   
     this.initCountries = initCountries;
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;
