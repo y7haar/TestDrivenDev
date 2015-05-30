@@ -317,6 +317,7 @@ TestCase("MapGeneratorTest for private Functions", {
         assertException(function(){gen.mergeIntoCountry(country,country);}, "Error");
     },
     
+    //Hier
     "test Should have generated bigger countries after Combination": function()
     {
         this.mapGenerator.setGridSize(7,6);
@@ -366,6 +367,51 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertNoException(function(){gen.combineCountryCells();});
+    },
+    
+    "test CollectAllCountriesBelowMinSize returns a List of Countries smaller than min size": function()
+    {
+        var grid = this.mapGenerator.getMapGrid();
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        this.mapGenerator.mergeIntoCountry(grid.cellGrid[0][0], grid.cellGrid[0][1]);
+        this.mapGenerator.mergeIntoCountry(grid.cellGrid[1][0], grid.cellGrid[0][1]);
+        
+        var result = this.mapGenerator.collectAllCountriesBelowMinSize();
+        
+        assertEquals(7, result.length);
+        assertEquals(1, result[0].size);
+        assertEquals(1, result[1].size);
+        assertEquals(1, result[2].size);
+        assertEquals(1, result[3].size);
+        assertEquals(1, result[4].size);
+        assertEquals(1, result[5].size);
+        assertEquals(1, result[6].size);
+    },
+    
+    "test CollectAllCountriesBelowMinSize shouldnt be able to be called before initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.collectAllCountriesBelowMinSize();}, "Error");
+        
+        this.mapGenerator.setGridSize(3,3);
+        assertException(function(){gen.collectAllCountriesBelowMinSize();}, "Error");
+        
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.collectAllCountriesBelowMinSize();}, "Error");
+    },
+    
+    "test CollectAllCountryBelowMinSize should be able to be called after initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.collectAllCountriesBelowMinSize();});
+        
     }
 }),
 
