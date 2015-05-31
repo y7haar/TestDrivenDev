@@ -26,6 +26,8 @@ TestCase("LobbyRequestControllerTest", {
     },
     
      "test requestAllLobbies should perform a GET request to /lobbies": function () {         
+         this.lobbyRequestController.requestAllLobbies();
+         
          assertEquals(1, this.sandbox.server.requests.length);
          assertEquals("GET", this.sandbox.server.requests[0].method);
          assertEquals("/lobbies", this.sandbox.server.requests[0].url);
