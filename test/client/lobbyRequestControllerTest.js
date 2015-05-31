@@ -14,5 +14,9 @@ TestCase("LobbyRequestControllerTest", {
     
     "test lobbyRequestController should not be undefined after constructor call": function () {  
         assertObject(this.lobbyRequestController);
+    },
+    
+    "test lobbyRequestController should have a method to request all lobbies": function () {  
+        assertFunction(this.lobbyRequestController.requestAllLobbies);
     }
 });
