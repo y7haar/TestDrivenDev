@@ -5,31 +5,6 @@
 (function(){
 
 tddjs.namespace("stubs.ajax").xmlHttpRequest = xmlHttpRequest;
-tddjs.namespace("stubs.ajax").useFakeXhr = useFakeXhr;
-tddjs.namespace("stubs.ajax").useOriginalXhr = useOriginalXhr;
-
-var create;
-
-function useFakeXhr()
-{
-    create = tddjs.util.ajax.create;
-    tddjs.util.ajax.create = fakeCreate;
-    
-    
-    console.log("Now using Fake XHR");
-}
-
-function useOriginalXhr()
-{
-    tddjs.util.ajax.create = create;
-    
-    console.log("Now using Original XHR");
-}
-
-function fakeCreate()
-{
-    return sinon.useFakeXMLHttpRequest();
-}
 
 function xmlHttpRequest()
 {
