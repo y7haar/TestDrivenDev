@@ -13,7 +13,8 @@ function lobbyRequestController()
     function requestAllLobbies()
     {
         var options = {
-          onSuccess: this.onAllLobbiesSuccess  
+          onSuccess: this.onAllLobbiesSuccess,
+          onFailure: this.onAllLobbiesFailure
         };
         
         ajax.get(BASE_URL + "lobbies", options);
@@ -21,9 +22,15 @@ function lobbyRequestController()
     
     function onAllLobbiesSuccess()
     {
-        console.log("ALL LOBBIES");
+        
+    }
+    
+    function onAllLobbiesFailure()
+    {
+        
     }
     
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
+    this.onAllLobbiesFailure = onAllLobbiesFailure;
 };
