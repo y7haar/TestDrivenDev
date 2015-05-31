@@ -26,7 +26,13 @@ function lobbyRequestController()
     
     function requestNewLobby()
     {
-        ajax.post(BASE_URL + "lobbies");
+        var options = {
+          headers: {
+            "Content-Type": "application/json"  
+          }
+        };
+        
+        ajax.post(BASE_URL + "lobbies", options);
     }
     
     function onAllLobbiesSuccess()
