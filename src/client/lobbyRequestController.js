@@ -8,9 +8,11 @@ tddjs.namespace("client.controller").lobbyRequestController= lobbyRequestControl
        
 function lobbyRequestController()
 {   
+    var ajax = tddjs.util.ajax;
+    
     function requestAllLobbies()
     {
-        
+        ajax.get(BASE_URL + "lobbies");
     }
     
     this.requestAllLobbies = requestAllLobbies;
