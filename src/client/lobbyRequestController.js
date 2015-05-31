@@ -13,6 +13,10 @@ function lobbyRequestController()
     function requestAllLobbies()
     {
         var options = {
+          headers: {
+            "Accept": "application/json"  
+          },  
+            
           onSuccess: this.onAllLobbiesSuccess,
           onFailure: this.onAllLobbiesFailure
         };
