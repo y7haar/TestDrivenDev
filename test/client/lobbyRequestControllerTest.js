@@ -90,6 +90,6 @@ TestCase("LobbyRequestControllerTest", {
     "test requestNewLobby should perform a POST request with correct Content-Type header": function () {         
          this.lobbyRequestController.requestNewLobby();
          
-         assertEquals("application/json", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     },
 });
