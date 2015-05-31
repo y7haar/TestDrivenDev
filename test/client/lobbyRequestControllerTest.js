@@ -34,6 +34,12 @@ TestCase("LobbyRequestControllerTest", {
          assertEquals("/lobbies", this.sandbox.server.requests[0].url);
     },
     
+     "test requestAllLobbies should perform a GET request with correct Accept header": function () {         
+         this.lobbyRequestController.requestAllLobbies();
+         
+         assertEquals("application/json", this.sandbox.server.requests[0].requestHeaders["Accept"]);
+    },
+    
     "test requestAllLobbies should call onAllLobbiesSuccess on success": function () {         
         var callback = this.sandbox.stub(this.lobbyRequestController, "onAllLobbiesSuccess");
         sinon.assert.notCalled(callback);
@@ -79,5 +85,11 @@ TestCase("LobbyRequestControllerTest", {
         console.log(json);
         
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
-    }
+    },
+    
+    "test requestNewLobby should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.requestNewLobby();
+         
+         assertEquals("application/json", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
 });
