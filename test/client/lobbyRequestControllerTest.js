@@ -63,12 +63,21 @@ TestCase("LobbyRequestControllerTest", {
         assertEquals(1, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[0].method);
         assertEquals("/lobbies", this.sandbox.server.requests[0].url);
+        
+        console.log(this.sandbox);
     },
     
-     "test requestNewLobby should perform POST request with new serialized lobby as JSON string": function () {         
+     "test requestNewLobby should perform POST request with correct data": function () {         
         this.lobbyRequestController.requestNewLobby();
         
-        // TO DO
-        // Compare sended data with serialized lobby
+        var jsonObj = {
+            type: "create",
+            lobby: null
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        console.log(json);
+        
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
     }
 });
