@@ -59,9 +59,9 @@ function request(url, options)
     options = tddjs.extend({}, options);
     
     var xhr = tddjs.util.ajax.create();
-    setRequestHeaders(xhr, options.headers);
-
     xhr.open(options.method || "GET", url, true);
+    
+    setRequestHeaders(xhr, options.headers);
     
     xhr.onreadystatechange = function(){   
         if(xhr.readyState === 4)
