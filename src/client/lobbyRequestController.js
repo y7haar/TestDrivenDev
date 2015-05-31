@@ -20,6 +20,11 @@ function lobbyRequestController()
         ajax.get(BASE_URL + "lobbies", options);
     }
     
+    function requestNewLobby()
+    {
+        ajax.post(BASE_URL + "lobbies");
+    }
+    
     function onAllLobbiesSuccess()
     {
         
@@ -33,4 +38,5 @@ function lobbyRequestController()
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
+    this.requestNewLobby = requestNewLobby;
 };
