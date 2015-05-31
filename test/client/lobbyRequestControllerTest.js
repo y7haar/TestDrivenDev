@@ -42,5 +42,14 @@ TestCase("LobbyRequestControllerTest", {
         
         this.sandbox.server.requests[0].respond(200, "", "");
         sinon.assert.calledOnce(callback); 
+    },
+    
+    "test requestAllLobbies should call onAllLobbiesFailure on failure": function () {         
+        var callback = this.sandbox.stub(this.lobbyRequestController, "onAllLobbiesFailure");
+        sinon.assert.notCalled(callback);
+        
+        this.lobbyRequestController.requestAllLobbies();
+        this.sandbox.server.requests[0].respond(400, "", "");
+        sinon.assert.calledOnce(callback); 
     }
 });
