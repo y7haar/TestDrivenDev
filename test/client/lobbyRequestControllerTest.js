@@ -9,6 +9,7 @@ TestCase("LobbyRequestControllerTest", {
         this.ajax = tddjs.util.ajax;
         this.sandbox = sinon.sandbox.create();
         this.sandbox.useFakeXMLHttpRequest();
+        this.sandbox.useFakeServer();
         
     }, 
     tearDown: function ()
@@ -33,11 +34,13 @@ TestCase("LobbyRequestControllerTest", {
          assertEquals("/lobbies", this.sandbox.server.requests[0].url);
     },
     
-    "test requestAllLobbies should call allLobbiesCallback": function () {         
+    "test requestAllLobbies should call allLobbiesCallback on success": function () {         
         var callback = this.sandbox.stub(this.lobbyRequestController, "allLobbiesCallback");
         sinon.assert.notCalled(callback);
         
         this.lobbyRequestController.requestAllLobbies();
-        sinon.assert.calledOnce(callback);
+        
+        this.sandbox.server.requests[0].respond(200, "", "");
+        sinon.assert.calledOnce(callback); 
     }
 });
