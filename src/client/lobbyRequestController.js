@@ -12,12 +12,16 @@ function lobbyRequestController()
     
     function requestAllLobbies()
     {
-        ajax.get(BASE_URL + "lobbies");
+        var options = {
+          onSuccess: this.allLobbiesCallback  
+        };
+        
+        ajax.get(BASE_URL + "lobbies", options);
     }
     
     function allLobbiesCallback()
     {
-        
+        console.log("ALL LOBBIES");
     }
     
     this.requestAllLobbies = requestAllLobbies;
