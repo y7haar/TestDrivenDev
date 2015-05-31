@@ -31,6 +31,13 @@ TestCase("LobbyRequestControllerTest", {
          assertEquals(1, this.sandbox.server.requests.length);
          assertEquals("GET", this.sandbox.server.requests[0].method);
          assertEquals("/lobbies", this.sandbox.server.requests[0].url);
-       
+    },
+    
+    "test requestAllLobbies should call allLobbiesCallback": function () {         
+        var callback = this.sandbox.stub(this.lobbyRequestController, "allLobbiesCallback");
+        sinon.assert.notCalled(callback);
+        
+        this.lobbyRequestController.requestAllLobbies();
+        sinon.assert.calledOnce(callback);
     }
 });

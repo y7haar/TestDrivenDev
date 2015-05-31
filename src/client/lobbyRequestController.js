@@ -15,5 +15,11 @@ function lobbyRequestController()
         ajax.get(BASE_URL + "lobbies");
     }
     
+    function allLobbiesCallback()
+    {
+        
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
+    this.allLobbiesCallback = allLobbiesCallback;
 };
