@@ -8,5 +8,10 @@ tddjs.namespace("client.controller").lobbyRequestController= lobbyRequestControl
        
 function lobbyRequestController()
 {   
+    function requestAllLobbies()
+    {
+        
+    }
     
+    this.requestAllLobbies = requestAllLobbies;
 };
