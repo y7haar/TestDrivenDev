@@ -5,10 +5,10 @@
 
 (function(){
     
-tddjs.namespace("stubs.ajax").create = create;
-tddjs.namespace("stubs.ajax").get = get;
-tddjs.namespace("stubs.ajax").post = post;
-tddjs.namespace("stubs.ajax").request = request;
+tddjs.namespace("util.ajax").create = create;
+tddjs.namespace("util.ajax").get = get;
+tddjs.namespace("util.ajax").post = post;
+tddjs.namespace("util.ajax").request = request;
 
 function create()
 {
@@ -37,7 +37,7 @@ function get(url, options)
     options = tddjs.extend({}, options);
     options.method = "GET";
     
-    tddjs.stubs.ajax.request(url, options);
+    tddjs.util.ajax.request(url, options);
 }
 
 function post(url, options)
@@ -48,7 +48,7 @@ function post(url, options)
     options = tddjs.extend({}, options);
     options.method = "POST";
     
-    tddjs.stubs.ajax.request(url, options);
+    tddjs.util.ajax.request(url, options);
 }
 
 function request(url, options)
@@ -58,7 +58,7 @@ function request(url, options)
     
     options = tddjs.extend({}, options);
     
-    var xhr = tddjs.stubs.ajax.create();
+    var xhr = tddjs.util.ajax.create();
     setRequestHeaders(xhr, options.headers);
 
     xhr.open(options.method || "GET", url, true);

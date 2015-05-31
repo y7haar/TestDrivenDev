@@ -4,23 +4,21 @@
 
 TestCase("AjaxFacadeStubTest", {
     setUp: function () {
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         this.ajaxCreate = ajax.create;
-        this.xhrStub = new ajax.xmlHttpRequest();
+        this.xhrStub = new tddjs.stubs.ajax.xmlHttpRequest();
         ajax.create = stubFn(this.xhrStub);
-
-
     }, 
     tearDown: function ()
     {
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         ajax.create = this.ajaxCreate;
     },
     
     "test facade should provide a create method to get a xhr object with important functions": function () {  
-        assertFunction(tddjs.stubs.ajax.create);
-        var xhr = tddjs.stubs.ajax.create();
+        assertFunction(tddjs.util.ajax.create);
+        var xhr = tddjs.util.ajax.create();
         
         assertFunction(xhr.open);
         assertFunction(xhr.send);
@@ -28,21 +26,21 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test facade should provide a method to perform a get request and url must be setted": function () {  
-        assertFunction(tddjs.stubs.ajax.get);
-        assertException (function() {tddjs.stubs.ajax.get(); }, "TypeError");
+        assertFunction(tddjs.util.ajax.get);
+        assertException (function() {tddjs.util.ajax.get(); }, "TypeError");
         
-        assertNoException (function() {tddjs.stubs.ajax.get("/url"); });
+        assertNoException (function() {tddjs.util.ajax.get("/url"); });
     },
     
     "test facade should provide a method to perform a post request and url must be setted": function () {  
-        assertFunction(tddjs.stubs.ajax.post);
-        assertException (function() {tddjs.stubs.ajax.post(); }, "TypeError");
+        assertFunction(tddjs.util.ajax.post);
+        assertException (function() {tddjs.util.ajax.post(); }, "TypeError");
         
-        assertNoException (function() {tddjs.stubs.ajax.post("/url"); });
+        assertNoException (function() {tddjs.util.ajax.post("/url"); });
     },
     
     "test get and post method should call xhr create method": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         ajax.get("/url");
         assertTrue(ajax.create.called);
@@ -52,14 +50,14 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test request should throw Exception if parameter are invalid": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         assertException(function() { ajax.request(2); }, "TypeError");
         assertNoException(function() { ajax.request("/url"); } );
     },
     
      "test request should call xhr open method with correct parameters and send method with data if data is provided": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         var options = {
             method: "GET"
@@ -83,7 +81,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test get method should call open / send method in xhr with correct params": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         ajax.get("/niceUrl");
         
@@ -94,7 +92,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
      "test post method should call open / send method in xhr with correct params": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         ajax.post("/url", { data: "SomeData" } );
         
@@ -105,7 +103,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
      "test ajax facade should set headers correctly on get / post in xhr object": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
         var options = {
             headers:{
@@ -129,7 +127,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test ajax facade should be able to set multiple headers": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         
          var options = {
             headers:{
@@ -145,7 +143,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test ajax facade should now call given method on onreadystatechange on get / post after success": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         this.xhrStub.status = 200;
         
         var options = {
@@ -164,7 +162,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
      "test ajax facade should not call success method on onreadystatechange on get / post after failure, but call onFailure": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         this.xhrStub.status = 500;
         
         var options = {
@@ -186,7 +184,7 @@ TestCase("AjaxFacadeStubTest", {
     },
     
     "test ajax facade should not throw Error if onSuccess / onFailure method is not given": function () {  
-        var ajax = tddjs.stubs.ajax;
+        var ajax = tddjs.util.ajax;
         this.xhrStub.status = 200;
         
         var options = {
