@@ -51,5 +51,24 @@ TestCase("LobbyRequestControllerTest", {
         this.lobbyRequestController.requestAllLobbies();
         this.sandbox.server.requests[0].respond(400, "", "");
         sinon.assert.calledOnce(callback); 
+    },
+    
+    "test constroller should have function to request a new lobby": function () {         
+        assertFunction(this.lobbyRequestController.requestNewLobby);
+    },
+    
+    "test requestNewLobby should perform POST request to /lobbies": function () {         
+        this.lobbyRequestController.requestNewLobby();
+         
+        assertEquals(1, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals("/lobbies", this.sandbox.server.requests[0].url);
+    },
+    
+     "test requestNewLobby should perform POST request with new serialized lobby as JSON string": function () {         
+        this.lobbyRequestController.requestNewLobby();
+        
+        // TO DO
+        // Compare sended data with serialized lobby
     }
 });
