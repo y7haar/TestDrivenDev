@@ -34,8 +34,8 @@ TestCase("LobbyRequestControllerTest", {
          assertEquals("/lobbies", this.sandbox.server.requests[0].url);
     },
     
-    "test requestAllLobbies should call allLobbiesCallback on success": function () {         
-        var callback = this.sandbox.stub(this.lobbyRequestController, "allLobbiesCallback");
+    "test requestAllLobbies should call onAllLobbiesSuccess on success": function () {         
+        var callback = this.sandbox.stub(this.lobbyRequestController, "onAllLobbiesSuccess");
         sinon.assert.notCalled(callback);
         
         this.lobbyRequestController.requestAllLobbies();
