@@ -369,6 +369,32 @@ TestCase("MapGeneratorTest for private Functions", {
         assertNoException(function(){gen.combineCountryCells();});
     },
     
+    "test There Should be no Country above MaximumCountrySize after combination": function()
+    {     
+        this.mapGenerator.setGridSize(7,6);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        this.mapGenerator.combineCountryCells();
+        var all = this.mapGenerator.collectAllCountries();
+        
+        assertTrue(all[0].size <= 20);
+        assertTrue(all[1].size <= 20);
+        assertTrue(all[2].size <= 20);
+        assertTrue(all[3].size <= 20);
+        assertTrue(all[4].size <= 20);
+        assertTrue(all[5].size <= 20);
+        assertTrue(all[6].size <= 20);
+        assertTrue(all[7].size <= 20);
+        assertTrue(all[8].size <= 20);
+        assertTrue(all[9].size <= 20);
+        assertTrue(all[10].size <= 20);
+        assertTrue(all[11].size <= 20);
+        assertTrue(all[12].size <= 20);
+        assertTrue(all[13].size <= 20);
+        assertTrue(all[14].size <= 20);
+        assertTrue(all[15].size <= 20);
+    },
+    
     "test CollectAllCountriesBelowMinSize returns a List of Countries smaller than min size": function()
     {
         var grid = this.mapGenerator.getMapGrid();
@@ -410,8 +436,7 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         
-        assertNoException(function(){gen.collectAllCountriesBelowMinSize();});
-        
+        assertNoException(function(){gen.collectAllCountriesBelowMinSize();});     
     }
 }),
 
