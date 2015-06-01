@@ -2,6 +2,8 @@
  *  Source-Code for Ajax-Stub
  */
 
+(function(){
+
 tddjs.namespace("stubs.ajax").xmlHttpRequest = xmlHttpRequest;
 
 function xmlHttpRequest()
@@ -133,4 +135,5 @@ function xmlHttpRequest()
     this.readyState = 0;
     this.status = 0;
 }
+}());
 

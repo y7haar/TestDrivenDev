@@ -96,8 +96,6 @@ function lobbyController()
         
         var lobbiesJson = JSON.stringify(lobbies);
         
-        console.log(lobbiesJson);
-        
         return lobbiesJson;
     }
     
