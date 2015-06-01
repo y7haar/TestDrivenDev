@@ -31,7 +31,18 @@ function placingState()
             throw new TypeError("given url is not a String");
         if (!isMoveLegal(currentMap, unitCount, move))
             return false;
-        // ajax POST to server with the move, server should validate the move then trigger eventSource event       
+        // ajax POST to server with the move, server should validate the move then trigger eventSource event 
+        var ajax = tddjs.util.ajax;
+        var data = JSON.stringify(move);
+        var options = {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: data
+        };
+        
+        ajax.post(url, options);
+        return true;
     }
 
     function endPhase()
