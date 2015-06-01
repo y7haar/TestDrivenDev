@@ -182,6 +182,28 @@ function mapGenerator()
         return countries;
     }
     
+    function collectAllCountriesBelowMaxSize()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        
+        var countries = [];
+        
+        //Länder hinzufügen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+            if(_grid.borders[i].getLeftCountry().size < maximumCountrySize)
+                countries.push(_grid.borders[i].getLeftCountry());
+            
+            if(_grid.borders[i].getRigthCountry().size < maximumCountrySize)
+                countries.push(_grid.borders[i].getRigthCountry());
+        }
+        
+        //Duplikate entfernen
+        countries = removeDuplicates(countries);
+        return countries;
+    }
+    
     //Sammelt alle Länder
     function collectAllCountries()
     {
@@ -358,6 +380,7 @@ function mapGenerator()
     this.generateMap = generateMap;
    
     //Eig private
+    this.collectAllCountriesBelowMaxSize = collectAllCountriesBelowMaxSize;
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
     this.collectNeighborCountries = collectNeighborCountries;   
