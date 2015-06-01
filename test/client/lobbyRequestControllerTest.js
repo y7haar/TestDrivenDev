@@ -91,5 +91,5 @@ TestCase("LobbyRequestControllerTest", {
          this.lobbyRequestController.requestNewLobby();
          
          assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
-    },
+    }
 });
