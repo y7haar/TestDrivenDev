@@ -317,6 +317,18 @@ TestCase("MapGeneratorTest for private Functions", {
         assertException(function(){gen.mergeIntoCountry(country,country);}, "Error");
     },
     
+    "test After merge a Country should have the size of both countrys": function()
+    {
+        this.mapGenerator.setGridSize(7,6);    
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        this.mapGenerator.mergeIntoCountry(this.mapGenerator.getMapGrid().cellGrid[0][0],
+                                           this.mapGenerator.getMapGrid().cellGrid[0][1]);
+                                           
+        assertEquals(2, this.mapGenerator.getMapGrid().cellGrid[0][0].size);
+    },
+    
     //Hier
     "test Should have generated bigger countries after Combination": function()
     {
