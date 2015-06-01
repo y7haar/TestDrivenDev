@@ -26,10 +26,19 @@ function lobbyRequestController()
     
     function requestNewLobby()
     {
+        var data = {
+            type: "create",
+            lobby: null
+        };
+        
+        data = JSON.stringify(data);
+        
         var options = {
           headers: {
             "Content-Type": "application/json"  
-          }
+          },
+          
+          data: data
         };
         
         ajax.post(BASE_URL + "lobbies", options);
