@@ -359,14 +359,19 @@ function mapGenerator()
         var remainingCountries = collectAllCountriesBelowMinSize();
         
         while(remainingCountries.length > 0)
-        {
-            remainingCountries = collectAllCountriesBelowMinSize();
-            
+        {           
             var loser = getRandom(remainingCountries);
-            var winner = getRandom(collectNeighborCountries(loser));
+            var neigbours = (collectNeighborCountries(loser));
+            var notOnly = true;
+            
+            //Spezialfall falls Land umschlossen
+            if(neigbours.length === 1)
+                notOnly = false;
+            
+            var winner = getRandom(neigbours);
             
             //Falls das gleiche Land erwischt wird oder es zu groß wird
-            if(winner === loser || winner.size + loser.size > maximumCountrySize)
+            if(winner === loser || (winner.size + loser.size > maximumCountrySize && notOnly))
             {
                 continue;
             }
