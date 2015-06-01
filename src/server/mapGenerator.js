@@ -160,6 +160,28 @@ function mapGenerator()
         calledInitBorders = true;
     }
     
+    function collectAllCountriesBelowMinSize()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        
+        var countries = [];
+        
+        //Länder hinzufügen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+            if(_grid.borders[i].getLeftCountry().size < minimumCountrySize)
+                countries.push(_grid.borders[i].getLeftCountry());
+            
+            if(_grid.borders[i].getRigthCountry().size < minimumCountrySize)
+                countries.push(_grid.borders[i].getRigthCountry());
+        }
+        
+        //Duplikate entfernen
+        countries = removeDuplicates(countries);
+        return countries;
+    }
+    
     //Sammelt alle Länder
     function collectAllCountries()
     {
@@ -250,8 +272,8 @@ function mapGenerator()
             //Aufgelöstes Land
             loserCountry = getRandom(collectNeighborCountries(winnerCountry));
 
-            //Falls das gleiche Land erwischt wird
-            if(winnerCountry === loserCountry)
+            //Falls das gleiche Land erwischt oder es zu groß wird
+            if(winnerCountry === loserCountry || (loserCountry.size + winnerCountry.size >= maximumCountrySize))
             {
                 i--;
                 continue;
@@ -276,6 +298,9 @@ function mapGenerator()
         
         if(country === targetCountry)
             throw new Error("Cannot merge one country into himself");
+        
+        //Größe umsetzen
+        targetCountry.size = targetCountry.size + country.size;
         
         //Borders umbelegen
         for(var i = 0; i < _grid.borders.length; i++)
@@ -331,7 +356,9 @@ function mapGenerator()
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
     this.generateMap = generateMap;
-    
+   
+    //Eig private
+    this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
     this.collectNeighborCountries = collectNeighborCountries;   
     this.initCountries = initCountries;
