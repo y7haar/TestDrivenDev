@@ -23,8 +23,10 @@ TestCase("LobbyUiTest", {
     // DOM Tests
     
     "test createWrapper should append the content with correct class": function () {  
-        /*:DOC this.content = <div class = "content" id = "content"></div> */
-
+        /*:DOC += <div class = "content" id = "content"></div> */
+        
+        this.content = document.getElementById("content");
+        
         assertEquals("", this.content.innerHTML);
 
         this.lobbyUi.createWrapper();
