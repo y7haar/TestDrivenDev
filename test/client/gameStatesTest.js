@@ -64,6 +64,10 @@ TestCase("stateTest", {
         this.map1.addContinent(this.continent1);
         this.map1.addContinent(this.continent2);
         
+        // ajax stub
+        this.ajax = tddjs.util.ajax;
+        this.sandbox = sinon.sandbox.create();
+        this.sandbox.useFakeXMLHttpRequest();           
     }, 
     tearDown: function ()
     {
@@ -71,6 +75,7 @@ TestCase("stateTest", {
         this.moving = null;
         this.attacking = null;
         this.waiting = null;
+        this.sandbox.restore();
     },    
     "test states should not be undefined": function () {  
         assertNotUndefined(this.placing);
@@ -170,7 +175,7 @@ TestCase("stateTest", {
           country: 'Country1'
         };
          var wrongUnitCountMove= {
-          type:'winGame',
+          type:'placing',
           unitCount:80,
           player: 'Peter',
           continent: 'Europa',
@@ -224,15 +229,28 @@ TestCase("stateTest", {
             placing.placeUnits(map,availableUnits,validMove,url);
         });
         
+        console.log("sandbox object");
+        console.log(this.sandbox);
+        
+        assertEquals(1, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(url, this.sandbox.server.requests[0].url);
+        assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+        
         assertFalse(this.placing.placeUnits(this.map1,availableUnits,wrongTypeMove,url));
-        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove,url));       
+        assertTrue(this.placing.placeUnits(this.map1,availableUnits,validMove,url));        
+        
+        assertEquals(2, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[1].method);
+        assertEquals(url, this.sandbox.server.requests[1].url);
+        assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[1].requestHeaders["Content-Type"]);
         
      },
      "test att state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
         assertFunction(this.attacking.isMoveLegal);
         assertFunction(this.attacking.endPhase);
-        assertFunction(this.attacking.toString);
+        assertFunction(this.attacking.toString);        
         
         assertEquals("attackingState", this.attacking.toString());
         
