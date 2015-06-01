@@ -16,5 +16,11 @@ function lobbyUi()
         content.appendChild(wrapper);
     }
     
+    function addLobby(aLobby)
+    {
+        
+    }
+    
     this.createWrapper = createWrapper;
+    this.addLobby = addLobby;
 }
