@@ -96,6 +96,11 @@ function mapGenerator()
         if(typeof(_grid.cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
         
+        initCountries();
+        initBorders();
+        combineCountryCells();
+        combineRemainingCountries();
+        
         return new tddjs.client.map.map();
     }
     
@@ -174,28 +179,6 @@ function mapGenerator()
                 countries.push(_grid.borders[i].getLeftCountry());
             
             if(_grid.borders[i].getRigthCountry().size < minimumCountrySize)
-                countries.push(_grid.borders[i].getRigthCountry());
-        }
-        
-        //Duplikate entfernen
-        countries = removeDuplicates(countries);
-        return countries;
-    }
-    
-    function collectAllCountriesBelowMaxSize()
-    {
-        if(!calledInitBorders)
-            throw new Error("There are no Borders to work with yet");
-        
-        var countries = [];
-        
-        //Länder hinzufügen
-        for(var i = 0; i < _grid.borders.length; i++)
-        {
-            if(_grid.borders[i].getLeftCountry().size < maximumCountrySize)
-                countries.push(_grid.borders[i].getLeftCountry());
-            
-            if(_grid.borders[i].getRigthCountry().size < maximumCountrySize)
                 countries.push(_grid.borders[i].getRigthCountry());
         }
         
@@ -290,9 +273,9 @@ function mapGenerator()
         for(var i = 0; i < combineCount; i++)
         {
             //Zielland
-            winnerCountry = getRandom(collectAllCountries());
+            var winnerCountry = getRandom(collectAllCountries());
             //Aufgelöstes Land
-            loserCountry = getRandom(collectNeighborCountries(winnerCountry));
+            var loserCountry = getRandom(collectNeighborCountries(winnerCountry));
 
             //Falls das gleiche Land erwischt oder es zu groß wird
             if(winnerCountry === loserCountry || (loserCountry.size + winnerCountry.size >= maximumCountrySize))
@@ -304,6 +287,8 @@ function mapGenerator()
             mergeIntoCountry(loserCountry, winnerCountry);
             removeCircularAndDuplicateBorders();
         }
+        
+        //Id zuweisen
         var countries = collectAllCountries();
         for(var x = 0; x < countries.length; x++)
             countries[x].id = x+1;
@@ -366,6 +351,32 @@ function mapGenerator()
         }
     }
     
+    function combineRemainingCountries()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        
+        var remainingCountries = collectAllCountriesBelowMinSize();
+        
+        while(remainingCountries.length > 0)
+        {
+            remainingCountries = collectAllCountriesBelowMinSize();
+            
+            var loser = getRandom(remainingCountries);
+            var winner = getRandom(collectNeighborCountries(loser));
+            
+            //Falls das gleiche Land erwischt wird oder es zu groß wird
+            if(winner === loser || winner.size + loser.size > maximumCountrySize)
+            {
+                continue;
+            }
+
+            mergeIntoCountry(loser, winner);
+            removeCircularAndDuplicateBorders();
+            remainingCountries = collectAllCountriesBelowMinSize();
+        }
+    }
+    
     //###############################################################################################################
     //Funktionsdeklaration
     //############################################################################################################
@@ -380,7 +391,6 @@ function mapGenerator()
     this.generateMap = generateMap;
    
     //Eig private
-    this.collectAllCountriesBelowMaxSize = collectAllCountriesBelowMaxSize;
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
     this.collectNeighborCountries = collectNeighborCountries;   
