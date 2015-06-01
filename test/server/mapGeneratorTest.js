@@ -448,51 +448,6 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertNoException(function(){gen.collectAllCountriesBelowMinSize();});     
-    },
-    
-    "test CollectAllCountriesBelowMaxSize returns a List of Countries smaller than max size": function()
-    {
-        this.mapGenerator.setGridSize(3,3);
-        this.mapGenerator.initCountries();
-        this.mapGenerator.initBorders();
-        var grid = this.mapGenerator.getMapGrid();
-        grid.cellGrid[0][0].size = 20;
-        grid.cellGrid[0][1].size = 20;
-        grid.cellGrid[2][2].size = 19;   
-        
-        var result = this.mapGenerator.collectAllCountriesBelowMaxSize();
-        
-        assertEquals(7, result.length);
-        assertEquals(1, result[0].size);
-        assertEquals(1, result[1].size);
-        assertEquals(1, result[2].size);
-        assertEquals(1, result[3].size);
-        assertEquals(1, result[4].size);
-        assertEquals(1, result[5].size);
-        assertEquals(19, result[6].size);
-    },
-    
-    "test CollectAllCountriesBelowMaxSize shouldnt be able to be called before initialisation": function()
-    {
-        var gen = this.mapGenerator;
-        
-        assertException(function(){gen.collectAllCountriesBelowMaxSize();}, "Error");
-        
-        this.mapGenerator.setGridSize(3,3);
-        assertException(function(){gen.collectAllCountriesBelowMaxSize();}, "Error");
-        
-        this.mapGenerator.initCountries();
-        assertException(function(){gen.collectAllCountriesBelowMaxSize();}, "Error");
-    },
-    
-    "test CollectAllCountryBelowMaxSize should be able to be called after initialisation": function()
-    {
-        var gen = this.mapGenerator;
-        this.mapGenerator.setGridSize(3,3);
-        this.mapGenerator.initCountries();
-        this.mapGenerator.initBorders();
-        
-        assertNoException(function(){gen.collectAllCountriesBelowMaxSize();});     
     }
 }),
 
@@ -515,12 +470,10 @@ TestCase("MapGeneratorTest", {
         assertFunction(this.mapGenerator.getMapHeight);
         assertFunction(this.mapGenerator.getMapWidth);
         assertFunction(this.mapGenerator.generateMap);
-        assertFunction(this.mapGenerator.initCountries);
-        assertFunction(this.mapGenerator.initBorders);
-        assertFunction(this.mapGenerator.collectAllCountries);
-        assertFunction(this.mapGenerator.collectNeighborCountries);
-        assertFunction(this.mapGenerator.removeCircularAndDuplicateBorders);
-        assertFunction(this.mapGenerator.combineCountryCells);
+        assertFunction(this.mapGenerator.getMaximumCountrySize);
+        assertFunction(this.mapGenerator.setMaximumCountrySize);
+        assertFunction(this.mapGenerator.getMinimumCountrySize);
+        assertFunction(this.mapGenerator.setMinimumCountrySize);
     },
     
      "test grid should be a object": function()
@@ -603,6 +556,15 @@ TestCase("MapGeneratorTest", {
         var gen = this.mapGenerator;
         
         assertException(function(){gen.generateMap();}, "Error");
+    },
+    
+    "test After generation there Should be no countrys below minCountrySize": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        this.mapGenerator.generateMap();
+        
+        assertEquals(0, this.mapGenerator.collectAllCountriesBelowMinSize().length);
     },
     
     "test generateMap should return a map-object with atleast one continent": function()
