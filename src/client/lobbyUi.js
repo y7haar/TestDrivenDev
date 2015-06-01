@@ -33,7 +33,7 @@ function lobbyUi()
         
         td1.innerHTML = "#" + lobbyId;
         td2.innerHTML = lobbyName;
-        td3.innerHTML = "" + lobbyCurrentPlayers + " / " + lobbyMaxPlayers
+        td3.innerHTML = "" + lobbyCurrentPlayers + " / " + lobbyMaxPlayers;
         
         div.appendChild(table);
         table.appendChild(tr);
