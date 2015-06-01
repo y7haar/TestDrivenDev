@@ -7,4 +7,4 @@ tddjs.namespace("client.ui").lobbyUi= lobbyUi;
 function lobbyUi()
 {   
     
-};
+}
