@@ -5,14 +5,12 @@
 
 TestCase("GameLoopTests", {
         
-    setUp: function () {
-        
+    setUp: function () {        
         this.gameLoop =  new tddjs.client.gameLoopController();      
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
     },
-    tearDown: function()
-    {
+    tearDown: function(){
         this.gameLoop = null;
         this.map = null;
         this.player1 = null;
@@ -51,6 +49,16 @@ TestCase("GameLoopTests", {
         },"TypeError");
         
         assertSame(this.gameLoop.getMap(), this.map);           
-    }  
-
+    },
+    "test gameloop should implemet isMoveLegal Method": function () {
+        assertFunction(this.gameLoop.isMoveLegal);
+    },
+    "test gameloop should implement getStateName Method": function () {
+        assertFunction(this.gameLoop.getStateName);
+    },
+    "test gameloop.getStateName shoulde return currentStateName": function () {
+        //init State is WaitingState
+        assertEquals("waitingState", this.gameLoop.getStatename());          
+    }
+ 
 });
