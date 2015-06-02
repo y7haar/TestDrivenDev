@@ -65,6 +65,14 @@ function lobbyRequestController()
     {
         if(typeof lobbyId !== "number")
             throw new TypeError("lobbyId must be a number");
+        
+        var options = {
+            headers: {
+                "Content-Type": "application/json" 
+            }
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + lobbyId, options);
     }
     
     this.requestAllLobbies = requestAllLobbies;
