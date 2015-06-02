@@ -227,5 +227,11 @@ TestCase("LobbyRequestControllerTest", {
         assertEquals("POST", this.sandbox.server.requests[1].method);
         assertEquals(BASE_URL + "lobbies/42", this.sandbox.server.requests[1].url);
          
+    },
+    
+    "test requestJoin should have correct Content-Type header": function () {         
+         this.lobbyRequestController.requestJoin(2);
+         
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     }
 });
