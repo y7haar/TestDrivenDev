@@ -255,7 +255,6 @@ TestCase("LobbyRequestControllerTest", {
         var jsonObj = {
             type: "join",
             player: {
-                id: 0,
                 name: "Peter",
                 color: "#ffffff"
             }
