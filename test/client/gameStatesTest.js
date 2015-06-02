@@ -311,9 +311,7 @@ TestCase("placingStateTests", {
         this.map1 = null;
     },
     "test state should implement relevant functions": function () {
-        assertFunction(this.attacking.attack);
         assertFunction(this.attacking.isMoveLegal);
-        assertFunction(this.attacking.endPhase);
         assertFunction(this.attacking.toString); 
     },
     "test toString method should return state name": function () {        
@@ -347,30 +345,8 @@ TestCase("placingStateTests", {
         assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongCountryMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongOwnerMove));
         assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongTypeMove));
-    },
-    "test attack shoulde throw exception if a parameter is wrong": function () {
-        var validMove = this.validMove;
-        var url = "/someURL";
-        var map = this.map1;
-        var attacking = this.attacking;
-        
-        assertException(function(){
-            attacking.attack(map,validMove);
-        },'TypeError');
-        
-        assertException(function(){
-            attacking.attack(map,validMove,{url:"someURL"});
-        },'TypeError');
-        
-        assertNoException(function(){
-            attacking.attack(map,validMove,url);
-        });
-    },
-    "test attack should perform a POST request": function () {
-        var url = "/someURL";
-        assertFalse(this.attacking.attack(this.map1,this.wrongTypeMove, url));
-        assertTrue(this.attacking.attack(this.map1,this.validMove, url));
-    }});
+    } 
+});
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
     "test waiting state should implement relevant functions": function () {
