@@ -83,6 +83,9 @@ function lobbyRequestController()
                 "Content-Type": "application/json" 
             },
             
+            onSuccess: this.onJoinSuccess,
+            onFailure: this.onJoinFailure,
+            
             data: data
         };
         
