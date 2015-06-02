@@ -9,6 +9,7 @@ function gameLoopController()
 {
     var _player;
     var _map;
+    var _currentState = new tddjs.client.waitingState();
     
     function setMap(aMap)
     {
@@ -32,10 +33,21 @@ function gameLoopController()
     function getPlayer()
     {
         return _player;
-    }    
+    }
+    
+    function getStateName()
+    {
+        return _currentState.toString();
+    }
+    
+    function isMoveLegal()
+    {
+    }
 
     this.setMap = setMap;
     this.getMap = getMap;
     this.setPlayer = setPlayer;
     this.getPlayer = getPlayer;    
+    this.getStateName = getStateName;
+    this.isMoveLegal = isMoveLegal;
 }
