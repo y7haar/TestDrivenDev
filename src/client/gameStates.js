@@ -65,11 +65,6 @@ placingState.prototype.constructor = placingState;
 
 function attackingState()
 {
-    function attack(currentMap, move, url)
-    {
-        
-    }
-    
     function isMoveLegal(currentMap, move)
     {
         if (!(currentMap instanceof tddjs.client.map.map))
@@ -115,16 +110,9 @@ function attackingState()
     function toString()
     {
         return "attackingState";
-    }
-    
-    function endPhase()
-    {
-        
-    }
-    
-    this.attack = attack;
+    }   
+
     this.isMoveLegal = isMoveLegal;
-    this.endPhase = endPhase;
     this.toString = toString;   
     
 }
