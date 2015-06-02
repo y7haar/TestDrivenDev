@@ -9,6 +9,7 @@ tddjs.namespace("client.controller").lobbyRequestController= lobbyRequestControl
 function lobbyRequestController()
 {   
     var ajax = tddjs.util.ajax;
+    var _lobbyUi = new tddjs.client.ui.lobbyUi();
     
     function requestAllLobbies()
     {
@@ -44,9 +45,15 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies", options);
     }
     
-    function onAllLobbiesSuccess()
+    function onAllLobbiesSuccess(xhr)
     {
+        var data = xhr.responseText;
+        data = JSON.parse(data);
         
+        for(var i = 0;i < data.length;++i)
+        {
+            _lobbyUi.addLobby(data[i]);
+        }
     }
     
     function onAllLobbiesFailure()
