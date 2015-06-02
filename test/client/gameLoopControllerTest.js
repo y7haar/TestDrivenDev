@@ -8,8 +8,8 @@ TestCase("GameLoopTests", {
     setUp: function () {
         
         this.gameLoop =  new tddjs.client.gameLoopController();      
-        this.map = new tddjs.client.Map();
-        this.player1 = new tddjs.client.Player();
+        this.map = new tddjs.client.map.map();
+        this.player1 = new tddjs.client.player();
     },
     tearDown: function()
     {
@@ -21,7 +21,7 @@ TestCase("GameLoopTests", {
       assertObject(this.gameLoop);      
     },
     "test gameLoop should be instance of gameLoopControler": function () {        
-        assertTrue(this.gameLoop instanceof tddjs.client.game.gameLoopController);
+        assertTrue(this.gameLoop instanceof tddjs.client.gameLoopController);
     },
     "test gameLoop should store 1 player, exception if not instance of Player": function () {        
     
