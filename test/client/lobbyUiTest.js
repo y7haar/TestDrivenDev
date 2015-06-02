@@ -71,6 +71,10 @@ TestCase("LobbyUiTest", {
         assertFunction(this.lobbyUi.addLobby);
     },
     
+    "test lobbyUi should have a function to display an error message": function () {  
+        assertFunction(this.lobbyUi.showErrorMessage);
+    },
+    
     // DOM Tests
     
     "test createWrapper should append the content with correct class": function () {  
