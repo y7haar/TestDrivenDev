@@ -105,18 +105,15 @@ TestCase("LobbyRequestControllerTest", {
     },
     
      "test requestAllLobbies should update Ui in DOM on success and display lobbies": function () {         
-          /*:DOC = */
-         
          /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyRequestController.requestAllLobbies();
-        this.sandbox.server.requests[0].respond(200, "", this.lobbyController.serialize());
-        
+
         this.wrapper = document.getElementById("lobbyWrapper");
 
+        assertEquals(0, this.wrapper.childNodes.length);
         assertEquals("", this.wrapper.innerHTML);
         
-        this.lobbyUi.addLobby(JSON.parse(this.lobby1Json));
-        this.lobbyUi.addLobby(JSON.parse(this.lobby2Json));
+        this.sandbox.server.requests[0].respond(200, "", this.lobbyController.serialize());
         
         var lobbies = this.wrapper.childNodes;
         assertEquals(2, lobbies.length);
@@ -155,7 +152,22 @@ TestCase("LobbyRequestControllerTest", {
         assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
     },
     
-    
+     "test requestAllLobbies should show an Error message in gui onFailure": function () {         
+         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.wrapper = document.getElementById("lobbyWrapper");
+         
+         this.lobbyRequestController.requestAllLobbies();
+        
+        assertEquals(0, this.wrapper.childNodes.length);
+         
+         this.sandbox.server.requests[0].respond(500, "", "");
+        
+        
+        assertEquals(1, this.wrapper.childNodes.length);
+        assertTagName("p", this.wrapper.childNodes[0]);
+        
+        assertEquals("Error: Could not get data", this.wrapper.childNodes[0] .innerHTML);
+    },
     
     
     "test constroller should have function to request a new lobby": function () {         
@@ -168,8 +180,6 @@ TestCase("LobbyRequestControllerTest", {
         assertEquals(1, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[0].method);
         assertEquals("/lobbies", this.sandbox.server.requests[0].url);
-        
-        console.log(this.sandbox);
     },
     
      "test requestNewLobby should perform POST request with correct data": function () {         
@@ -181,7 +191,6 @@ TestCase("LobbyRequestControllerTest", {
         };
         
         var json = JSON.stringify(jsonObj);
-        console.log(json);
         
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
