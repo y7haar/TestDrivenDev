@@ -3,7 +3,15 @@
  *  this code test the statePattern from gameLoopController
  *  there are 4 states PlaceingState, AttackingState, MovingState, WaitingState
  */
-
+     /*
+        assertEquals(1, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(this.url, this.sandbox.server.requests[0].url);
+        assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+        
+        console.log("AJAX STUB SINON OBJECT:");
+        console.log(this.sandbox);
+        */
 
 function generateMap()
 {
@@ -65,70 +73,44 @@ function generateMap()
 TestCase("stateTests", {
     setUp: function () {              
         this.placing = new tddjs.client.placingState();
-        this.moving = new tddjs.client.movingState();
         this.attacking = new tddjs.client.attackingState();
         this.waiting = new tddjs.client.waitingState();  
     },
     tearDown: function ()
     {
         this.placing = null;
-        this.moving = null;
         this.attacking = null;
         this.waiting = null; 
     },
     "test states should not be undefined": function () {
-        assertNotUndefined(this.placing);
-        assertNotUndefined(this.moving);
+        assertNotUndefined(this.placing); 
         assertNotUndefined(this.attacking);
         assertNotUndefined(this.waiting);
     },
     "test states should be instanace of theire state": function () {
         assertTrue(this.placing instanceof tddjs.client.placingState);
-        assertTrue(this.moving instanceof tddjs.client.movingState);
         assertTrue(this.attacking instanceof tddjs.client.attackingState);
         assertTrue(this.waiting instanceof tddjs.client.waitingState);
     
     },
     "test states should be instance of prototype (abstract)state": function () {
-        assertTrue(this.placing instanceof tddjs.client.abstractState);
-        assertTrue(this.moving instanceof tddjs.client.abstractState);
+        assertTrue(this.placing instanceof tddjs.client.abstractState);  
         assertTrue(this.attacking instanceof tddjs.client.abstractState);
         assertTrue(this.waiting instanceof tddjs.client.abstractState);
      },
     "test states should not be instance of other states": function () {
-        assertFalse(this.placing instanceof tddjs.client.movingState);
-        assertFalse(this.moving instanceof tddjs.client.attackingState);
+        assertFalse(this.placing instanceof tddjs.client.attackingState);    
         assertFalse(this.attacking instanceof tddjs.client.waitingState);
         assertFalse(this.waiting instanceof tddjs.client.placingState);
     },
-    "test states should inharit all functions": function () {
-
-        assertNotUndefined(this.placing.placeUnits);
-        assertNotUndefined(this.placing.attack);
-        assertNotUndefined(this.placing.moveUnits);
+    "test states should inharit all functions": function () { 
         assertNotUndefined(this.placing.isMoveLegal);
-        assertNotUndefined(this.placing.endPhase);
         assertNotUndefined(this.placing.toString);
 
-        assertNotUndefined(this.attacking.placeUnits);
-        assertNotUndefined(this.attacking.attack);
-        assertNotUndefined(this.attacking.moveUnits);
         assertNotUndefined(this.attacking.isMoveLegal);
-        assertNotUndefined(this.attacking.endPhase);
         assertNotUndefined(this.attacking.toString);
-
-        assertNotUndefined(this.moving.placeUnits);
-        assertNotUndefined(this.moving.attack);
-        assertNotUndefined(this.moving.moveUnits);
-        assertNotUndefined(this.moving.isMoveLegal);
-        assertNotUndefined(this.moving.endPhase);
-        assertNotUndefined(this.moving.toString);
-
-        assertNotUndefined(this.waiting.placeUnits);
-        assertNotUndefined(this.waiting.attack);
-        assertNotUndefined(this.waiting.moveUnits);
+   
         assertNotUndefined(this.waiting.isMoveLegal);
-        assertNotUndefined(this.waiting.endPhase);
         assertNotUndefined(this.waiting.toString);
     }    
 });
@@ -195,9 +177,7 @@ TestCase("placingStateTests", {
       this.sandbox.restore();
     },
     "test should implement relevant functions": function () {
-        assertFunction(this.placing.placeUnits);
         assertFunction(this.placing.isMoveLegal);
-        assertFunction(this.placing.endPhase);
         assertFunction(this.placing.toString);
     },
     "test toString method shoulde return state name": function () {        
@@ -237,55 +217,7 @@ TestCase("placingStateTests", {
         assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongOwnerMove));
         assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongTypeMove));
         assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongUnitCountMove));
-    },
-    "test placeUnits should throw exception if parameter is wrong ": function () { 
-        var validMove = this.validMove;
-        var placing = this.placing;
-        var map = this.map1;
-        var availableUnits = this.availableUnits;
-        var url = this.url;
-       
-
-        assertException(function () {
-            placing.placeUnits(map, availableUnits, validMove);
-        }, 'TypeError');
-
-        assertException(function () {
-            placing.placeUnits(map, availableUnits, validMove, {url: "someURL"});
-        }, 'TypeError');
-
-        assertNoException(function () {
-            placing.placeUnits(map, availableUnits, validMove, url);
-        });
-    },
-    "test placeUnits should not POST if move is not Valid": function () {       
-        assertFalse(this.placing.placeUnits(this.map1,this.availableUnits,this.wrongTypeMove,this.url));    
-    },
-    "test placeUnits should perform a POST request": function () { 
-        assertEquals(0, this.sandbox.server.requests.length);        
-    
-        assertTrue(this.placing.placeUnits(this.map1,this.availableUnits,this.validMove,this.url));        
-        
-        assertEquals(1, this.sandbox.server.requests.length);
-        assertEquals("POST", this.sandbox.server.requests[0].method);
-        assertEquals(this.url, this.sandbox.server.requests[0].url);
-        assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
-        
-        console.log("AJAX STUB SINON OBJECT:");
-        console.log(this.sandbox);
-     },
-     "test endPhase should perform a POST request": function () {         
-        assertEquals(0, this.sandbox.server.requests.length);  
-        
-        this.placing.endPhase();
-        
-        assertEquals(1, this.sandbox.server.requests.length);
-        assertEquals("POST", this.sandbox.server.requests[0].method);
-        assertEquals(this.url, this.sandbox.server.requests[0].url);
-        assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]); 
-         
-     }
-     
+    }
  });
  
  //--------- ATTACKING -----------------------------------
@@ -376,6 +308,7 @@ TestCase("placingStateTests", {
     },
     tearDown: function () {
         this.attacking = null;
+        this.map1 = null;
     },
     "test state should implement relevant functions": function () {
         assertFunction(this.attacking.attack);
@@ -438,7 +371,6 @@ TestCase("placingStateTests", {
         assertFalse(this.attacking.attack(this.map1,this.wrongTypeMove, url));
         assertTrue(this.attacking.attack(this.map1,this.validMove, url));
     }});
-
 //--------------------------------------------
 TestCase("movingStateTests", {
     "test moving state should implement relevant functions": function () {
@@ -446,14 +378,11 @@ TestCase("movingStateTests", {
         assertFunction(this.moving.isMoveLegal);
         assertFunction(this.moving.endPhase);
         assertFunction(this.moving.toString);
-
     }});
-
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
     "test waiting state should implement relevant functions": function () {
        assertFunction(this.waiting.toString);
-    }
-    
+    }    
 });
 
