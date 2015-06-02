@@ -12,7 +12,7 @@ function gameLoopController()
     
     function setMap(aMap)
     {
-        if(!(aMap instanceof tddjs.client.Map))
+        if(!(aMap instanceof tddjs.client.map.map))
             throw new TypeError("Parameter ist not instance of Map");
         this._map = aMap;
     }
@@ -24,7 +24,7 @@ function gameLoopController()
     
     function setPlayer(aPlayer)
     {
-        if(!(aPlayer instanceof tddjs.client.Player))
+        if(!(aPlayer instanceof tddjs.client.player))
             throw new TypeError("Parameter ist not instance of Player");
         this._player = aPlayer;
     }
