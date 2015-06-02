@@ -212,6 +212,11 @@ TestCase("LobbyRequestControllerTest", {
         assertFunction(this.lobbyRequestController.requestJoin);
     },
     
+     "test controller should have callbacks for requestJoin": function () {         
+        assertFunction(this.lobbyRequestController.onJoinSuccess);
+        assertFunction(this.lobbyRequestController.onJoinFailure);
+    },
+    
     "test requestJoin should have a parameter of type number, otherwise throw TypeError": function () {         
         var controller = this.lobbyRequestController;
         var player = this.player;
@@ -263,5 +268,5 @@ TestCase("LobbyRequestControllerTest", {
         var json = JSON.stringify(jsonObj);
         
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
-    },
+    }
 });
