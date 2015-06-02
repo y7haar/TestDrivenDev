@@ -120,7 +120,12 @@ attackingState.prototype.constructor = attackingState;
 
 function waitingState()
 {
+    function toString()
+    {
+        return "waitingState";
+    }
     
+    this.toString = toString;
 }
 waitingState.prototype = new state();
 waitingState.prototype.constructor = waitingState;
