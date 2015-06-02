@@ -76,7 +76,7 @@ TestCase("LobbyRequestControllerTest", {
          
          assertEquals(1, this.sandbox.server.requests.length);
          assertEquals("GET", this.sandbox.server.requests[0].method);
-         assertEquals("/lobbies", this.sandbox.server.requests[0].url);
+         assertEquals(BASE_URL + "lobbies", this.sandbox.server.requests[0].url);
     },
     
      "test requestAllLobbies should perform a GET request with correct Accept header": function () {         
@@ -179,7 +179,7 @@ TestCase("LobbyRequestControllerTest", {
          
         assertEquals(1, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[0].method);
-        assertEquals("/lobbies", this.sandbox.server.requests[0].url);
+        assertEquals(BASE_URL + "lobbies", this.sandbox.server.requests[0].url);
     },
     
      "test requestNewLobby should perform POST request with correct data": function () {         
@@ -213,4 +213,19 @@ TestCase("LobbyRequestControllerTest", {
         assertNoException(function(){ controller.requestJoin(2); });
         assertException(function(){ controller.requestJoin("lobby"); }, "TypeError");
     },
+    
+     "test requestJoin should perform a GET request to /lobbies/id": function () {         
+         this.lobbyRequestController.requestJoin(2);
+         
+        assertEquals(1, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/2", this.sandbox.server.requests[0].url);
+        
+         this.lobbyRequestController.requestJoin(42);
+         
+        assertEquals(2, this.sandbox.server.requests.length);
+        assertEquals("POST", this.sandbox.server.requests[1].method);
+        assertEquals(BASE_URL + "lobbies/42", this.sandbox.server.requests[1].url);
+         
+    }
 });
