@@ -371,14 +371,6 @@ TestCase("placingStateTests", {
         assertFalse(this.attacking.attack(this.map1,this.wrongTypeMove, url));
         assertTrue(this.attacking.attack(this.map1,this.validMove, url));
     }});
-//--------------------------------------------
-TestCase("movingStateTests", {
-    "test moving state should implement relevant functions": function () {
-        assertFunction(this.moving.moveUnits);
-        assertFunction(this.moving.isMoveLegal);
-        assertFunction(this.moving.endPhase);
-        assertFunction(this.moving.toString);
-    }});
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
     "test waiting state should implement relevant functions": function () {
