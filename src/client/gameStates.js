@@ -8,7 +8,6 @@
 
 tddjs.namespace("client").placingState = placingState;
 tddjs.namespace("client").attackingState = attackingState;
-tddjs.namespace("client").movingState = movingState;
 tddjs.namespace("client").waitingState = waitingState;
 tddjs.namespace("client").abstractState = state;
 
