@@ -55,6 +55,11 @@ TestCase("LobbyRequestControllerTest", {
       
       this.lobbyController.addLobby(this.lobby1);
       this.lobbyController.addLobby(this.lobby2);
+      
+      this.player = new tddjs.client.player();
+      this.player.setName("Peter");
+      this.player.setColor("#ffffff");
+      
         
     }, 
     tearDown: function ()
@@ -209,9 +214,18 @@ TestCase("LobbyRequestControllerTest", {
     
     "test requestJoin should have a parameter of type number, otherwise throw TypeError": function () {         
         var controller = this.lobbyRequestController;
+        var player = this.player;
         
-        assertNoException(function(){ controller.requestJoin(2); });
-        assertException(function(){ controller.requestJoin("lobby"); }, "TypeError");
+        assertNoException(function(){ controller.requestJoin(2, player); });
+        assertException(function(){ controller.requestJoin("lobby", player); }, "TypeError");
+    },
+    
+    "test requestJoin should have a parameter of type tddjs.client.player, otherwise throw TypeError": function () {         
+        var controller = this.lobbyRequestController;
+        var player = this.player;
+        
+        assertNoException(function(){ controller.requestJoin(2, player); });
+        assertException(function(){ controller.requestJoin(2, 5); }, "TypeError");
     },
     
      "test requestJoin should perform a POST request to /lobbies/id": function () {         
@@ -233,5 +247,22 @@ TestCase("LobbyRequestControllerTest", {
          this.lobbyRequestController.requestJoin(2);
          
          assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
-    }
+    },
+    
+    "test requestJoin should perform POST request with correct data": function () {         
+        this.lobbyRequestController.requestJoin(42);
+        
+        var jsonObj = {
+            type: "join",
+            player: {
+                id: 0,
+                name: "Peter",
+                color: "#ffffff"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
 });
