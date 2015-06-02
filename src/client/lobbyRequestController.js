@@ -61,8 +61,15 @@ function lobbyRequestController()
         
     }
     
+    function requestJoin(lobbyId)
+    {
+        if(typeof lobbyId !== "number")
+            throw new TypeError("lobbyId must be a number");
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
     this.requestNewLobby = requestNewLobby;
+    this.requestJoin = requestJoin;
 };
