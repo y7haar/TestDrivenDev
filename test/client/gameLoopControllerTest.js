@@ -58,7 +58,7 @@ TestCase("GameLoopTests", {
     },
     "test gameloop.getStateName shoulde return currentStateName": function () {
         //init State is WaitingState
-        assertEquals("waitingState", this.gameLoop.getStatename());          
+        assertEquals("waitingState", this.gameLoop.getStateName());          
     }
  
 });
