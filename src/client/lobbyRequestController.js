@@ -61,18 +61,32 @@ function lobbyRequestController()
         
     }
     
-    function requestJoin(lobbyId)
+    function requestJoin(aLobbyId, aPlayer)
     {
-        if(typeof lobbyId !== "number")
+        if(typeof aLobbyId !== "number")
             throw new TypeError("lobbyId must be a number");
+        
+        if(! (aPlayer instanceof tddjs.client.player))
+            throw new TypeError("player must be a from class player");
+        
+        var player = aPlayer.serializeAsObject();
+        
+        var data = {
+          type: "join",
+          player: player
+        };
+        
+        data = JSON.stringify(data);
         
         var options = {
             headers: {
                 "Content-Type": "application/json" 
-            }
+            },
+            
+            data: data
         };
         
-        ajax.post(BASE_URL + "lobbies/" + lobbyId, options);
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
     this.requestAllLobbies = requestAllLobbies;
