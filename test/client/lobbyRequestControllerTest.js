@@ -229,13 +229,13 @@ TestCase("LobbyRequestControllerTest", {
     },
     
      "test requestJoin should perform a POST request to /lobbies/id": function () {         
-         this.lobbyRequestController.requestJoin(2);
+         this.lobbyRequestController.requestJoin(2, this.player);
          
         assertEquals(1, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[0].method);
         assertEquals(BASE_URL + "lobbies/2", this.sandbox.server.requests[0].url);
         
-         this.lobbyRequestController.requestJoin(42);
+         this.lobbyRequestController.requestJoin(42, this.player);
          
         assertEquals(2, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[1].method);
@@ -244,13 +244,13 @@ TestCase("LobbyRequestControllerTest", {
     },
     
     "test requestJoin should have correct Content-Type header": function () {         
-         this.lobbyRequestController.requestJoin(2);
+         this.lobbyRequestController.requestJoin(2, this.player);
          
          assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     },
     
     "test requestJoin should perform POST request with correct data": function () {         
-        this.lobbyRequestController.requestJoin(42);
+        this.lobbyRequestController.requestJoin(42, this.player);
         
         var jsonObj = {
             type: "join",
