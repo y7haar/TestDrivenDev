@@ -206,4 +206,11 @@ TestCase("LobbyRequestControllerTest", {
      "test controller should have function to join an existing lobby": function () {         
         assertFunction(this.lobbyRequestController.requestJoin);
     },
+    
+    "test requestJoin should have a parameter of type number, otherwise throw TypeError": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertNoException(function(){ controller.requestJoin(2); });
+        assertException(function(){ controller.requestJoin("lobby"); }, "TypeError");
+    },
 });
