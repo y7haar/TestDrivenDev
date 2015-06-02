@@ -11,6 +11,35 @@ TestCase("LobbyRequestControllerTest", {
         this.sandbox.useFakeXMLHttpRequest();
         this.sandbox.useFakeServer();
         
+        
+       this.lobby1 = new tddjs.server.model.lobby();
+       this.lobbyController = new tddjs.server.controller.lobbyController();
+      
+      this.player1 = new tddjs.client.player();
+      this.player2 = new tddjs.client.player();
+      
+      this.player1.setId(1);
+      this.player2.setId(2);
+      
+      this.player1.setName("P1");
+      this.player2.setName("P2");
+      
+      this.player1.setColor("#000000");
+      this.player2.setColor("#111111");
+      
+      this.lobby1.setId(0);
+      
+      this.lobby1.setName("L1");
+      
+      this.lobby1.addPlayer(this.player1);
+      this.lobby1.addPlayer(this.player2);
+      
+      this.lobby1.setLeader(this.player1);
+      
+      this.lobby1.setMaxPlayers(2);
+      
+      this.lobbyController.addLobby(this.lobby1);
+        
     }, 
     tearDown: function ()
     {
@@ -58,6 +87,41 @@ TestCase("LobbyRequestControllerTest", {
         this.sandbox.server.requests[0].respond(400, "", "");
         sinon.assert.calledOnce(callback); 
     },
+    
+     "test requestAllLobbies should update Ui in DOM on success and display lobbies": function () {         
+         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyRequestController.requestAllLobbies();
+        this.sandbox.server.requests[0].respond(200, "", this.lobbyController.serialize());
+        
+        this.wrapper = document.getElementById("lobbyWrapper");
+
+        assertEquals("", this.wrapper.innerHTML);
+        
+        var lobbies = this.wrapper.childNodes;
+        assertEquals(1, lobbies.length);
+        
+        assertTagName("div", lobbies[0]);
+        
+        
+        var lobbyTable1 = lobbies[0].getElementsByTagName("table")[0];
+        
+        assertTagName("table", lobbyTable1);
+        
+        assertTagName("tr", lobbyTable1.getElementsByTagName("tr")[0]);
+        
+        var lobbyTrContent1 = lobbyTable1.getElementsByTagName("tr")[0].childNodes;
+        
+        assertTagName("td", lobbyTrContent1[0]);
+        assertTagName("td", lobbyTrContent1[1]);
+        assertTagName("td", lobbyTrContent1[2]);
+
+        assertEquals("#0", lobbyTrContent1[0].innerHTML);
+        assertEquals("L1", lobbyTrContent1[1].innerHTML);
+        assertEquals("2 / 2", lobbyTrContent1[2].innerHTML);
+    },
+    
+    
+    
     
     "test constroller should have function to request a new lobby": function () {         
         assertFunction(this.lobbyRequestController.requestNewLobby);
