@@ -89,9 +89,21 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
+    function onJoinSuccess()
+    {
+        
+    }
+    
+    function onJoinFailure()
+    {
+        
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
     this.requestNewLobby = requestNewLobby;
     this.requestJoin = requestJoin;
+    this.onJoinSuccess = onJoinSuccess;
+    this.onJoinFailure = onJoinFailure;
 };
