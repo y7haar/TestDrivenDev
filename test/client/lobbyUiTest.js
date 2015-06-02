@@ -105,7 +105,34 @@ TestCase("LobbyUiTest", {
         assertTagName("div", lobbies[0]);
         assertTagName("div", lobbies[1]);
         
-        // TODO 
-        // check div content
+        
+        var lobbyTable1 = lobbies[0].getElementsByTagName("table")[0];
+        var lobbyTable2 = lobbies[1].getElementsByTagName("table")[0];
+        
+        assertTagName("table", lobbyTable1);
+        assertTagName("table", lobbyTable2);
+        
+        assertTagName("tr", lobbyTable1.getElementsByTagName("tr")[0]);
+        assertTagName("tr", lobbyTable2.getElementsByTagName("tr")[0]);
+        
+        var lobbyTrContent1 = lobbyTable1.getElementsByTagName("tr")[0].childNodes;
+        var lobbyTrContent2 = lobbyTable2.getElementsByTagName("tr")[0].childNodes;
+        
+        assertTagName("td", lobbyTrContent1[0]);
+        assertTagName("td", lobbyTrContent1[1]);
+        assertTagName("td", lobbyTrContent1[2]);
+        
+        assertTagName("td", lobbyTrContent2[0]);
+        assertTagName("td", lobbyTrContent2[1]);
+        assertTagName("td", lobbyTrContent2[2]);
+        
+        
+        assertEquals("#0", lobbyTrContent1[0].innerHTML);
+        assertEquals("L1", lobbyTrContent1[1].innerHTML);
+        assertEquals("2 / 2", lobbyTrContent1[2].innerHTML);
+        
+        assertEquals("#1", lobbyTrContent2[0].innerHTML);
+        assertEquals("L2", lobbyTrContent2[1].innerHTML);
+        assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
     }
 });
