@@ -131,13 +131,6 @@ function attackingState()
 attackingState.prototype = new state();
 attackingState.prototype.constructor = attackingState;
 
-function movingState()
-{
-   
-}
-movingState.prototype = new state();
-movingState.prototype.constructor = movingState;
-
 function waitingState()
 {
     
