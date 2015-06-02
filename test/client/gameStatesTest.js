@@ -349,8 +349,21 @@ TestCase("placingStateTests", {
 });
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
-    "test waiting state should implement relevant functions": function () {
-       assertFunction(this.waiting.toString);
-    }    
+    setUp: function(){
+      this.waitingState = new tddjs.client.waitingState();  
+    },
+    tearDown: function(){
+        this.waitingState = null;
+    },
+    "test state should impelment toString function": function () {
+       assertFunction(this.waitingState.toString);
+    }, 
+    "test toString should return name of the State": function () {
+        assertEquals("waitingState", this.waitingState.toString());
+    },
+    "test state shoulde not implement isMoveLegal function": function () {
+        assertEquals(null, this.waitingState.isMoveLegal);
+    }
+    
 });
 
