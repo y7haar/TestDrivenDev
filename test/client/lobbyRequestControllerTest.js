@@ -11,6 +11,7 @@ TestCase("LobbyRequestControllerTest", {
         this.sandbox.useFakeXMLHttpRequest();
         this.sandbox.useFakeServer();
         
+        this.lobbyController = new tddjs.server.controller.lobbyController();
         
        this.lobby1 = new tddjs.server.model.lobby();
        this.lobby2 = new tddjs.server.model.lobby();
@@ -104,6 +105,8 @@ TestCase("LobbyRequestControllerTest", {
     },
     
      "test requestAllLobbies should update Ui in DOM on success and display lobbies": function () {         
+          /*:DOC = */
+         
          /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyRequestController.requestAllLobbies();
         this.sandbox.server.requests[0].respond(200, "", this.lobbyController.serialize());
