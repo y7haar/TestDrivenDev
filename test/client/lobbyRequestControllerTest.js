@@ -268,5 +268,25 @@ TestCase("LobbyRequestControllerTest", {
         var json = JSON.stringify(jsonObj);
         
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
-    }
+    },
+    
+     "test requestJoin should call onJoinSuccess on success": function () {         
+        var callback = this.sandbox.stub(this.lobbyRequestController, "onJoinSuccess");
+        sinon.assert.notCalled(callback);
+        
+        this.lobbyRequestController.requestJoin(1, this.player);
+        
+        this.sandbox.server.requests[0].respond(200, "", "");
+        sinon.assert.calledOnce(callback); 
+    },
+    
+    "test requestJoin should call onJoinFailure on failure": function () {         
+        var callback = this.sandbox.stub(this.lobbyRequestController, "onJoinFailure");
+        sinon.assert.notCalled(callback);
+        
+        this.lobbyRequestController.requestJoin(1, this.player);
+        
+        this.sandbox.server.requests[0].respond(400, "", "");
+        sinon.assert.calledOnce(callback); 
+    },
 });
