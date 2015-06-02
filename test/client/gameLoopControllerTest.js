@@ -8,7 +8,7 @@ TestCase("GameLoopTests", {
     setUp: function () {
         
         this.gameLoop =  new tddjs.client.gameLoopController();      
-        this.map = new tddjs.client.map.map();
+        this.map = generateMap();
         this.player1 = new tddjs.client.player();
     },
     tearDown: function()
@@ -32,7 +32,7 @@ TestCase("GameLoopTests", {
 
         var gameLoop = this.gameLoop;
         
-        assertExpection(function(){
+        assertException(function(){
             gameLoop.setPlayer(fakePlayer);
         },"TypeError");
         
