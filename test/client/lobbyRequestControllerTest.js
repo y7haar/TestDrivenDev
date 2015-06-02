@@ -214,7 +214,7 @@ TestCase("LobbyRequestControllerTest", {
         assertException(function(){ controller.requestJoin("lobby"); }, "TypeError");
     },
     
-     "test requestJoin should perform a GET request to /lobbies/id": function () {         
+     "test requestJoin should perform a POST request to /lobbies/id": function () {         
          this.lobbyRequestController.requestJoin(2);
          
         assertEquals(1, this.sandbox.server.requests.length);
