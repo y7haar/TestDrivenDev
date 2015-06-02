@@ -16,39 +16,11 @@ function state()
 {
     
 }
-state.prototype.placeUnits = null;
-state.prototype.attack = null;
-state.prototype.moveUnits = null;
 state.prototype.isMoveLegal = null;
-state.prototype.endPhase = null;
 state.prototype.toString = null;
 
 function placingState()
-{
-    function placeUnits(currentMap, unitCount, move, url)
-    {
-        if (typeof url !== 'string')
-            throw new TypeError("given url is not a String");
-        if (!isMoveLegal(currentMap, unitCount, move))
-            return false;
-        // ajax POST to server with the move, server should validate the move then trigger eventSource event 
-        var ajax = tddjs.util.ajax;
-        var data = JSON.stringify(move);
-        var options = {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: data
-        };
-        
-        ajax.post(url, options);
-        return true;
-    }
-
-    function endPhase()
-    {
-        //ajax Post to server that player want to end this Phase 
-    }
+{ 
     function toString()
     {
         return "placingState";
@@ -84,11 +56,9 @@ function placingState()
         // if passed till here move is Valid
         return true;
 
-    }
-    this.placeUnits = placeUnits;
+    }  
     this.isMoveLegal = isMoveLegal;
     this.toString = toString;
-    this.endPhase = endPhase;
 }
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;
