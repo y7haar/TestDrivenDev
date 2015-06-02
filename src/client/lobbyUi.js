@@ -45,6 +45,12 @@ function lobbyUi()
         wrapper.appendChild(div);
     }
     
+    function showErrorMessage()
+    {
+        
+    }
+    
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
+    this.showErrorMessage = showErrorMessage;
 }
