@@ -7,7 +7,7 @@ TestCase("GameLoopTests", {
         
     setUp: function () {
         
-        this.gameLoop =  new tddjs.client.game.gameLoopController();      
+        this.gameLoop =  new tddjs.client.gameLoopController();      
         this.map = new tddjs.client.Map();
         this.player1 = new tddjs.client.Player();
     },
@@ -17,15 +17,13 @@ TestCase("GameLoopTests", {
         this.map = null;
         this.player1 = null;
     },
-    "test object gameloop should not be undefined": function () {
-      
+    "test gameloop should not be undefined": function () {      
       assertObject(this.gameLoop);      
     },
-    "test object should be instance of gameLoopControler": function () {
-        
+    "test gameLoop should be instance of gameLoopControler": function () {        
         assertTrue(this.gameLoop instanceof tddjs.client.game.gameLoopController);
     },
-    "test object should store 1 player, exception if not instance of Player": function () {        
+    "test gameLoop should store 1 player, exception if not instance of Player": function () {        
     
         var fakePlayer = {name:'HansWurst'};
         
@@ -53,25 +51,6 @@ TestCase("GameLoopTests", {
         },"TypeError");
         
         assertSame(this.gameLoop.getMap(), this.map);           
-    },    
-    "test return true if a attack is possible false if not,Typeerror if not country obj": function () { 
-        
-        this.gameLoop.setMap(this.map);
-        this.gameLoop.setPlayer(this.player1);
-        
-        var c1 = new tddjs.client.map.country();
-        var c2 = new tddjs.client.map.country();
-        var c3 = new tddjs.client.map.country();
-        
-        c1.addBorder(c2);
-        c2.addBorder(c1);
-        c2.addBorder(c3);
-        c3.addBorder(c2);
-        
-        assertTrue(this.gameLoop.isAttackPossible(c1,c2));
-        assertFalse(this.gameLoop.isAttackPossible(c1, c3));
-           
-    }
-  
-  
+    }  
+
 });
