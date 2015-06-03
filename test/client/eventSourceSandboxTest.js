@@ -22,7 +22,7 @@ TestCase("eventSourceSandbox", {
     "test after creating sandbox EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
     },
-    "test restore method shoulde be function": function () {
+    "test sandbox.restore method should be a function": function () {
         assertFunction(this.sandbox.restore);
     },
     "test after calling restore function EventSource should be the real one": function () {
@@ -35,6 +35,12 @@ TestCase("eventSourceSandbox", {
     "test after calling restore function XHR should be the real one": function () {
         this.sandbox.restore();      
         assertEquals(this.realXHR, XMLHttpRequest); 
+    },
+    "test sandBox.update method should be a function ": function () {
+        assertFunction(this.sandbox.update);
+    },
+    "test sandbox.update": function()
+    {        
     },
     "test fakeEventSource should throw exception if URL parameter is missing": function () {
         assertException(function(){
