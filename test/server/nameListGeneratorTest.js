@@ -48,6 +48,18 @@ TestCase("NameListGeneratorTest", {
        assertEquals(2, this.nameListGenerator.getNextName());
        assertEquals(3, this.nameListGenerator.getNextName());
        assertEquals(4, this.nameListGenerator.getNextName());
+  },
+  
+   "test nameListGenerator getNextName should return names in same order as getNameList after shuffling": function () { 
+       this.nameListGenerator.setNameList(this.initialArray);
+       this.nameListGenerator.shuffleNameList();
+       
+       var list = this.nameListGenerator.getNameList();
+       
+       assertEquals(list[0], this.nameListGenerator.getNextName());
+       assertEquals(list[1], this.nameListGenerator.getNextName());
+       assertEquals(list[2], this.nameListGenerator.getNextName());
+       assertEquals(list[3], this.nameListGenerator.getNextName());
   }
   
 });
