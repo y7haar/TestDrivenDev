@@ -4,21 +4,17 @@
  */
 console.log(new EventSource("/fakeURL"));
 
-TestCase("eventSourceSandbox", {
+TestCase("eventSourceSandboxOverride", {
     setUp: function () {
         this.realEventSource = EventSource;     
         this.realXHR = XMLHttpRequest;
-        this.serverURL = "/serverURL";
-        this.sandbox = new tddjs.stubs.eventSourceSandbox(this.serverURL);
-        this.fakeEventSource = new EventSource(this.serverURL);
-        this.fakeXHR = tddjs.util.ajax;
+   
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();      
     },
     tearDown: function () {
         this.sandbox.restore();
-    },   
-    "test sandbox object should not be undefined": function () {
-        assertNotUndefined(this.sandbox);
     },  
+
     "test after creating sandbox-Object EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
     },
@@ -35,6 +31,24 @@ TestCase("eventSourceSandbox", {
     "test after calling restore function XHR should be the real one": function () {
         this.sandbox.restore();      
         assertEquals(this.realXHR, XMLHttpRequest); 
+    }
+});
+
+TestCase("eventSourceSandbox", {
+    setUp: function () {       
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();   
+    },
+    tearDown: function () {
+        this.sandbox.restore();
+    },
+    "test sandbox object should not be undefined": function () {
+        assertNotUndefined(this.sandbox);
+    },  
+    "test sandbox shoulde have a object that hold all servers": function () {
+        assertNotUndefined(this.sandbox.servers);
+    },
+    "test sandbox server property shoulde be empty at start": function () {
+        assertEquals({},this.sandbox.servers);
     },
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
@@ -78,7 +92,21 @@ TestCase("eventSourceSandbox", {
         assertException(function(){
             sandbox.dispatchClientEvent("notAEventName",msgObj);
         },"Error");
+    }
+});
+
+TestCase("eventSourceSandboxFakeEventSource", {
+    setUp: function () {
+        this.realEventSource = EventSource;     
+        this.realXHR = XMLHttpRequest;
+        this.serverURL = "/serverURL";
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.fakeEventSource = new EventSource(this.serverURL);
+        this.fakeXHR = tddjs.util.ajax;
     },
+    tearDown: function () {
+        this.sandbox.restore();
+    }, 
     "test fakeEventSource should throw exception if URL parameter is missing": function () {
         assertException(function(){
             new EventSource();
@@ -139,9 +167,6 @@ TestCase("eventSourceSandbox", {
          assertEquals(aFunction, this.fakeEventSource["on"+eventName.toLowerCase()]);
          assertEquals(aFunction(), this.fakeEventSource["on"+eventName.toLowerCase()]());  
      }
-    
-    
-
 });
 
 
