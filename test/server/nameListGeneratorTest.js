@@ -60,6 +60,20 @@ TestCase("NameListGeneratorTest", {
        assertEquals(list[1], this.nameListGenerator.getNextName());
        assertEquals(list[2], this.nameListGenerator.getNextName());
        assertEquals(list[3], this.nameListGenerator.getNextName());
+  },
+  
+  "test nameListGenerator getNextName should return names from beginning, if next is called more often than number of names": function () { 
+       this.nameListGenerator.setNameList(this.initialArray);
+
+       assertEquals(1, this.nameListGenerator.getNextName());
+       assertEquals(2, this.nameListGenerator.getNextName());
+       assertEquals(3, this.nameListGenerator.getNextName());
+       assertEquals(4, this.nameListGenerator.getNextName());
+       
+       assertEquals(1, this.nameListGenerator.getNextName());
+       assertEquals(2, this.nameListGenerator.getNextName());
+       assertEquals(3, this.nameListGenerator.getNextName());
+       assertEquals(4, this.nameListGenerator.getNextName());
   }
   
 });
