@@ -16,11 +16,17 @@ TestCase("eventSourceSandbox", {
     },
     tearDown: function () {
         this.sandbox.restore();
-    },
-    "test sandBox object should not be undefined": function () {
+    },   
+    "test sandbox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
     },
-    "test after creating sandbox EvenSource should be overriden": function () {
+    "test sandbox getSandboxUrl should be a function": function () {
+        assertFunction(this.sandbox.getServerUrl);
+    },
+    "test sandBox getSandboxUrl should return URL of the sandbox ": function () {
+        assertEquals(this.serverURL, this.sandbox.getServerUrl());
+    },
+    "test after creating sandbox-Object EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
     },
     "test sandbox.restore method should be a function": function () {
@@ -41,7 +47,8 @@ TestCase("eventSourceSandbox", {
         assertFunction(this.sandbox.update);
     },
     "test sandbox.update": function(){
-        
+        assertTrue(false);
+        this.sandbox.update();
     },
     "test sandbox dispatchClientEvent method should be a function": function(){
         assertFunction(this.sandbox.dispatchClientEvent);
