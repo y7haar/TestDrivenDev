@@ -128,7 +128,19 @@ TestCase("eventSourceSandboxServer", {
         assertNoException(function(){
             sandbox.addServer("/serverUrl");
         });
-    }   
+    },
+    
+    "test sandbox addServer should add a fakeServer": function () {
+        var url = "/serverUrl";
+        
+        assertEquals({}, this.sandbox.server);        
+        this.sandbox.addServer(url);
+        var fakeServer =  this.sandbox.server[url];
+        
+        assertNotUndefined(fakeServer);
+        assertEquals({url:fakeServer}, this.sandbox.server);      
+    }
+    
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
