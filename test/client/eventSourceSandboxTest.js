@@ -12,6 +12,7 @@ TestCase("eventSourceSandbox", {
         
         this.serverURL = "/serverURL";
         this.fakeEventSource = new EventSource(this.serverURL);
+        this.fakeXHR = tddjs.util.ajax;
     },
     tearDown: function () {
         this.sandbox.restore();
@@ -39,8 +40,44 @@ TestCase("eventSourceSandbox", {
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
     },
-    "test sandbox.update": function()
-    {        
+    "test sandbox.update": function(){
+        
+    },
+    "test sandbox dispatchClientEvent method should be a function": function(){
+        assertFunction(this.sandbox.dispatchClientEvent);
+    },
+    "test sandbox.dispatchClientEvent throw exception if paramter is wrong": function(){
+        var sandbox = this.sandbox;
+        var msgObj = {"msg":"HELLLOWORLD"};
+        
+        assertException(function(){
+            sandbox.dispatchClientEvent();
+        },"TypeError");
+        
+        assertException(function(){
+            sandbox.dispatchClientEvent("onerror");
+        },"TypeError");
+        
+        assertException(function(){
+            sandbox.dispatchClientEvent(msgObj);
+        },"TypeError");
+        
+        assertNoException(function(){
+            sandbox.dispatchClientEvent(null,msgObj);
+        });
+        
+        assertNoException(function(){
+            sandbox.dispatchClientEvent("onerror",msgObj);
+        });
+        
+    },
+    "test sandbox.dispatchClientEvent throw exception if eventName parameter is not null and event dont exists": function(){
+        var sandbox = this.sandbox;
+        var msgObj = {"msg":"HELLLOWORLD"};
+        
+        assertException(function(){
+            sandbox.dispatchClientEvent("notAEventName",msgObj);
+        },"Error");
     },
     "test fakeEventSource should throw exception if URL parameter is missing": function () {
         assertException(function(){
