@@ -15,9 +15,17 @@ function eventSourceSandbox()
     
     function fakeEventSource(url)
     {        
-        if(typeof url !== 'string') throw new TypeError("url is not a String.");
-        
+        if(typeof url !== 'string') throw new TypeError("url is not a String.");        
         var _url = url;
+        
+        this.addEventListner = function(eventName, aFunction)
+        {
+            if(typeof eventName !== 'string')throw new TypeError("eventName is not a String.");
+            if(typeof aFunction !== 'function')throw new TypeError("function parameter is not a Function");
+            
+        };
+        
+        
     }
     EventSource = fakeEventSource;
     
