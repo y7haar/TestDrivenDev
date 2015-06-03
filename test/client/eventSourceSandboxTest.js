@@ -35,111 +35,112 @@ TestCase("eventSourceSandboxOvverride", {
 
 
 TestCase("eventSourceSandbox", {
-    setUp: function () {       
-        this.sandbox = new tddjs.stubs.eventSourceSandbox();   
+    setUp: function () {
+        this.server1URL = "/server_1Url";
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
     },
     tearDown: function () {
         this.sandbox.restore();
     },
-    
     "test sandbox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
     },
-      
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
-    },   
-
-    "test sandbox.update should update all servers": function(){
+    },
+    "test sandbox.update should update all servers": function () {
         assertTrue(false);
         this.sandbox.update();
     },
-    
-    "test sandbox dispatchClientEvent method should be a function": function(){
+    "test sandbox dispatchClientEvent method should be a function": function () {
         assertFunction(this.sandbox.dispatchClientEvent);
     },
-    
-    "test sandbox.dispatchClientEvent throw exception if paramter is wrong": function(){
+    "test sandbox.dispatchClientEvent throw exception if paramter is wrong": function () {
         var sandbox = this.sandbox;
-        var msgObj = {"msg":"HELLLOWORLD"};
-        
-        assertException(function(){
+        var msgObj = {"msg": "HELLLOWORLD"};
+
+        assertException(function () {
             sandbox.dispatchClientEvent();
-        },"TypeError");
-        
-        assertException(function(){
+        }, "TypeError");
+
+        assertException(function () {
             sandbox.dispatchClientEvent("onerror");
-        },"TypeError");
-        
-        assertException(function(){
+        }, "TypeError");
+
+        assertException(function () {
             sandbox.dispatchClientEvent(msgObj);
-        },"TypeError");
-        
-        assertNoException(function(){
-            sandbox.dispatchClientEvent(null,msgObj);
+        }, "TypeError");
+
+        assertNoException(function () {
+            sandbox.dispatchClientEvent(null, msgObj);
         });
-        
-        assertNoException(function(){
-            sandbox.dispatchClientEvent("onerror",msgObj);
+
+        assertNoException(function () {
+            sandbox.dispatchClientEvent("onerror", msgObj);
         });
-        
+
     },
-    
-    "test sandbox.dispatchClientEvent throw exception if eventName parameter is not null and event dont exists": function(){
+    "test sandbox.dispatchClientEvent throw exception if eventName parameter is not null and event dont exists": function () {
         var sandbox = this.sandbox;
-        var msgObj = {"msg":"HELLLOWORLD"};
-        
-        assertException(function(){
-            sandbox.dispatchClientEvent("notAEventName",msgObj);
-        },"Error");
+        var msgObj = {"msg": "HELLLOWORLD"};
+
+        assertException(function () {
+            sandbox.dispatchClientEvent("notAEventName", msgObj);
+        }, "Error");
+    },
+    "test sandbox shoulde have a object that hold all servers": function () {
+        assertNotUndefined(this.sandbox.server);
+    },
+    "test sandbox servers property shoulde be empty at start": function () {
+        assertEquals({}, this.sandbox.server);
+    },
+    "test sandbox addServer method should be function": function () {
+        assertFunction(this.sandbox.addServer);
+    },
+    "test sandbox addServer shoulde throw exception if url parameter is wrong or missing": function () {
+        var sandbox = this.sandbox;
+
+        assertException(function () {
+            sandbox.addServer();
+        }, "TypeError");
+
+        assertException(function () {
+            sandbox.addServer({server: "aServer"});
+        }, "TypeError");
+
+        assertNoException(function () {
+            sandbox.addServer("/serverUrl");
+        });
+    },
+    "test sandbox addServer should add a fakeServer": function () {
+        assertEquals({}, this.sandbox.server);
+        this.sandbox.addServer(this.server1URL);
+        var fakeServer = this.sandbox.server[this.server1URL];
+
+        assertNotUndefined(fakeServer);
+        assertEquals({"/server_1Url": fakeServer}, this.sandbox.server);
     }
 });
 
 TestCase("eventSourceSandboxServer", {
-    setUp: function () {      
-        this.sandbox = new tddjs.stubs.eventSourceSandbox();       
+    setUp: function () {
+        this.server1URl = "/server_1Url";
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();  
+        this.sandbox.addServer(this.server1URL);
     },
     tearDown: function () {
         this.sandbox.restore();
     },
-      "test sandbox shoulde have a object that hold all servers": function () {
-        assertNotUndefined(this.sandbox.server);
+   
+    "test sandbox server shoulde have a array of connected clients": function () {
+        assertNotUndefined(this.sandbox.server[this.server1URl].clients);
     },
     
-    "test sandbox servers property shoulde be empty at start": function () {
-        assertEquals({},this.sandbox.server);
-    },
-    
-    "test sandbox addServer method should be function": function () {
-        assertFunction(this.sandbox.addServer);
-    },
-    
-    "test sandbox addServer shoulde throw exception if url parameter is wrong or missing": function () {
-        var sandbox = this.sandbox;
-        
-        assertException(function(){
-            sandbox.addServer();
-        },"TypeError");
-        
-        assertException(function(){
-            sandbox.addServer({server:"aServer"});
-        },"TypeError");
-        
-        assertNoException(function(){
-            sandbox.addServer("/serverUrl");
-        });
-    },
-    
-    "test sandbox addServer should add a fakeServer": function () {
-        var url = "/serverUrl";
-        
-        assertEquals({}, this.sandbox.server);        
-        this.sandbox.addServer(url);
-        var fakeServer =  this.sandbox.server[url];
-        
-        assertNotUndefined(fakeServer);
-        assertEquals({url:fakeServer}, this.sandbox.server);      
+    "test sandbox server.clients should be empty ": function () {
+        assertEquals([], this.sandbox.server[this.server1URl].clients);
     }
+    
+    
     
 });
 
