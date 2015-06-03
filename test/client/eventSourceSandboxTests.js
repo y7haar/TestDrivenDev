@@ -1,8 +1,7 @@
 /* 
- * Source-code for eventSourceStubTest
- * this code tests the simulation of the EventSource Object 
+ * Source-code for eventSourceSandbox
+ * this code tests the simulation of the EventSource object and the communication with the Server
  */
-// to be deleted only for testing
 
 
 
