@@ -25,11 +25,11 @@ TestCase("eventSourceSandbox", {
     "test sandBox getServerUrl should return URL of the sandbox ": function () {
         assertEquals(this.serverURL, this.sandbox.getServerUrl());
     },
-    "test sandBox getClient should be a function ": function () {
+    "test sandBox getConnectedEventSource should be a function ": function () {
         assertFunction(this.sandbox.getClient);
     },
-    "test sandBox getClient should return the Client that is connected to the fakeServer": function () {
-        assertEquals(this.fakeEventSource, this.sandbox.getClient());
+    "test sandBox getConnectedEventSource should return the Client that is connected to the fakeServer": function () {
+        assertEquals(this.fakeEventSource, this.sandbox.getConnectedEventSource());
     },
     "test after creating sandbox-Object EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
