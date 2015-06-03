@@ -186,7 +186,7 @@ function click_test(){
     alert(count+" selected!");
 }
 function init_map(){ //nur zum testen
-    mapGen.setGridSize(15,15);
+    mapGen.setGridSize(25,25);
     mapGen.generateMap();
     map = mapGen.getMapGrid();
     

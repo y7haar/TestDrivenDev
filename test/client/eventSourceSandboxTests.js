@@ -4,7 +4,6 @@
  */
 
 
-
 TestCase("eventSourceSandbox", {
     setUp: function () {
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
@@ -12,7 +11,8 @@ TestCase("eventSourceSandbox", {
     tearDown: function (){
        this.sandbox = null;
     },    
-    "test sandBox object should not be undefined": function () {        
+    "test sandBox object should not be undefined": function () { 
+        assertNotUndefined(sandbox);
     }
 });
 
