@@ -8,6 +8,13 @@ tddjs.namespace("stubs").eventSourceSandbox = eventSourceSandbox;
 
 function eventSourceSandbox()
 {
+    var realEventSource = EventSource;
+    
+    function fakeEventSource()
+    {
+        
+    }
+    EventSource = fakeEventSource;    
  
 };
 
