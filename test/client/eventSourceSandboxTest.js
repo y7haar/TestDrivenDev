@@ -26,7 +26,7 @@ TestCase("eventSourceSandbox", {
         assertEquals(this.serverURL, this.sandbox.getServerUrl());
     },
     "test sandBox getConnectedEventSource should be a function ": function () {
-        assertFunction(this.sandbox.getClient);
+        assertFunction(this.sandbox.getConnectedEventSource);
     },
     "test sandBox getConnectedEventSource should return the Client that is connected to the fakeServer": function () {
         assertEquals(this.fakeEventSource, this.sandbox.getConnectedEventSource());
