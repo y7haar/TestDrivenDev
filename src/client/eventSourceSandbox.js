@@ -23,6 +23,8 @@ function eventSourceSandbox()
             if(typeof eventName !== 'string')throw new TypeError("eventName is not a String.");
             if(typeof aFunction !== 'function')throw new TypeError("function parameter is not a Function");
             
+            var newEventName = "on"+eventName.toLowerCase();
+            this[newEventName] = aFunction;
         };
         
         
