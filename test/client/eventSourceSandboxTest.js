@@ -20,10 +20,10 @@ TestCase("eventSourceSandbox", {
     "test sandbox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
     },
-    "test sandbox getSandboxUrl should be a function": function () {
+    "test sandbox getServerUrl should be a function": function () {
         assertFunction(this.sandbox.getServerUrl);
     },
-    "test sandBox getSandboxUrl should return URL of the sandbox ": function () {
+    "test sandBox getServerUrl should return URL of the sandbox ": function () {
         assertEquals(this.serverURL, this.sandbox.getServerUrl());
     },
     "test after creating sandbox-Object EvenSource should be overriden": function () {
