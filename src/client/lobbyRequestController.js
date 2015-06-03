@@ -67,7 +67,7 @@ function lobbyRequestController()
             throw new TypeError("lobbyId must be a number");
         
         if(! (aPlayer instanceof tddjs.client.player))
-            throw new TypeError("player must be a from class player");
+            throw new TypeError("player must be from class player");
         
         var player = aPlayer.serializeAsObject();
         
