@@ -137,8 +137,15 @@ TestCase("eventSourceSandboxServer", {
     },
     
     "test sandbox server.clients should be empty ": function () {
+        assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
         assertEquals([], this.sandbox.server[this.server1URL].clients);
+    },
+    "test sandbox server should have a client if EventSource object is created with this server as source": function () {
+        var es = new EventSource(this.server1URL);
+        assertEquals(1, this.sandbox.server[this.server1URL].clients.length);
+        assertEquals(es, this.sandbox.server[this.server1URL].clients[0]);
     }
+    
     
     
     
