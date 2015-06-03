@@ -9,12 +9,25 @@ tddjs.namespace("stubs").eventSourceSandbox = eventSourceSandbox;
 function eventSourceSandbox()
 {
     var realEventSource = EventSource;
+    var sinonSandbox = sinon.sandbox.create();
+    sinonSandbox.useFakeXMLHttpRequest();
+    sinonSandbox.useFakeServer();
     
     function fakeEventSource()
     {
         
     }
-    EventSource = fakeEventSource;    
+    EventSource = fakeEventSource;
+    
+    function restore()
+    {
+        sinonSandbox.restore();
+        EventSource = realEventSource;
+    }
+    
+    
+    
+    this.restore = restore;
  
 };
 
