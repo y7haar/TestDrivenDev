@@ -6,9 +6,8 @@
 
 tddjs.namespace("stubs").eventSourceSandbox = eventSourceSandbox;
 
-function eventSourceSandbox(aURL)
+function eventSourceSandbox()
 {
-    var fakeServerURL = aURL;
     var realEventSource = EventSource;
     
     var sinonSandbox = sinon.sandbox.create();
@@ -53,22 +52,13 @@ function eventSourceSandbox(aURL)
     }
     
     function dispatchClientEvent(eventName, msg)
-    {
-        console.log("eventname:");
-        console.log(eventName);
-        console.log("methode vorhanden:");
-        console.log(connectedEventSource[eventName]);
+    {    
         if(typeof eventName !== 'string' && eventName !== null) throw new TypeError("eventName parameter is not String or not NULL.");
         if(typeof msg === 'undefined' || msg === null) throw new TypeError("Message to ClientEventListner is Undefined or NULL.");
         if(typeof connectedEventSource[eventName] === 'undefined' && eventName !== null) throw new Error("Event dont exisits on the client EventSource-Object.");
             
-    }
-    
-    function getServerUrl()
-    {
-        return fakeServerURL;
-    }
-    
+    }    
+
     function getConnectedEventSource()
     {
         return connectedEventSource;
