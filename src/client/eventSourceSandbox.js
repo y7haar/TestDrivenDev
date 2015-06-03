@@ -14,8 +14,6 @@ function eventSourceSandbox()
     sinonSandbox.useFakeXMLHttpRequest();
     sinonSandbox.useFakeServer();
     
-    var connectedEventSource;
-    
     function fakeEventSource(serverURL)
     {
         connectedEventSource = this;
@@ -58,12 +56,7 @@ function eventSourceSandbox()
         if(typeof connectedEventSource[eventName] === 'undefined' && eventName !== null) throw new Error("Event dont exisits on the client EventSource-Object.");
             
     }    
-
-    function getConnectedEventSource()
-    {
-        return connectedEventSource;
-    }
-        
+ 
     this.getConnectedEventSource = getConnectedEventSource;    
     this.getServerUrl = getServerUrl;
     this.dispatchClientEvent = dispatchClientEvent;
