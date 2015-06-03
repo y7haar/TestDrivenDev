@@ -36,12 +36,15 @@ TestCase("eventSourceSandbox", {
     "test fakeEventSource should throw exception if URL parameter is missing": function () {
         assertException(function(){
             new EventSource();
-        },"TypeError");
+        },"TypeError");   
+        
+        assertException(function(){
+            new EventSource({url:"aURL"});
+        },"TypeError");  
         
         assertNoException(function(){
             new EventSource("/URL");
-        });
-        
+        });        
     }  
 
 });
