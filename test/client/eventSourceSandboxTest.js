@@ -2,15 +2,16 @@
  * Source-code for eventSourceSandbox
  * this code tests the simulation of the EventSource object and the communication with the Server
  */
-
+console.log(new EventSource("/fakeURL"));
 
 TestCase("eventSourceSandbox", {
     setUp: function () {
-        this.realEventSource = EventSource;
+        this.realEventSource = EventSource;     
         this.realXHR = XMLHttpRequest;
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         
-        this.fakeEventSource = new EventSource("/URL");
+        this.serverURL = "/serverURL";
+        this.fakeEventSource = new EventSource(this.serverURL);
     },
     tearDown: function () {
         this.sandbox.restore();
@@ -48,7 +49,13 @@ TestCase("eventSourceSandbox", {
             new EventSource("/URL");
         });        
     },
-    "test fakeEventSource should implement onerror onmessage onopen events": function () {
+    "test fakeEventSource url shoulde not be undefined ": function () {
+        assertNotUndefined(this.fakeEventSource.url);
+    },
+    "test fakeEventSource url shoulde return the url of the connected server": function () {
+        assertEquals(this.serverURL, this.fakeEventSource.url);
+    },
+    "test fakeEventSourceonerror onmessage onopen events should not be undefined": function () {
         assertNotUndefined(this.fakeEventSource.onerror);
         assertNotUndefined(this.fakeEventSource.onmessage);
         assertNotUndefined(this.fakeEventSource.onopen);
