@@ -8,6 +8,7 @@ tddjs.namespace("stubs").eventSourceSandbox = eventSourceSandbox;
 
 function eventSourceSandbox()
 {
+    
     var realEventSource = EventSource;
     
     var sinonSandbox = sinon.sandbox.create();
@@ -15,8 +16,7 @@ function eventSourceSandbox()
     sinonSandbox.useFakeServer();
     
     function fakeEventSource(serverURL)
-    {
-        connectedEventSource = this;
+    {    
         
         if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
         this.url = serverURL;
@@ -57,13 +57,9 @@ function eventSourceSandbox()
             
     }    
  
-    this.getConnectedEventSource = getConnectedEventSource;    
-    this.getServerUrl = getServerUrl;
     this.dispatchClientEvent = dispatchClientEvent;
     this.update = update;
-    this.restore = restore;
-
- 
+    this.restore = restore;    
 };
 
 
