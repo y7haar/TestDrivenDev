@@ -48,6 +48,11 @@ TestCase("eventSourceSandbox", {
             new EventSource("/URL");
         });        
     },
+    "test fakeEventSource should implement onerror onmessage onopen events": function () {
+        assertNotUndefined(this.fakeEventSource.onerror);
+        assertNotUndefined(this.fakeEventSource.onmessage);
+        assertNotUndefined(this.fakeEventSource.onopen);
+    },
     "test fakeEventSource shoulde implement addEventListner function": function () {
         assertFunction(this.fakeEventSource.addEventListner);
     },
