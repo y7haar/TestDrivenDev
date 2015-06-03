@@ -36,6 +36,18 @@ TestCase("NameListGeneratorTest", {
         assertTrue(this.shuffled[0] === 2 || this.shuffled[1] === 2 || this.shuffled[2] === 2 || this.shuffled[3] === 2);
         assertTrue(this.shuffled[0] === 3 || this.shuffled[1] === 3 || this.shuffled[2] === 3 || this.shuffled[3] === 3);
         assertTrue(this.shuffled[0] === 4 || this.shuffled[1] === 4 || this.shuffled[2] === 4 || this.shuffled[3] === 4);
+  },
+  
+   "test nameListGenerator should have a function to get the next entry": function () { 
+        assertFunction(this.nameListGenerator.getNextName);
+  },
+  
+   "test nameListGenerator getNextName should return names in correct order": function () { 
+       this.nameListGenerator.setNameList(this.initialArray);
+       assertEquals(1, this.nameListGenerator.getNextName());
+       assertEquals(2, this.nameListGenerator.getNextName());
+       assertEquals(3, this.nameListGenerator.getNextName());
+       assertEquals(4, this.nameListGenerator.getNextName());
   }
   
 });
