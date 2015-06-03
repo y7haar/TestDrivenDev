@@ -18,13 +18,7 @@ TestCase("eventSourceSandbox", {
     },   
     "test sandbox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
-    },
-    "test sandbox getServerUrl should be a function": function () {
-        assertFunction(this.sandbox.getServerUrl);
-    },
-    "test sandBox getServerUrl should return URL of the sandbox ": function () {
-        assertEquals(this.serverURL, this.sandbox.getServerUrl());
-    },
+    },  
     "test sandBox getConnectedEventSource should be a function ": function () {
         assertFunction(this.sandbox.getConnectedEventSource);
     },
