@@ -150,6 +150,22 @@ function player()
         
         return JSON.stringify(playerObject);
     }
+    
+    //Serialisiert das Object
+    function serializeAsObject()
+    {
+        var id = getId();
+        var name = getName();
+        var color = getColor();
+        
+        var playerObject = {
+            id: id,
+            name: name,
+            color: color
+        };
+        
+        return playerObject;
+    }
   
     this.getName = getName;
     this.setName = setName;
@@ -165,4 +181,5 @@ function player()
     this.getId = getId;
     this.setId = setId;
     this.serialize = serialize;
+    this.serializeAsObject = serializeAsObject;
 };

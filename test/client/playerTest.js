@@ -186,6 +186,20 @@ TestCase("PlayerTest",
         assertEquals(2, json.id);
         assertEquals("Ranol", json.name);
         assertEquals("#FFFFFF", json.color);
+    },
+    
+    "test Should be able to serialize a Player correctly as object": function()
+    {    
+        this.player1.setId(2);
+        this.player1.setName("Ranol");
+        this.player1.setColor("#FFFFFF");
+        
+        var json = this.player1.serializeAsObject();
+        
+        assertObject(json);
+        assertEquals(2, json.id);
+        assertEquals("Ranol", json.name);
+        assertEquals("#FFFFFF", json.color);
     }
 });
 
