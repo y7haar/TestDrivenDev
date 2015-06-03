@@ -10,12 +10,17 @@ function eventSourceSandbox(aURL)
 {
     var fakeServerURL = aURL;
     var realEventSource = EventSource;
+    
     var sinonSandbox = sinon.sandbox.create();
     sinonSandbox.useFakeXMLHttpRequest();
     sinonSandbox.useFakeServer();
     
+    var connectedEventSource;
+    
     function fakeEventSource(serverURL)
-    {        
+    {
+        connectedEventSource = this;
+        
         if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
         this.url = serverURL;
         
@@ -30,7 +35,8 @@ function eventSourceSandbox(aURL)
             
             var newEventName = "on"+eventName.toLowerCase();
             this[newEventName] = aFunction;
-        };        
+        };       
+        
         
     }
     EventSource = fakeEventSource;
@@ -57,7 +63,13 @@ function eventSourceSandbox(aURL)
     {
         return fakeServerURL;
     }
+    
+    function getConnectedEventSource()
+    {
+        return connectedEventSource;
+    }
         
+    this.getConnectedEventSource = getConnectedEventSource;    
     this.getServerUrl = getServerUrl;
     this.dispatchClientEvent = dispatchClientEvent;
     this.update = update;
