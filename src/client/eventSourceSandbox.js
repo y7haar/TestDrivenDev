@@ -6,8 +6,9 @@
 
 tddjs.namespace("stubs").eventSourceSandbox = eventSourceSandbox;
 
-function eventSourceSandbox()
+function eventSourceSandbox(aURL)
 {
+    var fakeServerURL = aURL;
     var realEventSource = EventSource;
     var sinonSandbox = sinon.sandbox.create();
     sinonSandbox.useFakeXMLHttpRequest();
@@ -29,8 +30,7 @@ function eventSourceSandbox()
             
             var newEventName = "on"+eventName.toLowerCase();
             this[newEventName] = aFunction;
-        };
-        
+        };        
         
     }
     EventSource = fakeEventSource;
@@ -43,9 +43,23 @@ function eventSourceSandbox()
     
     function update()
     {
-        
+        console.log(sinonSandbox.server);
     }
     
+    function dispatchClientEvent(eventName, msg)
+    {
+        if(typeof eventName !== 'string' && eventName !== null) throw new TypeError("eventName parameter is not String or not NULL.");
+        if(typeof msg === 'undefined' || msg === null) throw new TypeError("Message to ClientEventListner is Undefined or NULL."); 
+            
+    }
+    
+    function getServerUrl()
+    {
+        return fakeServerURL;
+    }
+        
+    this.getServerUrl = getServerUrl;
+    this.dispatchClientEvent = dispatchClientEvent;
     this.update = update;
     this.restore = restore;
 
