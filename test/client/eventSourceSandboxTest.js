@@ -9,6 +9,8 @@ TestCase("eventSourceSandbox", {
         this.realEventSource = EventSource;
         this.realXHR = XMLHttpRequest;
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        
+        this.fakeEventSource = new EventSource("/URL");
     },
     tearDown: function () {
         this.sandbox.restore();
@@ -45,7 +47,34 @@ TestCase("eventSourceSandbox", {
         assertNoException(function(){
             new EventSource("/URL");
         });        
-    }  
+    },
+    "test fakeEventSource shoulde implement addEventListner function": function () {
+        assertFunction(this.fakeEventSource.addEventListner);
+    },
+    "test fakeEventSource.addEventListner should throw exception if parameter is wrong": function () {
+        var fakeES = new EventSource("/URL");
+        // parameter 1: EventListner Name, parameter2 : function
+        assertException(function(){
+            fakeES.addEventListner();
+        },"TypeError");
+        
+        assertException(function(){
+            fakeES.addEventListner("eventName");
+        },"TypeError");  
+        
+        assertException(function(){
+            fakeES.addEventListner("eventName", "doSomething");
+        },"TypeError");
+        
+        assertException(function(){
+            fakeES.addEventListner({name:"aName"}, "doSomething");
+        },"TypeError");  
+        
+        assertNoException(function(){
+            fakeES.addEventListner("eventName", function(){});
+        });  
+    }
+    
 
 });
 
