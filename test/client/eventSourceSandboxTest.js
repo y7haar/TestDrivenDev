@@ -19,12 +19,6 @@ TestCase("eventSourceSandbox", {
     "test sandbox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
     },  
-    "test sandBox getConnectedEventSource should be a function ": function () {
-        assertFunction(this.sandbox.getConnectedEventSource);
-    },
-    "test sandBox getConnectedEventSource should return the Client that is connected to the fakeServer": function () {
-        assertEquals(this.fakeEventSource, this.sandbox.getConnectedEventSource());
-    },
     "test after creating sandbox-Object EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
     },
