@@ -10,6 +10,7 @@ function eventSourceSandbox()
 {
     
     var realEventSource = EventSource;
+    var server  = {};
     
     var sinonSandbox = sinon.sandbox.create();
     sinonSandbox.useFakeXMLHttpRequest();
@@ -55,8 +56,22 @@ function eventSourceSandbox()
         if(typeof msg === 'undefined' || msg === null) throw new TypeError("Message to ClientEventListner is Undefined or NULL.");
         if(typeof connectedEventSource[eventName] === 'undefined' && eventName !== null) throw new Error("Event dont exisits on the client EventSource-Object.");
             
+    }
+    
+    function fakeServer()
+    {
+        this.clients = [];
+        
     }    
- 
+    function addServer(serverUrl)
+    {
+        if(typeof serverUrl !== 'string')throw new TypeError("serverUrl is missing or in wrong Format.");
+        
+        server[serverUrl] = new fakeServer(serverUrl);
+    }
+    
+    this.addServer = addServer;
+    this.server = server;
     this.dispatchClientEvent = dispatchClientEvent;
     this.update = update;
     this.restore = restore;    
