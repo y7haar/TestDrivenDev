@@ -6,17 +6,14 @@
 
 
 
-TestCase("eventSourceStubTest", {
+TestCase("eventSourceSandbox", {
     setUp: function () {
-        this.url = "someURL";
-        this.eventSourceObject = new tddjs.stubs.eventSourceStub(this.url);
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
     }, 
-    tearDown: function ()
-    {
-        delete this.eventSourceObject;
-    },
-    
-    "test eventSource object should not be undefined": function () {        
+    tearDown: function (){
+       this.sandbox = null;
+    },    
+    "test sandBox object should not be undefined": function () {        
     }
 });
 
