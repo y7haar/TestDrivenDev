@@ -124,7 +124,7 @@ TestCase("eventSourceSandbox", {
 
 TestCase("eventSourceSandboxServer", {
     setUp: function () {
-        this.server1URl = "/server_1Url";
+        this.server1URL = "/server_1Url";
         this.sandbox = new tddjs.stubs.eventSourceSandbox();  
         this.sandbox.addServer(this.server1URL);
     },
@@ -133,11 +133,11 @@ TestCase("eventSourceSandboxServer", {
     },
    
     "test sandbox server shoulde have a array of connected clients": function () {
-        assertNotUndefined(this.sandbox.server[this.server1URl].clients);
+        assertNotUndefined(this.sandbox.server[this.server1URL].clients);
     },
     
     "test sandbox server.clients should be empty ": function () {
-        assertEquals([], this.sandbox.server[this.server1URl].clients);
+        assertEquals([], this.sandbox.server[this.server1URL].clients);
     }
     
     
