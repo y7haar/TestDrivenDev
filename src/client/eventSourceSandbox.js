@@ -13,10 +13,14 @@ function eventSourceSandbox()
     sinonSandbox.useFakeXMLHttpRequest();
     sinonSandbox.useFakeServer();
     
-    function fakeEventSource(url)
+    function fakeEventSource(serverURL)
     {        
-        if(typeof url !== 'string') throw new TypeError("url is not a String.");        
-        var _url = url;
+        if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
+        this.url = serverURL;
+        
+        this.onerror = null;
+        this.onopen = null;
+        this.onmessage = null;
         
         this.addEventListner = function(eventName, aFunction)
         {
