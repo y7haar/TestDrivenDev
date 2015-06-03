@@ -148,6 +148,27 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox server should be empty if EventSource object is created with worng serverUrl": function () {
         var es = new EventSource("/worngServerUrl");
         assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
+    },
+    "test sandbox should be able to have 2 fakeServer running independently": function () {
+        var server2Url = "/server_2Url";
+        this.sandbox.addServer(server2Url);
+        
+        assertNotUndefined(this.sandbox.server[this.server1URL]);
+        assertNotUndefined(this.sandbox.server[server2Url]);
+        
+        assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
+        assertEquals(0, this.sandbox.server[server2Url].clients.length);        
+        
+        var es1 = new EventSource(this.server1URL);        
+        assertEquals(1, this.sandbox.server[this.server1URL].clients.length);
+        assertEquals(es1, this.sandbox.server[this.server1URL].clients[0]);
+        assertEquals(0, this.sandbox.server[server2Url].clients.length);
+        
+        var es2 = new EventSource(server2Url);        
+        assertEquals(1, this.sandbox.server[this.server1URL].clients.length);
+        assertEquals(es1, this.sandbox.server[this.server1URL].clients[0]);
+        assertEquals(1, this.sandbox.server[server2Url].clients.length);
+        assertEquals(es2, this.sandbox.server[server2Url].clients[0]);
     }
     
     
