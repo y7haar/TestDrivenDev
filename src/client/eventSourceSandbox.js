@@ -20,8 +20,8 @@ function eventSourceSandbox()
     EventSource = fakeEventSource;
     
     function restore()
-    {
-        sinonSandbox.restore();
+    {      
+        sinonSandbox.restore();     
         EventSource = realEventSource;
     }
     

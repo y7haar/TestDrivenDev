@@ -8,11 +8,10 @@ TestCase("eventSourceSandbox", {
     setUp: function () {
         this.realEventSource = EventSource;
         this.realXHR = XMLHttpRequest;
-
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
     },
     tearDown: function () {
-        this.sandbox = null;
+        this.sandbox.restore();
     },
     "test sandBox object should not be undefined": function () {
         assertNotUndefined(this.sandbox);
@@ -28,8 +27,9 @@ TestCase("eventSourceSandbox", {
         assertNotEquals(this.realXHR, XMLHttpRequest);
     },
     "test after calling restore function XHR should be the real one": function () {
-        this.sandbox.restore();
+        this.sandbox.restore();      
         assertEquals(this.realXHR, XMLHttpRequest);
+ 
     }
 
 });
