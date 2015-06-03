@@ -37,6 +37,7 @@ function nameListGenerator()
     
     function getNextName()
     {
+        _currentIndex %= _nameList.length;
         return _nameList[_currentIndex++];
     }
 
