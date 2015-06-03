@@ -8,9 +8,8 @@ TestCase("eventSourceSandbox", {
     setUp: function () {
         this.realEventSource = EventSource;     
         this.realXHR = XMLHttpRequest;
-        this.sandbox = new tddjs.stubs.eventSourceSandbox();
-        
         this.serverURL = "/serverURL";
+        this.sandbox = new tddjs.stubs.eventSourceSandbox(this.serverURL);
         this.fakeEventSource = new EventSource(this.serverURL);
         this.fakeXHR = tddjs.util.ajax;
     },
@@ -25,6 +24,12 @@ TestCase("eventSourceSandbox", {
     },
     "test sandBox getServerUrl should return URL of the sandbox ": function () {
         assertEquals(this.serverURL, this.sandbox.getServerUrl());
+    },
+    "test sandBox getClient should be a function ": function () {
+        assertFunction(this.sandbox.getClient);
+    },
+    "test sandBox getClient should return the Client that is connected to the fakeServer": function () {
+        assertEquals(this.fakeEventSource, this.sandbox.getClient());
     },
     "test after creating sandbox-Object EvenSource should be overriden": function () {
         assertNotEquals(this.realEventSource, EventSource);
