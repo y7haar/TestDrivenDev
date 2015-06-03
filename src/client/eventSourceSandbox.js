@@ -41,9 +41,14 @@ function eventSourceSandbox()
         EventSource = realEventSource;
     }
     
+    function update()
+    {
+        
+    }
     
-    
+    this.update = update;
     this.restore = restore;
+
  
 };
 
