@@ -7,6 +7,7 @@ tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
 function nameListGenerator()
 {
     var _nameList = [];
+    var _currentIndex = 0;
 
     function setNameList(aNameList)
     {
@@ -33,10 +34,16 @@ function nameListGenerator()
             _nameList[randomIndex] = swapValue;
         }
     }
+    
+    function getNextName()
+    {
+        return _nameList[_currentIndex++];
+    }
 
     this.setNameList = setNameList;
     this.getNameList = getNameList;
     this.shuffleNameList = shuffleNameList;
+    this.getNextName = getNextName;
     
 };
 
