@@ -52,7 +52,7 @@ TestCase("eventSourceSandbox", {
         assertFunction(this.fakeEventSource.addEventListner);
     },
     "test fakeEventSource.addEventListner should throw exception if parameter is wrong": function () {
-        var fakeES = new EventSource("/URL");
+        var fakeES = this.fakeEventSource;
         // parameter 1: EventListner Name, parameter2 : function
         assertException(function(){
             fakeES.addEventListner();
@@ -73,7 +73,18 @@ TestCase("eventSourceSandbox", {
         assertNoException(function(){
             fakeES.addEventListner("eventName", function(){});
         });  
-    }
+    },
+     "test fakeEventSource.addEventListner should add new EventListner": function () {
+         var eventName = "eventName";
+         var aFunction = function (){
+           return true;  
+         };
+         
+         this.fakeEventSource.addEventListner(eventName, aFunction);
+         assertEquals(aFunction, this.fakeEventSource["on"+eventName.toLowerCase()]);
+         assertEquals(aFunction(), this.fakeEventSource["on"+eventName.toLowerCase()]());  
+     }
+    
     
 
 });
