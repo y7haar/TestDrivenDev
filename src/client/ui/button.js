@@ -14,6 +14,10 @@ function button(x,y,str,ctx){
     var hover=false;
     var size=20;
     
+    function setText(text){
+        str = text;
+    }
+    
     function isCoordOnButton(_x,_y){
         hover=(_x>=x && _x<=x+ctx.measureText(str).width+10 && _y>=y && _y <= y+size+10);
         return hover;
@@ -43,4 +47,5 @@ function button(x,y,str,ctx){
     this.draw=draw;
     this.isCoordOnButton=isCoordOnButton;
     this.click=click;
+    this.setText=setText;
 }
