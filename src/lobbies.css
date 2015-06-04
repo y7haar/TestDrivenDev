@@ -52,7 +52,7 @@ body
 
 .lobbyName
 {
-    min-width: 670px;
+    min-width: 580px;
     padding-right:20px;
     text-align: left;
 }
@@ -60,6 +60,25 @@ body
 .lobbyPlayers
 {
     text-align: right;
-    padding-right:0px;
-    padding-left:40px;
+    padding-right:35px;
+    padding-left:20px;
+}
+
+.lobbyJoin
+{
+    text-align: center;
+    
+    padding-left:20px;
+    padding-right:20px;
+    
+    padding-bottom:5px;
+    padding-top:5px;
+    
+    color:#eee;
+    background-color:steelblue; 
+    
+    border: 3px solid #777;
+    border-radius: 3px;
+    
+    cursor: pointer;
 }
