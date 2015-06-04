@@ -6,9 +6,10 @@ tddjs.namespace("server.controller").lobbyResponseController= lobbyResponseContr
        
 function lobbyResponseController()
 {   
-    function respondNewLobby()
+    function respondNewLobby(req)
     {
-        
+        if(typeof req !== "string")
+            throw new TypeError("Request must be string");
     }
     
     this.respondNewLobby = respondNewLobby;
