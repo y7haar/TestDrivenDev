@@ -37,6 +37,7 @@ function drawGame(){
     drawUI();
 }
 
+// <editor-fold defaultstate="collapsed" desc="draw-Methoden">
 /*draw methoden*/
 var border=50; //25 an jeder seite
 var bottom=50; //insg 75 unten frei für menü etc
@@ -147,6 +148,7 @@ function clear(){
     ctx.fillStyle = "#ebebeb";
     ctx.fillRect(0,0,ctx.canvas.width, ctx.canvas.height);
 }
+// </editor-fold>
 
 /*Main-Init()*/
 function init(){
@@ -169,6 +171,7 @@ function init(){
     }
 }
 
+// <editor-fold defaultstate="collapsed" desc="gameSates für EventListener">
 /*gameSates: MouseMove*/
 function mouseMoveAttackingState(oEvent) {
     for (var i in button)
@@ -235,7 +238,9 @@ function mouseDownAttackingState(oEvent) {
        if(button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY))
            button[i].click();
 }
+// </editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="EventListener">
 /*Event-Listener*/
 function onCanvasMouseMove(oEvent) {
     if(gameLoop.getStateName() === "attackingState")
@@ -255,6 +260,7 @@ function onCanvasMouseDown(oEvent) {
         mouseDownAttackingState(oEvent)
     drawGame();
 }
+// </editor-fold>
 
 /*Test*/
 function click_test(){
