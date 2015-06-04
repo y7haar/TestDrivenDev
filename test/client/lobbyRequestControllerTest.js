@@ -192,7 +192,11 @@ TestCase("LobbyRequestControllerTest", {
         
         var jsonObj = {
             type: "create",
-            lobby: null
+            lobby: null,
+            player: {
+                name: "Hans",
+                color: "#ffffff"
+            }
         };
         
         var json = JSON.stringify(jsonObj);
