@@ -13,6 +13,9 @@ selectedImg.src = "client/ui/selectedImg.png";
 var hoverImg = new Image();
 hoverImg.src = "client/ui/hoverImg.png";
 
+var countryStrHover="NICHTS!";
+var countryStrSelected="NICHTS!";
+
 var button=[];
 
 
@@ -95,7 +98,7 @@ function drawMapBorder(x,y,w,h){
     }
 }
 function drawUI(){
-    
+
     ctx.fillStyle = "#D49B6A";
     ctx.fillRect(0,ctx.canvas.height-border/2,ctx.canvas.width,border/2);
     ctx.fillRect(0,0,ctx.canvas.width,border/2);
@@ -109,6 +112,13 @@ function drawUI(){
     //drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
     for (var i in button)
        button[i].draw();
+   
+   /*Text*/
+   ctx.font="20px Georgia";
+   ctx.fillStyle = "#000000";
+   ctx.fillText(countryStrHover,ctx.canvas.width-border-ctx.measureText(countryStrHover).width,canvas.height-border/2-bottom+20);
+   ctx.fillStyle = "#FF0000";
+   ctx.fillText(countryStrSelected,ctx.canvas.width-border-ctx.measureText(countryStrSelected).width,canvas.height-border/2-bottom+40);
 }
 function clear(){
     ctx.fillStyle = "#ebebeb";
@@ -142,7 +152,8 @@ function onCanvasMouseMove(oEvent) {
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
     
     var cache_id;
-    
+    var cache_id_str=[];
+    countryStrSelected=" | ";
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             if(oEvent.offsetX>=x+(x*w)+border/2
@@ -152,11 +163,17 @@ function onCanvasMouseMove(oEvent) {
             {
                 map.cellGrid[x][y].hover=true;
                 cache_id=map.cellGrid[x][y].id;
+                countryStrHover=map.cellGrid[x][y].getName();
             }
             else
             {
                 if(map.cellGrid[x][y].id !== cache_id)
                     map.cellGrid[x][y].hover=false;
+            }
+            if(map.cellGrid[x][y].selected){
+                if(cache_id_str.indexOf(map.cellGrid[x][y].id) === -1)
+                    countryStrSelected=countryStrSelected+map.cellGrid[x][y].getName()+" | ";
+                cache_id_str.push(map.cellGrid[x][y].id);
             }
         }
     }
@@ -204,6 +221,7 @@ function init_map(){ //nur zum testen
             map.cellGrid[x][y].selected=false;
             map.cellGrid[x][y].hover=false;
             map.cellGrid[x][y].color="#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
+            map.cellGrid[x][y].setName("ID: "+map.cellGrid[x][y].id);
         }
     }
     console.log(map);
