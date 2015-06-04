@@ -169,7 +169,7 @@ function init(){
     }
 }
 
-/*game-sates*/
+/*gameSates: MouseMove*/
 function mouseMoveAttackingState(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
@@ -214,21 +214,10 @@ function mouseMoveAttackingState(oEvent) {
 function mouseMoveWaitingState(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
-    var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
-    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
 }
 
-/*Event-Listener*/
-function onCanvasMouseMove(oEvent) {
-    if(gameLoop.getStateName() === "attackingState")
-        mouseMoveAttackingState(oEvent);
-    else if(gameLoop.getStateName() === "placingState")
-        mouseMoveAttackingState(oEvent)
-    else if(gameLoop.getStateName() === "waitingState")
-        mouseMoveAttackingState(oEvent)
-    drawGame();
-}
-function onCanvasMouseDown(oEvent) {
+/*gameStates: MouseDown*/
+function mouseDownAttackingState(oEvent) {
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;    
     
@@ -245,7 +234,25 @@ function onCanvasMouseDown(oEvent) {
     for (var i in button)
        if(button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY))
            button[i].click();
-    
+}
+
+/*Event-Listener*/
+function onCanvasMouseMove(oEvent) {
+    if(gameLoop.getStateName() === "attackingState")
+        mouseMoveAttackingState(oEvent);
+    else if(gameLoop.getStateName() === "placingState")
+        mouseMoveAttackingState(oEvent)
+    else if(gameLoop.getStateName() === "waitingState")
+        mouseMoveAttackingState(oEvent)
+    drawGame();
+}
+function onCanvasMouseDown(oEvent) {
+    if(gameLoop.getStateName() === "attackingState")
+        mouseDownAttackingState(oEvent);
+    else if(gameLoop.getStateName() === "placingState")
+        mouseDownAttackingState(oEvent)
+    else if(gameLoop.getStateName() === "waitingState")
+        mouseDownAttackingState(oEvent)
     drawGame();
 }
 
