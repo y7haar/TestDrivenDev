@@ -8,6 +8,9 @@ var ctx;
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map;
 
+var selectedImg = new Image();
+selectedImg.src = "client/ui/selectedImg.png";
+
 var button=[];
 
 
@@ -50,14 +53,16 @@ function drawMap(){
             
             drawMapBorder(x,y,w,h);
             
-            if(map.cellGrid[x][y].selected)
-                console.log("f");
-                //ctx.strokeStyle="#f00";
-                //ctx.strokeRect(x+(x*w)+border/2,y+(y*h)+border/2,w,h);
+            if(map.cellGrid[x][y].selected){
+                ctx.fillStyle = "rgba(255, 128, 128, 0.7)";
+                ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                ctx.drawImage(selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+            }
         }
     }
 }
 function drawMapBorder(x,y,w,h){
+    ctx.lineWidth="2";
     ctx.strokeStyle="#000";
     if(x>0 && y>0){
         ctx.strokeStyle="#00f";
@@ -156,7 +161,7 @@ function onCanvasMouseMove(oEvent) {
 }
 function onCanvasMouseDown(oEvent) {
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
-    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
+    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;    
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
