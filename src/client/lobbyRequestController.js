@@ -25,11 +25,12 @@ function lobbyRequestController()
         ajax.get(BASE_URL + "lobbies", options);
     }
     
-    function requestNewLobby()
-    {
+    function requestNewLobby(aPlayer)
+    {   
         var data = {
             type: "create",
-            lobby: null
+            lobby: null,
+            player: aPlayer.serializeAsObject()
         };
         
         data = JSON.stringify(data);
