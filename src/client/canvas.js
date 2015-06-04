@@ -203,10 +203,13 @@ function onCanvasMouseDown(oEvent) {
 /*Test*/
 function click_test(){
     var count=0;
+    var cache_id=[];
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             if(map.cellGrid[x][y].selected)
-                count++;
+                if(cache_id.indexOf(map.cellGrid[x][y].id) === -1)
+                    count++;
+                cache_id.push(map.cellGrid[x][y].id);
         }
     }
     console.log(count+" selected!");
