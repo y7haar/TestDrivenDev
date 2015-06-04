@@ -23,6 +23,8 @@ function lobbyUi()
         wrapper.id = "lobbyWrapper";
         wrapper.className = "lobbyWrapper";
         
+        
+        
         content.appendChild(wrapper);
     }
     
@@ -70,6 +72,12 @@ function lobbyUi()
         wrapper.appendChild(div);
     }
     
+    function clearLobbies()
+    {
+        var wrapper = document.getElementById("lobbyWrapper");
+        wrapper.innerHTML = "";
+    }
+    
     function showErrorMessage()
     {
         var lobbyWrapper = document.getElementById("lobbyWrapper");
@@ -85,4 +93,5 @@ function lobbyUi()
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
+    this.clearLobbies = clearLobbies;
 }
