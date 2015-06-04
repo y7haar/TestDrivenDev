@@ -125,18 +125,25 @@ TestCase("LobbyUiTest", {
         assertTagName("td", lobbyTrContent1[0]);
         assertTagName("td", lobbyTrContent1[1]);
         assertTagName("td", lobbyTrContent1[2]);
+        assertTagName("td", lobbyTrContent1[3]);
+        
+        assertTagName("div", lobbyTrContent1[3].childNodes[0]);
         
         assertTagName("td", lobbyTrContent2[0]);
         assertTagName("td", lobbyTrContent2[1]);
         assertTagName("td", lobbyTrContent2[2]);
+        assertTagName("td", lobbyTrContent2[3]);
         
+        assertTagName("div", lobbyTrContent2[3].childNodes[0]);
         
         assertEquals("#0", lobbyTrContent1[0].innerHTML);
         assertEquals("L1", lobbyTrContent1[1].innerHTML);
         assertEquals("2 / 2", lobbyTrContent1[2].innerHTML);
+        assertEquals("Join", lobbyTrContent1[3].childNodes[0].innerHTML);
         
         assertEquals("#1", lobbyTrContent2[0].innerHTML);
         assertEquals("L2", lobbyTrContent2[1].innerHTML);
         assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
+        assertEquals("Join", lobbyTrContent2[3].childNodes[0].innerHTML);
     }
 });
