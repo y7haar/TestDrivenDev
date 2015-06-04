@@ -4,7 +4,7 @@
 
 var canvas;
 var ctx;
-//var gameLoop =  new tddjs.client.game.gameLoopController();
+var gameLoop =  new tddjs.client.gameLoopController();
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
 var map,logicMap;
 
@@ -15,6 +15,7 @@ hoverImg.src = "client/ui/hoverImg.png";
 
 var countryStrHover="NICHTS!";
 var countryStrSelected="NICHTS!";
+var stateStr="";
 
 var button=[];
 
@@ -28,6 +29,7 @@ var mainloop = function() {
 
 function updateGame(){
     //window.requestAnimationFrame(mainloop);
+    stateStr=gameLoop.getStateName();
 }
 function drawGame(){
     clear();
@@ -135,6 +137,8 @@ function drawUI(){
    /*Text*/
    ctx.font="20px Georgia";
    ctx.fillStyle = "#000000";
+   ctx.fillText(stateStr,ctx.canvas.width/2-ctx.measureText(stateStr).width/2,20);
+   ctx.fillStyle = "#000000";
    ctx.fillText(countryStrHover,ctx.canvas.width-border-ctx.measureText(countryStrHover).width,canvas.height-border/2-bottom+20);
    ctx.fillStyle = "#FF0000";
    ctx.fillText(countryStrSelected,ctx.canvas.width-border-ctx.measureText(countryStrSelected).width,canvas.height-border/2-bottom+40);
@@ -156,7 +160,6 @@ function init(){
             button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"getSelected()",ctx);
             button[0].click=click_test;
             button[1]=new tddjs.client.ui.button(170,ctx.canvas.height-65,"button-class 2",ctx);
-            button[1].setText("macht nix");
             
             window.requestAnimationFrame(mainloop);
             
@@ -257,5 +260,4 @@ function init_map(){ //nur zum testen
             //map.cellGrid[x][y].setName("ID: "+map.cellGrid[x][y].id);
         }
     }
-    console.log(logicMap.getContinents());
 }
