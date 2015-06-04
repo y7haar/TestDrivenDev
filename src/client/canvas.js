@@ -17,6 +17,9 @@ var countryStrHover="NICHTS!";
 var countryStrSelected="NICHTS!";
 var stateStr="";
 
+var countryHover=[];
+var countrySelected=[];
+
 var button=[];
 
 
@@ -25,11 +28,29 @@ var button=[];
 var mainloop = function() {
         updateGame();
         drawGame();
+        window.requestAnimationFrame(mainloop);
     };
 
 function updateGame(){
     //window.requestAnimationFrame(mainloop);
     stateStr=gameLoop.getStateName();
+    countryStrSelected=" | ";
+    countryStrHover=" | ";
+    
+    for(var i in countryHover){
+        countryStrHover=countryHover[i].getName();
+        for(var continent in logicMap.getContinents())
+            if(logicMap.getContinents()[continent].hasCountryByObject(countryHover[i]))
+                countryStrHover=countryStrHover+" ["+logicMap.getContinents()[continent].getName()+"]";
+        countryHover[i].hover=true;
+    }
+    for(var i in countrySelected){
+        countryStrSelected=countryStrSelected+countrySelected[i].getName();
+        for(var continent in logicMap.getContinents())
+            if(logicMap.getContinents()[continent].hasCountryByObject(countrySelected[i]))
+                countryStrSelected=countryStrSelected+" ["+logicMap.getContinents()[continent].getName()+"] | ";
+        countrySelected[i].selected=true;
+    }
 }
 function drawGame(){
     clear();
@@ -178,38 +199,19 @@ function mouseMoveAttackingState(oEvent) {
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
-    
-    var cache_id;
-    var cache_id_str=[];
-    countryStrSelected=" | ";
-    countryStrHover=" | ";
+
+
+    countryHover=[];
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
+            map.cellGrid[x][y].hover=false;
             if(oEvent.offsetX>=x+(x*w)+border/2
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
             {
-                map.cellGrid[x][y].hover=true;
-                cache_id=map.cellGrid[x][y].id;
-                countryStrHover=map.cellGrid[x][y].getName();
-                for(var continent in logicMap.getContinents())
-                    if(logicMap.getContinents()[continent].hasCountryByObject(map.cellGrid[x][y]))
-                        countryStrHover=countryStrHover+" ["+logicMap.getContinents()[continent].getName()+"]";
-            }
-            else
-            {
-                if(map.cellGrid[x][y].id !== cache_id)
-                    map.cellGrid[x][y].hover=false;
-            }
-            if(map.cellGrid[x][y].selected){
-                if(cache_id_str.indexOf(map.cellGrid[x][y].id) === -1){
-                    countryStrSelected=countryStrSelected+map.cellGrid[x][y].getName();
-                    for(var continent in logicMap.getContinents())
-                        if(logicMap.getContinents()[continent].hasCountryByObject(map.cellGrid[x][y]))
-                            countryStrSelected=countryStrSelected+" ["+logicMap.getContinents()[continent].getName()+"] | ";
-                }
-                cache_id_str.push(map.cellGrid[x][y].id);
+                if(countryHover.indexOf(map.cellGrid[x][y]) === -1)
+                    countryHover.push(map.cellGrid[x][y]);
             }
         }
     }
@@ -226,11 +228,15 @@ function mouseDownAttackingState(oEvent) {
     
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
+            map.cellGrid[x][y].selected=false;
             if(oEvent.offsetX>=x+(x*w)+border/2
                     && oEvent.offsetX<=x+(x*w)+border/2+w
                     && oEvent.offsetY>=y+(y*h)+border/2
                     && oEvent.offsetY<=y+(y*h)+border/2+h)
-                map.cellGrid[x][y].selected=!map.cellGrid[x][y].selected;
+                if(countrySelected.indexOf(map.cellGrid[x][y]) === -1)
+                    countrySelected.push(map.cellGrid[x][y]);
+                else
+                    countrySelected.splice(countrySelected.indexOf(map.cellGrid[x][y]),1);
         }
     }
     
@@ -249,7 +255,7 @@ function onCanvasMouseMove(oEvent) {
         mouseMoveAttackingState(oEvent)
     else if(gameLoop.getStateName() === "waitingState")
         mouseMoveAttackingState(oEvent)
-    drawGame();
+    //drawGame();
 }
 function onCanvasMouseDown(oEvent) {
     if(gameLoop.getStateName() === "attackingState")
@@ -258,7 +264,7 @@ function onCanvasMouseDown(oEvent) {
         mouseDownAttackingState(oEvent)
     else if(gameLoop.getStateName() === "waitingState")
         mouseDownAttackingState(oEvent)
-    drawGame();
+    //drawGame();
 }
 // </editor-fold>
 
