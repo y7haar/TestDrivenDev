@@ -116,19 +116,24 @@ TestCase("PlayerServerTest",
         assertEquals("#FFFFFF", this.player1.getColor());
     },
     
-    "test Should throw error if deserialization fails": function()
+    "test Should throw error if Id is incorrect on deserialize": function()
     {   
         var player1 = this.player1;
-        
         var json = {
             id: "asd",
             name: "Peter",
             color: "#FFFFFF"
         };
-        
         json = JSON.stringify(json);
         
-        assertException( function() { player1.deserialize(json); }, "Error");
+        assertException( function() { player1.deserialize(json); }, "TypeError");
+        
+
+    },
+    
+    "test Should throw error if name is incorrect on deserialize": function()
+    {   
+        var player1 = this.player1;
         
         var json = {
             id: 2,
@@ -138,12 +143,17 @@ TestCase("PlayerServerTest",
         
         json = JSON.stringify(json);
         
-        assertException( function() { player1.deserialize(json); }, "Error");
+        assertException( function() { player1.deserialize(json); }, "TypeError");
+    },
+    
+    "test Should throw error if color is incorrect on deserialize": function()
+    {   
+        var player1 = this.player1;
         
         var json = {
             id: 2,
             name: "Peter",
-            color: "#premium"
+            color: "#hjk"
         };
         
         json = JSON.stringify(json);
