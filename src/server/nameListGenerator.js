@@ -2,12 +2,30 @@
  *  Source-Code for NameListGenerator
  */
 
-tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
+module.exports = nameListGenerator;
+
+//tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
 
 function nameListGenerator()
 {
+    var fs = require('fs');
     var _nameList = [];
     var _currentIndex = 0;
+    var DEFAULT_LIST = "./nameLists/games.txt";
+
+    function readFileList(file, callback)
+    {
+        fs.readFile(file, {encoding: "utf-8"}, function (err, data) {
+            
+        if (err) 
+            throw err;
+        
+        var splits = data.split("\n");
+        setNameList(splits);
+        
+        callback();
+        });
+    }
 
     function setNameList(aNameList)
     {
@@ -45,7 +63,7 @@ function nameListGenerator()
     this.getNameList = getNameList;
     this.shuffleNameList = shuffleNameList;
     this.getNextName = getNextName;
+    this.readFileList = readFileList;
+    this.DEFAULT_LIST = DEFAULT_LIST;
     
-};
-
-
+}
