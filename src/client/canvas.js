@@ -169,8 +169,8 @@ function init(){
     }
 }
 
-/*Event-Listener*/
-function onCanvasMouseMove(oEvent) {
+/*game-sates*/
+function mouseMoveAttackingState(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
@@ -210,6 +210,22 @@ function onCanvasMouseMove(oEvent) {
             }
         }
     }
+}
+function mouseMoveWaitingState(oEvent) {
+    for (var i in button)
+       button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
+    var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
+    var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;
+}
+
+/*Event-Listener*/
+function onCanvasMouseMove(oEvent) {
+    if(gameLoop.getStateName() === "attackingState")
+        mouseMoveAttackingState(oEvent);
+    else if(gameLoop.getStateName() === "placingState")
+        mouseMoveAttackingState(oEvent)
+    else if(gameLoop.getStateName() === "waitingState")
+        mouseMoveAttackingState(oEvent)
     drawGame();
 }
 function onCanvasMouseDown(oEvent) {
