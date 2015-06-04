@@ -179,8 +179,13 @@ TestCase("LobbyRequestControllerTest", {
         assertFunction(this.lobbyRequestController.requestNewLobby);
     },
     
+    "test requestNewLobby must have paramter of type client.player": function () {      
+        var controller = this.lobbyRequestController;
+        assertException(function() { controller.requestNewLobby(5); }, "TypeError");
+    },
+    
     "test requestNewLobby should perform POST request to /lobbies": function () {         
-        this.lobbyRequestController.requestNewLobby();
+        this.lobbyRequestController.requestNewLobby(this.player);
          
         assertEquals(1, this.sandbox.server.requests.length);
         assertEquals("POST", this.sandbox.server.requests[0].method);
@@ -188,13 +193,13 @@ TestCase("LobbyRequestControllerTest", {
     },
     
      "test requestNewLobby should perform POST request with correct data": function () {         
-        this.lobbyRequestController.requestNewLobby();
+        this.lobbyRequestController.requestNewLobby(this.player);
         
         var jsonObj = {
             type: "create",
             lobby: null,
             player: {
-                name: "Hans",
+                name: "Peter",
                 color: "#ffffff"
             }
         };
@@ -205,7 +210,7 @@ TestCase("LobbyRequestControllerTest", {
     },
     
     "test requestNewLobby should perform a POST request with correct Content-Type header": function () {         
-         this.lobbyRequestController.requestNewLobby();
+         this.lobbyRequestController.requestNewLobby(this.player);
          
          assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     },
