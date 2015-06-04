@@ -12,6 +12,8 @@ function player()
     var idIsSetted = false;
     var color = "#000000";
     
+    var _token;
+    
     //Holt den Namen
     function getName()
     {
@@ -71,6 +73,22 @@ function player()
         idIsSetted = true;
     }
     
+    function setToken(token)
+    {
+        if(typeof token !== "string")
+            throw new TypeError("Token has to be a string");
+        
+        if(typeof _token !== "undefined")
+            throw new Error("Cant set token more than Once");
+        
+        _token = token;
+    }
+    
+    function getToken()
+    {
+        return _token;
+    }
+    
     //Serialisiert das Object
     function serialize()
     {
@@ -115,6 +133,9 @@ function player()
     this.getName = getName;
     this.setName = setName;
 
+    this.setToken = setToken;
+    this.getToken = getToken;
+    
     this.getColor = getColor;
     this.setColor = setColor;
     this.getId = getId;
