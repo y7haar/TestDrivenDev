@@ -51,6 +51,8 @@ function lobbyRequestController()
         var data = xhr.responseText;
         data = JSON.parse(data);
         
+        _lobbyUi.clearLobbies();
+        
         for(var i = 0;i < data.length;++i)
         {
             _lobbyUi.addLobby(data[i]);
