@@ -123,6 +123,23 @@ TestCase("LobbyPlayerTest", {
         
         this.lobby.kickPlayer(this.player2);
         assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
+  },
+  
+   "test Lobby should set player id when player is added": function () { 
+        assertUndefined(this.player1.getId());
+        this.lobby.addPlayer(this.player1);
+        assertNotUndefined(this.player1.getId());
+  },
+  
+  "test when adding multiple players, each player should have a unique Id": function () { 
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        
+        assertNotUndefined(this.player1.getId());
+        assertNotUndefined(this.player2.getId());
+        
+        assertNotEquals(this.player1.getId(), this.player2.getId());
+        
   }
   
 });
