@@ -13,6 +13,15 @@ function lobbyUi()
         content.id = "content";
         content.className = "content";
         
+        var h1Div = document.createElement("div");
+        h1Div.className = "lobbyTitle";
+        
+        var h1 = document.createElement("h1");
+        h1.innerHTML = "Lobbies";
+        
+        h1Div.appendChild(h1);
+        content.appendChild(h1Div);
+        
         body.appendChild(content);
     }
     
@@ -22,7 +31,6 @@ function lobbyUi()
         var wrapper = document.createElement("div");
         wrapper.id = "lobbyWrapper";
         wrapper.className = "lobbyWrapper";
-        
         
         
         content.appendChild(wrapper);
