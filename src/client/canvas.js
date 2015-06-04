@@ -246,7 +246,7 @@ function init_map(){ //nur zum testen
             map.cellGrid[x][y].selected=false;
             map.cellGrid[x][y].hover=false;
             map.cellGrid[x][y].color="#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
-            map.cellGrid[x][y].setName("ID: "+map.cellGrid[x][y].id);
+            //map.cellGrid[x][y].setName("ID: "+map.cellGrid[x][y].id);
         }
     }
     console.log(map);

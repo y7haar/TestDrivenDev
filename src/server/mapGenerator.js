@@ -100,8 +100,31 @@ function mapGenerator()
         initBorders();
         combineCountryCells();
         combineRemainingCountries();
+        var map = new tddjs.client.map.map();
+        initLogicMap(map);
+        return map;
+    }
+    
+    function initLogicMap(map)
+    {
+        var continent = new tddjs.client.map.continent();
+        continent.setName("test");
         
-        return new tddjs.client.map.map();
+        var cache_id=[];
+        for(var i=0;i<getMapWidth();i++)
+        {
+            for(var j=0;j<getMapHeight();j++)
+            {
+                if(cache_id.indexOf(_grid.cellGrid[i][j].id) === -1)
+                {
+                    _grid.cellGrid[i][j].setName("ID: "+_grid.cellGrid[i][j].id);
+                    continent.addCountry(_grid.cellGrid[i][j]);
+                }
+                cache_id.push(_grid.cellGrid[i][j].id);
+            }
+        }
+        
+        map.addContinent(continent);
     }
     
     //Belegt jede Zelle mit einem neuen Land
