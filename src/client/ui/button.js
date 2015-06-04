@@ -24,7 +24,7 @@ function button(x,y,str,ctx){
     }
     
     function click(){
-        alert("CLICK");
+        console.log(str+"-->CLICK");
     }
     
     function draw(){
