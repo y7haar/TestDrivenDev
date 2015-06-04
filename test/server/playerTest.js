@@ -40,6 +40,29 @@ TestCase("PlayerServerTest",
         assertException(function(){player.setName(player);},"TypeError");
     },
     
+    "test token should be able to setted and getted correctly": function() 
+    {
+        this.player1.setToken("dgdfgdfg");
+        
+        assertEquals("dgdfgdfg", this.player1.getToken());
+    },
+    
+    "test should throw Error when token is not a string": function() 
+    {
+        var player = this.player1;
+
+        assertException(function(){player.setToken(4);},"TypeError");
+        assertNoException(function(){player.setToken("ad");});
+    },
+    
+    "test should throw Error when token is setted more than once": function() 
+    {
+        var player = this.player1;
+
+        assertNoException(function(){player.setToken("ad");});
+        assertException(function(){player.setToken("ad");}, "Error");
+    },
+    
     "test Should be able to set and get Hex-Values for Colors": function()
     {      
         this.player1.setColor("#FFFFFF");
