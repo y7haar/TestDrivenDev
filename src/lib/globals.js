@@ -2,7 +2,7 @@
  *  Some global variables
  */
 
-var BASE_URL = "/";
+var BASE_URL = "http://localhost:8080/";
 
 
 
