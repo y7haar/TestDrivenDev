@@ -6,6 +6,11 @@ tddjs.namespace("server.controller").lobbyResponseController= lobbyResponseContr
        
 function lobbyResponseController()
 {   
+    function respondNewLobby()
+    {
+        
+    }
     
+    this.respondNewLobby = respondNewLobby;
 }
 
