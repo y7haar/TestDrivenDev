@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Game Lobbies</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+        <script language="javascript" type="text/javascript" src="lib/tdd.js"></script>
+        <script language="javascript" type="text/javascript" src="lib/globals.js"></script>
+        <script language="javascript" type="text/javascript" src="client/lobbyUi.js"></script>
+        <script language="javascript" type="text/javascript" src="client/lobbyRequestController.js"></script>
+        <script language="javascript" type="text/javascript" src="client/player.js"></script>
+        <script language="javascript" type="text/javascript" src="client/ajax.js"></script>
+        
+        <script language="javascript" type="text/javascript" src="client/gameLoopController.js"></script>
+        <script language="javascript" type="text/javascript" src="client/gameStates.js"></script>
+        <script language="javascript" type="text/javascript" src="server/mapGenerator.js"></script>
+        <script language="javascript" type="text/javascript" src="client/canvas.js"></script>
+        <script language="javascript" type="text/javascript" src="client/ui/button.js"></script>
+    </head>
+    <body>
+        <script>
+            var ui = new tddjs.client.ui.lobbyUi();
+            ui.createContent();
+            ui.createWrapper();
+            
+            var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+            lobbyRequestController.requestAllLobbies();
+        </script>
+    </body>
+</html>
