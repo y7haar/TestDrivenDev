@@ -197,8 +197,12 @@ function onCanvasMouseMove(oEvent) {
                     map.cellGrid[x][y].hover=false;
             }
             if(map.cellGrid[x][y].selected){
-                if(cache_id_str.indexOf(map.cellGrid[x][y].id) === -1)
-                    countryStrSelected=countryStrSelected+map.cellGrid[x][y].getName()+" | ";
+                if(cache_id_str.indexOf(map.cellGrid[x][y].id) === -1){
+                    countryStrSelected=countryStrSelected+map.cellGrid[x][y].getName();
+                    for(var continent in logicMap.getContinents())
+                        if(logicMap.getContinents()[continent].hasCountryByObject(map.cellGrid[x][y]))
+                            countryStrSelected=countryStrSelected+" ["+logicMap.getContinents()[continent].getName()+"] | ";
+                }
                 cache_id_str.push(map.cellGrid[x][y].id);
             }
         }
