@@ -10,6 +10,8 @@ var map;
 
 var selectedImg = new Image();
 selectedImg.src = "client/ui/selectedImg.png";
+var hoverImg = new Image();
+hoverImg.src = "client/ui/hoverImg.png";
 
 var button=[];
 
@@ -46,16 +48,17 @@ function drawMap(){
             ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
             
             if(map.cellGrid[x][y].hover){
-                ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-                ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                //ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+                //ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                ctx.drawImage(hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
             }
             
             drawMapBorder(x,y,w,h);
             
             if(map.cellGrid[x][y].selected){
-                ctx.fillStyle = "rgba(255, 128, 128, 0.7)";
-                ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                //ctx.fillStyle = "rgba(255, 128, 128, 0.7)";
+                //ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                 ctx.drawImage(selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
             }
         }
