@@ -68,37 +68,57 @@ function drawMap(){
     }
 }
 function drawMapBorder(x,y,w,h){
+    var offset=1;
     ctx.lineWidth="2";
-    ctx.strokeStyle="#000";
+    ctx.strokeStyle="#00F";
     if(x>0 && y>0){
-        ctx.strokeStyle="#00f";
         if(map.cellGrid[x][y].id !== map.cellGrid[x-1][y].id)
         {
             ctx.beginPath();
             ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
-            ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
+            ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h+offset);
             ctx.stroke();
         }
         if(map.cellGrid[x][y].id !== map.cellGrid[x][y-1].id)
         {
             ctx.beginPath();
             ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
-            ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
+            ctx.lineTo(x+(x*w)+border/2+w+offset, y+(y*h)+border/2+0);
             ctx.stroke();
         }
     }
     else{
-        ctx.strokeStyle="#0f0";
-        ctx.beginPath();
-        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
-        ctx.lineTo(x+(x*w)+border/2+w, y+(y*h)+border/2+0);
-        ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
-        ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h);
-        ctx.stroke();
+        if(x===0 && y>0 )
+        {
+            if(map.cellGrid[x][y].id !== map.cellGrid[x][y-1].id)
+            {
+                ctx.beginPath();
+                ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+                ctx.lineTo(x+(x*w)+border/2+w+offset, y+(y*h)+border/2+0);
+                ctx.stroke();
+            }
+        }
+        else if(y===0 && x>0 )
+        {
+            if(map.cellGrid[x][y].id !== map.cellGrid[x-1][y].id)
+            {
+                ctx.beginPath();
+                ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
+                ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h+offset);
+                ctx.stroke();
+            }
+        }
     }
+    ctx.beginPath();
+    ctx.moveTo(border/2,border/2);
+    ctx.lineTo(ctx.canvas.width-border/2, border/2);
+    ctx.lineTo(ctx.canvas.width-border/2, ctx.canvas.height-border/2-bottom);
+    ctx.lineTo(border/2, ctx.canvas.height-border/2-bottom);
+    ctx.lineTo(border/2, border/2);
+    ctx.stroke();
 }
 function drawUI(){
-
+    /*draw borders etc*/
     ctx.fillStyle = "#D49B6A";
     ctx.fillRect(0,ctx.canvas.height-border/2,ctx.canvas.width,border/2);
     ctx.fillRect(0,0,ctx.canvas.width,border/2);
@@ -109,7 +129,6 @@ function drawUI(){
     ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
     
     /*draw buttons*/
-    //drawButton(ctx.canvas.width-border-90,ctx.canvas.height-border/2-bottom+2,"TEST");
     for (var i in button)
        button[i].draw();
    
@@ -133,11 +152,14 @@ function init(){
        if (ctx) {
             clear();
             init_map();
-            button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"button-class",ctx);
+            
+            button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"getSelected()",ctx);
             button[0].click=click_test;
-            button[1]=new tddjs.client.ui.button(150,ctx.canvas.height-65,"button-class 2",ctx);
-            button[1].setText("TEST");
+            button[1]=new tddjs.client.ui.button(170,ctx.canvas.height-65,"button-class 2",ctx);
+            button[1].setText("macht nix");
+            
             window.requestAnimationFrame(mainloop);
+            
             canvas.addEventListener('mousemove', onCanvasMouseMove, false);
             canvas.addEventListener('mousedown', onCanvasMouseDown, false);
         }
