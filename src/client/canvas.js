@@ -6,7 +6,7 @@ var canvas;
 var ctx;
 //var gameLoop =  new tddjs.client.game.gameLoopController();
 var mapGen = new tddjs.server.controller.mapGenerator(); //nur zum testen
-var map;
+var map,logicMap;
 
 var selectedImg = new Image();
 selectedImg.src = "client/ui/selectedImg.png";
@@ -176,6 +176,7 @@ function onCanvasMouseMove(oEvent) {
     var cache_id;
     var cache_id_str=[];
     countryStrSelected=" | ";
+    countryStrHover=" | ";
     for(x=0;x<map.cellGrid.length;x++){
         for(y=0;y<map.cellGrid[0].length;y++){
             if(oEvent.offsetX>=x+(x*w)+border/2
@@ -186,6 +187,9 @@ function onCanvasMouseMove(oEvent) {
                 map.cellGrid[x][y].hover=true;
                 cache_id=map.cellGrid[x][y].id;
                 countryStrHover=map.cellGrid[x][y].getName();
+                for(var continent in logicMap.getContinents())
+                    if(logicMap.getContinents()[continent].hasCountryByObject(map.cellGrid[x][y]))
+                        countryStrHover=countryStrHover+" ["+logicMap.getContinents()[continent].getName()+"]";
             }
             else
             {
@@ -238,7 +242,7 @@ function click_test(){
 }
 function init_map(){ //nur zum testen
     mapGen.setGridSize(25,25);
-    mapGen.generateMap();
+    logicMap = mapGen.generateMap();
     map = mapGen.getMapGrid();
     
     for(x=0;x<map.cellGrid.length;x++){
@@ -249,5 +253,5 @@ function init_map(){ //nur zum testen
             //map.cellGrid[x][y].setName("ID: "+map.cellGrid[x][y].id);
         }
     }
-    console.log(map);
+    console.log(logicMap.getContinents());
 }
