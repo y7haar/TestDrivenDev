@@ -6,6 +6,16 @@ tddjs.namespace("client.ui").lobbyUi= lobbyUi;
        
 function lobbyUi()
 {   
+    function createContent()
+    {
+        var body = document.getElementsByTagName("body")[0];
+        var content = document.createElement("div");
+        content.id = "content";
+        content.className = "content";
+        
+        body.appendChild(content);
+    }
+    
     function createWrapper()
     {
         var content = document.getElementById("content");
@@ -47,9 +57,14 @@ function lobbyUi()
     
     function showErrorMessage()
     {
+        var lobbyWrapper = document.getElementById("lobbyWrapper");
+        var p = document.createElement("p");
+        p.innerHTML = "Error: Could not get data";
         
+        lobbyWrapper.appendChild(p);
     }
     
+    this.createContent = createContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
