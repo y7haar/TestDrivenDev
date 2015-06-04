@@ -12,6 +12,7 @@ function lobby()
     var _isIdSet = false;
     var _name = "GameLobby";
     var _leader;
+    var _currentPlayerId = 0;
 
     
     function setId(aId)
@@ -33,6 +34,9 @@ function lobby()
 
     function addPlayer(aPlayer)
     {
+        if(typeof aPlayer.getId() === "undefined")
+             aPlayer.setId(_currentPlayerId++);
+        
         if (_players.length < _maxPlayers)
             _players.push(aPlayer);
     }
