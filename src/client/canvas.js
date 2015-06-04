@@ -118,6 +118,7 @@ function init(){
             button[0]=new tddjs.client.ui.button(30,ctx.canvas.height-65,"button-class",ctx);
             button[0].click=click_test;
             button[1]=new tddjs.client.ui.button(150,ctx.canvas.height-65,"button-class 2",ctx);
+            button[1].setText("TEST");
             window.requestAnimationFrame(mainloop);
             canvas.addEventListener('mousemove', onCanvasMouseMove, false);
             canvas.addEventListener('mousedown', onCanvasMouseDown, false);
@@ -183,7 +184,7 @@ function click_test(){
                 count++;
         }
     }
-    alert(count+" selected!");
+    console.log(count+" selected!");
 }
 function init_map(){ //nur zum testen
     mapGen.setGridSize(25,25);
