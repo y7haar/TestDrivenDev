@@ -104,14 +104,16 @@ function mapGenerator()
         initLogicMap(map);
         return map;
     }
-    
+    /*test-funktion für die UI*/
     function initLogicMap(map)
     {
         var continent = new tddjs.client.map.continent();
-        continent.setName("test");
+        continent.setName("Continent 1");
+        var continent2 = new tddjs.client.map.continent();
+        continent2.setName("Continent 2");
         
         var cache_id=[];
-        for(var i=0;i<getMapWidth();i++)
+        for(var i=0;i<getMapWidth()/2;i++)
         {
             for(var j=0;j<getMapHeight();j++)
             {
@@ -123,8 +125,21 @@ function mapGenerator()
                 cache_id.push(_grid.cellGrid[i][j].id);
             }
         }
+        for(var i=Math.floor(getMapWidth()/2);i<getMapWidth();i++)
+        {
+            for(var j=0;j<getMapHeight();j++)
+            {
+                if(cache_id.indexOf(_grid.cellGrid[i][j].id) === -1)
+                {
+                    _grid.cellGrid[i][j].setName("ID: "+_grid.cellGrid[i][j].id);
+                    continent2.addCountry(_grid.cellGrid[i][j]);
+                }
+                cache_id.push(_grid.cellGrid[i][j].id);
+            }
+        }
         
         map.addContinent(continent);
+        map.addContinent(continent2);
     }
     
     //Belegt jede Zelle mit einem neuen Land
