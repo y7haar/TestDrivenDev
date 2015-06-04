@@ -59,7 +59,7 @@ function drawGame(){
 }
 
 // <editor-fold defaultstate="collapsed" desc="draw-Methoden">
-/*draw methoden*/
+//draw methoden
 var border=50; //25 an jeder seite
 var bottom=50; //insg 75 unten frei für menü etc
 function drawMap(){
@@ -142,7 +142,7 @@ function drawMapBorder(x,y,w,h){
     ctx.stroke();
 }
 function drawUI(){
-    /*draw borders etc*/
+    //draw borders etc
     ctx.fillStyle = "#D49B6A";
     ctx.fillRect(0,ctx.canvas.height-border/2,ctx.canvas.width,border/2);
     ctx.fillRect(0,0,ctx.canvas.width,border/2);
@@ -152,11 +152,11 @@ function drawUI(){
     ctx.fillStyle = "#FFD1AA";
     ctx.fillRect(border/2,ctx.canvas.height-border/2-bottom,ctx.canvas.width-border,bottom);
     
-    /*draw buttons*/
+    //draw buttons
     for (var i in button)
        button[i].draw();
    
-   /*Text*/
+   //Text
    ctx.font="20px Georgia";
    ctx.fillStyle = "#000000";
    ctx.fillText(stateStr,ctx.canvas.width/2-ctx.measureText(stateStr).width/2,20);
@@ -171,7 +171,7 @@ function clear(){
 }
 // </editor-fold>
 
-/*Main-Init()*/
+//Main-Init()
 function init(){
     canvas = document.getElementById('game');
     if (canvas && canvas.getContext) {
@@ -193,7 +193,8 @@ function init(){
 }
 
 // <editor-fold defaultstate="collapsed" desc="gameSates für EventListener">
-/*gameSates: MouseMove*/
+// <editor-fold defaultstate="collapsed" desc="gameSates für MouseMove">
+//gameSates: MouseMove
 function mouseMoveAttackingState(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
@@ -220,8 +221,9 @@ function mouseMoveWaitingState(oEvent) {
     for (var i in button)
        button[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
 }
-
-/*gameStates: MouseDown*/
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="gameSates für MouseDown">
+//gameStates: MouseDown
 function mouseDownAttackingState(oEvent) {
     var w = (ctx.canvas.width-border-map.cellGrid.length)/map.cellGrid.length;
     var h = (ctx.canvas.height-border-bottom-map.cellGrid[0].length)/map.cellGrid[0].length;    
@@ -245,30 +247,32 @@ function mouseDownAttackingState(oEvent) {
            button[i].click();
 }
 // </editor-fold>
+// </editor-fold>
 
 // <editor-fold defaultstate="collapsed" desc="EventListener">
-/*Event-Listener*/
+//Event-Listener
 function onCanvasMouseMove(oEvent) {
     if(gameLoop.getStateName() === "attackingState")
         mouseMoveAttackingState(oEvent);
     else if(gameLoop.getStateName() === "placingState")
-        mouseMoveAttackingState(oEvent)
+        mouseMoveAttackingState(oEvent);
     else if(gameLoop.getStateName() === "waitingState")
-        mouseMoveAttackingState(oEvent)
+        mouseMoveAttackingState(oEvent);
     //drawGame();
 }
 function onCanvasMouseDown(oEvent) {
     if(gameLoop.getStateName() === "attackingState")
         mouseDownAttackingState(oEvent);
     else if(gameLoop.getStateName() === "placingState")
-        mouseDownAttackingState(oEvent)
+        mouseDownAttackingState(oEvent);
     else if(gameLoop.getStateName() === "waitingState")
-        mouseDownAttackingState(oEvent)
+        mouseDownAttackingState(oEvent);
     //drawGame();
 }
 // </editor-fold>
 
-/*Test*/
+// <editor-fold defaultstate="collapsed" desc="Methoden für die UI-"Tests"">
+//Test
 function click_test(){
     var count=0;
     var cache_id=[];
@@ -296,3 +300,4 @@ function init_map(){ //nur zum testen
         }
     }
 }
+// </editor-fold>
