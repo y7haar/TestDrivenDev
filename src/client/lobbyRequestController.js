@@ -59,7 +59,7 @@ function lobbyRequestController()
     
     function onAllLobbiesFailure()
     {
-        
+        _lobbyUi.showErrorMessage();
     }
     
     function requestJoin(aLobbyId, aPlayer)
