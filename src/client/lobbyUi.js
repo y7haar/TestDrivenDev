@@ -99,10 +99,15 @@ function lobbyUi(aRequestController)
         lobbyWrapper.appendChild(p);
     }
     
-    function onJoinSubmit(aLobby)
+    function onJoinSubmit(aLobbyId, aPlayer)
     {
-        if(typeof aLobby !== "object")
-            throw new TypeError("Lobby must be an object");
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("LobbyId must be a number");
+        
+        if(! (aPlayer instanceof tddjs.client.player))
+            throw new TypeError("Not a Player");
+        
+        _lobbyRequestController.requestJoin(aLobbyId, aPlayer);
     }
     
     function getLobbyRequestController()

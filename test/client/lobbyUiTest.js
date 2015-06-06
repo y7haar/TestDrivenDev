@@ -106,7 +106,7 @@ TestCase("LobbyUiTest", {
        var spy = this.sandbox.spy(requestController.joinRequest);
        
        sinon.assert.notCalled(spy);
-       ui.onJoinSubmit(1, { name: "Peter", color: "#ffffff"});
+       ui.onJoinSubmit(1, this.player1);
        sinon.assert.calledOnce(spy);
     },
     

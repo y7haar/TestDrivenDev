@@ -9,7 +9,7 @@ tddjs.namespace("client.controller").lobbyRequestController= lobbyRequestControl
 function lobbyRequestController()
 {   
     var ajax = tddjs.util.ajax;
-    var _lobbyUi = new tddjs.client.ui.lobbyUi();
+    var _lobbyUi = new tddjs.client.ui.lobbyUi(this);
     
     function requestAllLobbies()
     {
