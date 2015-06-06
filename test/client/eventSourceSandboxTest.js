@@ -192,8 +192,31 @@ TestCase("eventSourceSandboxServer", {
          
          assertTrue(called);
          assertEquals(msg, sendMsg);
+    },
+    
+    "test sandbox.server sendMessage should call onMessage event of client if eventName is null": function () {
+        
+         var es = new EventSource(this.server1URL);
+         
+         var calledTestEvent = false;         
+         var testEvent = function(e){
+             calledTestEvent = true;
+         };
+         
+         var calledMessageEvent = false;         
+         var onMessage = function(e){
+             calledMessageEvent = true;
+         };
+ 
+         var sendMsg = "HELLOWORLD";
+         es.addEventListner("test", testEvent); 
+         es.addEventListner("Message" ,onMessage);
+         
+         this.sandbox.server[this.server1URL].sendMessage(0,null,{data:sendMsg});
+         
+         assertFalse(calledTestEvent);
+         assertTrue(calledMessageEvent);             
     }
-   
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
