@@ -5,7 +5,7 @@
 
 TestCase("LobbyUiTest", {
     setUp: function () {
-        this.lobbyUi = new tddjs.client.ui.lobbyUi();
+        this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
         
       this.lobby1 = new tddjs.server.model.lobby();
       this.lobby2 = new tddjs.server.model.lobby();
