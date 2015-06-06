@@ -46,11 +46,7 @@ TestCase("eventSourceSandbox", {
     },
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
-    },
-    "test sandbox.update should update all servers": function () {
-        assertTrue(false);
-        this.sandbox.update();
-    }, 
+    },    
     "test sandbox shoulde have a object that hold all servers": function () {
         assertNotUndefined(this.sandbox.server);
     },
@@ -269,7 +265,7 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox.server requets should hold all requests at start 0": function(){
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
     },
-    "test sandbox.server requets should have 1 entry after a ajax request to server": function(){
+    "test sandbox.server requets should have 1 entry after a ajax request to server, sandbox.upgrade should upgrade all servers": function(){
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
         var succesCalled = false;        
