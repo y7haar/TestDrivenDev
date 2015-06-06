@@ -222,8 +222,8 @@ TestCase("PlayerTest",
         assertNoException(function() { player1.setType("bot"); });
         assertNoException(function() { player1.setType("Bot"); });
         
-        assertException(function() { player1.setType("boot"); }, "Error");
-        assertException(function() { player1.setType("UltraNatzer1337"); }, "Error");
+        assertException(function() { player1.setType("boot"); }, "TypeError");
+        assertException(function() { player1.setType("UltraNatzer1337"); }, "TypeError");
         
     },
     
