@@ -139,6 +139,8 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox.server sendMessage throw exception if paramter is wrong": function () {
         var sandbox = this.sandbox;
         var url = this.server1URL;
+        var es = EventSource(this.server1URL);
+        
         
         // prameter1 is the index of the client that should be messaged
         // parameter2 should be sting of the event or null
@@ -149,42 +151,33 @@ TestCase("eventSourceSandboxServer", {
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage({client:1},"onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage({client:0},"onmessage",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1,{eventName:"onmessage"},{data:"helloWorld"});
+            sandbox.server[url].sendMessage(0,{eventName:"onmessage"},{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1,"onmessage","");
+            sandbox.server[url].sendMessage(0,"onmessage","");
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1, "onmessage",{information:"helloWorld"});
+            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
         } ,"TypeError");
         
         assertNoException(function(){
-            sandbox.server[url].sendMessage(1,"onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage(0,"onmessage",{data:"helloWorld"});
         });
         
         assertNoException(function(){
-            sandbox.server[url].sendMessage(1,null,{data:null});
+            sandbox.server[url].sendMessage(0,null,{data:null});
         });
-
-    },
-    "test sandbox.server sendMessage throw exception if eventName parameter is not null and event dont exists": function () {
-        var sandbox = this.sandbox;
-        var url = this.server1URL;
         
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
-    },
-    "test sandbox.server sendMessage throw exception if index of client dont exists": function () {
-        var sandbox = this.sandbox;
-        var url = this.server1URL;
-        
+
         assertException(function(){
             sandbox.server[url].sendMessage(300,null,{data:null});
         } ,"Error");
