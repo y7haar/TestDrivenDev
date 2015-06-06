@@ -133,62 +133,138 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(1, this.sandbox.server[server2Url].clients.length);
         assertEquals(es2, this.sandbox.server[server2Url].clients[0]);
     },
-     "test sandbox.server sendMessage method should be a function": function () {
+    "test sandbox.server sendMessage method should be a function": function () {
         assertFunction(this.sandbox.server[this.server1URL].sendMessage);
     },
     "test sandbox.server sendMessage throw exception if paramter is wrong": function () {
         var sandbox = this.sandbox;
         var url = this.server1URL;
+        var es = EventSource(this.server1URL);        
         
         // prameter1 is the index of the client that should be messaged
         // parameter2 should be sting of the event or null
         // parameter3 shoulde be object with atleast date property
+        
+        // if there is no client with give index --> exception
+        // if client dont have given eventName --> exception
         
         assertException(function(){
             sandbox.server[url].sendMessage();
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage({client:1},"onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage({client:0},"onmessage",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1,{eventName:"onmessage"},{data:"helloWorld"});
+            sandbox.server[url].sendMessage(0,{eventName:"onmessage"},{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1,"onmessage","");
+            sandbox.server[url].sendMessage(0,"onmessage","");
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(1, "onmessage",{information:"helloWorld"});
+            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
         } ,"TypeError");
-        
-        assertNoException(function(){
-            sandbox.server[url].sendMessage(1,"onmessage",{data:"helloWorld"});
-        });
-        
-        assertNoException(function(){
-            sandbox.server[url].sendMessage(1,null,{data:null});
-        });
-
-    },
-    "test sandbox.server sendMessage throw exception if eventName parameter is not null and event dont exists": function () {
-        var sandbox = this.sandbox;
-        var url = this.server1URL;
-        
+  
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
-    },
-    "test sandbox.server sendMessage throw exception if index of client dont exists": function () {
-        var sandbox = this.sandbox;
-        var url = this.server1URL;
-        
+
         assertException(function(){
             sandbox.server[url].sendMessage(300,null,{data:null});
         } ,"Error");
-    }
+    }, 
+    "test sandbox.server sendMessage should call specific event of client": function () {
+         var es = new EventSource(this.server1URL);
+         var called = false;
+         var msg;
+         
+         var testEvent = function(e){
+             called = true;
+             msg = e.data;
+         };
+ 
+         var sendMsg = "HELLOWORLD";
+         es.addEventListner("test", testEvent);                
+         this.sandbox.server[this.server1URL].sendMessage(0,"ontest",{data:sendMsg});
+         
+         assertTrue(called);
+         assertEquals(msg, sendMsg);
+    },
+    
+    "test sandbox.server sendMessage should call onMessage event of client if eventName is null": function () {
+        
+         var es = new EventSource(this.server1URL);
+         
+         var calledTestEvent = false;         
+         var testEvent = function(e){
+             calledTestEvent = true;
+         };
+         
+         var calledMessageEvent = false;         
+         var onMessage = function(e){
+             calledMessageEvent = true;
+         };
+ 
+         var sendMsg = "HELLOWORLD";
+         es.addEventListner("test", testEvent); 
+         es.addEventListner("Message" ,onMessage);
+         
+         this.sandbox.server[this.server1URL].sendMessage(0,null,{data:sendMsg});
+         
+         assertFalse(calledTestEvent);
+         assertTrue(calledMessageEvent);             
+    },
+    "test sandbox.server should implement sendMessageToAll function": function () {
+        assertFunction(this.sandbox.sendMessageToAll);
+    },    
+    "test sandbox.server sendMessageToAll should call every connected Client": function () {
+        var es1 = new EventSource(this.server1URL);
+        var es2 = new EventSource(this.server1URL);
+        var es3 = new EventSource(this.server1URL);   
+        
+        
+        var es1_called = false;
+        var es1_event = function(e){
+            es1_called = true;
+        };
+        es1.addEventListner("test", es1_event);
+        
+        var es2_called = false;
+        var es2_event = function(e){
+            es2_called = true;
+        };
+        es2.addEventListner("test", es2_event);
+        
+        var es3_called = false;
+        var es3_event = function(e){
+            es3_called = true;
+        };
+        es3.addEventListner("test", es3_event);
+        
+        
+        var notConnectedES = new EventSource("/wrongUrl");
+        var notConnectedES_called = false;
+        var notConnectedES_event = function(e){
+            notConnectedES_called = true;
+        };
+        
+        assertFalse(es1_called);
+        assertFalse(es2_called);
+        assertFalse(es3_called);
+        assertFalse(notConnectedES_called);
+        
+        
+        this.sandbox.server[this.server1URL].sendMessageToAll('test',{data:"HELLOWORLD"});
+        
+        assertTrue(es1_called);
+        assertTrue(es2_called);
+        assertTrue(es3_called);
+        assertFalse(notConnectedES_called);
+    }  
+    
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
