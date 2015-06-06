@@ -149,7 +149,7 @@ TestCase("eventSourceSandboxServer", {
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage("1","onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage({client:1},"onmessage",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
@@ -168,7 +168,7 @@ TestCase("eventSourceSandboxServer", {
             sandbox.server[url].sendMessage(1,"onmessage",{data:"helloWorld"});
         });
         
-        assertNoEcxeption(function(){
+        assertNoException(function(){
             sandbox.server[url].sendMessage(1,null,{data:null});
         });
 
@@ -178,7 +178,7 @@ TestCase("eventSourceSandboxServer", {
         var url = this.server1URL;
         
         assertException(function(){
-            sandbox.server[url].sendMessage("EventThatDontExist",{data:null});
+            sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
     },
     "test sandbox.server sendMessage throw exception if index of client dont exists": function () {
