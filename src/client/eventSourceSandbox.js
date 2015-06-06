@@ -65,6 +65,13 @@ function eventSourceSandbox()
     {
         this.clients = [];
         
+        this.sendMessage = function(clientIndex, eventName, message){    
+            
+            if(isNaN(clientIndex) || typeof clientIndex === 'undefined')throw new TypeError("clientIndex is not a Number");            
+            if(typeof eventName !== 'string' && eventName !== null)throw new TypeError("eventName ist not a String");
+            if(typeof message === 'undefined' || typeof message.data === 'undefined') throw new TypeError("message data propert is missing");
+        };
+        
     }    
     function addServer(serverUrl)
     {

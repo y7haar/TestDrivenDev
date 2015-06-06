@@ -33,7 +33,6 @@ TestCase("eventSourceSandboxOvverride", {
     }
 });
 
-
 TestCase("eventSourceSandbox", {
     setUp: function () {
         this.server1URL = "/server_1Url";
@@ -51,43 +50,7 @@ TestCase("eventSourceSandbox", {
     "test sandbox.update should update all servers": function () {
         assertTrue(false);
         this.sandbox.update();
-    },
-    "test sandbox dispatchClientEvent method should be a function": function () {
-        assertFunction(this.sandbox.dispatchClientEvent);
-    },
-    "test sandbox.dispatchClientEvent throw exception if paramter is wrong": function () {
-        var sandbox = this.sandbox;
-        var msgObj = {"msg": "HELLLOWORLD"};
-
-        assertException(function () {
-            sandbox.dispatchClientEvent();
-        }, "TypeError");
-
-        assertException(function () {
-            sandbox.dispatchClientEvent("onerror");
-        }, "TypeError");
-
-        assertException(function () {
-            sandbox.dispatchClientEvent(msgObj);
-        }, "TypeError");
-
-        assertNoException(function () {
-            sandbox.dispatchClientEvent(null, msgObj);
-        });
-
-        assertNoException(function () {
-            sandbox.dispatchClientEvent("onerror", msgObj);
-        });
-
-    },
-    "test sandbox.dispatchClientEvent throw exception if eventName parameter is not null and event dont exists": function () {
-        var sandbox = this.sandbox;
-        var msgObj = {"msg": "HELLLOWORLD"};
-
-        assertException(function () {
-            sandbox.dispatchClientEvent("notAEventName", msgObj);
-        }, "Error");
-    },
+    }, 
     "test sandbox shoulde have a object that hold all servers": function () {
         assertNotUndefined(this.sandbox.server);
     },
@@ -169,11 +132,63 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(es1, this.sandbox.server[this.server1URL].clients[0]);
         assertEquals(1, this.sandbox.server[server2Url].clients.length);
         assertEquals(es2, this.sandbox.server[server2Url].clients[0]);
+    },
+     "test sandbox.server sendMessage method should be a function": function () {
+        assertFunction(this.sandbox.server[this.server1URL].sendMessage);
+    },
+    "test sandbox.server sendMessage throw exception if paramter is wrong": function () {
+        var sandbox = this.sandbox;
+        var url = this.server1URL;
+        
+        // prameter1 is the index of the client that should be messaged
+        // parameter2 should be sting of the event or null
+        // parameter3 shoulde be object with atleast date property
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage();
+        } ,"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage({client:1},"onmessage",{data:"helloWorld"});
+        } ,"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(1,{eventName:"onmessage"},{data:"helloWorld"});
+        } ,"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(1,"onmessage","");
+        } ,"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(1, "onmessage",{information:"helloWorld"});
+        } ,"TypeError");
+        
+        assertNoException(function(){
+            sandbox.server[url].sendMessage(1,"onmessage",{data:"helloWorld"});
+        });
+        
+        assertNoException(function(){
+            sandbox.server[url].sendMessage(1,null,{data:null});
+        });
+
+    },
+    "test sandbox.server sendMessage throw exception if eventName parameter is not null and event dont exists": function () {
+        var sandbox = this.sandbox;
+        var url = this.server1URL;
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
+        } ,"Error");
+    },
+    "test sandbox.server sendMessage throw exception if index of client dont exists": function () {
+        var sandbox = this.sandbox;
+        var url = this.server1URL;
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(300,null,{data:null});
+        } ,"Error");
     }
-    
-    
-    
-    
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
@@ -188,6 +203,10 @@ TestCase("eventSourceSandboxFakeEventSource", {
     tearDown: function () {
         this.sandbox.restore();
     }, 
+
+    "test fakeEventSource url shoulde not be undefined ": function () {
+        assertNotUndefined(this.fakeEventSource.url);
+    },
     "test fakeEventSource should throw exception if URL parameter is missing": function () {
         assertException(function(){
             new EventSource();
@@ -200,9 +219,6 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertNoException(function(){
             new EventSource("/URL");
         });        
-    },
-    "test fakeEventSource url shoulde not be undefined ": function () {
-        assertNotUndefined(this.fakeEventSource.url);
     },
     "test fakeEventSource url shoulde return the url of the connected server": function () {
         assertEquals(this.serverURL, this.fakeEventSource.url);
