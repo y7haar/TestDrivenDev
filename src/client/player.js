@@ -13,6 +13,7 @@ function player()
     var id;
     var idIsSetted = false;
     var color = "#000000";
+    var type = "human";
     
     //Holt den Namen
     function getName()
@@ -166,6 +167,24 @@ function player()
         
         return playerObject;
     }
+    
+    function getType()
+    {
+        return type;
+    }
+    
+    function setType(aType)
+    {
+        if(typeof aType !== "string")
+            throw new TypeError("Type must be human or bot");
+        
+        aType = aType.toLowerCase();
+        
+        if(! (aType === "human" || aType === "bot") )
+            throw new TypeError("Type must be human or bot");
+        
+        type = aType;
+    }
   
     this.getName = getName;
     this.setName = setName;
@@ -182,4 +201,7 @@ function player()
     this.setId = setId;
     this.serialize = serialize;
     this.serializeAsObject = serializeAsObject;
+    
+    this.setType = setType;
+    this.getType = getType;
 };
