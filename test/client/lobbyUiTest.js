@@ -115,7 +115,10 @@ TestCase("LobbyUiTest", {
        sinon.assert.calledWith(spy, 1, this.player1);
        
        ui.onJoinSubmit(1);
-       sinon.assert.calledWith(spy, 1, defaultPlayer);
+       sinon.assert.calledWith(spy, 1);
+       
+       assertEquals("Unnamed Player", spy.args[1][1].getName());
+       assertEquals("#ffffff", spy.args[1][1].getColor());
     },
     
     "test lobbyUi should have a function to display an error message": function () {  
