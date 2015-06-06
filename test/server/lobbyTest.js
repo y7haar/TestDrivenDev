@@ -150,9 +150,9 @@ TestCase("LobbyLeaderServerTest", {
     
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
-        this.player1 = new tddjs.client.player();
-        this.player2 = new tddjs.client.player();
-        this.player3 = new tddjs.client.player();
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        this.player3 = new tddjs.server.player();
         this.lobby.setMaxPlayers(4);
     },
     
@@ -210,9 +210,9 @@ TestCase("LobbyServerTest", {
     
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
-        this.player1 = new tddjs.client.player();
-        this.player2 = new tddjs.client.player();
-        this.player3 = new tddjs.client.player();
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        this.player3 = new tddjs.server.player();
         this.lobby.setMaxPlayers(4);
     },
     
