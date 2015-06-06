@@ -50,6 +50,7 @@ TestCase("LobbyUiTest", {
       this.lobby1Json = this.lobby1.serialize();
       this.lobby2Json = this.lobby2.serialize();
       
+      this.sandbox = sinon.sandbox.create();
       
     }, 
     tearDown: function ()
@@ -57,6 +58,8 @@ TestCase("LobbyUiTest", {
         delete this.lobbyUi;
         delete this.lobby1;
         delete this.lobby2;
+        
+        this.sandbox.restore();
     },
     
     "test lobbyUi should not be undefined after constructor call": function () {  
@@ -74,12 +77,20 @@ TestCase("LobbyUiTest", {
      "test lobbyUi should have a function to be called on join submit button": function () {  
         assertFunction(this.lobbyUi.onJoinSubmit);
     },
+
+    
+     "test onJoinSubmit must have parameter of type number, else throw an Error": function () {  
+       var ui = this.lobbyUi;
+        
+       assertNoException(function() { ui.onJoinSubmit(4, {}); } );
+       assertException(function() { ui.onJoinSubmit("4"); }, "TypeError" );
+    },
     
     "test onJoinSubmit must have parameter of type object, else throw an Error": function () {  
        var ui = this.lobbyUi;
         
-       assertNoException(function() { ui.onJoinSubmit({}); } );
-       assertException(function() { ui.onJoinSubmit(4); }, "TypeError" );
+       assertNoException(function() { ui.onJoinSubmit(4, {}); } );
+       assertException(function() { ui.onJoinSubmit(4, 4); }, "TypeError" );
     },
     
      "test class should have getter for lobbyRequestController instance": function () {  
@@ -90,10 +101,11 @@ TestCase("LobbyUiTest", {
     "test onJoinSubmit should call method in lobbyRequestController to do a POST request": function () {  
        var ui = this.lobbyUi;
        var requestController = ui.getLobbyRequestController();
+       var spy = this.sandbox.spy(requestController.joinRequest);
        
-       sinon.assert.notCalled(requestController.joinRequest);
-       ui.onJoinSubmit({ name: "Peter", color: "#ffffff"});
-       sinon.assert.calledOnce(requestController.joinRequest);
+       sinon.assert.notCalled(spy);
+       ui.onJoinSubmit(1, { name: "Peter", color: "#ffffff"});
+       sinon.assert.calledOnce(spy);
     },
     
     "test lobbyUi should have a function to display an error message": function () {  
