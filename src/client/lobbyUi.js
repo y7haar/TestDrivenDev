@@ -67,6 +67,12 @@ function lobbyUi(aRequestController)
         
         td4Div.innerHTML = "Join";
         
+        var submit = this.onJoinSubmit;
+        
+        td4.onclick = function(){
+            submit(lobbyId);
+        };
+        
         td1.innerHTML = "#" + lobbyId;
         td2.innerHTML = lobbyName;
         td3.innerHTML = "" + lobbyCurrentPlayers + " / " + lobbyMaxPlayers;
@@ -104,8 +110,12 @@ function lobbyUi(aRequestController)
         if(typeof aLobbyId !== "number")
             throw new TypeError("LobbyId must be a number");
         
-        if(! (aPlayer instanceof tddjs.client.player))
-            throw new TypeError("Not a Player");
+        var defaultPlayer = new tddjs.client.player();
+        defaultPlayer.setName("Unnamed Player");
+        defaultPlayer.setColor("#ffffff");
+        
+        if(typeof aPlayer === "undefined")
+            aPlayer = defaultPlayer;
         
         _lobbyRequestController.requestJoin(aLobbyId, aPlayer);
     }
