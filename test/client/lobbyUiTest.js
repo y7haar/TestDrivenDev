@@ -75,6 +75,14 @@ TestCase("LobbyUiTest", {
         assertFunction(this.lobbyUi.onJoinSubmit);
     },
     
+    "test onJoinSubmit must have parameter of type lobby, else throw an Error": function () {  
+       var ui = this.lobbyUi;
+        var lobby1 = this.lobby1;
+        
+        assertNoException(function() { ui.onJoinSubmit(lobby1); } );
+       assertException(function() { ui.onJoinSubmit(4); }, "TypeError" );
+    },
+    
     "test lobbyUi should have a function to display an error message": function () {  
         assertFunction(this.lobbyUi.showErrorMessage);
     },
