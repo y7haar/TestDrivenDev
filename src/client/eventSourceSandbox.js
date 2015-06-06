@@ -51,16 +51,7 @@ function eventSourceSandbox()
     {
         console.log(sinonSandbox.server);
     }
-    
-    function dispatchClientEvent(eventName, msg)
-    {    
-        if(typeof eventName !== 'string' && eventName !== null) throw new TypeError("eventName parameter is not String or not NULL.");
-        if(typeof msg === 'undefined' || msg === null) throw new TypeError("Message to ClientEventListner is Undefined or NULL.");
-        if(typeof connectedEventSource[eventName] === 'undefined' && eventName !== null) throw new Error("Event dont exisits on the client EventSource-Object.");
-       
-            
-    }
-    
+
     function fakeServer()
     {
         this.clients = [];
@@ -74,9 +65,7 @@ function eventSourceSandbox()
             if(typeof this.clients[clientIndex] === 'undefined') throw new Error("No client at given ClientIndex.");
             if(typeof this.clients[clientIndex][eventName] === 'undefined' && eventName !== null) throw new Error("There is no "+eventName+" Event on the Client.");
             // --------------
-            
-            console.log("EVENT:");
-            console.log(this.clients[clientIndex][eventName]);
+       
             
             if(eventName === null)
                 this.clients[clientIndex]["onmessage"](message);
@@ -94,7 +83,6 @@ function eventSourceSandbox()
     
     this.addServer = addServer;
     this.server = server;
-    this.dispatchClientEvent = dispatchClientEvent;
     this.update = update;
     this.restore = restore;    
 };
