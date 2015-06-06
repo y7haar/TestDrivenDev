@@ -97,9 +97,15 @@ function lobbyUi()
         lobbyWrapper.appendChild(p);
     }
     
+    function onJoinSubmit()
+    {
+        
+    }
+    
     this.createContent = createContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
     this.clearLobbies = clearLobbies;
+    this.onJoinSubmit = onJoinSubmit;
 }
