@@ -20,7 +20,7 @@ function country()
     
     function getName()
     {
-        if(typeof _name == "undefined")
+        if(typeof _name === "undefined")
         {
             
             throw {
