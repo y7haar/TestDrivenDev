@@ -4,14 +4,25 @@
 
 tddjs.namespace("client.ui").lobbyUi= lobbyUi;
        
-function lobbyUi()
+function lobbyUi(aRequestController)
 {   
+    var _lobbyRequestController = aRequestController;
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
         var content = document.createElement("div");
         content.id = "content";
         content.className = "content";
+        
+        var h1Div = document.createElement("div");
+        h1Div.className = "lobbyTitle";
+        
+        var h1 = document.createElement("h1");
+        h1.innerHTML = "Lobbies";
+        
+        h1Div.appendChild(h1);
+        content.appendChild(h1Div);
         
         body.appendChild(content);
     }
@@ -22,7 +33,6 @@ function lobbyUi()
         var wrapper = document.createElement("div");
         wrapper.id = "lobbyWrapper";
         wrapper.className = "lobbyWrapper";
-        
         
         
         content.appendChild(wrapper);
@@ -57,6 +67,12 @@ function lobbyUi()
         
         td4Div.innerHTML = "Join";
         
+        var submit = this.onJoinSubmit;
+        
+        td4.onclick = function(){
+            submit(lobbyId);
+        };
+        
         td1.innerHTML = "#" + lobbyId;
         td2.innerHTML = lobbyName;
         td3.innerHTML = "" + lobbyCurrentPlayers + " / " + lobbyMaxPlayers;
@@ -89,9 +105,31 @@ function lobbyUi()
         lobbyWrapper.appendChild(p);
     }
     
+    function onJoinSubmit(aLobbyId, aPlayer)
+    {
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("LobbyId must be a number");
+        
+        var defaultPlayer = new tddjs.client.player();
+        defaultPlayer.setName("Unnamed Player");
+        defaultPlayer.setColor("#ffffff");
+        
+        if(typeof aPlayer === "undefined")
+            aPlayer = defaultPlayer;
+        
+        _lobbyRequestController.requestJoin(aLobbyId, aPlayer);
+    }
+    
+    function getLobbyRequestController()
+    {
+        return _lobbyRequestController;
+    }
+    
     this.createContent = createContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
     this.clearLobbies = clearLobbies;
+    this.onJoinSubmit = onJoinSubmit;
+    this.getLobbyRequestController = getLobbyRequestController;
 }

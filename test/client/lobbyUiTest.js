@@ -5,7 +5,7 @@
 
 TestCase("LobbyUiTest", {
     setUp: function () {
-        this.lobbyUi = new tddjs.client.ui.lobbyUi();
+        this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
         
       this.lobby1 = new tddjs.server.model.lobby();
       this.lobby2 = new tddjs.server.model.lobby();
@@ -50,6 +50,7 @@ TestCase("LobbyUiTest", {
       this.lobby1Json = this.lobby1.serialize();
       this.lobby2Json = this.lobby2.serialize();
       
+      this.sandbox = sinon.sandbox.create();
       
     }, 
     tearDown: function ()
@@ -57,6 +58,8 @@ TestCase("LobbyUiTest", {
         delete this.lobbyUi;
         delete this.lobby1;
         delete this.lobby2;
+        
+        this.sandbox.restore();
     },
     
     "test lobbyUi should not be undefined after constructor call": function () {  
@@ -69,6 +72,53 @@ TestCase("LobbyUiTest", {
     
      "test lobbyUi should have a function to add a new Lobby": function () {  
         assertFunction(this.lobbyUi.addLobby);
+    },
+    
+     "test lobbyUi should have a function to be called on join submit button": function () {  
+        assertFunction(this.lobbyUi.onJoinSubmit);
+    },
+
+    
+     "test onJoinSubmit must have parameter of type number, else throw an Error": function () {  
+       var ui = this.lobbyUi;
+       var player = this.player1; 
+        
+       assertNoException(function() { ui.onJoinSubmit(4, player); } );
+       assertException(function() { ui.onJoinSubmit("4"); }, "TypeError" );
+    },
+    
+     "test class should have getter for lobbyRequestController instance": function () {  
+         assertFunction(this.lobbyUi.getLobbyRequestController);
+         assertTrue(this.lobbyUi.getLobbyRequestController() instanceof tddjs.client.controller.lobbyRequestController);
+    },
+    
+    "test onJoinSubmit should call method in lobbyRequestController to do a POST request": function () {  
+       var ui = this.lobbyUi;
+       var requestController = ui.getLobbyRequestController();
+       var spy = this.sandbox.spy(requestController, "requestJoin");
+       
+       sinon.assert.notCalled(spy);
+       ui.onJoinSubmit(1, this.player1);
+       sinon.assert.calledOnce(spy);
+    },
+    
+    "test onJoinSubmit should call method in lobbyRequestController witch correct parameters": function () {  
+       var ui = this.lobbyUi;
+       var requestController = ui.getLobbyRequestController();
+       var spy = this.sandbox.spy(requestController, "requestJoin");
+       
+       var defaultPlayer = new tddjs.client.player();
+       defaultPlayer.setName("Unnamed Player");
+       defaultPlayer.setColor("#ffffff");
+       
+       ui.onJoinSubmit(1, this.player1);
+       sinon.assert.calledWith(spy, 1, this.player1);
+       
+       ui.onJoinSubmit(1);
+       sinon.assert.calledWith(spy, 1);
+       
+       assertEquals("Unnamed Player", spy.args[1][1].getName());
+       assertEquals("#ffffff", spy.args[1][1].getColor());
     },
     
     "test lobbyUi should have a function to display an error message": function () {  

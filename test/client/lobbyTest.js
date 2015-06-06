@@ -2,15 +2,14 @@
  *  Testcases for Lobby
  */
 
-TestCase("LobbyPlayerServerTest", {
+TestCase("LobbyPlayerClientTest", {
     
     setUp: function () {
-        this.lobby = new tddjs.server.model.lobby();
-        this.lobby2 = new tddjs.server.model.lobby();
-        
-        this.player1 = new tddjs.server.player();
-        this.player2 = new tddjs.server.player();
-        this.player3 = new tddjs.server.player();
+        this.lobby = new tddjs.client.model.lobby();
+        this.lobby2 = new tddjs.client.model.lobby();
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
     },
     
     tearDown: function () {
@@ -80,79 +79,17 @@ TestCase("LobbyPlayerServerTest", {
         assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
         assertTrue(this.lobby.getPlayers().indexOf(this.player3) >= 0);
-  },
-  
-      "test Lobby should only store player1, not store player3 and kick player2 when setter is called": function () { 
-        this.lobby.setMaxPlayers(2);
-          
-        assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
-        
-        this.lobby.addPlayer(this.player1);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        
-        this.lobby.addPlayer(this.player2);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-        
-        this.lobby.addPlayer(this.player3);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
-        
-        this.lobby.setMaxPlayers(1);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
-        
-  },
-  
-        "test Lobby should store player1 and kick player2 and player3": function () { 
-        this.lobby.setMaxPlayers(4);
-          
-        assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        
-        this.lobby.addPlayer(this.player1);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        
-        this.lobby.addPlayer(this.player2);
-        assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-        
-        this.lobby.kickPlayer(this.player1);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player1) >= 0);
-        
-        this.lobby.kickPlayer(this.player2);
-        assertFalse(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-  },
-  
-   "test Lobby should set player id when player is added": function () { 
-        assertUndefined(this.player1.getId());
-        this.lobby.addPlayer(this.player1);
-        assertNotUndefined(this.player1.getId());
-  },
-  
-  "test when adding multiple players, each player should have a unique Id": function () { 
-        this.lobby.addPlayer(this.player1);
-        this.lobby.addPlayer(this.player2);
-        
-        assertNotUndefined(this.player1.getId());
-        assertNotUndefined(this.player2.getId());
-        
-        assertNotEquals(this.player1.getId(), this.player2.getId());
-        
   }
-  
 });
 
 
-TestCase("LobbyLeaderServerTest", {
+TestCase("LobbyLeaderClientTest", {
     
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
-        this.player1 = new tddjs.server.player();
-        this.player2 = new tddjs.server.player();
-        this.player3 = new tddjs.server.player();
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
         this.lobby.setMaxPlayers(4);
     },
     
@@ -206,13 +143,13 @@ TestCase("LobbyLeaderServerTest", {
 });
 
 
-TestCase("LobbyServerTest", {
+TestCase("LobbyClientTest", {
     
     setUp: function () {
         this.lobby = new tddjs.server.model.lobby();
-        this.player1 = new tddjs.server.player();
-        this.player2 = new tddjs.server.player();
-        this.player3 = new tddjs.server.player();
+        this.player1 = new tddjs.client.player();
+        this.player2 = new tddjs.client.player();
+        this.player3 = new tddjs.client.player();
         this.lobby.setMaxPlayers(4);
     },
     
