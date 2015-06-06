@@ -4,8 +4,10 @@
 
 tddjs.namespace("client.ui").lobbyUi= lobbyUi;
        
-function lobbyUi()
+function lobbyUi(aRequestController)
 {   
+    var _lobbyRequestController = aRequestController;
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -103,10 +105,16 @@ function lobbyUi()
             throw new TypeError("Lobby must be an object");
     }
     
+    function getLobbyRequestController()
+    {
+        return _lobbyRequestController;
+    }
+    
     this.createContent = createContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
     this.clearLobbies = clearLobbies;
     this.onJoinSubmit = onJoinSubmit;
+    this.getLobbyRequestController = getLobbyRequestController;
 }
