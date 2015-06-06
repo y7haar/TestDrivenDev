@@ -150,6 +150,23 @@ TestCase("PlayerServerTest",
         json = JSON.stringify(json);
         
         assertException( function() { player1.deserialize(json); }, "TypeError");
+    },
+    
+    "test Should not throw error and set Id if Id is not included in json": function()
+    {   
+        var player1 = this.player1;
+        player1.setId(1);
+        
+        var id = player1.getId();
+        
+        var json = {
+            name: "Peter",
+            color: "#FFFFFF"
+        };
+        json = JSON.stringify(json);
+        
+        assertNoException( function() { player1.deserialize(json); });
+        assertEquals(id, player1.getId());
         
 
     },

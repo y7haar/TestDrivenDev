@@ -1,0 +1,84 @@
+
+/* 
+    Created on : 04.06.2015, 21:13:47
+    Author     : Yannic
+*/
+
+body
+{
+    font-family: "Verdana";
+}
+
+.content
+{
+    margin: 0 auto;
+}
+
+.lobbyWrapper
+{
+    max-width: 900px;
+    
+    margin: 0 auto;
+    background-color: #cccccc;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+}
+
+.lobby
+{
+    border: 1px solid #fff;
+    background-color: #bbb;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    font-size: 20px;
+    
+}
+
+.lobbyId
+{
+    color: seagreen;
+    font-weight: bold;
+    
+    //min-width: 50px;
+    text-align: right;
+    padding-right:25px;
+    padding-left:15px;
+    
+}
+
+.lobbyName
+{
+    min-width: 580px;
+    padding-right:20px;
+    text-align: left;
+}
+
+.lobbyPlayers
+{
+    text-align: right;
+    padding-right:35px;
+    padding-left:20px;
+}
+
+.lobbyJoin
+{
+    text-align: center;
+    
+    padding-left:20px;
+    padding-right:20px;
+    
+    padding-bottom:5px;
+    padding-top:5px;
+    
+    color:#eee;
+    background-color:steelblue; 
+    
+    border: 3px solid #777;
+    border-radius: 3px;
+    
+    cursor: pointer;
+}

@@ -125,7 +125,21 @@ function player()
     {
         var obj = JSON.parse(json);
         
-        this.setId(obj.id);
+        if(typeof obj.id !== "number" && typeof obj.id !== "undefined")
+            throw new TypeError("Id is incorrect");
+        
+        if(typeof obj.id === "number")
+        {
+            try
+            {
+                this.setId(obj.id);
+            }
+            catch(e)
+            {
+                throw new Error("Id is wrong");
+            }
+        }
+
         this.setName(obj.name);
         this.setColor(obj.color);
     }
