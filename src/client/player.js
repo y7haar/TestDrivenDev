@@ -139,15 +139,7 @@ function player()
     //Serialisiert das Object
     function serialize()
     {
-        var id = getId();
-        var name = getName();
-        var color = getColor();
-        
-        var playerObject = {
-            id: id,
-            name: name,
-            color: color
-        };
+        var playerObject = serializeAsObject();
         
         return JSON.stringify(playerObject);
     }
@@ -158,11 +150,13 @@ function player()
         var id = getId();
         var name = getName();
         var color = getColor();
+        var type = getType();
         
         var playerObject = {
             id: id,
             name: name,
-            color: color
+            color: color,
+            type: type
         };
         
         return playerObject;

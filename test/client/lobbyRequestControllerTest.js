@@ -200,7 +200,8 @@ TestCase("LobbyRequestControllerTest", {
             lobby: null,
             player: {
                 name: "Peter",
-                color: "#ffffff"
+                color: "#ffffff",
+                type: "human"
             }
         };
         
@@ -270,7 +271,8 @@ TestCase("LobbyRequestControllerTest", {
             type: "join",
             player: {
                 name: "Peter",
-                color: "#ffffff"
+                color: "#ffffff",
+                type: "human"
             }
         };
         
