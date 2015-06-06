@@ -133,18 +133,20 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(1, this.sandbox.server[server2Url].clients.length);
         assertEquals(es2, this.sandbox.server[server2Url].clients[0]);
     },
-     "test sandbox.server sendMessage method should be a function": function () {
+    "test sandbox.server sendMessage method should be a function": function () {
         assertFunction(this.sandbox.server[this.server1URL].sendMessage);
     },
     "test sandbox.server sendMessage throw exception if paramter is wrong": function () {
         var sandbox = this.sandbox;
         var url = this.server1URL;
-        var es = EventSource(this.server1URL);
-        
+        var es = EventSource(this.server1URL);        
         
         // prameter1 is the index of the client that should be messaged
         // parameter2 should be sting of the event or null
         // parameter3 shoulde be object with atleast date property
+        
+        // if there is no client with give index --> exception
+        // if client dont have given eventName --> exception
         
         assertException(function(){
             sandbox.server[url].sendMessage();
@@ -165,15 +167,7 @@ TestCase("eventSourceSandboxServer", {
         assertException(function(){
             sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
         } ,"TypeError");
-        
-        assertNoException(function(){
-            sandbox.server[url].sendMessage(0,"onmessage",{data:"helloWorld"});
-        });
-        
-        assertNoException(function(){
-            sandbox.server[url].sendMessage(0,null,{data:null});
-        });
-        
+  
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
@@ -181,7 +175,25 @@ TestCase("eventSourceSandboxServer", {
         assertException(function(){
             sandbox.server[url].sendMessage(300,null,{data:null});
         } ,"Error");
+    }, 
+    "test sandbox.server sendMessage should call specific event of client": function () {
+         var es = new EventSource(this.server1URL);
+         var called = false;
+         var msg;
+         
+         var testEvent = function(e){
+             called = true;
+             msg = e.data;
+         };
+ 
+         var sendMsg = "HELLOWORLD";
+         es.addEventListner("test", testEvent);                
+         this.sandbox.server[this.server1URL].sendMessage(0,"ontest",{data:sendMsg});
+         
+         assertTrue(called);
+         assertEquals(msg, sendMsg);
     }
+   
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
