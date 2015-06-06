@@ -73,6 +73,14 @@ function eventSourceSandbox()
                 this.clients[clientIndex][eventName](message);
         };
         
+        this.sendMessageToAll = function(eventName,message){
+            
+            for(i = 0,length = this.clients.length ; i < length ;i++ )
+            {
+                this.sendMessage(i,eventName,message);
+            }
+        };
+        
     }    
     function addServer(serverUrl)
     {
