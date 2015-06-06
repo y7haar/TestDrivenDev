@@ -186,6 +186,7 @@ TestCase("PlayerTest",
         assertEquals(2, json.id);
         assertEquals("Ranol", json.name);
         assertEquals("#FFFFFF", json.color);
+        assertEquals("human", json.type);
     },
     
     "test Should be able to serialize a Player correctly as object": function()
@@ -200,6 +201,7 @@ TestCase("PlayerTest",
         assertEquals(2, json.id);
         assertEquals("Ranol", json.name);
         assertEquals("#FFFFFF", json.color);
+        assertEquals("human", json.type);
     },
     
     "test player should have setter for type": function()
