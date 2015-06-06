@@ -1,8 +1,8 @@
 /* 
- *  Source-Code for Lobby
+ *  Source-Code for Lobby on Client
  */
 
-tddjs.namespace("server.model").lobby =  lobby;
+tddjs.namespace("client.model").lobby =  lobby;
 
 function lobby()
 {
