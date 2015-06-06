@@ -216,7 +216,55 @@ TestCase("eventSourceSandboxServer", {
          
          assertFalse(calledTestEvent);
          assertTrue(calledMessageEvent);             
-    }
+    },
+    "test sandbox.server should implement sendMessageToAll function": function () {
+        assertFunction(this.sandbox.sendMessageToAll);
+    },    
+    "test sandbox.server sendMessageToAll should call every connected Client": function () {
+        var es1 = new EventSource(this.server1URL);
+        var es2 = new EventSource(this.server1URL);
+        var es3 = new EventSource(this.server1URL);   
+        
+        
+        var es1_called = false;
+        var es1_event = function(e){
+            es1_called = true;
+        };
+        es1.addEventListner("test", es1_event);
+        
+        var es2_called = false;
+        var es2_event = function(e){
+            es2_called = true;
+        };
+        es2.addEventListner("test", es2_event);
+        
+        var es3_called = false;
+        var es3_event = function(e){
+            es3_called = true;
+        };
+        es3.addEventListner("test", es3_event);
+        
+        
+        var notConnectedES = new EventSource("/wrongUrl");
+        var notConnectedES_called = false;
+        var notConnectedES_event = function(e){
+            notConnectedES_called = true;
+        };
+        
+        assertFalse(es1_called);
+        assertFalse(es2_called);
+        assertFalse(es3_called);
+        assertFalse(notConnectedES_called);
+        
+        
+        this.sandbox.server[this.server1URL].sendMessageToAll('test',{data:"HELLOWORLD"});
+        
+        assertTrue(es1_called);
+        assertTrue(es2_called);
+        assertTrue(es3_called);
+        assertFalse(notConnectedES_called);
+    }  
+    
 });
 
 TestCase("eventSourceSandboxFakeEventSource", {
