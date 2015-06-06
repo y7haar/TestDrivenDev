@@ -140,30 +140,36 @@ TestCase("eventSourceSandboxServer", {
         var sandbox = this.sandbox;
         var url = this.server1URL;
         
-        // parameter1 should be sting of the event or null, parameter2 shoulde be object with atleast date property
+        // prameter1 is the index of the client that should be messaged
+        // parameter2 should be sting of the event or null
+        // parameter3 shoulde be object with atleast date property
         
         assertException(function(){
             sandbox.server[url].sendMessage();
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage({eventName:"onmessage"},{data:"helloWorld"});
+            sandbox.server[url].sendMessage("1","onmessage",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage("onmessage",{});
+            sandbox.server[url].sendMessage(1,{eventName:"onmessage"},{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage("onmessage",{information:"helloWorld"});
+            sandbox.server[url].sendMessage(1,"onmessage","");
+        } ,"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(1, "onmessage",{information:"helloWorld"});
         } ,"TypeError");
         
         assertNoException(function(){
-            sandbox.server[url].sendMessage("onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage(1,"onmessage",{data:"helloWorld"});
         });
         
         assertNoEcxeption(function(){
-            sandbox.server[url].sendMessage(null,{data:null});
+            sandbox.server[url].sendMessage(1,null,{data:null});
         });
 
     },
@@ -173,6 +179,14 @@ TestCase("eventSourceSandboxServer", {
         
         assertException(function(){
             sandbox.server[url].sendMessage("EventThatDontExist",{data:null});
+        } ,"Error");
+    },
+    "test sandbox.server sendMessage throw exception if index of client dont exists": function () {
+        var sandbox = this.sandbox;
+        var url = this.server1URL;
+        
+        assertException(function(){
+            sandbox.server[url].sendMessage(300,null,{data:null});
         } ,"Error");
     }
 });
