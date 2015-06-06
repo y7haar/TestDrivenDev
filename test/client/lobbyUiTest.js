@@ -72,7 +72,7 @@ TestCase("LobbyUiTest", {
     },
     
      "test lobbyUi should have a function to be called on join submit button": function () {  
-        assertFunction(this.lobbyUi.submitJoin);
+        assertFunction(this.lobbyUi.onJoinSubmit);
     },
     
     "test lobbyUi should have a function to display an error message": function () {  
