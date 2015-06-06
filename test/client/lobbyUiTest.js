@@ -82,6 +82,20 @@ TestCase("LobbyUiTest", {
        assertException(function() { ui.onJoinSubmit(4); }, "TypeError" );
     },
     
+     "test class should have getter for lobbyRequestController instance": function () {  
+         assertFunction(this.lobbyUi.getLobbyRequestController);
+         assertTrue(this.lobbyUi.getLobbyRequestController() instanceof tddjs.client.controller.lobbyRequestController);
+    },
+    
+    "test onJoinSubmit should call method in lobbyRequestController to do a POST request": function () {  
+       var ui = this.lobbyUi;
+       var requestController = ui.getLobbyRequestController();
+       
+       sinon.assert.notCalled(requestController.joinRequest);
+       ui.onJoinSubmit({ name: "Peter", color: "#ffffff"});
+       sinon.assert.calledOnce(requestController.joinRequest);
+    },
+    
     "test lobbyUi should have a function to display an error message": function () {  
         assertFunction(this.lobbyUi.showErrorMessage);
     },
