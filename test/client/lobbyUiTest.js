@@ -103,7 +103,7 @@ TestCase("LobbyUiTest", {
     "test onJoinSubmit should call method in lobbyRequestController to do a POST request": function () {  
        var ui = this.lobbyUi;
        var requestController = ui.getLobbyRequestController();
-       var spy = this.sandbox.spy(requestController.joinRequest);
+       var spy = this.sandbox.spy(requestController, "requestJoin");
        
        sinon.assert.notCalled(spy);
        ui.onJoinSubmit(1, this.player1);
