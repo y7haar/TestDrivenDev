@@ -81,15 +81,17 @@ TestCase("LobbyUiTest", {
     
      "test onJoinSubmit must have parameter of type number, else throw an Error": function () {  
        var ui = this.lobbyUi;
+       var player = this.player1; 
         
-       assertNoException(function() { ui.onJoinSubmit(4, {}); } );
+       assertNoException(function() { ui.onJoinSubmit(4, player); } );
        assertException(function() { ui.onJoinSubmit("4"); }, "TypeError" );
     },
     
-    "test onJoinSubmit must have parameter of type object, else throw an Error": function () {  
+    "test onJoinSubmit must have parameter of type player, else throw an Error": function () {  
        var ui = this.lobbyUi;
+        var player = this.player1;
         
-       assertNoException(function() { ui.onJoinSubmit(4, {}); } );
+       assertNoException(function() { ui.onJoinSubmit(4, player); } );
        assertException(function() { ui.onJoinSubmit(4, 4); }, "TypeError" );
     },
     
