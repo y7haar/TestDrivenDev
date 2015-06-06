@@ -4,7 +4,6 @@
 var logger = require('connect-logger');
 var express = require('express');
 var sessions = require("client-sessions");
-var cors = require('cors');
 var bodyParser = require("body-parser");
 
 
@@ -19,9 +18,19 @@ var app = express();
 
 /*
  *  IMPORTANT: 
- *  This must be removed on Integration
+ *  This must be removed  or setted empty on Integration
  */
-app.use(cors());
+function useCors(req, res)
+{
+    //to allow cross domain requests to send cookie information.
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin',  req.headers.origin);
+
+    // list of methods that are supported by the server
+    res.header('Access-Control-Allow-Methods','OPTIONS,GET,POST');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+}
+
 /*
  *  This will stay
  */
@@ -45,9 +54,12 @@ app.listen(8080);
  *  Routing information
  */
 app.all("*", function (req, res, next) {
-    req.accepts("application/json");
     
-    console.log("Token; " + req.session.token);
+    useCors(req, res);
+    
+    req.accepts("application/json");
+    console.log(req.headers);
+    
     next();
 });
 
@@ -107,8 +119,11 @@ app.post('/lobbies/:id', function (req, res) {
    
     if(typeof req.session.token === "undefined")
     {
+        console.log();
         console.log("SESSION UNDEFINED");
         req.session.token = parseInt((Math.random() * 100000000));
+        console.log("NEW TOKEN: " + req.session.token);
+        console.log();
     }
     
   res.send('Lobby ' + req.params.id);
