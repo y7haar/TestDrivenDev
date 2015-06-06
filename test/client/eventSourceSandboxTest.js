@@ -97,8 +97,7 @@ TestCase("eventSourceSandboxServer", {
    
     "test sandbox server shoulde have a array of connected clients": function () {
         assertNotUndefined(this.sandbox.server[this.server1URL].clients);
-    },
-    
+    },    
     "test sandbox server.clients should be empty ": function () {
         assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
         assertEquals([], this.sandbox.server[this.server1URL].clients);
@@ -263,7 +262,38 @@ TestCase("eventSourceSandboxServer", {
         assertTrue(es2_called);
         assertTrue(es3_called);
         assertFalse(notConnectedES_called);
-    }  
+    },
+    "test sandbox.server should hold a array of all requests the server recived": function(){
+        assertNotUndefined(this.sandbox.server[this.server1URL].requests);
+    },
+    "test sandbox.server requets should hold all requests at start 0": function(){
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+    },
+    "test sandbox.server requets should have 1 entry after a ajax request to server": function(){
+        var es = new EventSource(this.server1URL);
+        var ajax = tddjs.util.ajax;
+        var succesCalled = false;        
+        var onSuccesEvent = function ()
+        {
+            succesCalled = true;
+        };        
+        var options = {
+            headers: {
+                "Accept": "text/event-stream"
+            },
+            onSuccess: onSuccesEvent,
+            onFailure: null
+        };
+        
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        ajax.post(this.server1URL, options);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        assertFalse(succesCalled);
+        
+        this.sandbox.update();
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        assertTrue(succesCalled);
+    }
     
 });
 
