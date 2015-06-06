@@ -97,9 +97,10 @@ function lobbyUi()
         lobbyWrapper.appendChild(p);
     }
     
-    function onJoinSubmit()
+    function onJoinSubmit(aLobby)
     {
-        
+        if(typeof aLobby !== "object")
+            throw new TypeError("Lobby must be an object");
     }
     
     this.createContent = createContent;
