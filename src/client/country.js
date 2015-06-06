@@ -96,7 +96,7 @@ function country()
     
     function getOwner()
     {
-        if (typeof _owner == "undefined")
+        if (typeof _owner === "undefined")
         {
             throw {
                 name: "initError",
