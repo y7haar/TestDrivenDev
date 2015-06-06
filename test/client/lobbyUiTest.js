@@ -87,14 +87,6 @@ TestCase("LobbyUiTest", {
        assertException(function() { ui.onJoinSubmit("4"); }, "TypeError" );
     },
     
-    "test onJoinSubmit must have parameter of type player, else throw an Error": function () {  
-       var ui = this.lobbyUi;
-        var player = this.player1;
-        
-       assertNoException(function() { ui.onJoinSubmit(4, player); } );
-       assertException(function() { ui.onJoinSubmit(4, 4); }, "TypeError" );
-    },
-    
      "test class should have getter for lobbyRequestController instance": function () {  
          assertFunction(this.lobbyUi.getLobbyRequestController);
          assertTrue(this.lobbyUi.getLobbyRequestController() instanceof tddjs.client.controller.lobbyRequestController);
@@ -108,6 +100,22 @@ TestCase("LobbyUiTest", {
        sinon.assert.notCalled(spy);
        ui.onJoinSubmit(1, this.player1);
        sinon.assert.calledOnce(spy);
+    },
+    
+    "test onJoinSubmit should call method in lobbyRequestController witch correct parameters": function () {  
+       var ui = this.lobbyUi;
+       var requestController = ui.getLobbyRequestController();
+       var spy = this.sandbox.spy(requestController, "requestJoin");
+       
+       var defaultPlayer = new tddjs.client.player();
+       defaultPlayer.setName("Unnamed Player");
+       defaultPlayer.setColor("#ffffff");
+       
+       ui.onJoinSubmit(1, this.player1);
+       sinon.assert.calledWith(spy, 1, this.player1);
+       
+       ui.onJoinSubmit(1);
+       sinon.assert.calledWith(spy, 1, defaultPlayer);
     },
     
     "test lobbyUi should have a function to display an error message": function () {  
