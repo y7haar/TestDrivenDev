@@ -20,7 +20,7 @@ function country()
     
     function getName()
     {
-        if(typeof _name == "undefined")
+        if(typeof _name === "undefined")
         {
             
             throw {
@@ -96,7 +96,7 @@ function country()
     
     function getOwner()
     {
-        if (typeof _owner == "undefined")
+        if (typeof _owner === "undefined")
         {
             throw {
                 name: "initError",

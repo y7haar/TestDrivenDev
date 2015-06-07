@@ -106,6 +106,7 @@ TestCase("PlayerServerTest",
         assertEquals(2, json.id);
         assertEquals("Ranol", json.name);
         assertEquals("#FFFFFF", json.color);
+        assertEquals("human", json.type);
     },
     
     "test Should be able to serialize a Player correctly as object": function()
@@ -120,6 +121,7 @@ TestCase("PlayerServerTest",
         assertEquals(2, json.id);
         assertEquals("Ranol", json.name);
         assertEquals("#FFFFFF", json.color);
+        assertEquals("human", json.type);
     },
     
     "test Should be able to deserialize a Player correctly": function()
@@ -127,7 +129,8 @@ TestCase("PlayerServerTest",
         var json = {
             id: 2,
             name: "Peter",
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            type: "bot"
         };
         
         json = JSON.stringify(json);
@@ -137,6 +140,7 @@ TestCase("PlayerServerTest",
         assertEquals(2, this.player1.getId());
         assertEquals("Peter", this.player1.getName());
         assertEquals("#FFFFFF", this.player1.getColor());
+        assertEquals("bot", this.player1.getType());
     },
     
     "test Should throw error if Id is incorrect on deserialize": function()
@@ -178,7 +182,8 @@ TestCase("PlayerServerTest",
         var json = {
             id: 2,
             name: 4,
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            type: "bot"
         };
         
         json = JSON.stringify(json);
@@ -193,12 +198,70 @@ TestCase("PlayerServerTest",
         var json = {
             id: 2,
             name: "Peter",
-            color: "#hjk"
+            color: "#hjk",
+            type: "bot"
         };
         
         json = JSON.stringify(json);
         
         assertException( function() { player1.deserialize(json); }, "Error");
+    },
+    
+    "test Should throw error if type is incorrect on deserialize": function()
+    {   
+        var player1 = this.player1;
+        
+        var json = {
+            id: 2,
+            name: "Peter",
+            color: "#hjk",
+            type: "UltraBasher"
+        };
+        
+        json = JSON.stringify(json);
+        
+        assertException( function() { player1.deserialize(json); }, "Error");
+    },
+    
+    "test player should have setter for type": function()
+    {    
+        assertFunction(this.player1.setType);
+    },
+    
+     "test player should have getter for type": function()
+    {    
+        assertFunction(this.player1.getType);
+    },
+    
+    "test setter for type should only accept a string human or bot, else throw Exception": function()
+    {    
+        var player1 = this.player1;
+        
+        assertNoException(function() { player1.setType("human"); });
+        assertNoException(function() { player1.setType("Human"); });
+        
+        assertNoException(function() { player1.setType("bot"); });
+        assertNoException(function() { player1.setType("Bot"); });
+        
+        assertException(function() { player1.setType("boot"); }, "TypeError");
+        assertException(function() { player1.setType("UltraNatzer1337"); }, "TypeError");
+        
+    },
+    
+    "test type should be setted to human by default": function()
+    {    
+        assertEquals("human", this.player1.getType());
+    },
+    
+    "test player should store a type attribute to differntiate between human player and bot": function()
+    {    
+        assertEquals("human", this.player1.getType());
+        
+        this.player1.setType("Bot");
+        assertEquals("bot", this.player1.getType());
+        
+        this.player1.setType("human");
+        assertEquals("human", this.player1.getType());
     }
 });
 

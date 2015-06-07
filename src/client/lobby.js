@@ -50,7 +50,7 @@ function lobby()
         _maxPlayers = aMaxPlayers;
     }
     
-    function _getMaxPlayers()
+    function getMaxPlayers()
     {
         return _maxPlayers;
     }
@@ -107,7 +107,7 @@ function lobby()
     {
         var id = getId();
         var name = getName();
-        var maxPlayers = _getMaxPlayers();
+        var maxPlayers = getMaxPlayers();
         var leader = getLeader().getId();
         
         var playersObj = [];
@@ -139,6 +139,8 @@ function lobby()
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
     this.setMaxPlayers = setMaxPlayers;
+    this.getMaxPlayers = getMaxPlayers;
+    
     this.kickPlayer = kickPlayer;
     
     this.getId = getId;

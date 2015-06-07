@@ -12,7 +12,10 @@ tddjs.namespace("util.ajax").request = request;
 
 function create()
 {
-    return new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    
+    return xhr;
 }
 
 function setRequestHeaders(xhr, headers)

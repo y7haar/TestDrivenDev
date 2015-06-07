@@ -2,65 +2,70 @@
  *  Test cases for the lobby UI
  */
 
+function lobbyUiSetup()
+{
+     this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
+        
+    this.lobby1 = new tddjs.client.model.lobby();
+    this.lobby2 = new tddjs.client.model.lobby();
+
+    this.player1 = new tddjs.client.player();
+    this.player2 = new tddjs.client.player();
+    this.player3 = new tddjs.client.player();
+    this.player4 = new tddjs.client.player();
+
+    this.player1.setId(1);
+    this.player2.setId(2);
+    this.player3.setId(3);
+    this.player4.setId(4);
+
+    this.player1.setName("P1");
+    this.player2.setName("P2");
+    this.player3.setName("P3");
+    this.player4.setName("P4");
+
+    this.player1.setColor("#000000");
+    this.player2.setColor("#111111");
+    this.player3.setColor("#222222");
+    this.player4.setColor("#333333");
+
+    this.lobby1.setId(0);
+    this.lobby2.setId(1);
+
+    this.lobby1.setName("L1");
+    this.lobby2.setName("L2");
+
+    this.lobby1.addPlayer(this.player1);
+    this.lobby1.addPlayer(this.player2);
+    this.lobby2.addPlayer(this.player3);
+    this.lobby2.addPlayer(this.player4);
+
+    this.lobby1.setLeader(this.player1);
+    this.lobby2.setLeader(this.player4);
+
+    this.lobby1.setMaxPlayers(2);
+    this.lobby2.setMaxPlayers(3);
+
+    this.lobby1Json = this.lobby1.serialize();
+    this.lobby2Json = this.lobby2.serialize();
+
+    this.sandbox = sinon.sandbox.create();
+}
+
+function lobbyUiTeardown()
+{
+    delete this.lobbyUi;
+    delete this.lobby1;
+    delete this.lobby2;
+
+    this.sandbox.restore();
+}
+
 
 TestCase("LobbyUiTest", {
-    setUp: function () {
-        this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
-        
-      this.lobby1 = new tddjs.server.model.lobby();
-      this.lobby2 = new tddjs.server.model.lobby();
-      
-      this.player1 = new tddjs.client.player();
-      this.player2 = new tddjs.client.player();
-      this.player3 = new tddjs.client.player();
-      this.player4 = new tddjs.client.player();
-      
-      this.player1.setId(1);
-      this.player2.setId(2);
-      this.player3.setId(3);
-      this.player4.setId(4);
-      
-      this.player1.setName("P1");
-      this.player2.setName("P2");
-      this.player3.setName("P3");
-      this.player4.setName("P4");
-      
-      this.player1.setColor("#000000");
-      this.player2.setColor("#111111");
-      this.player3.setColor("#222222");
-      this.player4.setColor("#333333");
-      
-      this.lobby1.setId(0);
-      this.lobby2.setId(1);
-      
-      this.lobby1.setName("L1");
-      this.lobby2.setName("L2");
-      
-      this.lobby1.addPlayer(this.player1);
-      this.lobby1.addPlayer(this.player2);
-      this.lobby2.addPlayer(this.player3);
-      this.lobby2.addPlayer(this.player4);
-      
-      this.lobby1.setLeader(this.player1);
-      this.lobby2.setLeader(this.player4);
-      
-      this.lobby1.setMaxPlayers(2);
-      this.lobby2.setMaxPlayers(3);
-      
-      this.lobby1Json = this.lobby1.serialize();
-      this.lobby2Json = this.lobby2.serialize();
-      
-      this.sandbox = sinon.sandbox.create();
-      
-    }, 
-    tearDown: function ()
-    {
-        delete this.lobbyUi;
-        delete this.lobby1;
-        delete this.lobby2;
-        
-        this.sandbox.restore();
-    },
+    setUp: lobbyUiSetup,
+    
+    tearDown: lobbyUiTeardown,
     
     "test lobbyUi should not be undefined after constructor call": function () {  
         assertObject(this.lobbyUi);
@@ -196,4 +201,64 @@ TestCase("LobbyUiTest", {
         assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
         assertEquals("Join", lobbyTrContent2[3].childNodes[0].innerHTML);
     }
+});
+
+TestCase("SingleLobbyUiTest", {
+   
+   setUp: lobbyUiSetup,
+   tearDown: lobbyUiTeardown,
+        
+    // Tests for single Lobby instance
+    
+    "test ui should have function to display a Lobby": function () {  
+        assertFunction(this.lobbyUi.showLobby);
+    },
+    
+    "test showLobby should show a lobby with correct title name": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes;
+        var h1 = wrapperNodes[0];
+        assertTagName("h1", h1);
+        assertEquals("lobbyTitle", h1.className);
+        assertEquals("#" + 0 + " " + "L1", h1.innerHTML);
+    },
+    
+    "test multiple calls of showLobby should not append the body": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        var count = document.getElementById("lobbyWrapper").childNodes.length;
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        assertEquals(count, document.getElementById("lobbyWrapper").childNodes.length);
+        
+    },
+    
+     "test showLobby should show a lobby with correct max Players divs": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+        
+        var playerWrapper = document.getElementById("playerWrapper");
+        assertTagName("div", playerWrapper);
+        assertEquals("playerWrapper", playerWrapper.className);
+        
+        // Max Player count
+        assertEquals(3, playerWrapper.childNodes.length);
+        assertTagName("div", playerWrapper.childNodes[0]);
+        assertTagName("div", playerWrapper.childNodes[1]);
+        assertTagName("div", playerWrapper.childNodes[2]);
+        
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[2].className);
+    }
+    
+    // TODO Check for player data and settings
+    
 });

@@ -13,6 +13,7 @@ function player()
     var id;
     var idIsSetted = false;
     var color = "#000000";
+    var type = "human";
     
     //Holt den Namen
     function getName()
@@ -138,15 +139,7 @@ function player()
     //Serialisiert das Object
     function serialize()
     {
-        var id = getId();
-        var name = getName();
-        var color = getColor();
-        
-        var playerObject = {
-            id: id,
-            name: name,
-            color: color
-        };
+        var playerObject = serializeAsObject();
         
         return JSON.stringify(playerObject);
     }
@@ -157,14 +150,34 @@ function player()
         var id = getId();
         var name = getName();
         var color = getColor();
+        var type = getType();
         
         var playerObject = {
             id: id,
             name: name,
-            color: color
+            color: color,
+            type: type
         };
         
         return playerObject;
+    }
+    
+    function getType()
+    {
+        return type;
+    }
+    
+    function setType(aType)
+    {
+        if(typeof aType !== "string")
+            throw new TypeError("Type must be human or bot");
+        
+        aType = aType.toLowerCase();
+        
+        if(! (aType === "human" || aType === "bot") )
+            throw new TypeError("Type must be human or bot");
+        
+        type = aType;
     }
   
     this.getName = getName;
@@ -182,4 +195,7 @@ function player()
     this.setId = setId;
     this.serialize = serialize;
     this.serializeAsObject = serializeAsObject;
+    
+    this.setType = setType;
+    this.getType = getType;
 };
