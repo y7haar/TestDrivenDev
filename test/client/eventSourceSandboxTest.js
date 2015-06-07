@@ -467,7 +467,8 @@ TestCase("eventSourceSandboxFakeEventSource", {
         this.fakeEventSource.close();
         
         assertEquals(1, this.sandbox.server[this.serverURL].clients.length);
-        assertEquals(secondES,this.sandbox.server[this.serverURL].clients[0]); 
+        assertEquals(secondES,this.sandbox.server[this.serverURL].clients[0]);
+        assertEquals(1,secondES.readyState);
     }
     
     
