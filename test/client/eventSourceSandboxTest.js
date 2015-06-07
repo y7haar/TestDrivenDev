@@ -2,7 +2,8 @@
  * Source-code for eventSourceSandbox
  * this code tests the simulation of the EventSource object and the communication with the Server
  */
-console.log(new EventSource("/fakeURL"));
+
+//console.log(new EventSource("/fakeURL"));
 
 TestCase("eventSourceSandboxOvverride", {
     setUp: function () {
@@ -286,15 +287,15 @@ TestCase("eventSourceSandboxServer", {
             onFailure: onFailureEvent
         };
         
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);        
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);        
         ajax.post(this.server1URL, options);        
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
         
         assertFalse(succesCalled);
         assertFalse(failureCalled);
         
         this.sandbox.update();
-        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(2,this.sandbox.server[this.server1URL].requests.length);
         
         assertTrue(succesCalled);
         assertFalse(failureCalled);
@@ -320,14 +321,14 @@ TestCase("eventSourceSandboxServer", {
             onFailure: onFailureEvent
         };
         
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
         
         ajax.post("wrongURL", options);       
         assertFalse(succesCalled); 
         assertFalse(failureCalled);
         
         this.sandbox.update();
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
         assertTrue(failureCalled);
         assertFalse(succesCalled);
     },
@@ -343,11 +344,11 @@ TestCase("eventSourceSandboxServer", {
             onFailure: null
         }; 
         ajax.post(this.server1URL, options);
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
-        this.sandbox.update();
         assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
         this.sandbox.update();
-        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);        
+        assertEquals(2,this.sandbox.server[this.server1URL].requests.length);
+        this.sandbox.update();
+        assertEquals(2,this.sandbox.server[this.server1URL].requests.length);        
     }
     
 });
@@ -356,6 +357,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
     setUp: function () {
         this.realEventSource = EventSource;     
         this.realXHR = XMLHttpRequest;
+        
         this.serverURL = "/serverURL";
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.serverURL);
@@ -365,6 +367,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
     },
     tearDown: function () {
         this.sandbox.restore();
+        this.sandbox = null;
     }, 
 
     "test fakeEventSource url shoulde not be undefined ": function () {
@@ -380,7 +383,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
         },"TypeError");  
         
         assertNoException(function(){
-            new EventSource("/URL");
+            new EventSource("/serverURL");
         });        
     },
     "test fakeEventSource url shoulde return the url of the connected server": function () {
@@ -430,14 +433,8 @@ TestCase("eventSourceSandboxFakeEventSource", {
     "test fakeEventSource should hold readyState property": function () {
         assertNotUndefined(this.fakeEventSource.readyState);
     },
-    "test fakeEventSource.readyState should be 0 at begining": function () {
-         assertEquals(0,this.fakeEventSource.readyState);
-    },
-    "test fakeEventSource readyState should switch to 1 if connection is established": function () {
-         assertEquals(0,this.fakeEventSource.readyState);
-         this.sandbox.update();
-         assertEquals(1,this.fakeEventSource.readyState);         
-    }
-     
+    "test fakeEventSource.readyState should be 1 after creating": function () {
+         assertEquals(1,this.fakeEventSource.readyState);
+    }       
 });
 
