@@ -435,6 +435,23 @@ TestCase("eventSourceSandboxFakeEventSource", {
     },
     "test fakeEventSource.readyState should be 1 after creating": function () {
          assertEquals(1,this.fakeEventSource.readyState);
-    }       
+    },
+    "test fakeEventSource.readyState should be 2 after creating if url is wrong": function () {
+         var wrongES = new EventSource("wrongURL");
+         assertEquals(2,wrongES.readyState);
+    },
+    "test fakeEventSource should have close function": function () {
+        assertFunction(this.fakeEventSource.close);
+    },
+    "test fakeEventSource should be able to close connection to server": function () {
+        assertEquals(1, this.sandbox.server[this.serverURL].clients);
+        assertEquals(this.fakeEventSource, this.sandbox.server[this.serverURL].clients[0]);
+        
+        this.fakeEventSource.close();
+        
+        assertEquals(0, this.sandbox.server[this.serverURL].clients);
+        assertNotEquals(this.fakeEventSource, this.sandbox.server[this.serverURL].clients[0]);        
+    }
+    
 });
 
