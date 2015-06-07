@@ -138,6 +138,12 @@ function eventSourceSandbox()
             
         };
         
+        this.closeAllConnections = function()
+        {
+            for(i = 0,length = this.clients.length ; i < length ;i++ )            
+                this.clients[0].close();            
+        };
+        
     }    
     function addServer(serverUrl)
     {
