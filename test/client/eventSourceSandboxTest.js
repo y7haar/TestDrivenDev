@@ -398,6 +398,30 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(1,es.readyState);
         this.sandbox.server[this.server1URL].closeConnection(es);
         assertEquals(2,es.readyState);        
+    },
+    "test server should implement closeAllConnections function": function(){
+        assertFunction(this.sandbox.server[this.server1URL].closeAllConnections);
+    },
+    "test server.closeAllConnections should close all Connections": function(){
+        assertEquals(0,this.sandbox.server[this.server1URL].clients.length);
+        var es1 = new EventSource(this.server1URL);
+        var es2 = new EventSource(this.server1URL);
+        var es3 = new EventSource(this.server1URL);
+        
+        assertEquals(3,this.sandbox.server[this.server1URL].clients.length);
+        this.sandbox.server[this.server1URL].closeAllConnections();
+        assertEquals(0,this.sandbox.server[this.server1URL].clients.length); 
+    },
+    "test server.closeAllConnections after calling all Clients should have readyState 2": function(){
+        var es1 = new EventSource(this.server1URL);
+        var es2 = new EventSource(this.server1URL);
+        var es3 = new EventSource(this.server1URL);
+        
+        this.sandbox.server[this.server1URL].closeAllConnections();
+        
+        assertEquals(2,es1.readyState);
+        assertEquals(2,es2.readyState);
+        assertEquals(2,es3.readyState);
     }
     
 });
