@@ -246,6 +246,7 @@ TestCase("SingleLobbyUiTest", {
         
         var playerWrapper = document.getElementById("playerWrapper");
         assertTagName("div", playerWrapper);
+        assertEquals("playerWrapper", playerWrapper.className);
         
         // Max Player count
         assertEquals(3, playerWrapper.childNodes.length);
