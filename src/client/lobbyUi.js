@@ -125,6 +125,34 @@ function lobbyUi(aRequestController)
         return _lobbyRequestController;
     }
     
+    function showLobby(aLobby)
+    {
+        clearLobbies();
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var title = document.createElement("h1");
+        title.innerHTML = "#" + aLobby.getId() + " " + aLobby.getName();
+        title.className = "lobbyTitle";
+        
+        var playerWrapper = document.createElement("div");
+        playerWrapper.id = "playerWrapper";
+        playerWrapper.className = "playerWrapper";
+        
+        var maxPlayers = aLobby.getMaxPlayers();
+        
+        for(var i = 0;i < maxPlayers; ++i)
+        {
+            var playerDiv = document.createElement("div");
+            playerDiv.className = "lobbyPlayer";
+            
+            playerWrapper.appendChild(playerDiv);
+            
+        }
+        
+        wrapper.appendChild(title);
+        wrapper.appendChild(playerWrapper);
+    }
+    
     this.createContent = createContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
@@ -132,4 +160,5 @@ function lobbyUi(aRequestController)
     this.clearLobbies = clearLobbies;
     this.onJoinSubmit = onJoinSubmit;
     this.getLobbyRequestController = getLobbyRequestController;
+    this.showLobby = showLobby;
 }
