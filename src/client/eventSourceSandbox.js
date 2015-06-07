@@ -24,13 +24,41 @@ function eventSourceSandbox()
     
     // ------------ FAKE EVENTSOURCE ------------------------
     function fakeEventSource(serverURL)
-    {    
-        
+    {
+        // ------------- INIT -------------------------------------
         if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
-        this.url = serverURL;
-        
-        if(typeof server[this.url] !== 'undefined')server[this.url].clients.push(this);   
-        
+        this.url = serverURL;        
+        this.readyState;
+        var thisFakeES = this;
+    
+        establishConnection();
+ 
+        function establishConnection()
+        {
+            var ajax = tddjs.util.ajax;          
+            var options = {
+                headers: {
+                    "Accept": "text/event-stream"
+                },
+                onSuccess: connectionSucces,
+                onFailure: connectionFailure
+            };
+            ajax.post(thisFakeES.url, options);
+            thisFakeES.readyState = 0;
+              
+        }        
+        function connectionSucces()
+        {
+            thisFakeES.readyState = 1;
+            server[thisFakeES.url].clients.push(thisFakeES);            
+        } 
+        function connectionFailure()
+        {
+            thisFakeES.readyState = 2;         
+        }
+
+       
+        //----------------------------------
         this.onerror = null;
         this.onopen = null;
         this.onmessage = null;
@@ -42,9 +70,9 @@ function eventSourceSandbox()
             
             var newEventName = "on"+eventName.toLowerCase();
             this[newEventName] = aFunction;
-        };       
+        };      
         
-        
+  
     }
     EventSource = fakeEventSource;    
 
@@ -87,7 +115,7 @@ function eventSourceSandbox()
         server[serverUrl] = new fakeServer(serverUrl);
     }
     function update()
-    {
+    {   
         for(i = 0, length = sinonSandbox.server.requests.length; i < length; i++)
         {
             var requestURL = sinonSandbox.server.requests[i].url;
