@@ -14,8 +14,15 @@ function eventSourceSandbox()
     
     var sinonSandbox = sinon.sandbox.create();
     sinonSandbox.useFakeXMLHttpRequest();
-    sinonSandbox.useFakeServer();
+    sinonSandbox.useFakeServer();    
+
+    function restore()
+    {      
+        sinonSandbox.restore();     
+        EventSource = realEventSource;
+    }
     
+    // ------------ FAKE EVENTSOURCE ------------------------
     function fakeEventSource(serverURL)
     {    
         
@@ -39,22 +46,13 @@ function eventSourceSandbox()
         
         
     }
-    EventSource = fakeEventSource;
-    
-    function restore()
-    {      
-        sinonSandbox.restore();     
-        EventSource = realEventSource;
-    }
-    
-    function update()
-    {
-        console.log(sinonSandbox.server);
-    }
+    EventSource = fakeEventSource;    
 
+    //------------- FAKESERVER -------------------
     function fakeServer()
     {
         this.clients = [];
+        this.requests = [];
         
         this.sendMessage = function(clientIndex, eventName, message){    
             
@@ -87,6 +85,24 @@ function eventSourceSandbox()
         if(typeof serverUrl !== 'string')throw new TypeError("serverUrl is missing or in wrong Format.");
         
         server[serverUrl] = new fakeServer(serverUrl);
+    }
+    function update()
+    {
+        for(i = 0, length = sinonSandbox.server.requests.length; i < length; i++)
+        {
+            var requestURL = sinonSandbox.server.requests[i].url;
+            if(typeof server[requestURL] !== 'undefined')
+            {
+                server[requestURL].requests.push(sinonSandbox.server.requests[i]);
+                sinonSandbox.server.requests[i].respond(200, "", "");
+            }
+            else
+            {              
+                sinonSandbox.server.requests[i].respond(404, "", "");
+            }            
+        }
+        sinonSandbox.server.requests.length = 0;        
+        
     }
     
     this.addServer = addServer;
