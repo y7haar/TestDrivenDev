@@ -358,6 +358,8 @@ TestCase("eventSourceSandboxFakeEventSource", {
         this.realXHR = XMLHttpRequest;
         this.serverURL = "/serverURL";
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sandbox.addServer(this.serverURL);
+        
         this.fakeEventSource = new EventSource(this.serverURL);
         this.fakeXHR = tddjs.util.ajax;
     },
@@ -415,7 +417,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
             fakeES.addEventListner("eventName", function(){});
         });  
     },
-     "test fakeEventSource.addEventListner should add new EventListner": function () {
+    "test fakeEventSource.addEventListner should add new EventListner": function () {
          var eventName = "eventName";
          var aFunction = function (){
            return true;  
@@ -424,6 +426,18 @@ TestCase("eventSourceSandboxFakeEventSource", {
          this.fakeEventSource.addEventListner(eventName, aFunction);
          assertEquals(aFunction, this.fakeEventSource["on"+eventName.toLowerCase()]);
          assertEquals(aFunction(), this.fakeEventSource["on"+eventName.toLowerCase()]());  
-     }
+     },
+    "test fakeEventSource should hold readyState property": function () {
+        assertNotUndefined(this.fakeEventSource.readyState);
+    },
+    "test fakeEventSource.readyState should be 0 at begining": function () {
+         assertEquals(0,this.fakeEventSource.readyState);
+    },
+    "test fakeEventSource readyState should switch to 1 if connection is established": function () {
+         assertEquals(0,this.fakeEventSource.readyState);
+         this.sandbox.update();
+         assertEquals(1,this.fakeEventSource.readyState);         
+    }
+     
 });
 
