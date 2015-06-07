@@ -444,7 +444,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertFunction(this.fakeEventSource.close);
     },
     "test fakeEventSource should be able to close connection to server": function () {
-        assertEquals(1, this.sandbox.server[this.serverURL].clients);
+        assertEquals(1, this.sandbox.server[this.serverURL].clients.length);
         assertEquals(this.fakeEventSource, this.sandbox.server[this.serverURL].clients[0]);
         
         this.fakeEventSource.close();
