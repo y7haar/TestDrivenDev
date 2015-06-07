@@ -21,7 +21,6 @@ function eventSourceSandbox()
         sinonSandbox.restore();     
         EventSource = realEventSource;
     }
-    
     // ------------ FAKE EVENTSOURCE ------------------------
     function fakeEventSource(serverURL)
     {
@@ -39,8 +38,7 @@ function eventSourceSandbox()
         
         var thisFakeES = this;
     
-        establishConnection();
- 
+        establishConnection();       
         function establishConnection()
         {
             var ajax = tddjs.util.ajax;          
@@ -53,7 +51,7 @@ function eventSourceSandbox()
             };
             ajax.post(url, options);
             readyState = 0;
-              
+            update();              
         }        
         function connectionSucces()
         {
@@ -78,7 +76,19 @@ function eventSourceSandbox()
             
             var newEventName = "on"+eventName.toLowerCase();
             this[newEventName] = aFunction;
-        };      
+        }; 
+        
+        this.close = function()
+        {
+           console.log(server[url].clients.length);
+           var index = server[url].clients.indexOf(thisFakeES);
+           if (index > -1)
+           {
+               server[url].clients.splice(index,1);
+           }
+           console.log(server[url].clients.length);
+           
+        };
         
   
     }
@@ -125,7 +135,7 @@ function eventSourceSandbox()
     
     // --------------- SANDBOX -----------------
     function update()
-    {   
+    {       
         for(i = 0, length = sinonSandbox.server.requests.length; i < length; i++)
         {
             var requestURL = sinonSandbox.server.requests[i].url;
