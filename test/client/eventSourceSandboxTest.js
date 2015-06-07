@@ -330,6 +330,24 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
         assertTrue(failureCalled);
         assertFalse(succesCalled);
+    },
+    "test sandbox.update should not add same requests at second call": function(){
+        var es = new EventSource(this.server1URL);
+        var ajax = tddjs.util.ajax;
+    
+        var options = {
+            headers: {
+                "Accept": "text/event-stream"
+            },
+            onSuccess: null,
+            onFailure: null
+        }; 
+        ajax.post(this.server1URL, options);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        this.sandbox.update();
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        this.sandbox.update();
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);        
     }
     
 });
