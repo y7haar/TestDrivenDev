@@ -388,14 +388,16 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(2,es.readyState);
     },
     "test sandbox.server closeConnection should close connection of a Client with object": function(){
-        var es = new EventSource(this.server1URL);
-        assertEquals(1,es.readyState);
-        
+        var es = new EventSource(this.server1URL);      
         assertEquals(1,this.sandbox.server[this.server1URL].clients.length); 
         this.sandbox.server[this.server1URL].closeConnection(es);
         assertEquals(0,this.sandbox.server[this.server1URL].clients.length);
-        
-        assertEquals(2,es.readyState);
+    },
+    "test after calling server.closeConnection Closed Client readyState should be 2": function(){
+        var es = new EventSource(this.server1URL);
+        assertEquals(1,es.readyState);
+        this.sandbox.server[this.server1URL].closeConnection(es);
+        assertEquals(2,es.readyState);        
     }
     
 });
