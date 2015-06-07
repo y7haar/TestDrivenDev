@@ -349,6 +349,49 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(2,this.sandbox.server[this.server1URL].requests.length);
         this.sandbox.update();
         assertEquals(2,this.sandbox.server[this.server1URL].requests.length);        
+    },
+    "test sandbox.server should implement closeConnection function": function(){     
+        assertFunction(this.sandbox.server[this.server1URL].closeConnection);        
+    },
+    "test sandbox.server closeConnection throw exception if parameter is wrong": function(){        
+        var sandbox = this.sandbox;
+        var url = this.server1URL;
+        var wrongES = new EventSource("wrongURL");       
+        assertException(function(){
+            sandbox.server[url].closeConnection();
+        },"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].closeConnection(wrongES);
+        },"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].closeConnection({client:0});
+        },"TypeError");
+        
+        assertException(function(){
+            sandbox.server[url].closeConnection(100);
+        },"TypeError");     
+    },
+    "test sandbox.server closeConnection should close connection of a Client with index": function(){
+        var es = new EventSource(this.server1URL);
+        assertEquals(1,es.readyState);
+     
+        assertEquals(1,this.sandbox.server[this.server1URL].clients.length); 
+        this.sandbox.server[this.server1URL].closeConnection(0);
+        assertEquals(0,this.sandbox.server[this.server1URL].clients.length);
+        
+        assertEquals(2,es.readyState);
+    },
+    "test sandbox.server closeConnection should close connection of a Client with object": function(){
+        var es = new EventSource(this.server1URL);
+        assertEquals(1,es.readyState);
+        
+        assertEquals(1,this.sandbox.server[this.server1URL].clients.length); 
+        this.sandbox.server[this.server1URL].closeConnection(es);
+        assertEquals(0,this.sandbox.server[this.server1URL].clients.length);
+        
+        assertEquals(2,es.readyState);
     }
     
 });
