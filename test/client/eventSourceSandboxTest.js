@@ -451,7 +451,25 @@ TestCase("eventSourceSandboxFakeEventSource", {
         
         assertEquals(0, this.sandbox.server[this.serverURL].clients);
         assertNotEquals(this.fakeEventSource, this.sandbox.server[this.serverURL].clients[0]);        
+    },
+    "test fakeEventSource readyState should be 2 after closing connection": function () {
+        this.fakeEventSource.close();
+        assertEquals(2, this.fakeEventSource.readyState);
+    },
+    "test fakeEventSource closing conenction should not effect other EventSource connections": function () {
+        var secondES = new EventSource(this.serverURL);
+        assertEquals(1, secondES.readyState);
+        
+        assertEquals(2, this.sandbox.server[this.serverURL].clients.length);
+        assertEquals(secondES,this.sandbox.server[this.serverURL].clients[1]);   
+        assertEquals(this.fakeEventSource,this.sandbox.server[this.serverURL].clients[0]);
+        
+        this.fakeEventSource.close();
+        
+        assertEquals(1, this.sandbox.server[this.serverURL].clients.length);
+        assertEquals(secondES,this.sandbox.server[this.serverURL].clients[0]); 
     }
+    
     
 });
 
