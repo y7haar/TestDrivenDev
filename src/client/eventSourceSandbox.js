@@ -124,6 +124,17 @@ function eventSourceSandbox()
         
         this.closeConnection = function(clientIdentifier)
         {
+            if(typeof clientIdentifier === 'undefined' || (isNaN(clientIdentifier) && !(clientIdentifier instanceof EventSource) ))
+                throw new TypeError("index is not a number or EventSource object");
+            if(Number.isInteger(clientIdentifier) && clientIdentifier >= 0 && typeof this.clients[clientIdentifier] !== 'undefined' )
+               this.clients[clientIdentifier].close();
+            else if(clientIdentifier instanceof EventSource && this.clients.indexOf(clientIdentifier) >= 0)
+            {
+                var index = this.clients.indexOf(clientIdentifier);
+                this.clients[index].close();
+            }
+            else
+                throw new Error("Wrong Parameter, client not found.");
             
         };
         
