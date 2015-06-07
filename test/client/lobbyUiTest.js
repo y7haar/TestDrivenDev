@@ -253,6 +253,10 @@ TestCase("SingleLobbyUiTest", {
         assertTagName("div", playerWrapper.childNodes[0]);
         assertTagName("div", playerWrapper.childNodes[1]);
         assertTagName("div", playerWrapper.childNodes[2]);
+        
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
+        assertEquals("lobbyPlayer", playerWrapper.childNodes[2].className);
     }
     
 });
