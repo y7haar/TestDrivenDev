@@ -107,7 +107,7 @@ function lobby()
     {
         var id = getId();
         var name = getName();
-        var maxPlayers = _getMaxPlayers();
+        var maxPlayers = getMaxPlayers();
         var leader = getLeader().getId();
         
         var playersObj = [];
