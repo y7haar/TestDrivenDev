@@ -268,27 +268,68 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox.server requets should have 1 entry after a ajax request to server, sandbox.upgrade should upgrade all servers": function(){
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
-        var succesCalled = false;        
+        var succesCalled = false;      
+        var failureCalled = false;
         var onSuccesEvent = function ()
         {
             succesCalled = true;
-        };        
+        };
+        var onFailureEvent = function()
+        {
+            failureCalled = true;
+        };
         var options = {
             headers: {
                 "Accept": "text/event-stream"
             },
             onSuccess: onSuccesEvent,
-            onFailure: null
+            onFailure: onFailureEvent
         };
         
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);        
+        ajax.post(this.server1URL, options);        
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
-        ajax.post(this.server1URL, options);
-        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
         assertFalse(succesCalled);
+        assertFalse(failureCalled);
         
         this.sandbox.update();
         assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        
         assertTrue(succesCalled);
+        assertFalse(failureCalled);
+    },
+    "test sandbox.server requets with wrong url should not be added": function(){
+        var es = new EventSource(this.server1URL);
+        var ajax = tddjs.util.ajax;
+        var succesCalled = false;      
+        var failureCalled = false;
+        var onSuccesEvent = function ()
+        {
+            succesCalled = true;
+        };
+        var onFailureEvent = function()
+        {
+            failureCalled = true;
+        };
+        var options = {
+            headers: {
+                "Accept": "text/event-stream"
+            },
+            onSuccess: onSuccesEvent,
+            onFailure: onFailureEvent
+        };
+        
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
+        ajax.post("wrongURL", options);       
+        assertFalse(succesCalled); 
+        assertFalse(failureCalled);
+        
+        this.sandbox.update();
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        assertTrue(failureCalled);
+        assertFalse(succesCalled);
     }
     
 });
