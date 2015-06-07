@@ -80,17 +80,14 @@ function eventSourceSandbox()
         
         this.close = function()
         {
-           console.log(server[url].clients.length);
-           var index = server[url].clients.indexOf(thisFakeES);
-           if (index > -1)
-           {
-               server[url].clients.splice(index,1);
-           }
-           console.log(server[url].clients.length);
-           
+            if (readyState === 1)
+            {
+                var index = server[url].clients.indexOf(thisFakeES);
+                if (index > -1)
+                    server[url].clients.splice(index, 1);
+                readyState = 2;
+            }        
         };
-        
-  
     }
     EventSource = fakeEventSource;    
 
