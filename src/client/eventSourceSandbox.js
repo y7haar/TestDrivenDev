@@ -27,8 +27,16 @@ function eventSourceSandbox()
     {
         // ------------- INIT -------------------------------------
         if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
-        this.url = serverURL;        
-        this.readyState;
+        var url = serverURL;        
+        var readyState;
+        
+        Object.defineProperty(this,'url',{
+            get: function(){return url;}
+        });
+        Object.defineProperty(this,'readyState',{
+            get: function(){return readyState;}
+        });
+        
         var thisFakeES = this;
     
         establishConnection();
@@ -43,18 +51,18 @@ function eventSourceSandbox()
                 onSuccess: connectionSucces,
                 onFailure: connectionFailure
             };
-            ajax.post(thisFakeES.url, options);
-            thisFakeES.readyState = 0;
+            ajax.post(url, options);
+            readyState = 0;
               
         }        
         function connectionSucces()
         {
-            thisFakeES.readyState = 1;
-            server[thisFakeES.url].clients.push(thisFakeES);            
+            readyState = 1;
+            server[url].clients.push(thisFakeES);            
         } 
         function connectionFailure()
         {
-            thisFakeES.readyState = 2;         
+            readyState = 2;         
         }
 
        
@@ -114,6 +122,8 @@ function eventSourceSandbox()
         
         server[serverUrl] = new fakeServer(serverUrl);
     }
+    
+    // --------------- SANDBOX -----------------
     function update()
     {   
         for(i = 0, length = sinonSandbox.server.requests.length; i < length; i++)
