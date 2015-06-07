@@ -122,6 +122,11 @@ function eventSourceSandbox()
             }
         };
         
+        this.closeConnection = function(clientIdentifier)
+        {
+            
+        };
+        
     }    
     function addServer(serverUrl)
     {
