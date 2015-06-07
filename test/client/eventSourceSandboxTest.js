@@ -269,8 +269,8 @@ TestCase("eventSourceSandboxServer", {
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
         var succesCalled = false;        
-        var onSuccesEvent = function ()
-        {
+        var onSuccesEvent = function (x)
+        {        
             succesCalled = true;
         };        
         var options = {
@@ -286,9 +286,9 @@ TestCase("eventSourceSandboxServer", {
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
         assertFalse(succesCalled);
         
-        this.sandbox.update();
-        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
-        assertTrue(succesCalled);
+        this.sandbox.update(); 
+        assertTrue(succesCalled);  
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);        
     }
     
 });
