@@ -362,7 +362,7 @@ TestCase("eventSourceSandboxServer", {
         },"TypeError");
         
         assertException(function(){
-            sandbox.server[url].closeConnection(wrongES);
+            sandbox.server[url].closeConnection("client1");
         },"TypeError");
         
         assertException(function(){
@@ -371,7 +371,11 @@ TestCase("eventSourceSandboxServer", {
         
         assertException(function(){
             sandbox.server[url].closeConnection(100);
-        },"TypeError");     
+        },"Error");
+        
+        assertException(function(){
+            sandbox.server[url].closeConnection(wrongES);
+        },"Error");
     },
     "test sandbox.server closeConnection should close connection of a Client with index": function(){
         var es = new EventSource(this.server1URL);
