@@ -3,8 +3,6 @@
  * this code tests the simulation of the EventSource object and the communication with the Server
  */
 
-//console.log(new EventSource("/fakeURL"));
-
 TestCase("eventSourceSandboxOvverride", {
     setUp: function () {
         this.realEventSource = EventSource;     
@@ -399,8 +397,23 @@ TestCase("eventSourceSandboxServer", {
         this.sandbox.server[this.server1URL].closeConnection(es);
         assertEquals(2,es.readyState);        
     },
+    "test server.closeConnection should not effect other Connections": function(){
+        var es1 = new EventSource(this.server1URL);
+        var es2 = new EventSource(this.server1URL);
+        var es3 = new EventSource(this.server1URL);
+        
+        assertEquals(es1, this.sandbox.server[this.server1URL].clients[0]);
+        assertEquals(es2, this.sandbox.server[this.server1URL].clients[1]);
+        assertEquals(es3, this.sandbox.server[this.server1URL].clients[2]);
+        
+        this.sandbox.server[this.server1URL].closeConnection(1);
+        
+        assertEquals(es1, this.sandbox.server[this.server1URL].clients[0]);
+        assertEquals(es3, this.sandbox.server[this.server1URL].clients[1]);        
+    },
     "test server should implement closeAllConnections function": function(){
         assertFunction(this.sandbox.server[this.server1URL].closeAllConnections);
+        
     },
     "test server.closeAllConnections should close all Connections": function(){
         assertEquals(0,this.sandbox.server[this.server1URL].clients.length);
@@ -416,7 +429,7 @@ TestCase("eventSourceSandboxServer", {
         var es1 = new EventSource(this.server1URL);
         var es2 = new EventSource(this.server1URL);
         var es3 = new EventSource(this.server1URL);
-        
+   
         this.sandbox.server[this.server1URL].closeAllConnections();
         
         assertEquals(2,es1.readyState);
