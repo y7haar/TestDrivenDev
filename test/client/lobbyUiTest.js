@@ -259,4 +259,6 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("lobbyPlayer", playerWrapper.childNodes[2].className);
     }
     
+    // TODO Check for player data and settings
+    
 });
