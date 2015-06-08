@@ -16,13 +16,23 @@ function lobbyUi(aRequestController)
         content.className = "content";
         
         var h1Div = document.createElement("div");
-        h1Div.className = "lobbyTitle";
+        h1Div.className = "lobbiesTitle";
         
         var h1 = document.createElement("h1");
         h1.innerHTML = "Lobbies";
         
         h1Div.appendChild(h1);
         content.appendChild(h1Div);
+        
+        body.appendChild(content);
+    }
+    
+    function createLobbyContent()
+    {
+        var body = document.getElementsByTagName("body")[0];
+        var content = document.createElement("div");
+        content.id = "content";
+        content.className = "content";
         
         body.appendChild(content);
     }
@@ -147,6 +157,24 @@ function lobbyUi(aRequestController)
             
             playerWrapper.appendChild(playerDiv);
             
+            var table = document.createElement("table");
+            var tr = document.createElement("tr");
+            
+            table.appendChild(tr);
+            
+            var playerColor = document.createElement("td");
+            var playerName = document.createElement("td");
+            var playerType = document.createElement("td");
+            
+            playerColor.className = "playerColor";
+            playerName.className = "playerName";
+            playerType.className = "playerType";
+            
+            tr.appendChild(playerColor);
+            tr.appendChild(playerName);
+            tr.appendChild(playerType);
+            playerDiv.appendChild(table);
+            
         }
         
         wrapper.appendChild(title);
@@ -154,6 +182,7 @@ function lobbyUi(aRequestController)
     }
     
     this.createContent = createContent;
+    this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
     this.addLobby = addLobby;
     this.showErrorMessage = showErrorMessage;
