@@ -29,6 +29,8 @@ function lobbyUiSetup()
     this.player3.setColor("#222222");
     this.player4.setColor("#333333");
 
+    this.player4.setType("bot");
+
     this.lobby1.setId(0);
     this.lobby2.setId(1);
 
@@ -299,6 +301,35 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("playerType", players[0].childNodes[0].childNodes[0].childNodes[2].className);
         assertEquals("playerType", players[1].childNodes[0].childNodes[0].childNodes[2].className);
         assertEquals("playerType", players[2].childNodes[0].childNodes[0].childNodes[2].className);
+        
+    },
+    
+    "test player Div should contain correct data in container": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+        
+        var playerWrapper = document.getElementById("playerWrapper");
+        var players = playerWrapper.childNodes;
+        
+        
+        assertEquals("", players[0].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[1].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        
+        assertEquals(this.player3.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals(this.player4.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("#ffffff", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        
+        
+        
+        assertEquals("P1", players[0].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("P2", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        
+        assertEquals("Human", players[0].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         
     }
     
