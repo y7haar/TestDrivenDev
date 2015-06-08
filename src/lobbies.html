@@ -19,7 +19,7 @@ and open the template in the editor.
         <script language="javascript" type="text/javascript" src="client/player.js"></script>
         <script language="javascript" type="text/javascript" src="client/ajax.js"></script>
         
-        <script language="javascript" type="text/javascript" src="client/gameStates.js"></script>
+        <script language="javascript" type="text/javascript" src="client/lobby.js"></script>
         <script language="javascript" type="text/javascript" src="server/mapGenerator.js"></script>
         <script language="javascript" type="text/javascript" src="client/canvas.js"></script>
         <script language="javascript" type="text/javascript" src="client/ui/button.js"></script>
@@ -27,12 +27,42 @@ and open the template in the editor.
     <body>
         <script>
             var ui = new tddjs.client.ui.lobbyUi();
-            ui.createContent();
+            //ui.createContent();
+            ui.createLobbyContent();
             ui.createWrapper();
             
+            
+            this.lobby2 = new tddjs.client.model.lobby();
+
+            this.player3 = new tddjs.client.player();
+            this.player4 = new tddjs.client.player();
+
+            this.player3.setId(3);
+            this.player4.setId(4);
+
+            this.player3.setName("P3");
+            this.player4.setName("P4");
+
+            this.player3.setColor("#222222");
+            this.player4.setColor("#333333");
+
+            this.lobby2.setId(1);
+
+            this.lobby2.setName("L2");
+
+            this.lobby2.addPlayer(this.player3);
+            this.lobby2.addPlayer(this.player4);
+
+            this.lobby2.setLeader(this.player4);
+
+            this.lobby2.setMaxPlayers(3);
+            
+            
             var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
-            lobbyRequestController.requestAllLobbies();
-            lobbyRequestController.requestAllLobbies();
+            //lobbyRequestController.requestAllLobbies();
+            ui.showLobby(this.lobby2);
+            
+            
         </script>
     </body>
 </html>
