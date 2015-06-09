@@ -2,19 +2,27 @@
  *  Source-Code for NameListGenerator
  */
 
-module.exports = nameListGenerator;
+if(typeof module !== "undefined")
+{
+    module.exports = nameListGenerator;
+}
 
-//tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
+else
+{
+    tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
+}
 
 function nameListGenerator()
 {
-    var fs = require('fs');
+    
     var _nameList = [];
     var _currentIndex = 0;
     var DEFAULT_LIST = "./nameLists/games.txt";
 
     function readFileList(file, callback)
     {
+        var fs = require('fs');
+        
         fs.readFile(file, {encoding: "utf-8"}, function (err, data) {
             
         if (err) 

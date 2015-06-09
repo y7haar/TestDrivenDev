@@ -4,7 +4,7 @@
 
 function lobbyUiSetup()
 {
-     this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
+    this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
         
     this.lobby1 = new tddjs.client.model.lobby();
     this.lobby2 = new tddjs.client.model.lobby();
@@ -257,6 +257,49 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[2].className);
+    },
+    
+    "test player Div should contain correct container": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+        
+        var playerWrapper = document.getElementById("playerWrapper");
+        var players = playerWrapper.childNodes;
+        
+        assertTagName("table", players[0].childNodes[0]);
+        assertTagName("table", players[1].childNodes[0]);
+        assertTagName("table", players[2].childNodes[0]);
+        
+        assertTagName("tr", players[0].childNodes[0].childNodes[0]);
+        assertTagName("tr", players[1].childNodes[0].childNodes[0]);
+        assertTagName("tr", players[2].childNodes[0].childNodes[0]);
+        
+        assertTagName("td", players[0].childNodes[0].childNodes[0].childNodes[0]);
+        assertTagName("td", players[0].childNodes[0].childNodes[0].childNodes[1]);
+        assertTagName("td", players[0].childNodes[0].childNodes[0].childNodes[2]);
+        
+        assertTagName("td", players[1].childNodes[0].childNodes[0].childNodes[0]);
+        assertTagName("td", players[1].childNodes[0].childNodes[0].childNodes[1]);
+        assertTagName("td", players[1].childNodes[0].childNodes[0].childNodes[2]);
+        
+        assertTagName("td", players[2].childNodes[0].childNodes[0].childNodes[0]);
+        assertTagName("td", players[2].childNodes[0].childNodes[0].childNodes[1]);
+        assertTagName("td", players[2].childNodes[0].childNodes[0].childNodes[2]);
+        
+        
+        assertEquals("playerColor", players[0].childNodes[0].childNodes[0].childNodes[0].className);
+        assertEquals("playerColor", players[1].childNodes[0].childNodes[0].childNodes[0].className);
+        assertEquals("playerColor", players[2].childNodes[0].childNodes[0].childNodes[0].className);
+        
+        assertEquals("playerName", players[0].childNodes[0].childNodes[0].childNodes[1].className);
+        assertEquals("playerName", players[1].childNodes[0].childNodes[0].childNodes[1].className);
+        assertEquals("playerName", players[2].childNodes[0].childNodes[0].childNodes[1].className);
+        
+        assertEquals("playerType", players[0].childNodes[0].childNodes[0].childNodes[2].className);
+        assertEquals("playerType", players[1].childNodes[0].childNodes[0].childNodes[2].className);
+        assertEquals("playerType", players[2].childNodes[0].childNodes[0].childNodes[2].className);
+        
     }
     
     // TODO Check for player data and settings
