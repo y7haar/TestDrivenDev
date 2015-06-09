@@ -40,22 +40,24 @@ and open the template in the editor.
             this.player3.setId(3);
             this.player4.setId(4);
 
-            this.player3.setName("P3");
-            this.player4.setName("P4");
+            this.player3.setName("Kohl ov Dyutie Killar");
+            this.player4.setName("Peter");
 
-            this.player3.setColor("#222222");
-            this.player4.setColor("#333333");
+            this.player3.setColor("#00ff66");
+            this.player4.setColor("#3300ff");
 
+            this.player4.setType("bot");
+            
             this.lobby2.setId(1);
 
-            this.lobby2.setName("L2");
+            this.lobby2.setName("Just for Fun!");
 
             this.lobby2.addPlayer(this.player3);
             this.lobby2.addPlayer(this.player4);
 
             this.lobby2.setLeader(this.player4);
 
-            this.lobby2.setMaxPlayers(3);
+            this.lobby2.setMaxPlayers(4);
             
             
             var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
