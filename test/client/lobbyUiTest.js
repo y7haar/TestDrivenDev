@@ -239,7 +239,7 @@ TestCase("SingleLobbyUiTest", {
         var p = wrapperNodes[1];
         assertTagName("p", p);
         assertEquals("lobbyMaxPlayers", p.className);
-        assertEquals("2 / 3 Players", p.innerHTML);
+        assertEquals("2 / 2 Players", p.innerHTML);
     },
     
     "test multiple calls of showLobby should not append the body": function () {  
