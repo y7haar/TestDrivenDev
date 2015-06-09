@@ -50,7 +50,7 @@ TestCase("MapTest",
         //-------------------------------------
     },
     
-    "test instance of should not be undefinded and shoulde be created": function()
+    "test map should not be undefinded, be created and instance of map": function()
     {
         assertNotUndefined(this.map1);
         assertObject(this.map1);
@@ -84,7 +84,7 @@ TestCase("MapTest",
         assertTrue(this.map1.hasContinent(this.continent1.getName()));
         assertFalse(this.map1.hasContinent(this.continent2.getName()));     
     },
-    "test it shoulde be possible to ": function()
+    "test it should be possible to add new Continents": function()
     {
         this.map1.addContinent(this.continent1);
         this.map1.addContinent(this.continent2);
@@ -108,7 +108,7 @@ TestCase("MapTest",
         assertEquals("undefined",typeof this.map1.getContinent("Europa").getCountry("fakeCountry"));  
     },
     
-    "test Should be able to get a correct Continent-Count": function()
+    "test should be able to get a correct Continent-Count": function()
     {
         assertFunction(this.map1.getContinentCount);
         
