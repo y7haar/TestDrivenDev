@@ -148,3 +148,10 @@ body
     min-width: 100px;
     text-align: left;
 }
+
+.lobbyMaxPlayers
+{
+    text-align: left;
+    padding-left: 20px;
+    font-size: 20px;
+}
