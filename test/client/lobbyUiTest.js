@@ -43,7 +43,7 @@ function lobbyUiSetup()
     this.lobby2.addPlayer(this.player4);
 
     this.lobby1.setLeader(this.player1);
-    this.lobby2.setLeader(this.player4);
+    this.lobby2.setLeader(this.player3);
 
     this.lobby1.setMaxPlayers(2);
     this.lobby2.setMaxPlayers(3);
@@ -227,6 +227,19 @@ TestCase("SingleLobbyUiTest", {
         assertTagName("h1", h1);
         assertEquals("lobbyTitle", h1.className);
         assertEquals("#" + 0 + " " + "L1", h1.innerHTML);
+    },
+    
+    "test showLobby should show a lobby with correct players / maxPlayers": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes;
+        var p = wrapperNodes[1];
+        assertTagName("p", p);
+        assertEquals("lobbyMaxPlayers", p.className);
+        assertEquals("2 / 3 Players", p.innerHTML);
     },
     
     "test multiple calls of showLobby should not append the body": function () {  
