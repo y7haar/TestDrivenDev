@@ -139,7 +139,30 @@ TestCase("GameLoopControllerTests", {
         assertEquals(1,this.sandbox.server[this.url].clients.length);
         assertSame(this.gameLoop.eventSource,this.sandbox.server[this.url].clients[0]);        
         assertEquals(1, this.gameLoop.eventSource.readyState);
+    },
+    "test gameLoop stablishConnection should call addAllEventListner function": function () {
+        assertNotUndefined(this.gameLoop.isAddAllEventListnerCalled);
+        assertFalse(this.gameLoop.isAddAllEventListnerCalled);
+        this.gameLoop.establishConnection();
+        assertTrue(this.gameLoop.isAddAllEventListnerCalled);        
+    },
+    "test gameLoop created EventSource should implement onchangetoplacing event": function () {
+        this.gameLoop.establishConnection();
+        assertNotUndefined(this.gameLoop.eventSource.onchangetoplacing);
+        assertFunction(this.gameLoop.eventSource.onchangetoplacing);
+    },
+    "test gameLoop created EventSource should implement onchangetoattacking event": function () {
+        this.gameLoop.establishConnection();
+        assertNotUndefined(this.gameLoop.eventSource.onchangetoattacking);
+        assertFunction(this.gameLoop.eventSource.onchangetoattacking);
+    },
+    "test gameLoop created EventSource should implement onchangetowaiting event": function () {
+        this.gameLoop.establishConnection();
+        assertNotUndefined(this.gameLoop.eventSource.onchangetowaiting);
+        assertFunction(this.gameLoop.eventSource.onchangetowaiting);
     }
+    
+    
 });
 
 /*
