@@ -33,10 +33,15 @@ TestCase("GameUiTest", {
         assertObject(this.gameUi);
     },
     
+    "test Object of gameUiController should have the needed functions": function (){
+        assertFunction(this.gameUi.addButton);
+        assertFunction(this.gameUi.getButtons);
+    },
+    
     "test gameUi button: coord should be on the Button": function () {        
         assert(this.button.isCoordOnButton(170,65));
-        assert(this.button.isCoordOnButton(this.buttonW,65));
-        assert(this.button.isCoordOnButton(170,this.buttonH));
-        assert(this.button.isCoordOnButton(this.buttonW,this.buttonH));
+        assert(this.button.isCoordOnButton(this.buttonW+170,65));
+        assert(this.button.isCoordOnButton(170,this.buttonH+65));
+        assert(this.button.isCoordOnButton(this.buttonW+170,this.buttonH+65));
     }
 });
