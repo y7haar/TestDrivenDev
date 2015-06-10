@@ -555,8 +555,30 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertEquals(1, this.sandbox.server[this.serverURL].clients.length);
         assertEquals(secondES,this.sandbox.server[this.serverURL].clients[0]);
         assertEquals(1,secondES.readyState);
-    }
-    
-    
+    },
+    "test fakeEventSource should hold boolean named withCredentials": function () {
+        assertNotUndefined(this.fakeEventSource.withCredentials);
+    },
+    "test fakeEventSource should throw exception if Credentials parameter is not boolean": function () {
+        assertException(function(){
+            var es = new EventSource("someUrl", "YES");
+        },"TypeError");        
+        assertException(function(){
+            var es = new EventSource("someUrl", null);
+        },"TypeError");        
+    },
+    "test fakeEventSource should not throw exception if Credentials is not given": function () {
+        assertNoException(function(){
+            var es = new EventSource("someUrl");
+        });  
+    },
+    "test fakeEventSource withCredentials should be setted with 'constructor'": function () {
+        var es = new EventSource("someUrl", true);
+        assertTrue(es.withCredentials);
+    },
+    "test fakeEventSource should be false if not setted via 'constructor' ": function () {
+       assertFalse(this.fakeEventSource.withCredentials);
+    }    
+  
 });
 
