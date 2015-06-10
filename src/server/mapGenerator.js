@@ -8,6 +8,7 @@ function mapGenerator()
 {
     //Gewissermaßen die Welt
     var _grid = {};
+    var countriesInContinents = [];
     
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
@@ -76,6 +77,11 @@ function mapGenerator()
             throw new Error("Size musst be one or higher");
         
         maximumCountrySize = size;
+    }
+    
+    function getCountriesInContinents()
+    {
+        return countriesInContinents;
     }
     
     function createArray(length) {
@@ -154,7 +160,7 @@ function mapGenerator()
             for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
-                _grid.cellGrid[i][j].id = id++;
+                _grid.cellGrid[i][j].id = -1;
                 _grid.cellGrid[i][j].size = 1;
             }
         }
@@ -214,14 +220,14 @@ function mapGenerator()
         for(var i = 0; i < _grid.borders.length; i++)
         {
             if(_grid.borders[i].getLeftCountry().size < minimumCountrySize)
-                countries.push(_grid.borders[i].getLeftCountry());
+                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
+                    countries.push(_grid.borders[i].getLeftCountry());
             
             if(_grid.borders[i].getRigthCountry().size < minimumCountrySize)
-                countries.push(_grid.borders[i].getRigthCountry());
+                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
+                    countries.push(_grid.borders[i].getRigthCountry());
         }
         
-        //Duplikate entfernen
-        countries = removeDuplicates(countries);
         return countries;
     }
     
@@ -243,31 +249,7 @@ function mapGenerator()
                 countries.push(_grid.borders[i].getRigthCountry());
         }
         
-        //Duplikate entfernen
-        //countries = removeDuplicates(countries);
         return countries;
-    }
-    
-    //Hilfsmethode um Duplikate in Listen zu vermeiden vll später verbessern
-    function removeDuplicates(array)
-    {
-        var newArray = [];
-        
-        for(var i = 0; i < array.length; i++)
-        {
-            var value = array[i];
-            var double = false;
-            
-            for(var j = 0; j < newArray.length; j++)
-            {
-                if(newArray[j] === value)
-                    double = true;
-            }
-            
-            if(!double)
-                newArray.push(value);
-        }
-        return newArray;
     }
     
     //Sammelt Nachbarländer eines Landes
@@ -284,14 +266,61 @@ function mapGenerator()
         for(var i = 0; i < _grid.borders.length; i++)
         {
             if(_grid.borders[i].getLeftCountry() === country)
-                countries.push(_grid.borders[i].getRigthCountry());
+                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
+                    countries.push(_grid.borders[i].getRigthCountry());
             
             if(_grid.borders[i].getRigthCountry() === country)
-                countries.push(_grid.borders[i].getLeftCountry());
+                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
+                    countries.push(_grid.borders[i].getLeftCountry());
         }
-        //Duplikate entfernen
-        countries = removeDuplicates(countries);
+        
         return countries;
+    }
+    
+    //Sammelt alle Nachbarländer von Kontinenten
+    function collectNeighborCountriesOfContinent(continent)
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(continent instanceof tddjs.client.map.continent))
+            throw new TypeError("Given value is not a Continent");
+        
+        var neigbors = [];
+        
+        for(var i in continent.getCountrys())
+        {
+            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            
+            for(j = 0; j < countryNeigbors.length; j++)
+            {
+                if(countriesInContinents.indexOf(countryNeigbors[j]) === -1)
+                    neigbors.push(countryNeigbors[j]);
+            }
+        }
+        
+        return neigbors;
+    }
+    
+    function collectBorderCountriesOfContinent(continent){
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(continent instanceof tddjs.client.map.continent))
+            throw new TypeError("Given value is not a Continent");
+        
+        var neigbors = [];
+        
+        for(var i in continent.getCountrys())
+        {
+            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            
+            for(j = 0; j < countryNeigbors.length; j++)
+            {
+                if(continent.hasCountryByObject(countryNeigbors[j]))
+                    neigbors.push(countryNeigbors[j]);
+            }
+        }
+        
+        return neigbors;
     }
     
     //Wählt ein zufälliges Element
@@ -434,12 +463,14 @@ function mapGenerator()
     this.setMinimumCountrySize = setMinimumCountrySize;
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
+    this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
    
     //Eig private
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
-    this.collectNeighborCountries = collectNeighborCountries;   
+    this.collectNeighborCountries = collectNeighborCountries;  
+    this.collectNeighborCountriesOfContinent = collectNeighborCountriesOfContinent;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;

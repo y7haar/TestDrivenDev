@@ -157,7 +157,7 @@ TestCase("MapGeneratorTest for private Functions", {
         assertException(function(){gen.collectAllCountries();}, "Error");    
     },
     
-    "test Shouldnt be able to call collectNeigbourCountries without initialisation": function()
+    "test Shouldnt be able to call collectNeighborCountries without initialisation": function()
     {
         var country = new tddjs.client.map.country();
         var gen = this.mapGenerator;
@@ -182,7 +182,7 @@ TestCase("MapGeneratorTest for private Functions", {
         assertNoException(function(){gen.collectAllCountries();});
     },
     
-    "test Should be able to call collectNeigbourCountries after initialisation": function()
+    "test Should be able to call collectNeighborCountries after initialisation": function()
     {
         var country = new tddjs.client.map.country();
         var gen = this.mapGenerator;
@@ -414,17 +414,17 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         var grid = this.mapGenerator.getMapGrid();
         this.mapGenerator.mergeIntoCountry(grid.cellGrid[0][0], grid.cellGrid[0][1]);
-        this.mapGenerator.mergeIntoCountry(grid.cellGrid[1][0], grid.cellGrid[0][1]);  
+        this.mapGenerator.mergeIntoCountry(grid.cellGrid[1][0], grid.cellGrid[0][1]); 
+        this.mapGenerator.mergeIntoCountry(grid.cellGrid[2][2], grid.cellGrid[2][1]);
         
         var result = this.mapGenerator.collectAllCountriesBelowMinSize();
         
-        assertEquals(6, result.length);
+        assertEquals(5, result.length);
         assertEquals(1, result[0].size);
         assertEquals(1, result[1].size);
         assertEquals(1, result[2].size);
         assertEquals(1, result[3].size);
-        assertEquals(1, result[4].size);
-        assertEquals(1, result[5].size);
+        assertEquals(2, result[4].size);
     },
     
     "test CollectAllCountriesBelowMinSize shouldnt be able to be called before initialisation": function()
@@ -448,6 +448,72 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertNoException(function(){gen.collectAllCountriesBelowMinSize();});     
+    },
+    
+    "test CollectNeigborCountriesOfContinent Should Collect All Neighbor-Countries of a Continent": function()
+    {
+        var continent = new tddjs.client.map.continent();
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var grid = this.mapGenerator.getMapGrid().cellGrid;
+        this.mapGenerator.getCountriesInContinents().push(grid[1][1]);
+        grid[1][1].setName("Alex");
+        continent.addCountry(grid[1][1]);
+        
+        var neigbors = this.mapGenerator.collectNeighborCountriesOfContinent(continent);
+        
+        assertEquals(4, neigbors.length);
+        assertEquals(grid[0][1], neigbors[0]);
+        assertEquals(grid[1][0], neigbors[1]);
+        assertEquals(grid[2][1], neigbors[2]);
+        assertEquals(grid[1][2], neigbors[3]);
+        
+        this.mapGenerator.getCountriesInContinents().push(grid[1][2]);
+        grid[1][2].setName("Alex!");
+        continent.addCountry(grid[1][2]);
+        neigbors = this.mapGenerator.collectNeighborCountriesOfContinent(continent);
+        
+        assertEquals(5, neigbors.length);
+        assertEquals(grid[0][1], neigbors[0]);
+        assertEquals(grid[1][0], neigbors[1]);
+        assertEquals(grid[2][1], neigbors[2]);
+        assertEquals(grid[0][2], neigbors[3]);
+        assertEquals(grid[2][2], neigbors[4]);
+    },
+    
+    "test Shouldnt be able to call CollectNeighborCountriesOfContinent before initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.collectNeighborCountriesOfContinent();}, "Error");
+        
+        this.mapGenerator.setGridSize(3,3);
+        assertException(function(){gen.collectNeighborCountriesOfContinent();}, "Error");
+        
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.collectNeighborCountriesOfContinent();}, "Error");
+    },
+    
+    "test Should be able to call CollectNeighborCountriesOfContinent after initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        var continent = new tddjs.client.map.continent();
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.collectNeighborCountriesOfContinent(continent);});
+    },
+    
+    "test CollectNeighborCountriesOfContinent shouldnt be able to be called with somethings thats not a continent": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertException(function(){gen.collectNeighborCountriesOfContinent(5);}, "TypeError");
     }
 }),
 
@@ -538,6 +604,13 @@ TestCase("MapGeneratorTest", {
         
         assertException(function(){gen.setMaximumCountrySize("fff");}, "TypeError");
         assertException(function(){gen.setMaximumCountrySize(-10);}, "Error");
+    },
+    
+    "test Should be able to get Variable CountriesInContinents": function()
+    {
+        var array = this.mapGenerator.getCountriesInContinents();
+        
+        assertObject(array);
     },
     
     "test generateMap() should return a Map-Object":  function()
