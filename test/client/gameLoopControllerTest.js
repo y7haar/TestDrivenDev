@@ -2,11 +2,11 @@
  Testcases for the Gameloop
  */
 
-TestCase("GameLoopControllerConstructorTests", {
+TestCase("GameLoopConstTests", {
      setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
-        this.url = "/serverURL";        
+        this.url = "/serverURL";     
      
     },
     tearDown: function(){     
@@ -83,13 +83,19 @@ TestCase("GameLoopControllerTests", {
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
         
-        this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url); 
+        this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url);
+        
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sandbox.addServer(this.url);
+        
     },
     tearDown: function(){
         this.gameLoop = null;
         this.map = null;
         this.player1 = null;
         this.url = null;
+        this.sandbox.restore();
+        this.sandbox = null;
     },
     "test gameloop should not be undefined": function () {      
         assertObject(this.gameLoop);      
@@ -114,10 +120,29 @@ TestCase("GameLoopControllerTests", {
     },
     "test gameLoop getUrl should return Url": function () {        
          assertSame(this.url, this.gameLoop.getUrl());
-    } 
+    },
+    "test gameLoop should implement establishConneciton function": function () {        
+        assertFunction(this.gameLoop.establishConnection);
+    },
+    "test gameLoop should hold EventSource obj": function () {
+        assertNotUndefined(this.gameLoop.eventSource);
+    },
+    "test gameLoop EventSource obj should be null": function () {
+        assertNotUndefined(this.gameLoop.eventSource);
+        assertEquals(null, this.gameLoop.eventSource);
+    },
+    "test gameLoop establishConnection should create a connected EventSource": function () {        
+        assertEquals(0,this.sandbox.server[this.url].clients.length);        
+        this.gameLoop.establishConnection();
+        assertNotEquals(null, this.gameLoop.eventSource);
+        assertTrue(this.gameLoop.eventSource instanceof EventSource);        
+        assertEquals(1,this.sandbox.server[this.url].clients.length);
+        assertSame(this.gameLoop.eventSource,this.sandbox.server[this.url].clients[0]);        
+        assertEquals(1, this.gameLoop.eventSource.readyState);
+    }
 });
 
-
+/*
 TestCase("GameLoopEventHandlerTests", {
     setUp: function () {             
         this.map = generateMap();      
@@ -136,6 +161,6 @@ TestCase("GameLoopEventHandlerTests", {
         this.url = null;
         this.sandbox.restore();
         this.sandbox = null;
-    }
-    
+    }   
 });
+*/
