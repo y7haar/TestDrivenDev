@@ -10,7 +10,10 @@ function gameUiController(aGLC){
     var gameLoopController = null;
     if(arguments.length === 1)
         gameLoopController = aGLC;
+    
     var _btn =[];
+    var _countrys =[];
+    var _gridMap;
     
     function init(){
         
@@ -29,8 +32,20 @@ function gameUiController(aGLC){
     
     
     
-    function _initMap(){
-        
+    function _initMap(aGridMap){
+        _gridMap = aGridMap;
+        for(x=0;x<_gridMap.cellGrid.length;x++){
+            for(y=0;y<_gridMap.cellGrid[0].length;y++){
+                if(_countrys.indexOf(_gridMap.cellGrid[x][y].id) === -1)
+                    _countrys.push(_gridMap.cellGrid[x][y].id);
+            }
+        }
+    }
+    
+    function _getCountrys(){
+        if(_countrys.length === 0)
+            throw new Error("Call _initMap first!");
+        return _countrys;
     }
     
     
@@ -40,4 +55,5 @@ function gameUiController(aGLC){
     
     //private
     this._initMap = _initMap;
+    this._getCountrys = _getCountrys;
 }
