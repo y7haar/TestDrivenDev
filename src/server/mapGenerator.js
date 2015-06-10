@@ -301,6 +301,28 @@ function mapGenerator()
         return neigbors;
     }
     
+    function collectBorderCountriesOfContinent(continent){
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(continent instanceof tddjs.client.map.continent))
+            throw new TypeError("Given value is not a Continent");
+        
+        var neigbors = [];
+        
+        for(var i in continent.getCountrys())
+        {
+            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            
+            for(j = 0; j < countryNeigbors.length; j++)
+            {
+                if(continent.hasCountryByObject(countryNeigbors[j]))
+                    neigbors.push(countryNeigbors[j]);
+            }
+        }
+        
+        return neigbors;
+    }
+    
     //Wählt ein zufälliges Element
     function getRandom(countries)
     {
