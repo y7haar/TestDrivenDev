@@ -7,15 +7,15 @@ tddjs.namespace("client").gameLoopController = gameLoopController;
 
 function gameLoopController(aMap, aPlayer, aUrl)
 {
+    //init
     setMap(aMap);
     setPlayer(aPlayer);
     setUrl(aUrl);
-    
+    // initEnd 
     
     var _player;
     var _map;
     var _url;
-    var _currentState = new tddjs.client.waitingState();
   
     
     function setUrl(aUrl)
@@ -54,18 +54,10 @@ function gameLoopController(aMap, aPlayer, aUrl)
         return _player;
     }
     
-    function getStateName()
-    {
-        return _currentState.toString();
-    }
     
-    function isMoveLegal()
-    {
-    }
     
     this.getUrl = getUrl;
     this.getMap = getMap;
-    this.getPlayer = getPlayer;    
-    this.getStateName = getStateName;
-    this.isMoveLegal = isMoveLegal;
+    this.getPlayer = getPlayer;   
+ 
 }
