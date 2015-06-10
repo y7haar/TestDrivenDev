@@ -236,12 +236,14 @@ function mapGenerator()
         //Länder hinzufügen
         for(var i = 0; i < _grid.borders.length; i++)
         {
-            countries.push(_grid.borders[i].getLeftCountry());
-            countries.push(_grid.borders[i].getRigthCountry());
+            if(countries.indexOf(_grid.borders[i].getLeftCountry() === -1))
+                countries.push(_grid.borders[i].getLeftCountry());
+            if(countries.indexOf(_grid.borders[i].getRigthCountry() === -1))
+                countries.push(_grid.borders[i].getRigthCountry());
         }
         
         //Duplikate entfernen
-        countries = removeDuplicates(countries);
+        //countries = removeDuplicates(countries);
         return countries;
     }
     
