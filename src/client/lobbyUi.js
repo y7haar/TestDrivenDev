@@ -201,6 +201,8 @@ function lobbyUi(aRequestController)
         // Real Player
         else
         {
+            playerDiv.id = "playerId" + aPlayer.getId();
+            
             if(aPlayer.getType() === "bot")
             {
                 playerType.innerHTML = "Bot";
