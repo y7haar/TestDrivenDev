@@ -270,8 +270,8 @@ TestCase("SingleLobbyUiTest", {
         assertTagName("div", playerWrapper.childNodes[2]);
         
         assertEquals("playerId" + "3", playerWrapper.childNodes[0].id);
-        assertEquals("playerId" + "4", playerWrapper.childNodes[0].id);
-        assertEquals("", playerWrapper.childNodes[0].id);
+        assertEquals("playerId" + "4", playerWrapper.childNodes[1].id);
+        assertEquals("", playerWrapper.childNodes[2].id);
         
         assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
