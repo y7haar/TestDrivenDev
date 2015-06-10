@@ -438,5 +438,25 @@ TestCase("SingleLobbyUiLeaderTest", {
     
     "test ui should have function to display a Lobby": function () {  
         assertFunction(this.lobbyUi.showLeaderLobby);
+    },
+    
+    "test showLobby should show a lobby with correct title name": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLeaderLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes[0].childNodes[0].childNodes[0];
+        
+        var h1 = wrapperNodes.childNodes[1];
+        var h12 = wrapperNodes.childNodes[0];
+        
+        assertTagName("h1", h1);
+        assertEquals("lobbyTitle", h1.className);
+        assertEquals("L1", h1.innerHTML);
+        
+        assertTagName("h1", h12);
+        assertEquals("lobbyTitle", h12.className);
+        assertEquals("#3", h12.innerHTML);
     }
 });
