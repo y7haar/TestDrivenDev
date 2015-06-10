@@ -11,7 +11,7 @@ function gameUiSetup()
     this.ctx = this.canvas.getContext("2d");
     assertObject(this.ctx);
     
-    this.gameUi = new tddjs.client.ui.gameUiController(null);
+    this.gameUi = new tddjs.client.ui.gameUiController(new tddjs.client.gameLoopController(),this.ctx);
     this.button = new tddjs.client.ui.button(170,65,"button",this.ctx);
     this.buttonW = this.ctx.measureText("button").width;
     this.buttonH = this.ctx.measureText("button").height;
