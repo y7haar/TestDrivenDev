@@ -558,6 +558,7 @@ TestCase("eventSourceSandboxFakeEventSource", {
     },
     "test fakeEventSource should hold boolean named withCredentials": function () {
         assertNotUndefined(this.fakeEventSource.withCredentials);
+        assertEquals("boolean",typeof this.fakeEventSource.withCredentials );
     },
     "test fakeEventSource should throw exception if Credentials parameter is not boolean": function () {
         assertException(function(){
@@ -577,7 +578,8 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertTrue(es.withCredentials);
     },
     "test fakeEventSource should be false if not setted via 'constructor' ": function () {
-       assertFalse(this.fakeEventSource.withCredentials);
+        var es = new EventSource("someUrl"); 
+        assertFalse(es.withCredentials);
     }    
   
 });
