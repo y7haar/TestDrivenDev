@@ -4,13 +4,20 @@
 
 function gameUiSetup()
 {
-    //this.gameUi = new tddjs.client.ui.gameUiController();
-    this.button = new tddjs.client.ui.button(170,65,"button",null);
+    /*:DOC += <canvas id="game" width="700" height="500"></canvas> */
+    
+    this.canvas = document.getElementById('game');
+    this.ctx = this.canvas.getContext("2d");
+    this.gameUi = null;//new tddjs.client.ui.gameUiController();
+    this.button = new tddjs.client.ui.button(170,65,"button",ctx);
 }
 
 function gameUiTeardown()
-{
-    //delete this.gameUi;
+{   
+    delete this.gameUi;
+    delete this.canvas;
+    delete this.ctx;
+    delete this.button;
 }
 
 TestCase("GameUiTest", {
@@ -22,6 +29,6 @@ TestCase("GameUiTest", {
     },
     
     "test gameUi button": function () {  
-        assert(this.button.isCoordOnButton(170,65));
+        assert(this.button.isCoordOnButton(160,65));
     }
 });
