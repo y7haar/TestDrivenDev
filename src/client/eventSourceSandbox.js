@@ -22,13 +22,23 @@ function eventSourceSandbox()
         EventSource = realEventSource;
     }
     // ------------ FAKE EVENTSOURCE ------------------------
-    function fakeEventSource(serverURL)
-    {
+    function fakeEventSource(serverURL, credentials)
+    {        
         // ------------- INIT -------------------------------------
-        if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
+        if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");    
+        if(typeof credentials !== 'boolean' && typeof credentials !== 'undefined')
+            throw new TypeError("withCredentials is not a Boolean.");
+        
+        var withCredentials = false;
+        if(typeof credentials !== 'undefined')
+            withCredentials = credentials;
+        
         var url = serverURL;        
         var readyState;
         
+        Object.defineProperty(this,'withCredentials',{
+            get: function(){return withCredentials;}
+        });        
         Object.defineProperty(this,'url',{
             get: function(){return url;}
         });
