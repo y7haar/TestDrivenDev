@@ -269,6 +269,10 @@ TestCase("SingleLobbyUiTest", {
         assertTagName("div", playerWrapper.childNodes[1]);
         assertTagName("div", playerWrapper.childNodes[2]);
         
+        assertEquals("playerId" + "3", playerWrapper.childNodes[0].id);
+        assertEquals("playerId" + "4", playerWrapper.childNodes[0].id);
+        assertEquals("", playerWrapper.childNodes[0].id);
+        
         assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[2].className);
@@ -331,13 +335,13 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[0].innerHTML);
         
         assertEquals("rgb(34, 34, 34)", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
-        assertEquals("rgb(51, 51, 51)", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
-        assertEquals("#ffffff", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(51, 51, 51)", players[1].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(255, 255, 255)", players[2].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
         
         
         
-        assertEquals("P1", players[0].childNodes[0].childNodes[0].childNodes[1].innerHTML);
-        assertEquals("P2", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("P3", players[0].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("P4", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
         assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
         
         assertEquals("Human", players[0].childNodes[0].childNodes[0].childNodes[2].innerHTML);
@@ -346,4 +350,16 @@ TestCase("SingleLobbyUiTest", {
         
     }
     
+});
+
+TestCase("SingleLobbyUiLeaderTest", {
+   
+   setUp: lobbyUiSetup,
+   tearDown: lobbyUiTeardown,
+        
+    // Tests for single Lobby instance seen as Lobby Leader
+    
+    "test ui should have function to display a Lobby": function () {  
+        assertFunction(this.lobbyUi.showLeaderLobby);
+    }
 });
