@@ -218,6 +218,12 @@ function lobbyUi(aRequestController)
         }
     }
     
+    function setPlayerEditable(aId)
+    {
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+    }
+    
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
@@ -227,4 +233,5 @@ function lobbyUi(aRequestController)
     this.onJoinSubmit = onJoinSubmit;
     this.getLobbyRequestController = getLobbyRequestController;
     this.showLobby = showLobby;
+    this.setPlayerEditable = setPlayerEditable;
 }
