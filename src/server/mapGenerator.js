@@ -154,7 +154,7 @@ function mapGenerator()
             for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
-                _grid.cellGrid[i][j].id = id++;
+                _grid.cellGrid[i][j].id = -1;
                 _grid.cellGrid[i][j].size = 1;
             }
         }
@@ -214,14 +214,14 @@ function mapGenerator()
         for(var i = 0; i < _grid.borders.length; i++)
         {
             if(_grid.borders[i].getLeftCountry().size < minimumCountrySize)
-                countries.push(_grid.borders[i].getLeftCountry());
+                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
+                    countries.push(_grid.borders[i].getLeftCountry());
             
             if(_grid.borders[i].getRigthCountry().size < minimumCountrySize)
-                countries.push(_grid.borders[i].getRigthCountry());
+                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
+                    countries.push(_grid.borders[i].getRigthCountry());
         }
         
-        //Duplikate entfernen
-        countries = removeDuplicates(countries);
         return countries;
     }
     
@@ -243,31 +243,7 @@ function mapGenerator()
                 countries.push(_grid.borders[i].getRigthCountry());
         }
         
-        //Duplikate entfernen
-        //countries = removeDuplicates(countries);
         return countries;
-    }
-    
-    //Hilfsmethode um Duplikate in Listen zu vermeiden vll später verbessern
-    function removeDuplicates(array)
-    {
-        var newArray = [];
-        
-        for(var i = 0; i < array.length; i++)
-        {
-            var value = array[i];
-            var double = false;
-            
-            for(var j = 0; j < newArray.length; j++)
-            {
-                if(newArray[j] === value)
-                    double = true;
-            }
-            
-            if(!double)
-                newArray.push(value);
-        }
-        return newArray;
     }
     
     //Sammelt Nachbarländer eines Landes
@@ -284,13 +260,14 @@ function mapGenerator()
         for(var i = 0; i < _grid.borders.length; i++)
         {
             if(_grid.borders[i].getLeftCountry() === country)
-                countries.push(_grid.borders[i].getRigthCountry());
+                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
+                    countries.push(_grid.borders[i].getRigthCountry());
             
             if(_grid.borders[i].getRigthCountry() === country)
-                countries.push(_grid.borders[i].getLeftCountry());
+                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
+                    countries.push(_grid.borders[i].getLeftCountry());
         }
-        //Duplikate entfernen
-        countries = removeDuplicates(countries);
+        
         return countries;
     }
     
