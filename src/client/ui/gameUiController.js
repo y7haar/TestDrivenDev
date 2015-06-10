@@ -5,11 +5,14 @@
 
 tddjs.namespace("client.ui").gameUiController = gameUiController;
 
-function gameUiController(aGLC){
+function gameUiController(aGLC,aCtx){
     
     var gameLoopController = null;
-    if(arguments.length === 1)
+    var _ctx = null;
+    if(arguments.length === 2){
         gameLoopController = aGLC;
+        _ctx = aCtx;
+    }
     
     var _btn =[];
     var _countrys =[];
@@ -47,10 +50,10 @@ function gameUiController(aGLC){
             throw new Error("Call _initMap first!");
         for (var i=0; i<_countrys.length; ++i)
             _countrys[i]._isOnCoord=_isOnCoord;
-        console.log(_countrys);
     }
     // <editor-fold defaultstate="collapsed" desc="Country helper">
     function _isOnCoord(x,y){
+        console.log(this);
         return null;
     }
     // </editor-fold>
