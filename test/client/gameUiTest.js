@@ -57,7 +57,7 @@ TestCase("GameUiTest", {
         var map = mapGen.getMapGrid();
         
         
-        assertTrue(this.gameUi._getCountrys().length === 0);
+        assertException(this.gameUi._getCountrys(),"Error");
         this.gameUi._initMap(map);
         assertTrue(this.gameUi._getCountrys().length !== 0);
     },
