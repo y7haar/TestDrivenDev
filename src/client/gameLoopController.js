@@ -57,15 +57,49 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function establishConnection()
     {
-        _eventSource = new EventSource(_url, true);        
+        _eventSource = new EventSource(_url, true);
+        addAllEventListner();
     }
     
-    // property for Testing
+    function addAllEventListner()
+    {        
+        addAllEventListnerCalled = true;
+        
+        _eventSource.addEventListner("changeToPlacing", changeToPlacingState);
+        _eventSource.addEventListner("changeToAttacking", changeToAttackingState);
+        _eventSource.addEventListner("changeToWaiting", changeToWaitingState);
+        
+        
+    }      
+    
+    
+    // EventSource events
+    function changeToPlacingState(e)
+    {
+        
+    }
+    function changeToAttackingState(e)
+    {
+        
+    }
+    function changeToWaitingState(e)
+    {
+        
+    }
+    
+    //  Testing
     Object.defineProperty(this, 'eventSource', {
         get: function () {
             return _eventSource;
         }
-    });     
+    });
+    
+    var addAllEventListnerCalled = false;
+    Object.defineProperty(this, 'isAddAllEventListnerCalled', {
+        get: function () {
+            return addAllEventListnerCalled;
+        }
+    });
     
     
     
