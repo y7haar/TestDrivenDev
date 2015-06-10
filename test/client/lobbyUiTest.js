@@ -463,7 +463,7 @@ TestCase("SingleLobbyUiLeaderTest", {
     "test player Div should contain correct container": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyUi.createWrapper();
-        this.lobbyUi.showLobby(this.lobby2);
+        this.lobbyUi.showLeaderLobby(this.lobby2);
         
         var playerWrapper = document.getElementById("playerWrapper");
         var players = playerWrapper.childNodes;
@@ -490,7 +490,9 @@ TestCase("SingleLobbyUiLeaderTest", {
         
         assertTagName("select", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
         assertTagName("select", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
-        assertTagName("select", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
+        
+        assertEquals("playerTypeSelect", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].className);
+        assertEquals("playerTypeSelect", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].className);
         
         assertEquals("playerColor", players[0].childNodes[0].childNodes[0].childNodes[0].className);
         assertEquals("playerColor", players[1].childNodes[0].childNodes[0].childNodes[0].className);
