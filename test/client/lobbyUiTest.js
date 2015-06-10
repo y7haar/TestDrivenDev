@@ -403,7 +403,7 @@ TestCase("SingleLobbyUiTest", {
         var playerDiv = document.getElementById("playerId3");
         var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
         
-        assertFunction(colorBox.onClick);
+        assertFunction(colorBox.onclick);
     },
     
     "test onclick Event in colorBox should change Color": function () {  
@@ -417,12 +417,12 @@ TestCase("SingleLobbyUiTest", {
         var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
         var colorValue = colorBox.style.backgroundColor;
         
-        colorBox.onClick();
+        colorBox.onclick();
         assertNotEquals(colorValue, colorBox.style.backgroundColor);
         
         colorValue = colorBox.style.backgroundColor;
         
-        colorBox.onClick();
+        colorBox.onclick();
         assertNotEquals(colorValue, colorBox.style.backgroundColor);
     }
     
