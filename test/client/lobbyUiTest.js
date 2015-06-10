@@ -377,6 +377,19 @@ TestCase("SingleLobbyUiTest", {
          
          assertException(function() { ui.setPlayerEditable(1); }, "Error");
          assertNoException(function() { ui.setPlayerEditable(3); });
+    },
+    
+    "test setPlayerEditable should change player name to editable and active": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        this.lobbyUi.setPlayerEditable(3);
+        
+        var playerDiv = document.getElementById("playerId3");
+        var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
+        
+        assertTrue(playerName.contentEditable);
     }
     
 });
