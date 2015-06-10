@@ -355,6 +355,13 @@ TestCase("SingleLobbyUiTest", {
     
      "test lobbyUi should have function to make input elements editable": function () {  
          assertFunction(this.lobbyUi.setPlayerEditable);
+    },
+    
+     "test setPlayerEditable should throw Error if id is not a number": function () {  
+         var ui = this.lobbyUi;
+         
+         assertException(function() { ui.setPlayerEditable("playerId3"); }, "TypeError");
+         assertNoException(function() { ui.setPlayerEditable(3); });
     }
     
 });
