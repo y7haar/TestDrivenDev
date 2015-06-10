@@ -488,9 +488,9 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertTagName("td", players[2].childNodes[0].childNodes[0].childNodes[1]);
         assertTagName("td", players[2].childNodes[0].childNodes[0].childNodes[2]);
         
-        assertTagName("input", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
-        assertTagName("input", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
-        assertTagName("input", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
+        assertTagName("select", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
+        assertTagName("select", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
+        assertTagName("select", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0]);
         
         assertEquals("playerColor", players[0].childNodes[0].childNodes[0].childNodes[0].className);
         assertEquals("playerColor", players[1].childNodes[0].childNodes[0].childNodes[0].className);
