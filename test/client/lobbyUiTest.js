@@ -358,6 +358,10 @@ TestCase("SingleLobbyUiTest", {
     },
     
      "test setPlayerEditable should throw Error if id is not a number": function () {  
+         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+         
          var ui = this.lobbyUi;
          
          assertException(function() { ui.setPlayerEditable("playerId3"); }, "TypeError");
@@ -365,7 +369,11 @@ TestCase("SingleLobbyUiTest", {
     },
     
     "test setPlayerEditable should throw Error if player with given Id is not there": function () {  
-         var ui = this.lobbyUi;
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        var ui = this.lobbyUi;
          
          assertException(function() { ui.setPlayerEditable(1); }, "Error");
          assertNoException(function() { ui.setPlayerEditable(3); });
