@@ -35,11 +35,12 @@ TestCase("GameUiTest", {
     
     "test Object of gameUiController should have the needed functions": function (){
         assertFunction(this.gameUi.init);
+        assertFunction(this.gameUi.draw);
         assertFunction(this.gameUi.addButton);
         assertFunction(this.gameUi.getButtons);
         
         assertFunction(this.gameUi._initMap);
-        assertFunction(this.gameUi._extendCountrys);
+        assertFunction(this.gameUi._extendCountries);
     },
     
     "test if gameUiController can store Buttons": function (){
@@ -58,9 +59,9 @@ TestCase("GameUiTest", {
         var map = mapGen.getMapGrid();
         
         
-        assertException(this.gameUi._getCountrys(),"Error");
+        assertException(this.gameUi._getCountries(),"Error");
         this.gameUi._initMap(map);
-        assertTrue(this.gameUi._getCountrys().length !== 0);
+        assertTrue(this.gameUi._getCountries().length !== 0);
     },
     
     "test if countrys get helper-functions":function(){
@@ -70,8 +71,8 @@ TestCase("GameUiTest", {
         var map = mapGen.getMapGrid();
         this.gameUi._initMap(map);
         
-        this.gameUi._extendCountrys();
-        var countrys = this.gameUi._getCountrys();
+        this.gameUi._extendCountries();
+        var countrys = this.gameUi._getCountries();
         
         assertFunction(countrys[0]._isOnCoord);
     },

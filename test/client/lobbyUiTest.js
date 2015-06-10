@@ -29,6 +29,8 @@ function lobbyUiSetup()
     this.player3.setColor("#222222");
     this.player4.setColor("#333333");
 
+    this.player4.setType("bot");
+
     this.lobby1.setId(0);
     this.lobby2.setId(1);
 
@@ -41,7 +43,7 @@ function lobbyUiSetup()
     this.lobby2.addPlayer(this.player4);
 
     this.lobby1.setLeader(this.player1);
-    this.lobby2.setLeader(this.player4);
+    this.lobby2.setLeader(this.player3);
 
     this.lobby1.setMaxPlayers(2);
     this.lobby2.setMaxPlayers(3);
@@ -227,6 +229,19 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("#" + 0 + " " + "L1", h1.innerHTML);
     },
     
+    "test showLobby should show a lobby with correct players / maxPlayers": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes;
+        var p = wrapperNodes[1];
+        assertTagName("p", p);
+        assertEquals("lobbyMaxPlayers", p.className);
+        assertEquals("2 / 2 Players", p.innerHTML);
+    },
+    
     "test multiple calls of showLobby should not append the body": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyUi.createWrapper();
@@ -299,6 +314,35 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("playerType", players[0].childNodes[0].childNodes[0].childNodes[2].className);
         assertEquals("playerType", players[1].childNodes[0].childNodes[0].childNodes[2].className);
         assertEquals("playerType", players[2].childNodes[0].childNodes[0].childNodes[2].className);
+        
+    },
+    
+    "test player Div should contain correct data in container": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+        
+        var playerWrapper = document.getElementById("playerWrapper");
+        var players = playerWrapper.childNodes;
+        
+        
+        assertEquals("", players[0].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[1].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        
+        assertEquals(this.player3.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals(this.player4.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("#ffffff", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        
+        
+        
+        assertEquals("P1", players[0].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("P2", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        
+        assertEquals("Human", players[0].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         
     }
     

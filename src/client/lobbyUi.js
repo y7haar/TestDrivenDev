@@ -144,6 +144,10 @@ function lobbyUi(aRequestController)
         title.innerHTML = "#" + aLobby.getId() + " " + aLobby.getName();
         title.className = "lobbyTitle";
         
+        var p = document.createElement("p");
+        p.className = "lobbyMaxPlayers";
+        p.innerHTML =  aLobby.getPlayers().length + " / "+ aLobby.getMaxPlayers() + " Players";
+        
         var playerWrapper = document.createElement("div");
         playerWrapper.id = "playerWrapper";
         playerWrapper.className = "playerWrapper";
@@ -152,33 +156,64 @@ function lobbyUi(aRequestController)
         
         for(var i = 0;i < maxPlayers; ++i)
         {
-            var playerDiv = document.createElement("div");
-            playerDiv.className = "lobbyPlayer";
-            
-            playerWrapper.appendChild(playerDiv);
-            
-            var table = document.createElement("table");
-            var tr = document.createElement("tr");
-            
-            table.appendChild(tr);
-            
-            var playerColor = document.createElement("td");
-            var playerName = document.createElement("td");
-            var playerType = document.createElement("td");
-            
-            playerColor.className = "playerColor";
-            playerName.className = "playerName";
-            playerType.className = "playerType";
-            
-            tr.appendChild(playerColor);
-            tr.appendChild(playerName);
-            tr.appendChild(playerType);
-            playerDiv.appendChild(table);
-            
+            showLobbyPlayer(playerWrapper, aLobby.getPlayers()[i]);            
         }
         
         wrapper.appendChild(title);
+        wrapper.appendChild(p);
         wrapper.appendChild(playerWrapper);
+    }
+    
+    function showLobbyPlayer(playerWrapper, aPlayer)
+    {
+        
+        var playerDiv = document.createElement("div");
+        playerDiv.className = "lobbyPlayer";
+
+        playerWrapper.appendChild(playerDiv);
+
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+
+        table.appendChild(tr);
+
+        var playerColor = document.createElement("td");
+        var playerName = document.createElement("td");
+        var playerType = document.createElement("td");
+
+        playerColor.className = "playerColor";
+        playerName.className = "playerName";
+        playerType.className = "playerType";
+
+        tr.appendChild(playerColor);
+        tr.appendChild(playerName);
+        tr.appendChild(playerType);
+        playerDiv.appendChild(table);
+        
+        // Empty slot
+        if(typeof aPlayer === "undefined")
+        {
+            playerColor.style.backgroundColor = "#ffffff";
+            playerName.innerHTML = "";
+            playerType.innerHTML = "Open Slot";
+        }
+        
+        // Real Player
+        else
+        {
+            if(aPlayer.getType() === "bot")
+            {
+                playerType.innerHTML = "Bot";
+            }
+            
+            else if(aPlayer.getType() === "human")
+            {
+                playerType.innerHTML = "Human";
+            }
+            
+            playerName.innerHTML = aPlayer.getName();
+            playerColor.style.backgroundColor = aPlayer.getColor();
+        }
     }
     
     this.createContent = createContent;
