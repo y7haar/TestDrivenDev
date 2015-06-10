@@ -137,6 +137,7 @@ function gameUiController(aGLC,aCtx){
        _ctx.fillStyle = "#FF0000";
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
     }
+    
     function clear(){
         _ctx.fillStyle = "#ebebeb";
         _ctx.fillRect(0,0,_ctx.canvas.width, _ctx.canvas.height);
