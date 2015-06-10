@@ -8,6 +8,9 @@ function lobbyUi(aRequestController)
 {   
     var _lobbyRequestController = aRequestController;
     
+    var _colors = [ "Blue", "LightGreen", "Coral", "CornflowerBlue", "ForestGreen", "Red", "DarkOrange", "Yellow", "LawnGreen", "Khaki", "Violet"];
+    var _colorIndex = 0;
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -144,6 +147,10 @@ function lobbyUi(aRequestController)
         title.innerHTML = "#" + aLobby.getId() + " " + aLobby.getName();
         title.className = "lobbyTitle";
         
+        var p = document.createElement("p");
+        p.className = "lobbyMaxPlayers";
+        p.innerHTML =  aLobby.getPlayers().length + " / "+ aLobby.getMaxPlayers() + " Players";
+        
         var playerWrapper = document.createElement("div");
         playerWrapper.id = "playerWrapper";
         playerWrapper.className = "playerWrapper";
@@ -152,33 +159,96 @@ function lobbyUi(aRequestController)
         
         for(var i = 0;i < maxPlayers; ++i)
         {
-            var playerDiv = document.createElement("div");
-            playerDiv.className = "lobbyPlayer";
-            
-            playerWrapper.appendChild(playerDiv);
-            
-            var table = document.createElement("table");
-            var tr = document.createElement("tr");
-            
-            table.appendChild(tr);
-            
-            var playerColor = document.createElement("td");
-            var playerName = document.createElement("td");
-            var playerType = document.createElement("td");
-            
-            playerColor.className = "playerColor";
-            playerName.className = "playerName";
-            playerType.className = "playerType";
-            
-            tr.appendChild(playerColor);
-            tr.appendChild(playerName);
-            tr.appendChild(playerType);
-            playerDiv.appendChild(table);
-            
+            showLobbyPlayer(playerWrapper, aLobby.getPlayers()[i]);            
         }
         
         wrapper.appendChild(title);
+        wrapper.appendChild(p);
         wrapper.appendChild(playerWrapper);
+    }
+    
+    function showLobbyPlayer(playerWrapper, aPlayer)
+    {
+        
+        var playerDiv = document.createElement("div");
+        playerDiv.className = "lobbyPlayer";
+
+        playerWrapper.appendChild(playerDiv);
+
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+
+        table.appendChild(tr);
+
+        var playerColor = document.createElement("td");
+        var playerName = document.createElement("td");
+        var playerType = document.createElement("td");
+
+        playerColor.className = "playerColor";
+        playerName.className = "playerName";
+        playerType.className = "playerType";
+
+        tr.appendChild(playerColor);
+        tr.appendChild(playerName);
+        tr.appendChild(playerType);
+        playerDiv.appendChild(table);
+        
+        // Empty slot
+        if(typeof aPlayer === "undefined")
+        {
+            playerColor.style.backgroundColor = "#ffffff";
+            playerName.innerHTML = "";
+            playerType.innerHTML = "Open Slot";
+        }
+        
+        // Real Player
+        else
+        {
+            playerDiv.id = "playerId" + aPlayer.getId();
+            
+            if(aPlayer.getType() === "bot")
+            {
+                playerType.innerHTML = "Bot";
+            }
+            
+            else if(aPlayer.getType() === "human")
+            {
+                playerType.innerHTML = "Human";
+            }
+            
+            playerName.innerHTML = aPlayer.getName();
+            playerColor.style.backgroundColor = aPlayer.getColor();
+        }
+    }
+    
+    function setPlayerEditable(aId)
+    {
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        var playerDiv = document.getElementById("playerId" + aId);
+        
+        if(playerDiv === null)
+            throw new Error("Player with given Id does not exist");
+        
+        var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
+        playerName.contentEditable = true;
+        playerName.innerHTML = "";
+        
+        playerName.onclick = function(){
+          this.innerHTML = "";  
+        };
+        
+        var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
+        colorBox.style.cursor = "pointer";
+        
+        colorBox.onclick = function() {
+            colorBox.style.backgroundColor = _colors[_colorIndex % _colors.length];
+            _colorIndex++;
+        };
+        
+        
+        playerName.focus();
     }
     
     this.createContent = createContent;
@@ -190,4 +260,5 @@ function lobbyUi(aRequestController)
     this.onJoinSubmit = onJoinSubmit;
     this.getLobbyRequestController = getLobbyRequestController;
     this.showLobby = showLobby;
+    this.setPlayerEditable = setPlayerEditable;
 }

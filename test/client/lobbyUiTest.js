@@ -29,6 +29,8 @@ function lobbyUiSetup()
     this.player3.setColor("#222222");
     this.player4.setColor("#333333");
 
+    this.player4.setType("bot");
+
     this.lobby1.setId(0);
     this.lobby2.setId(1);
 
@@ -41,7 +43,7 @@ function lobbyUiSetup()
     this.lobby2.addPlayer(this.player4);
 
     this.lobby1.setLeader(this.player1);
-    this.lobby2.setLeader(this.player4);
+    this.lobby2.setLeader(this.player3);
 
     this.lobby1.setMaxPlayers(2);
     this.lobby2.setMaxPlayers(3);
@@ -227,6 +229,19 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("#" + 0 + " " + "L1", h1.innerHTML);
     },
     
+    "test showLobby should show a lobby with correct players / maxPlayers": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes;
+        var p = wrapperNodes[1];
+        assertTagName("p", p);
+        assertEquals("lobbyMaxPlayers", p.className);
+        assertEquals("2 / 2 Players", p.innerHTML);
+    },
+    
     "test multiple calls of showLobby should not append the body": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyUi.createWrapper();
@@ -253,6 +268,10 @@ TestCase("SingleLobbyUiTest", {
         assertTagName("div", playerWrapper.childNodes[0]);
         assertTagName("div", playerWrapper.childNodes[1]);
         assertTagName("div", playerWrapper.childNodes[2]);
+        
+        assertEquals("playerId" + "3", playerWrapper.childNodes[0].id);
+        assertEquals("playerId" + "4", playerWrapper.childNodes[1].id);
+        assertEquals("", playerWrapper.childNodes[2].id);
         
         assertEquals("lobbyPlayer", playerWrapper.childNodes[0].className);
         assertEquals("lobbyPlayer", playerWrapper.childNodes[1].className);
@@ -300,8 +319,124 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("playerType", players[1].childNodes[0].childNodes[0].childNodes[2].className);
         assertEquals("playerType", players[2].childNodes[0].childNodes[0].childNodes[2].className);
         
+    },
+    
+    "test player Div should contain correct data in container": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+        
+        var playerWrapper = document.getElementById("playerWrapper");
+        var players = playerWrapper.childNodes;
+        
+        
+        assertEquals("", players[0].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[1].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[0].innerHTML);
+        
+        assertEquals("rgb(34, 34, 34)", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(51, 51, 51)", players[1].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(255, 255, 255)", players[2].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        
+        
+        
+        assertEquals("P3", players[0].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("P4", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
+        
+        assertEquals("Human", players[0].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
+        
+    },
+    
+    
+    // Tests for editable inputs
+    
+     "test lobbyUi should have function to make input elements editable": function () {  
+         assertFunction(this.lobbyUi.setPlayerEditable);
+    },
+    
+     "test setPlayerEditable should throw Error if id is not a number": function () {  
+         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2);
+         
+         var ui = this.lobbyUi;
+         
+         assertException(function() { ui.setPlayerEditable("playerId3"); }, "TypeError");
+         assertNoException(function() { ui.setPlayerEditable(3); });
+    },
+    
+    "test setPlayerEditable should throw Error if player with given Id is not there": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        var ui = this.lobbyUi;
+         
+         assertException(function() { ui.setPlayerEditable(1); }, "Error");
+         assertNoException(function() { ui.setPlayerEditable(3); });
+    },
+    
+    "test setPlayerEditable should change player name to editable and active": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        this.lobbyUi.setPlayerEditable(3);
+        
+        var playerDiv = document.getElementById("playerId3");
+        var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
+        
+        assertEquals("true", playerName.contentEditable);
+        assertEquals("", playerName.innerHTML);
+    },
+    
+    "test setPlayerEditable should set onClick Event on colorBox": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        this.lobbyUi.setPlayerEditable(3);
+        
+        var playerDiv = document.getElementById("playerId3");
+        var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
+        
+        assertFunction(colorBox.onclick);
+    },
+    
+    "test onclick Event in colorBox should change Color": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLobby(this.lobby2); 
+        
+        this.lobbyUi.setPlayerEditable(3);
+        
+        var playerDiv = document.getElementById("playerId3");
+        var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
+        var colorValue = colorBox.style.backgroundColor;
+        
+        colorBox.onclick();
+        assertNotEquals(colorValue, colorBox.style.backgroundColor);
+        
+        colorValue = colorBox.style.backgroundColor;
+        
+        colorBox.onclick();
+        assertNotEquals(colorValue, colorBox.style.backgroundColor);
     }
     
-    // TODO Check for player data and settings
     
+});
+
+TestCase("SingleLobbyUiLeaderTest", {
+   
+   setUp: lobbyUiSetup,
+   tearDown: lobbyUiTeardown,
+        
+    // Tests for single Lobby instance seen as Lobby Leader
+    
+    "test ui should have function to display a Lobby": function () {  
+        assertFunction(this.lobbyUi.showLeaderLobby);
+    }
 });

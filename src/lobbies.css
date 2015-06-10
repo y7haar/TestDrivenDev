@@ -117,10 +117,42 @@ body
 {
     border: 1px solid #fff;
     background-color: #bbb;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
     
+    font-size: 20px;
+}
+
+.playerColor
+{
+    width:25px;
+    height:25px;
+    
+    margin-right:20px;
+    
+    border: 2px solid #444;
+    border-radius: 2px;
+}
+
+.playerName
+{
+    padding-left: 20px;
+    min-width: 400px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.playerType
+{
+    min-width: 100px;
+    text-align: left;
+}
+
+.lobbyMaxPlayers
+{
+    text-align: left;
+    padding-left: 20px;
     font-size: 20px;
 }
