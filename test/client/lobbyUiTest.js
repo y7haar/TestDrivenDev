@@ -446,10 +446,10 @@ TestCase("SingleLobbyUiLeaderTest", {
         this.lobbyUi.showLeaderLobby(this.lobby1);
         
         var wrapper = document.getElementById("lobbyWrapper");
-        var wrapperNodes = wrapper.childNodes[0].childNodes[0].childNodes[0];
+        var wrapperNodes = wrapper.childNodes[0].childNodes[0];
         
-        var h1 = wrapperNodes.childNodes[1];
-        var h12 = wrapperNodes.childNodes[0];
+        var h1 = wrapperNodes.childNodes[1].childNodes[0];
+        var h12 = wrapperNodes.childNodes[0].childNodes[0];
         
         assertTagName("h1", h1);
         assertEquals("lobbyTitle", h1.className);
@@ -457,6 +457,6 @@ TestCase("SingleLobbyUiLeaderTest", {
         
         assertTagName("h1", h12);
         assertEquals("lobbyTitle", h12.className);
-        assertEquals("#3", h12.innerHTML);
+        assertEquals("#0", h12.innerHTML);
     }
 });
