@@ -192,8 +192,28 @@ function lobbyUi(aRequestController)
         tr.appendChild(td1);
         tr.appendChild(td2);
         
+        var playerWrapper = document.createElement("div");
+        playerWrapper.id = "playerWrapper";
+        playerWrapper.className = "playerWrapper";
+        
+        var maxPlayers = aLobby.getMaxPlayers();
+        
+        for(var i = 0;i < maxPlayers; ++i)
+        {
+            if(aLobby.getPlayers()[i]=== aLobby.getLeader())
+            {
+                showLobbyPlayer(playerWrapper, aLobby.getPlayers()[i]);         
+            }
+            
+            else
+            {
+                showLobbyLeaderPlayer(playerWrapper, aLobby.getPlayers()[i]);         
+            }
+        }
+        
         table.appendChild(tr);
         wrapper.appendChild(table);
+        wrapper.appendChild(playerWrapper);
     }
     
     
@@ -244,6 +264,80 @@ function lobbyUi(aRequestController)
             else if(aPlayer.getType() === "human")
             {
                 playerType.innerHTML = "Human";
+            }
+            
+            playerName.innerHTML = aPlayer.getName();
+            playerColor.style.backgroundColor = aPlayer.getColor();
+        }
+    }
+    
+     function showLobbyLeaderPlayer(playerWrapper, aPlayer)
+    {
+        
+        var playerDiv = document.createElement("div");
+        playerDiv.className = "lobbyPlayer";
+
+        playerWrapper.appendChild(playerDiv);
+
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+
+        table.appendChild(tr);
+
+        var playerColor = document.createElement("td");
+        var playerName = document.createElement("td");
+        var playerType = document.createElement("td");
+        var playerTypeRoll = document.createElement("select");
+        var type1 = document.createElement("option");
+        var type2 = document.createElement("option");
+        var type3 = document.createElement("option");
+        
+        type1.text = "Open Slot";
+        type2.text = "Bot";
+        type3.text = "Human";
+        
+        playerTypeRoll.className = "playerTypeSelect";
+        
+        playerType.appendChild(playerTypeRoll);
+
+        playerColor.className = "playerColor";
+        playerName.className = "playerName";
+        playerType.className = "playerType";
+
+        tr.appendChild(playerColor);
+        tr.appendChild(playerName);
+        tr.appendChild(playerType);
+        playerDiv.appendChild(table);
+        
+        // Empty slot
+        if(typeof aPlayer === "undefined")
+        {
+            playerColor.style.backgroundColor = "#ffffff";
+            playerName.innerHTML = "";
+            
+            playerTypeRoll.add(type1);
+            playerTypeRoll.add(type2);
+            playerTypeRoll.selectedIndex = 0;
+        }
+        
+        // Real Player
+        else
+        {
+            playerDiv.id = "playerId" + aPlayer.getId();
+            
+            playerTypeRoll.add(type1);
+            playerTypeRoll.add(type2);
+            
+            
+            if(aPlayer.getType() === "bot")
+            {
+                playerTypeRoll.selectedIndex = 1;
+            }
+            
+            else if(aPlayer.getType() === "human")
+            {
+                playerTypeRoll.add(type3);
+                playerTypeRoll.selectedIndex = 2;
             }
             
             playerName.innerHTML = aPlayer.getName();
