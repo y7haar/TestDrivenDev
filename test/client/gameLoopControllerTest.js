@@ -2,7 +2,7 @@
  Testcases for the Gameloop
  */
 
-TestCase("GameLoopConstructorTests", {
+TestCase("GameLoopControllerConstructorTests", {
      setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
@@ -96,6 +96,24 @@ TestCase("GameLoopTests", {
     },
     "test gameLoop should be instance of gameLoopControler": function () {        
         assertTrue(this.gameLoop instanceof tddjs.client.gameLoopController);
+    },
+    "test gameLoop getMap should be implemented": function () {        
+         assertFunction(this.gameLoop.getMap);
+    },
+    "test gameLoop getMap should return Map": function () {        
+         assertSame(this.map, this.gameLoop.getMap());
+    },
+    "test gameLoop getPlayer should be implemented": function () {        
+         assertFunction(this.gameLoop.getPlayer);
+    },
+    "test gameLoop getPlayer should return Player": function () {        
+         assertSame(this.player1, this.gameLoop.getPlayer());
+    },
+    "test gameLoop getUrl should be implemented": function () {        
+         assertFunction(this.gameLoop.getUrl);
+    },
+    "test gameLoop getUrl should return Url": function () {        
+         assertSame(this.url, this.gameLoop.getUrl());
     }
 });
     
