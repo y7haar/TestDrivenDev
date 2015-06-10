@@ -389,7 +389,8 @@ TestCase("SingleLobbyUiTest", {
         var playerDiv = document.getElementById("playerId3");
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
         
-        assertTrue(playerName.contentEditable);
+        assertEquals("true", playerName.contentEditable);
+        assertEquals("", playerName.innerHTML);
     }
     
 });
