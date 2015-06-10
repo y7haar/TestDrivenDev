@@ -222,6 +222,11 @@ function lobbyUi(aRequestController)
     {
         if(typeof aId !== "number")
             throw new TypeError("Id must be number");
+        
+        var playerDiv = document.getElementById("playerId" + aId);
+        
+        if(playerDiv === null)
+            throw new Error("Player with given Id does not exist");
     }
     
     this.createContent = createContent;
