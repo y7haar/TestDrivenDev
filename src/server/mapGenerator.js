@@ -8,6 +8,7 @@ function mapGenerator()
 {
     //Gewissermaßen die Welt
     var _grid = {};
+    var countriesInContinents = [];
     
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
@@ -76,6 +77,11 @@ function mapGenerator()
             throw new Error("Size musst be one or higher");
         
         maximumCountrySize = size;
+    }
+    
+    function getCountriesInContinents()
+    {
+        return countriesInContinents;
     }
     
     function createArray(length) {
@@ -271,6 +277,30 @@ function mapGenerator()
         return countries;
     }
     
+    //Sammelt alle Nachbarländer von Kontinenten
+    function collectNeighborCountriesOfContinent(continent)
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(continent instanceof tddjs.client.map.continent))
+            throw new TypeError("Given value is not a Continent");
+        
+        var neigbors = [];
+        
+        for(var i in continent.getCountrys())
+        {
+            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            
+            for(j = 0; j < countryNeigbors.length; j++)
+            {
+                if(countriesInContinents.indexOf(countryNeigbors[j]) === -1)
+                    neigbors.push(countryNeigbors[j]);
+            }
+        }
+        
+        return neigbors;
+    }
+    
     //Wählt ein zufälliges Element
     function getRandom(countries)
     {
@@ -411,12 +441,14 @@ function mapGenerator()
     this.setMinimumCountrySize = setMinimumCountrySize;
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
+    this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
    
     //Eig private
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
-    this.collectNeighborCountries = collectNeighborCountries;   
+    this.collectNeighborCountries = collectNeighborCountries;  
+    this.collectNeighborCountriesOfContinent = collectNeighborCountriesOfContinent;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;
