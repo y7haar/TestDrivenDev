@@ -16,6 +16,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     var _player;
     var _map;
     var _url;
+    var _eventSource = null;
   
     
     function setUrl(aUrl)
@@ -54,8 +55,21 @@ function gameLoopController(aMap, aPlayer, aUrl)
         return _player;
     }
     
+    function establishConnection()
+    {
+        _eventSource = new EventSource(_url, true);        
+    }
+    
+    // property for Testing
+    Object.defineProperty(this, 'eventSource', {
+        get: function () {
+            return _eventSource;
+        }
+    });     
     
     
+    
+    this.establishConnection = establishConnection;
     this.getUrl = getUrl;
     this.getMap = getMap;
     this.getPlayer = getPlayer;   
