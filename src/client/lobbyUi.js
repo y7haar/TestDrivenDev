@@ -167,6 +167,36 @@ function lobbyUi(aRequestController)
         wrapper.appendChild(playerWrapper);
     }
     
+    function showLeaderLobby(aLobby)
+    {
+        clearLobbies();
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        
+        var title = document.createElement("h1");
+        var id = document.createElement("h1");
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        
+        title.innerHTML = aLobby.getName();
+        title.className = "lobbyTitle";
+        
+        id.innerHTML = "#" + aLobby.getId();
+        id.className = "lobbyTitle";
+        
+        td1.appendChild(id);
+        td2.appendChild(title);
+        
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        
+        table.appendChild(tr);
+        wrapper.appendChild(table);
+    }
+    
+    
     function showLobbyPlayer(playerWrapper, aPlayer)
     {
         
@@ -260,5 +290,6 @@ function lobbyUi(aRequestController)
     this.onJoinSubmit = onJoinSubmit;
     this.getLobbyRequestController = getLobbyRequestController;
     this.showLobby = showLobby;
+    this.showLeaderLobby = showLeaderLobby;
     this.setPlayerEditable = setPlayerEditable;
 }
