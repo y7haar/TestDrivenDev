@@ -77,7 +77,7 @@ TestCase("GameLoopControllerConstructorTests", {
     }    
 });
 
-TestCase("GameLoopTests", {        
+TestCase("GameLoopControllerTests", {        
     setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
@@ -114,31 +114,28 @@ TestCase("GameLoopTests", {
     },
     "test gameLoop getUrl should return Url": function () {        
          assertSame(this.url, this.gameLoop.getUrl());
-    }
+    } 
 });
-    
- TestCase("GameLoopFunctionTests", {
-     setUp: function () {             
+
+
+TestCase("GameLoopEventHandlerTests", {
+    setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
         
-        this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url); 
+        this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url);
+        
+        this.sandbox = tddjs.stubs.eventSourceSandbox();
+        this.sandbox.addServer(this.url);
     },
     tearDown: function(){
         this.gameLoop = null;
         this.map = null;
         this.player1 = null;
         this.url = null;
-    }, 
-    "test gameloop should implemet isMoveLegal Method": function () {
-        assertFunction(this.gameLoop.isMoveLegal);
-    },
-    "test gameloop should implement getStateName Method": function () {
-        assertFunction(this.gameLoop.getStateName);
-    },
-    "test gameloop.getStateName should return currentStateName": function () {
-        //init State is WaitingState
-        assertEquals("waitingState", this.gameLoop.getStateName());          
-    } 
+        this.sandbox.restore();
+        this.sandbox = null;
+    }
+    
 });
