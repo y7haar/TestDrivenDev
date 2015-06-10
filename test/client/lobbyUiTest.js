@@ -330,8 +330,8 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("", players[1].childNodes[0].childNodes[0].childNodes[0].innerHTML);
         assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[0].innerHTML);
         
-        assertEquals(this.player3.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
-        assertEquals(this.player4.getColor(), players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(34, 34, 34)", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
+        assertEquals("rgb(51, 51, 51)", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
         assertEquals("#ffffff", players[0].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
         
         
@@ -345,7 +345,5 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         
     }
-    
-    // TODO Check for player data and settings
     
 });
