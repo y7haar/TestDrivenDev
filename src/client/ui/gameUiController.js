@@ -36,11 +36,24 @@ function gameUiController(aGLC){
         _gridMap = aGridMap;
         for(x=0;x<_gridMap.cellGrid.length;x++){
             for(y=0;y<_gridMap.cellGrid[0].length;y++){
-                if(_countrys.indexOf(_gridMap.cellGrid[x][y].id) === -1)
-                    _countrys.push(_gridMap.cellGrid[x][y].id);
+                if(_countrys.indexOf(_gridMap.cellGrid[x][y]) === -1)
+                    _countrys.push(_gridMap.cellGrid[x][y]);
             }
         }
     }
+    
+    function _extendCountrys(){
+        if(_countrys.length === 0)
+            throw new Error("Call _initMap first!");
+        for (var i=0; i<_countrys.length; ++i)
+            _countrys[i]._isOnCoord=_isOnCoord;
+        console.log(_countrys);
+    }
+    // <editor-fold defaultstate="collapsed" desc="Country helper">
+    function _isOnCoord(x,y){
+        return null;
+    }
+    // </editor-fold>
     
     function _getCountrys(){
         if(_countrys.length === 0)
@@ -56,4 +69,7 @@ function gameUiController(aGLC){
     //private
     this._initMap = _initMap;
     this._getCountrys = _getCountrys;
+    this._extendCountrys = _extendCountrys;
+    
+    //helper
 }
