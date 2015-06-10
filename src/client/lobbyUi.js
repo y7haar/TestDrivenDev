@@ -8,6 +8,9 @@ function lobbyUi(aRequestController)
 {   
     var _lobbyRequestController = aRequestController;
     
+    var _colors = [ "Blue", "LightGreen", "Coral", "CornflowerBlue", "ForestGreen", "Red", "DarkOrange", "Yellow", "LawnGreen", "Khaki", "Violet"];
+    var _colorIndex = 0;
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -235,6 +238,15 @@ function lobbyUi(aRequestController)
         playerName.onclick = function(){
           this.innerHTML = "";  
         };
+        
+        var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
+        colorBox.style.cursor = "pointer";
+        
+        colorBox.onclick = function() {
+            colorBox.style.backgroundColor = _colors[_colorIndex % _colors.length];
+            _colorIndex++;
+        };
+        
         
         playerName.focus();
     }
