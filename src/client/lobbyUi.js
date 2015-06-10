@@ -227,6 +227,16 @@ function lobbyUi(aRequestController)
         
         if(playerDiv === null)
             throw new Error("Player with given Id does not exist");
+        
+        var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
+        playerName.contentEditable = true;
+        playerName.innerHTML = "";
+        
+        playerName.onclick = function(){
+          this.innerHTML = "";  
+        };
+        
+        playerName.focus();
     }
     
     this.createContent = createContent;
