@@ -362,6 +362,13 @@ TestCase("SingleLobbyUiTest", {
          
          assertException(function() { ui.setPlayerEditable("playerId3"); }, "TypeError");
          assertNoException(function() { ui.setPlayerEditable(3); });
+    },
+    
+    "test setPlayerEditable should throw Error if player with given Id is not there": function () {  
+         var ui = this.lobbyUi;
+         
+         assertException(function() { ui.setPlayerEditable(1); }, "Error");
+         assertNoException(function() { ui.setPlayerEditable(3); });
     }
     
 });
