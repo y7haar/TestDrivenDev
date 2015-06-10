@@ -147,14 +147,14 @@ function mapGenerator()
     {
         if(typeof(_grid.cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
-        
+        var id=0;
         //Auf gesamter Breite
         for(var i = 0; i < getMapWidth(); i++)
         {   //Auf gesamter Höhe
             for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
-                _grid.cellGrid[i][j].id = -1;
+                _grid.cellGrid[i][j].id = id++;
                 _grid.cellGrid[i][j].size = 1;
             }
         }
@@ -236,9 +236,10 @@ function mapGenerator()
         //Länder hinzufügen
         for(var i = 0; i < _grid.borders.length; i++)
         {
-            if(countries.indexOf(_grid.borders[i].getLeftCountry() === -1))
+            if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
                 countries.push(_grid.borders[i].getLeftCountry());
-            if(countries.indexOf(_grid.borders[i].getRigthCountry() === -1))
+            
+            if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
                 countries.push(_grid.borders[i].getRigthCountry());
         }
         
