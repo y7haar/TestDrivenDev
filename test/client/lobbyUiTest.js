@@ -348,6 +348,13 @@ TestCase("SingleLobbyUiTest", {
         assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         
+    },
+    
+    
+    // Tests for editable inputs
+    
+     "test lobbyUi should have function to make input elements editable": function () {  
+         assertFunction(this.lobbyUi.setPlayerEditable);
     }
     
 });
