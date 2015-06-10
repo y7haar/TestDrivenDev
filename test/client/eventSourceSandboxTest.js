@@ -576,6 +576,9 @@ TestCase("eventSourceSandboxFakeEventSource", {
     "test fakeEventSource withCredentials should be setted with 'constructor'": function () {
         var es = new EventSource("someUrl", true);
         assertTrue(es.withCredentials);
+        
+        var es2 = new EventSource("someUrl", false);
+        assertFalse(es2.withCredentials);
     },
     "test fakeEventSource should be false if not setted via 'constructor' ": function () {
         var es = new EventSource("someUrl"); 
