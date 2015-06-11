@@ -265,9 +265,20 @@ TestCase("GameLoopCommunicationTests", {
         this.gameLoop.endPhase();
         assertEquals(1, this.gameLoop.toServerLogs.length);
         this.sandbox.update();
-        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request
-        console.log(this.sandbox.server[this.url].requests[1]);
+        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request       
+        assertSame(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);
+    },
+    "test gameLoop should implement makeMove function": function () {
+        assertFunction(this.gameLoop.makeMove);
+    },
+    "test gemeLoop.makeMove should call isMoveValid from currentState": function () {
+        var state = this.gameLoop.currentState;
+        state.isMoveLegal = stubFn();
+        assertFalse(state.isMoveLegal.called);        
+        this.gameLoop.makeMove();
+        assertTrue(state.isMoveLegal.called);
     }
+    
     
    
     
