@@ -306,7 +306,7 @@ TestCase("placingStateTests", {
         },'TypeError');
         
         assertException(function(){
-            attacking.isMoveLegal({});
+            attacking.isMoveLegal("attackSomeWhere");
         },'TypeError');  
       
     },
