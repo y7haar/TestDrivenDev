@@ -196,22 +196,26 @@ function mapGenerator()
                 
                 var lastX= x-1;
                 var lastY= y-1;
-                    
-                //Rechtsliegende Border hinzufügen
-                if(nextX < getMapWidth())
+                
+                //Nachbarländer falls vorhanden als Grenze hinzufügen
+                if(lastX >= 0)
                 {
-                    var border = new tddjs.client.map.border();
-                    border.setLeftCountry(_grid.cellGrid[x][y]);
-                    border.setRigthCountry(_grid.cellGrid[nextX][y]);
-                    _grid.borders.push(border);
+                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[lastX][y]);
                 }
-                //Obere Border hinzufügen
+                
+                if(lastY >= 0)
+                {
+                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[x][lastY]);
+                }
+                
                 if(nextY < getMapHeight())
                 {
-                    var border = new tddjs.client.map.border();
-                    border.setLeftCountry(_grid.cellGrid[x][y]);
-                    border.setRigthCountry(_grid.cellGrid[x][nextY]);
-                    _grid.borders.push(border);
+                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[x][nextY]);
+                }
+                
+                if(nextX < getMapWidth())
+                {
+                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[nextX][y]);
                 }
             }
         }
@@ -219,6 +223,7 @@ function mapGenerator()
         calledInitBorders = true;
     }
     
+    //Sammelt alle Länder unter der Mindestgröße
     function collectAllCountriesBelowMinSize()
     {
         if(!calledInitBorders)
@@ -236,38 +241,13 @@ function mapGenerator()
         return countries;
     }
     
-    //Sammelt alle Länder
-    function collectAllCountries()
+    //Holt alle Länder
+    function getAllCountries()
     {
         if(!calledInitCountries)
             throw new Error("There are no Countries to work with yet");
         
         return allCountries;
-    }
-    
-    //Sammelt Nachbarländer eines Landes
-    function collectNeighborCountries(country)
-    {
-        if(!calledInitBorders)
-            throw new Error("There are no Borders to work with yet");
-        if(!(country instanceof tddjs.client.map.country))
-            throw new TypeError("Given value is not a country");
-        
-        var countries = [];
-        
-         //Länder hinzufügen
-        for(var i = 0; i < _grid.borders.length; i++)
-        {
-            if(_grid.borders[i].getLeftCountry() === country)
-                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
-                    countries.push(_grid.borders[i].getRigthCountry());
-            
-            if(_grid.borders[i].getRigthCountry() === country)
-                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
-                    countries.push(_grid.borders[i].getLeftCountry());
-        }
-        
-        return countries;
     }
     
     //Sammelt alle Nachbarländer von Kontinenten
@@ -282,7 +262,7 @@ function mapGenerator()
         
         for(var i in continent.getCountrys())
         {
-            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            var countryNeigbors = continent.getCountrys()[i].getBorders();
             
             for(j = 0; j < countryNeigbors.length; j++)
             {
@@ -306,7 +286,7 @@ function mapGenerator()
         for(var i in continent.getCountrys())
         {
             var country = continent.getCountrys()[i];
-            var countryNeighbors = collectNeighborCountries(country);
+            var countryNeighbors = country.getBorders();
             
             for(j = 0; j < countryNeighbors.length; j++)
             {
@@ -351,7 +331,7 @@ function mapGenerator()
             //Zielland
             var winnerCountry = getRandom(allCountries);
             //Aufgelöstes Land
-            var loserCountry = getRandom(collectNeighborCountries(winnerCountry));
+            var loserCountry = getRandom(winnerCountry.getBorders());
 
             //Falls das Land zu groß wird
             if((loserCountry.size + winnerCountry.size >= maximumCountrySize))
@@ -361,13 +341,7 @@ function mapGenerator()
             }
             
             mergeIntoCountry(loserCountry, winnerCountry);
-            removeCircularAndDuplicateBorders();
         }
-        
-        //Id zuweisen
-        var countries = collectAllCountries();
-        for(var x = 0; x < countries.length; x++)
-            countries[x].id = x+1;
     }
     
     //Verbindet ein Land in ein anderes
@@ -384,6 +358,17 @@ function mapGenerator()
         
         //Gemergetes Land entfernen
         allCountries.splice(allCountries.indexOf(country), 1);
+        
+        //Gemergtes Land aus der BorderListe entfernen
+        var borders = targetCountry.getBorders();
+        borders.splice(borders.indexOf(country), 1);
+        
+        //Grenzen des anderen Landes hinzufügen, falls es nicht das Zielland ist
+        for(var i = 0; i < country.getBorders().length; i++)
+        {
+            if(!(country.getBorders()[i] === targetCountry))
+                borders.push(country.getBorders()[i]);
+        }
         
         //Größe umsetzen
         targetCountry.size = targetCountry.size + country.size;
@@ -409,27 +394,8 @@ function mapGenerator()
             }
         }
     }
-    
-    //Entfernt nicht mehr benötigte Borders
-    function removeCircularAndDuplicateBorders()
-    {
-        if(!calledInitBorders)
-            throw new Error("There are not borders to work with yet");
-        
-        var oldBorders = _grid.borders;
-        var length = _grid.borders.length;
-        _grid.borders = [];
-        
-        for(var i = 0; i < length; i++)
-        {
-            var current = oldBorders.pop();
-            
-            //Nur pushen wenn angrenzendes Land nicht gleich
-            if(current.getLeftCountry() !== current.getRigthCountry())
-                _grid.borders.push(current);
-        }
-    }
-    
+   
+    //Verbindet die Verbleibenden Länder
     function combineRemainingCountries()
     {
         if(!calledInitBorders)
@@ -440,7 +406,7 @@ function mapGenerator()
         while(remainingCountries.length > 0)
         {           
             var loser = getRandom(remainingCountries);
-            var neigbours = (collectNeighborCountries(loser));
+            var neigbours = loser.getBorders();
             //var notOnly = true;
             
             //Prüfen
@@ -459,9 +425,10 @@ function mapGenerator()
             //    continue;
             //}
 
+            //Mergen
             mergeIntoCountry(loser, winner);
-            removeCircularAndDuplicateBorders();
-            remainingCountries = collectAllCountriesBelowMinSize();
+            //Loser entfernen
+            remainingCountries.splice(remainingCountries.indexOf(loser),1);
         }
     }
     
@@ -481,13 +448,57 @@ function mapGenerator()
    
     //Eig private
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
-    this.collectAllCountries = collectAllCountries;
-    this.collectNeighborCountries = collectNeighborCountries;  
+    this.getAllCountries = getAllCountries;  
     this.collectUnusedNeighborCountriesOfContinent = collectUnusedNeighborCountriesOfContinent;
     this.calculateUnitBonus = calculateUnitBonus;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;
     this.mergeIntoCountry = mergeIntoCountry;
-    this.removeCircularAndDuplicateBorders = removeCircularAndDuplicateBorders;
 };
+
+
+//Altes Zeug Zwischenlager
+/*Entfernt nicht mehr benötigte Borders
+    function removeCircularAndDuplicateBorders()
+    {
+        if(!calledInitBorders)
+            throw new Error("There are not borders to work with yet");
+        
+        var oldBorders = _grid.borders;
+        var length = _grid.borders.length;
+        _grid.borders = [];
+        
+        for(var i = 0; i < length; i++)
+        {
+            var current = oldBorders.pop();
+            
+            //Nur pushen wenn angrenzendes Land nicht gleich
+            if(current.getLeftCountry() !== current.getRigthCountry())
+                _grid.borders.push(current);
+        }
+    }*/
+/*Sammelt Nachbarländer eines Landes
+    function collectNeighborCountries(country)
+    {
+        if(!calledInitBorders)
+            throw new Error("There are no Borders to work with yet");
+        if(!(country instanceof tddjs.client.map.country))
+            throw new TypeError("Given value is not a country");
+        
+        var countries = [];
+        
+         //Länder hinzufügen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+            if(_grid.borders[i].getLeftCountry() === country)
+                if(countries.indexOf(_grid.borders[i].getLeftCountry()) === -1)
+                    countries.push(_grid.borders[i].getRigthCountry());
+            
+            if(_grid.borders[i].getRigthCountry() === country)
+                if(countries.indexOf(_grid.borders[i].getRigthCountry()) === -1)
+                    countries.push(_grid.borders[i].getLeftCountry());
+        }
+        
+        return countries;
+    }*/
