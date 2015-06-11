@@ -16,7 +16,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     var _player;
     var _map;
     var _url;
-    var _currentState = new tddjs.client.waitingState();
+    var _currentState = new tddjs.client.waitingState(_map);
     var _eventSource = null;
     var _fromServerLogs = [];
     var _toServerLogs =[];
@@ -109,19 +109,21 @@ function gameLoopController(aMap, aPlayer, aUrl)
     // EventSource events
     function changeToPlacingState(e)
     {
+        var data = JSON.parse(e.data);
+        var unitCount = data.unitCount;
         _fromServerLogs.push(e);
-        _currentState = new tddjs.client.placingState();
+        _currentState = new tddjs.client.placingState(_map, unitCount);
     }
     function changeToAttackingState(e)
     {
         _fromServerLogs.push(e);
-        _currentState = new tddjs.client.attackingState();
+        _currentState = new tddjs.client.attackingState(_map);
         
     }
     function changeToWaitingState(e)
     {
         _fromServerLogs.push(e);
-        _currentState = new tddjs.client.waitingState();
+        _currentState = new tddjs.client.waitingState(_map);
     }
     function attackResult(e)
     {
