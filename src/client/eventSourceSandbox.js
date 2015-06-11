@@ -114,14 +114,18 @@ function eventSourceSandbox()
             if(typeof message === 'undefined' || typeof message.data === 'undefined') throw new TypeError("message is undefined or data property is missing");
             
             if(typeof this.clients[clientIndex] === 'undefined') throw new Error("No client at given ClientIndex.");
-            if(typeof this.clients[clientIndex][eventName] === 'undefined' && eventName !== null) throw new Error("There is no "+eventName+" Event on the Client.");
+            if(eventName !== null)
+            {
+                if(typeof this.clients[clientIndex]["on"+eventName.toLowerCase()] === 'undefined')
+                    throw new Error("There is no "+eventName+" Event on the Client.");
+            }
             // --------------
        
             
             if(eventName === null)
                 this.clients[clientIndex]["onmessage"](message);
             else
-                this.clients[clientIndex][eventName](message);
+                this.clients[clientIndex]["on"+eventName.toLowerCase()](message);
         };
         
         this.sendMessageToAll = function(eventName,message){

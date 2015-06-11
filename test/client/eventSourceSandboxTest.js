@@ -148,29 +148,30 @@ TestCase("eventSourceSandboxServer", {
         
         // wrong Client
         assertException(function(){
-            sandbox.server[url].sendMessage({client:0},"onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage({client:0},"message",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0,{eventName:"onmessage"},{data:"helloWorld"});
+            sandbox.server[url].sendMessage(0,{eventName:"message"},{data:"helloWorld"});
         } ,"TypeError");
         
+         assertException(function(){
+            sandbox.server[url].sendMessage(300,null,{data:null});
+        } ,"Error");
         // wrong message
         assertException(function(){
-            sandbox.server[url].sendMessage(0,"onmessage","");
+            sandbox.server[url].sendMessage(0,"message","");
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
+            sandbox.server[url].sendMessage(0, "message",{information:"helloWorld"});
         } ,"TypeError");
         // wrong eventName
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
 
-        assertException(function(){
-            sandbox.server[url].sendMessage(300,null,{data:null});
-        } ,"Error");
+       
     }, 
     "test sandbox.server sendMessage should call specific event of client": function () {
          var es = new EventSource(this.server1URL);
@@ -184,7 +185,7 @@ TestCase("eventSourceSandboxServer", {
  
          var sendMsg = "HELLOWORLD";
          es.addEventListner("test", testEvent);                
-         this.sandbox.server[this.server1URL].sendMessage(0,"ontest",{data:sendMsg});
+         this.sandbox.server[this.server1URL].sendMessage(0,"test",{data:sendMsg});
          
          assertTrue(called);
          assertEquals(msg, sendMsg);
@@ -253,7 +254,7 @@ TestCase("eventSourceSandboxServer", {
         assertFalse(es3_called);
         assertFalse(notConnectedES_called);        
 
-        this.sandbox.server[this.server1URL].sendMessageToAll('ontest',{data:"HELLOWORLD"});
+        this.sandbox.server[this.server1URL].sendMessageToAll('test',{data:"HELLOWORLD"});
         
         assertTrue(es1_called);
         assertTrue(es2_called);
