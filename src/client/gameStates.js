@@ -18,20 +18,23 @@ function state()
 state.prototype.isMoveLegal = null;
 state.prototype.toString = null;
 
-function placingState()
+function placingState(aMap, unitCount)
 { 
+    if (!(aMap instanceof tddjs.client.map.map))
+        throw new TypeError("given Map is not instance of Map");
+    if (isNaN(unitCount) || unitCount === null)
+        throw new TypeError("given unitCount is not a Number");
+ 
+    var _map = aMap;
+    var _unitCount = unitCount;
+    
     function toString()
     {
         return "placingState";
     }
 
-    function isMoveLegal(currentMap, unitCount, move)
-    {
-        if (!(currentMap instanceof tddjs.client.map.map))
-            throw new TypeError("given Map is not instance of Map");
-
-        if (isNaN(unitCount))
-            throw new TypeError("given unitCount is not a Number");
+    function isMoveLegal(move)
+    {      
 
         if (typeof move !== 'object')
             throw new TypeError("given Move is not in right Format");
@@ -39,18 +42,18 @@ function placingState()
         if (move.type !== 'placing')
             return false;
 
-        if (move.unitCount > unitCount)
+        if (move.unitCount > _unitCount)
             return false;
 
         //test if Continent exists 
-        if (!currentMap.hasContinent(move.continent))
+        if (!_map.hasContinent(move.continent))
             return false;
 
         //test if Country not exists on the Continent in moveObject 
-        if (!currentMap.getContinent(move.continent).hasCountryByName(move.country))
+        if (!_map.getContinent(move.continent).hasCountryByName(move.country))
             return false;
         //test if the player dont own the Country    
-        if (currentMap.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
+        if (_map.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
             return false;
         // if passed till here move is Valid
         return true;
@@ -58,6 +61,18 @@ function placingState()
     }  
     this.isMoveLegal = isMoveLegal;
     this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    });    
+    Object.defineProperty(this, 'unitCount', {
+        get: function () {
+            return _unitCount;
+        }
+    });
 }
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;
@@ -125,6 +140,12 @@ function waitingState()
         return "waitingState";
     }
     
+    function isMoveLegal()
+    {
+        return false;
+    }
+    
+    this.isMoveLegal = isMoveLegal;
     this.toString = toString;
 }
 waitingState.prototype = new state();
