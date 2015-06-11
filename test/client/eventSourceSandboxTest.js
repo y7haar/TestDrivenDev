@@ -146,6 +146,7 @@ TestCase("eventSourceSandboxServer", {
             sandbox.server[url].sendMessage();
         } ,"TypeError");
         
+        // wrong Client
         assertException(function(){
             sandbox.server[url].sendMessage({client:0},"onmessage",{data:"helloWorld"});
         } ,"TypeError");
@@ -154,14 +155,15 @@ TestCase("eventSourceSandboxServer", {
             sandbox.server[url].sendMessage(0,{eventName:"onmessage"},{data:"helloWorld"});
         } ,"TypeError");
         
+        // wrong message
         assertException(function(){
-            sandbox.server[url].sendMessage(0,"onmessage","");
+            sandbox.server[url].sendMessage(0,"onmessage",null);
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
+            sandbox.server[url].sendMessage(0, "onmessage");
         } ,"TypeError");
-  
+        // wrong eventName
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
