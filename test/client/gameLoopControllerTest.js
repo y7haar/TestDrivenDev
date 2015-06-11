@@ -161,6 +161,16 @@ TestCase("GameLoopControllerTests", {
         assertNotUndefined(this.gameLoop.eventSource.onchangetowaiting);
         assertFunction(this.gameLoop.eventSource.onchangetowaiting);
     },
+    "test gameLoop created EventSource should implement onattackresult event": function () {
+        this.gameLoop.establishConnection();
+        assertNotUndefined(this.gameLoop.eventSource.onattackresult);
+        assertFunction(this.gameLoop.eventSource.onattackresult);
+    },
+    "test gameLoop created EventSource should implement onplaceunits event": function () {
+        this.gameLoop.establishConnection();
+        assertNotUndefined(this.gameLoop.eventSource.onplaceunits);
+        assertFunction(this.gameLoop.eventSource.onplaceunits);
+    },
     "test gameLoop should hold current State, waitingState at init": function () {        
          assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
     },   
