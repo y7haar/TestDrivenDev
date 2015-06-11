@@ -83,10 +83,8 @@ function attackingState(aMap)
             throw new TypeError("given Map is not instance of Map");
     var _map = aMap;
         
-    function isMoveLegal(currentMap, move)
-    {
-        if (!(currentMap instanceof tddjs.client.map.map))
-            throw new TypeError("given Map is not instance of Map");
+    function isMoveLegal(move)
+    {    
 
         if (typeof move !== 'object')
             throw new TypeError("given Move is not in right Format");
@@ -98,24 +96,24 @@ function attackingState(aMap)
         var defender = move.to;
 
         //attacker tests
-        if (!currentMap.hasContinent(attacker.continent))
+        if (!_map.hasContinent(attacker.continent))
             return false;
-        if (!currentMap.getContinent(attacker.continent).hasCountryByName(attacker.country))
+        if (!_map.getContinent(attacker.continent).hasCountryByName(attacker.country))
             return false;
-        if (currentMap.getContinent(attacker.continent).getCountry(attacker.country).getOwner().getName() !== attacker.player)
+        if (_map.getContinent(attacker.continent).getCountry(attacker.country).getOwner().getName() !== attacker.player)
             return false;
 
         //defender tests
-        if (!currentMap.hasContinent(defender.continent))
+        if (!_map.hasContinent(defender.continent))
             return false;
-        if (!currentMap.getContinent(defender.continent).hasCountryByName(defender.country))
+        if (!_map.getContinent(defender.continent).hasCountryByName(defender.country))
             return false;
-        if (currentMap.getContinent(defender.continent).getCountry(defender.country).getOwner().getName() !== defender.player)
+        if (_map.getContinent(defender.continent).getCountry(defender.country).getOwner().getName() !== defender.player)
             return false;
 
         //border tests
-        var attackerCountry = currentMap.getContinent(attacker.continent).getCountry(attacker.country);
-        var defenderCountry = currentMap.getContinent(defender.continent).getCountry(defender.country);
+        var attackerCountry = _map.getContinent(attacker.continent).getCountry(attacker.country);
+        var defenderCountry = _map.getContinent(defender.continent).getCountry(defender.country);
 
         if (!(attackerCountry.borders(defenderCountry) && defenderCountry.borders(attackerCountry)))
             return false;
