@@ -16,6 +16,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     var _player;
     var _map;
     var _url;
+    var _currentState = new tddjs.client.waitingState();
     var _eventSource = null;
   
     
@@ -55,6 +56,13 @@ function gameLoopController(aMap, aPlayer, aUrl)
         return _player;
     }
     
+    function getStateName()
+    {
+        return _currentState.toString();
+    }
+    
+    
+    // EventSource
     function establishConnection()
     {
         _eventSource = new EventSource(_url, true);
@@ -101,11 +109,18 @@ function gameLoopController(aMap, aPlayer, aUrl)
         }
     });
     
+    Object.defineProperty(this, 'currentState', {
+        get: function () {
+            return _currentState;
+        }
+    });
+    
     
     
     this.establishConnection = establishConnection;
     this.getUrl = getUrl;
     this.getMap = getMap;
-    this.getPlayer = getPlayer;   
+    this.getPlayer = getPlayer;
+    this.getStateName = getStateName;
  
 }
