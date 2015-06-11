@@ -33,20 +33,20 @@ TestCase("MapGeneratorTest for private Functions", {
         assertTrue(grid.cellGrid[6][6] instanceof(tddjs.client.map.country));
     },
     
-    "test After initCountries every gridCell should contain a contry with id -1": function()
+    "test After initCountries every gridCell should contain a contry with a valid id": function()
     {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
         var grid = this.mapGenerator.getMapGrid();
         
-        assertEquals(-1, grid.cellGrid[0][0].id);
-        assertEquals(-1, grid.cellGrid[1][0].id);
-        assertEquals(-1, grid.cellGrid[0][1].id);
-        assertEquals(-1, grid.cellGrid[3][3].id);
-        assertEquals(-1, grid.cellGrid[5][5].id);
-        assertEquals(-1, grid.cellGrid[5][6].id);
-        assertEquals(-1, grid.cellGrid[6][5].id);
-        assertEquals(-1, grid.cellGrid[6][6].id);
+        assertEquals(1, grid.cellGrid[0][0].id);
+        assertEquals(2, grid.cellGrid[0][1].id);
+        assertEquals(8, grid.cellGrid[1][0].id);
+        assertEquals(25, grid.cellGrid[3][3].id);
+        assertEquals(41, grid.cellGrid[5][5].id);
+        assertEquals(42, grid.cellGrid[5][6].id);
+        assertEquals(48, grid.cellGrid[6][5].id);
+        assertEquals(49, grid.cellGrid[6][6].id);
     },
     
     "test After Initialisation every country should have the size 1": function()
@@ -458,7 +458,6 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         var grid = this.mapGenerator.getMapGrid().cellGrid;
         this.mapGenerator.getCountriesInContinents().push(grid[1][1]);
-        grid[1][1].setName("Alex");
         continent.addCountry(grid[1][1]);
         
         var neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
@@ -470,7 +469,6 @@ TestCase("MapGeneratorTest for private Functions", {
         assertEquals(grid[1][2], neigbors[3]);
         
         this.mapGenerator.getCountriesInContinents().push(grid[1][2]);
-        grid[1][2].setName("Alex!");
         continent.addCountry(grid[1][2]);
         neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
         
@@ -520,14 +518,50 @@ TestCase("MapGeneratorTest for private Functions", {
     "test calculateUnitBonus Should calculate the correctBonus": function()
     {
         var continent = new tddjs.client.map.continent();
+        var continent1 = new tddjs.client.map.continent();
+        var continent2 = new tddjs.client.map.continent();
+        var continent3 = new tddjs.client.map.continent();
+        var continent4 = new tddjs.client.map.continent();
+        var continent5 = new tddjs.client.map.continent();
+        var continent6 = new tddjs.client.map.continent();
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var grid = this.mapGenerator.getMapGrid().cellGrid;
+        continent1.addCountry(grid[2][2]);
+        continent2.addCountry(grid[2][2]);
+        continent2.addCountry(grid[2][1]);
+        continent3.addCountry(grid[2][2]);
+        continent3.addCountry(grid[2][1]);
+        continent3.addCountry(grid[2][0]);
+        continent4.addCountry(grid[1][1]);
+        continent5.addCountry(grid[1][1]);
+        continent5.addCountry(grid[0][1]);
+        continent6.addCountry(grid[1][1]);
+        continent6.addCountry(grid[1][2]);
+        continent6.addCountry(grid[2][1]);
+        continent6.addCountry(grid[2][2]);
         
-        assertEquals(0,this.mapGenerator.calculateUnitBonus(continent));
+        var i = this.mapGenerator.calculateUnitBonus(continent);
+        assertEquals(0, i);
         
+        i = this.mapGenerator.calculateUnitBonus(continent1);
+        assertEquals(1, i);
         
+        i = this.mapGenerator.calculateUnitBonus(continent2);
+        assertEquals(2, i);
+             
+        i = this.mapGenerator.calculateUnitBonus(continent3);
+        assertEquals(3, i);
+        
+        i = this.mapGenerator.calculateUnitBonus(continent4);
+        assertEquals(1, i);
+        
+        i = this.mapGenerator.calculateUnitBonus(continent5);
+        assertEquals(2, i);
+        
+        i = this.mapGenerator.calculateUnitBonus(continent6);
+        assertEquals(3, i);
     },
     
     "test Shouldnt be able to call calculateUnitBonus before initialisation": function()
