@@ -77,8 +77,12 @@ function placingState(aMap, unitCount)
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;
 
-function attackingState()
+function attackingState(aMap)
 {
+    if (!(aMap instanceof tddjs.client.map.map))
+            throw new TypeError("given Map is not instance of Map");
+    var _map = aMap;
+        
     function isMoveLegal(currentMap, move)
     {
         if (!(currentMap instanceof tddjs.client.map.map))
@@ -127,7 +131,14 @@ function attackingState()
     }   
 
     this.isMoveLegal = isMoveLegal;
-    this.toString = toString;   
+    this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    }); 
     
 }
 attackingState.prototype = new state();
