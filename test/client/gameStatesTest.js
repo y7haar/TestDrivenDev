@@ -19,7 +19,7 @@ TestCase("stateTests", {
         this.unitCount = 8;
         this.placing = new tddjs.client.placingState(this.map, this.unitCount);
         this.attacking = new tddjs.client.attackingState(this.map);
-        this.waiting = new tddjs.client.waitingState();  
+        this.waiting = new tddjs.client.waitingState(this.map);  
     },
     tearDown: function ()
     {        this.placing = null;
@@ -322,10 +322,26 @@ TestCase("placingStateTests", {
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
     setUp: function(){
-      this.waitingState = new tddjs.client.waitingState();  
+      this.map = generateMap();
+      this.waitingState = new tddjs.client.waitingState(this.map);  
     },
     tearDown: function(){
         this.waitingState = null;
+    },
+    "test creating WaitingState should throw exception if wrong Parameter": function () {
+        var map = this.map;        
+        assertException(function(){
+            new tddjs.client.waitingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.waitingState(null);
+        },"TypeError");           
+    },
+    "test waitingState should hold map ": function () {
+        assertNotUndefined(this.waitingState.map);   
+        assertSame(this.map,this.waitingState.map);
+        assertTrue(this.waitingState.map instanceof tddjs.client.map.map);
     },
     "test state should impelment toString function": function () {
        assertFunction(this.waitingState.toString);
