@@ -300,31 +300,23 @@ TestCase("placingStateTests", {
     "test state should throw exception if a paramter is wrong": function () {
         var validMove = this.validMove;
         var attacking = this.attacking;
-        var map = this.map1;
         
         assertException(function(){
             attacking.isMoveLegal();
         },'TypeError');
         
         assertException(function(){
-            attacking.isMoveLegal({},validMove);
-        },'TypeError');    
-        
-        assertException(function(){
-            attacking.isMoveLegal(map,"attack somewhere");
-        },'TypeError');   
-        
-        assertNoException(function(){
-            attacking.isMoveLegal(map,validMove);
-        });
+            attacking.isMoveLegal({});
+        },'TypeError');  
+      
     },
     "test isMoveLegal should return false if move is not Valid else true": function () {        
-        assertTrue(this.attacking.isMoveLegal(this.map1, this.validMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongBorderMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongContinentMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongCountryMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongOwnerMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongTypeMove));
+        assertTrue(this.attacking.isMoveLegal(this.validMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongBorderMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongContinentMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongCountryMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongOwnerMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongTypeMove));
     } 
 });
 //--------- WAITING -----------------------------------
