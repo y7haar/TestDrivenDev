@@ -151,9 +151,6 @@ TestCase("MapGeneratorTest for private Functions", {
         assertException(function(){gen.collectAllCountries();}, "Error");
         
         gen.setGridSize(7,6);
-        assertException(function(){gen.collectAllCountries();}, "Error");
-        
-        gen.initCountries();
         assertException(function(){gen.collectAllCountries();}, "Error");    
     },
     
@@ -270,7 +267,7 @@ TestCase("MapGeneratorTest for private Functions", {
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
         assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], country3);     
-        assertEquals(this.mapGenerator.collectAllCountries().length, 39);
+        assertEquals(39, this.mapGenerator.collectAllCountries().length);
     },
     
     "test Shouldn´t be able to call merge without initialisation": function()
