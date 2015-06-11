@@ -81,9 +81,14 @@ function gameLoopController(aMap, aPlayer, aUrl)
         ajax.post(_url, options);        
     }
     
-    function makeMove()
+    function makeMove(move)
     {
-        
+        if (_currentState.isMoveLegal(move))
+        {   
+         
+        }
+        else
+            return false;
     }
     
     
