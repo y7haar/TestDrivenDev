@@ -18,20 +18,23 @@ function state()
 state.prototype.isMoveLegal = null;
 state.prototype.toString = null;
 
-function placingState()
+function placingState(aMap, unitCount)
 { 
+    if (!(aMap instanceof tddjs.client.map.map))
+        throw new TypeError("given Map is not instance of Map");
+    if (isNaN(unitCount) || unitCount === null)
+        throw new TypeError("given unitCount is not a Number");
+ 
+    var _map = aMap;
+    var _unitCount = unitCount;
+    
     function toString()
     {
         return "placingState";
     }
 
-    function isMoveLegal(currentMap, unitCount, move)
-    {
-        if (!(currentMap instanceof tddjs.client.map.map))
-            throw new TypeError("given Map is not instance of Map");
-
-        if (isNaN(unitCount))
-            throw new TypeError("given unitCount is not a Number");
+    function isMoveLegal(move)
+    {      
 
         if (typeof move !== 'object')
             throw new TypeError("given Move is not in right Format");
@@ -39,18 +42,18 @@ function placingState()
         if (move.type !== 'placing')
             return false;
 
-        if (move.unitCount > unitCount)
+        if (move.unitCount > _unitCount)
             return false;
 
         //test if Continent exists 
-        if (!currentMap.hasContinent(move.continent))
+        if (!_map.hasContinent(move.continent))
             return false;
 
         //test if Country not exists on the Continent in moveObject 
-        if (!currentMap.getContinent(move.continent).hasCountryByName(move.country))
+        if (!_map.getContinent(move.continent).hasCountryByName(move.country))
             return false;
         //test if the player dont own the Country    
-        if (currentMap.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
+        if (_map.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
             return false;
         // if passed till here move is Valid
         return true;
@@ -58,16 +61,30 @@ function placingState()
     }  
     this.isMoveLegal = isMoveLegal;
     this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    });    
+    Object.defineProperty(this, 'unitCount', {
+        get: function () {
+            return _unitCount;
+        }
+    });
 }
 placingState.prototype = new state();
 placingState.prototype.constructor = placingState;
 
-function attackingState()
+function attackingState(aMap)
 {
-    function isMoveLegal(currentMap, move)
-    {
-        if (!(currentMap instanceof tddjs.client.map.map))
+    if (!(aMap instanceof tddjs.client.map.map))
             throw new TypeError("given Map is not instance of Map");
+    var _map = aMap;
+        
+    function isMoveLegal(move)
+    {    
 
         if (typeof move !== 'object')
             throw new TypeError("given Move is not in right Format");
@@ -79,24 +96,24 @@ function attackingState()
         var defender = move.to;
 
         //attacker tests
-        if (!currentMap.hasContinent(attacker.continent))
+        if (!_map.hasContinent(attacker.continent))
             return false;
-        if (!currentMap.getContinent(attacker.continent).hasCountryByName(attacker.country))
+        if (!_map.getContinent(attacker.continent).hasCountryByName(attacker.country))
             return false;
-        if (currentMap.getContinent(attacker.continent).getCountry(attacker.country).getOwner().getName() !== attacker.player)
+        if (_map.getContinent(attacker.continent).getCountry(attacker.country).getOwner().getName() !== attacker.player)
             return false;
 
         //defender tests
-        if (!currentMap.hasContinent(defender.continent))
+        if (!_map.hasContinent(defender.continent))
             return false;
-        if (!currentMap.getContinent(defender.continent).hasCountryByName(defender.country))
+        if (!_map.getContinent(defender.continent).hasCountryByName(defender.country))
             return false;
-        if (currentMap.getContinent(defender.continent).getCountry(defender.country).getOwner().getName() !== defender.player)
+        if (_map.getContinent(defender.continent).getCountry(defender.country).getOwner().getName() !== defender.player)
             return false;
 
         //border tests
-        var attackerCountry = currentMap.getContinent(attacker.continent).getCountry(attacker.country);
-        var defenderCountry = currentMap.getContinent(defender.continent).getCountry(defender.country);
+        var attackerCountry = _map.getContinent(attacker.continent).getCountry(attacker.country);
+        var defenderCountry = _map.getContinent(defender.continent).getCountry(defender.country);
 
         if (!(attackerCountry.borders(defenderCountry) && defenderCountry.borders(attackerCountry)))
             return false;
@@ -112,20 +129,44 @@ function attackingState()
     }   
 
     this.isMoveLegal = isMoveLegal;
-    this.toString = toString;   
+    this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    }); 
     
 }
 attackingState.prototype = new state();
 attackingState.prototype.constructor = attackingState;
 
-function waitingState()
+function waitingState(aMap)
 {
+    if (!(aMap instanceof tddjs.client.map.map))
+            throw new TypeError("given Map is not instance of Map");
+    var _map = aMap;
+    
     function toString()
     {
         return "waitingState";
     }
     
+    function isMoveLegal()
+    {
+        return false;
+    }
+    
+    this.isMoveLegal = isMoveLegal;
     this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    }); 
 }
 waitingState.prototype = new state();
 waitingState.prototype.constructor = waitingState;

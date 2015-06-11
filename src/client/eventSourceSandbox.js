@@ -22,13 +22,23 @@ function eventSourceSandbox()
         EventSource = realEventSource;
     }
     // ------------ FAKE EVENTSOURCE ------------------------
-    function fakeEventSource(serverURL)
-    {
+    function fakeEventSource(serverURL, credentials)
+    {        
         // ------------- INIT -------------------------------------
-        if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");        
+        if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");    
+        if(typeof credentials !== 'boolean' && typeof credentials !== 'undefined')
+            throw new TypeError("withCredentials is not a Boolean.");
+        
+        var withCredentials = false;
+        if(typeof credentials !== 'undefined')
+            withCredentials = credentials;
+        
         var url = serverURL;        
         var readyState;
         
+        Object.defineProperty(this,'withCredentials',{
+            get: function(){return withCredentials;}
+        });        
         Object.defineProperty(this,'url',{
             get: function(){return url;}
         });
@@ -101,17 +111,21 @@ function eventSourceSandbox()
             
             if(isNaN(clientIndex) || typeof clientIndex === 'undefined')throw new TypeError("clientIndex is not a Number");            
             if(typeof eventName !== 'string' && eventName !== null)throw new TypeError("eventName ist not a String");
-            if(typeof message === 'undefined' || typeof message.data === 'undefined') throw new TypeError("message data propert is missing");
+            if(typeof message === 'undefined' || typeof message.data === 'undefined') throw new TypeError("message is undefined or data property is missing");
             
             if(typeof this.clients[clientIndex] === 'undefined') throw new Error("No client at given ClientIndex.");
-            if(typeof this.clients[clientIndex][eventName] === 'undefined' && eventName !== null) throw new Error("There is no "+eventName+" Event on the Client.");
+            if(eventName !== null)
+            {
+                if(typeof this.clients[clientIndex]["on"+eventName.toLowerCase()] === 'undefined')
+                    throw new Error("There is no "+eventName+" Event on the Client.");
+            }
             // --------------
        
             
             if(eventName === null)
                 this.clients[clientIndex]["onmessage"](message);
             else
-                this.clients[clientIndex][eventName](message);
+                this.clients[clientIndex]["on"+eventName.toLowerCase()](message);
         };
         
         this.sendMessageToAll = function(eventName,message){

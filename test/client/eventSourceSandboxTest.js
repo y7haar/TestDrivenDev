@@ -146,29 +146,32 @@ TestCase("eventSourceSandboxServer", {
             sandbox.server[url].sendMessage();
         } ,"TypeError");
         
+        // wrong Client
         assertException(function(){
-            sandbox.server[url].sendMessage({client:0},"onmessage",{data:"helloWorld"});
+            sandbox.server[url].sendMessage({client:0},"message",{data:"helloWorld"});
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0,{eventName:"onmessage"},{data:"helloWorld"});
+            sandbox.server[url].sendMessage(0,{eventName:"message"},{data:"helloWorld"});
+        } ,"TypeError");
+        
+         assertException(function(){
+            sandbox.server[url].sendMessage(300,null,{data:null});
+        } ,"Error");
+        // wrong message
+        assertException(function(){
+            sandbox.server[url].sendMessage(0,"message","");
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0,"onmessage","");
+            sandbox.server[url].sendMessage(0, "message",{information:"helloWorld"});
         } ,"TypeError");
-        
-        assertException(function(){
-            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
-        } ,"TypeError");
-  
+        // wrong eventName
         assertException(function(){
             sandbox.server[url].sendMessage(0,"EventThatDontExist",{data:null});
         } ,"Error");
 
-        assertException(function(){
-            sandbox.server[url].sendMessage(300,null,{data:null});
-        } ,"Error");
+       
     }, 
     "test sandbox.server sendMessage should call specific event of client": function () {
          var es = new EventSource(this.server1URL);
@@ -182,7 +185,7 @@ TestCase("eventSourceSandboxServer", {
  
          var sendMsg = "HELLOWORLD";
          es.addEventListner("test", testEvent);                
-         this.sandbox.server[this.server1URL].sendMessage(0,"ontest",{data:sendMsg});
+         this.sandbox.server[this.server1URL].sendMessage(0,"test",{data:sendMsg});
          
          assertTrue(called);
          assertEquals(msg, sendMsg);
@@ -251,7 +254,7 @@ TestCase("eventSourceSandboxServer", {
         assertFalse(es3_called);
         assertFalse(notConnectedES_called);        
 
-        this.sandbox.server[this.server1URL].sendMessageToAll('ontest',{data:"HELLOWORLD"});
+        this.sandbox.server[this.server1URL].sendMessageToAll('test',{data:"HELLOWORLD"});
         
         assertTrue(es1_called);
         assertTrue(es2_called);
@@ -555,8 +558,35 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertEquals(1, this.sandbox.server[this.serverURL].clients.length);
         assertEquals(secondES,this.sandbox.server[this.serverURL].clients[0]);
         assertEquals(1,secondES.readyState);
-    }
-    
-    
+    },
+    "test fakeEventSource should hold boolean named withCredentials": function () {
+        assertNotUndefined(this.fakeEventSource.withCredentials);
+        assertEquals("boolean",typeof this.fakeEventSource.withCredentials );
+    },
+    "test fakeEventSource should throw exception if Credentials parameter is not boolean": function () {
+        assertException(function(){
+            var es = new EventSource("someUrl", "YES");
+        },"TypeError");        
+        assertException(function(){
+            var es = new EventSource("someUrl", null);
+        },"TypeError");        
+    },
+    "test fakeEventSource should not throw exception if Credentials is not given": function () {
+        assertNoException(function(){
+            var es = new EventSource("someUrl");
+        });  
+    },
+    "test fakeEventSource withCredentials should be setted with 'constructor'": function () {
+        var es = new EventSource("someUrl", true);
+        assertTrue(es.withCredentials);
+        
+        var es2 = new EventSource("someUrl", false);
+        assertFalse(es2.withCredentials);
+    },
+    "test fakeEventSource should be false if not setted via 'constructor' ": function () {
+        var es = new EventSource("someUrl"); 
+        assertFalse(es.withCredentials);
+    }    
+  
 });
 

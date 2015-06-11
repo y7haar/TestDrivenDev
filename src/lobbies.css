@@ -141,12 +141,26 @@ body
     padding-left: 20px;
     min-width: 400px;
     text-align: left;
+    white-space: nowrap;
 }
 
 .playerType
 {
     min-width: 100px;
     text-align: left;
+}
+
+.playerTypeSelect
+{
+    min-width: 100px;
+    height:25px;
+    text-align: left;
+    border: 2px solid seagreen;
+    border-radius: 3px;
+    background-color: #dddddd;
+    
+    padding: 0px;
+    margin: 0px;
 }
 
 .lobbyMaxPlayers

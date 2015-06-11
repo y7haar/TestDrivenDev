@@ -8,6 +8,9 @@ function lobbyUi(aRequestController)
 {   
     var _lobbyRequestController = aRequestController;
     
+    var _colors = [ "Blue", "LightGreen", "Coral", "CornflowerBlue", "ForestGreen", "Red", "DarkOrange", "Yellow", "LawnGreen", "Khaki", "Violet"];
+    var _colorIndex = 0;
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -164,6 +167,56 @@ function lobbyUi(aRequestController)
         wrapper.appendChild(playerWrapper);
     }
     
+    function showLeaderLobby(aLobby)
+    {
+        clearLobbies();
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        
+        var title = document.createElement("h1");
+        var id = document.createElement("h1");
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        
+        title.innerHTML = aLobby.getName();
+        title.className = "lobbyTitle";
+        
+        id.innerHTML = "#" + aLobby.getId();
+        id.className = "lobbyTitle";
+        
+        td1.appendChild(id);
+        td2.appendChild(title);
+        
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        
+        var playerWrapper = document.createElement("div");
+        playerWrapper.id = "playerWrapper";
+        playerWrapper.className = "playerWrapper";
+        
+        var maxPlayers = aLobby.getMaxPlayers();
+        
+        for(var i = 0;i < maxPlayers; ++i)
+        {
+            if(aLobby.getPlayers()[i]=== aLobby.getLeader())
+            {
+                showLobbyPlayer(playerWrapper, aLobby.getPlayers()[i]);         
+            }
+            
+            else
+            {
+                showLobbyLeaderPlayer(playerWrapper, aLobby.getPlayers()[i]);         
+            }
+        }
+        
+        table.appendChild(tr);
+        wrapper.appendChild(table);
+        wrapper.appendChild(playerWrapper);
+    }
+    
+    
     function showLobbyPlayer(playerWrapper, aPlayer)
     {
         
@@ -201,6 +254,8 @@ function lobbyUi(aRequestController)
         // Real Player
         else
         {
+            playerDiv.id = "playerId" + aPlayer.getId();
+            
             if(aPlayer.getType() === "bot")
             {
                 playerType.innerHTML = "Bot";
@@ -216,6 +271,110 @@ function lobbyUi(aRequestController)
         }
     }
     
+     function showLobbyLeaderPlayer(playerWrapper, aPlayer)
+    {
+        
+        var playerDiv = document.createElement("div");
+        playerDiv.className = "lobbyPlayer";
+
+        playerWrapper.appendChild(playerDiv);
+
+        var table = document.createElement("table");
+        var tr = document.createElement("tr");
+
+        table.appendChild(tr);
+
+        var playerColor = document.createElement("td");
+        var playerName = document.createElement("td");
+        var playerType = document.createElement("td");
+        var playerTypeRoll = document.createElement("select");
+        var type1 = document.createElement("option");
+        var type2 = document.createElement("option");
+        var type3 = document.createElement("option");
+        
+        type1.text = "Open Slot";
+        type2.text = "Bot";
+        type3.text = "Human";
+        
+        playerTypeRoll.className = "playerTypeSelect";
+        
+        playerType.appendChild(playerTypeRoll);
+
+        playerColor.className = "playerColor";
+        playerName.className = "playerName";
+        playerType.className = "playerType";
+
+        tr.appendChild(playerColor);
+        tr.appendChild(playerName);
+        tr.appendChild(playerType);
+        playerDiv.appendChild(table);
+        
+        // Empty slot
+        if(typeof aPlayer === "undefined")
+        {
+            playerColor.style.backgroundColor = "#ffffff";
+            playerName.innerHTML = "";
+            
+            playerTypeRoll.add(type1);
+            playerTypeRoll.add(type2);
+            playerTypeRoll.selectedIndex = 0;
+        }
+        
+        // Real Player
+        else
+        {
+            playerDiv.id = "playerId" + aPlayer.getId();
+            
+            playerTypeRoll.add(type1);
+            playerTypeRoll.add(type2);
+            
+            
+            if(aPlayer.getType() === "bot")
+            {
+                playerTypeRoll.selectedIndex = 1;
+            }
+            
+            else if(aPlayer.getType() === "human")
+            {
+                playerTypeRoll.add(type3);
+                playerTypeRoll.selectedIndex = 2;
+            }
+            
+            playerName.innerHTML = aPlayer.getName();
+            playerColor.style.backgroundColor = aPlayer.getColor();
+        }
+    }
+    
+    function setPlayerEditable(aId)
+    {
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        var playerDiv = document.getElementById("playerId" + aId);
+        
+        if(playerDiv === null)
+            throw new Error("Player with given Id does not exist");
+        
+        var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
+        playerName.contentEditable = true;
+        playerName.innerHTML = "";
+        
+        playerName.onclick = function(){
+          this.innerHTML = "";  
+        };
+        
+        var colorBox = playerDiv.childNodes[0].childNodes[0].childNodes[0];
+        colorBox.style.cursor = "pointer";
+        
+        colorBox.onclick = function() {
+            colorBox.style.backgroundColor = _colors[_colorIndex % _colors.length];
+            _colorIndex++;
+        };
+        
+        
+        playerName.focus();
+    }
+    
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
@@ -225,4 +384,6 @@ function lobbyUi(aRequestController)
     this.onJoinSubmit = onJoinSubmit;
     this.getLobbyRequestController = getLobbyRequestController;
     this.showLobby = showLobby;
+    this.showLeaderLobby = showLeaderLobby;
+    this.setPlayerEditable = setPlayerEditable;
 }

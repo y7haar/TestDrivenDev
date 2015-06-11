@@ -14,14 +14,15 @@
         */
 
 TestCase("stateTests", {
-    setUp: function () {              
-        this.placing = new tddjs.client.placingState();
-        this.attacking = new tddjs.client.attackingState();
-        this.waiting = new tddjs.client.waitingState();  
+    setUp: function () {
+        this.map = generateMap();
+        this.unitCount = 8;
+        this.placing = new tddjs.client.placingState(this.map, this.unitCount);
+        this.attacking = new tddjs.client.attackingState(this.map);
+        this.waiting = new tddjs.client.waitingState(this.map);  
     },
     tearDown: function ()
-    {
-        this.placing = null;
+    {        this.placing = null;
         this.attacking = null;
         this.waiting = null; 
     },
@@ -33,8 +34,7 @@ TestCase("stateTests", {
     "test states should be instanace of theire state": function () {
         assertTrue(this.placing instanceof tddjs.client.placingState);
         assertTrue(this.attacking instanceof tddjs.client.attackingState);
-        assertTrue(this.waiting instanceof tddjs.client.waitingState);
-    
+        assertTrue(this.waiting instanceof tddjs.client.waitingState);    
     },
     "test states should be instance of prototype (abstract)state": function () {
         assertTrue(this.placing instanceof tddjs.client.abstractState);  
@@ -55,16 +55,30 @@ TestCase("stateTests", {
    
         assertNotUndefined(this.waiting.isMoveLegal);
         assertNotUndefined(this.waiting.toString);
-    }    
+    },
+    "test if toString Method was called": function () {
+       var state = new tddjs.client.abstractState();
+       state.toString = stubFn();
+       assertFalse(state.toString.called);
+       state.toString();
+       assertTrue(state.toString.called);
+    },
+    "test if isMoveLegal Method was called": function () {
+       var state = new tddjs.client.abstractState();
+       state.isMoveLegal = stubFn();
+       assertFalse(state.isMoveLegal.called);
+       state.isMoveLegal();
+       assertTrue(state.isMoveLegal.called);
+    } 
+    
 });
 
 //---------    PLACING -------------------------------
 TestCase("placingStateTests", {
-    setUp: function () {
-        this.placing = new tddjs.client.placingState();
+    setUp: function () {     
         this.map1 = generateMap();
         this.availableUnits = 4;
-        this.url = "/someURL";
+        this.placing = new tddjs.client.placingState(this.map1, this.availableUnits);
 
         this.validMove = {
             type: 'placing',
@@ -107,18 +121,41 @@ TestCase("placingStateTests", {
             player: 'Peter',
             continent: 'Europa',
             country: 'Country1'
-        };
-
-        // ajax stub
-        this.ajax = tddjs.util.ajax;
-        this.sandbox = sinon.sandbox.create();
-        this.sandbox.useFakeXMLHttpRequest();
+        };  
     },
     tearDown: function(){
       this.placing = null;
       this.map1 = null;
-      this.sandbox.restore();
+      this.availableUnits = null;
     },
+    "test creating PlaceState should throw exception if wrong Parameter": function () {
+        var map = this.map1;
+        var unit = this.availableUnits;
+        
+        assertException(function(){
+            new tddjs.client.placingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(null,null);
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(null,unit);
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(map, null);
+        },"TypeError");
+    },
+    "test placeingState should hold map ": function () {
+        assertNotUndefined(this.placing.map);   
+        assertSame(this.map1,this.placing.map);
+        assertTrue(this.placing.map instanceof tddjs.client.map.map);
+    },
+    "test placeingState should hold unitCount": function () {
+        assertNotUndefined(this.placing.unitCount);
+    },    
     "test should implement relevant functions": function () {
         assertFunction(this.placing.isMoveLegal);
         assertFunction(this.placing.toString);
@@ -129,46 +166,31 @@ TestCase("placingStateTests", {
     "test isMoveLegal shoulde throw exception if paramter is wrong": function () {
         var validMove = this.validMove;
         var placing = this.placing;
-        var map = this.map1;
-        var availableUnits = this.availableUnits;
 
         assertException(function () {
             placing.isMoveLegal();
         }, 'TypeError');
 
         assertException(function () {
-            placing.isMoveLegal({}, availableUnits, validMove);
-        }, 'TypeError');
-
-        assertException(function () {
-            placing.isMoveLegal(map, availableUnits, "place units somehwere");
-        }, 'TypeError');
-
-        assertException(function () {
-            placing.isMoveLegal(map, "4asd", validMove);
-        }, 'TypeError');
-
-        assertNoException(function () {
-            placing.isMoveLegal(map, availableUnits, validMove);
-        });         
+            placing.isMoveLegal("place units somehwere");
+        }, 'TypeError');       
     },
     "test isMoveLegal should return false if Move is not Valid else true": function () {
         
-        assertTrue(this.placing.isMoveLegal(this.map1,this.availableUnits,this.validMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongContinentMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongCountryMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongOwnerMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongTypeMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongUnitCountMove));
+        assertTrue(this.placing.isMoveLegal(this.validMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongContinentMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongCountryMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongOwnerMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongTypeMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongUnitCountMove));
     }
  });
  
  //--------- ATTACKING -----------------------------------
  TestCase("attackingStateTests", {
-    setUp: function () {
-        this.attacking = new tddjs.client.attackingState();
+    setUp: function () {        
         this.map1 = generateMap();
-
+        this.attacking = new tddjs.client.attackingState(this.map1);
         this.validMove = {
             type: 'attack',
             from: {
@@ -253,6 +275,21 @@ TestCase("placingStateTests", {
         this.attacking = null;
         this.map1 = null;
     },
+    "test creating AttackingState should throw exception if wrong Parameter": function () {
+        var map = this.map1;        
+        assertException(function(){
+            new tddjs.client.attackingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.attackingState(null);
+        },"TypeError");           
+    },
+    "test attackingState should hold map ": function () {
+        assertNotUndefined(this.attacking.map);   
+        assertSame(this.map1,this.attacking.map);
+        assertTrue(this.attacking.map instanceof tddjs.client.map.map);
+    },
     "test state should implement relevant functions": function () {
         assertFunction(this.attacking.isMoveLegal);
         assertFunction(this.attacking.toString); 
@@ -263,40 +300,48 @@ TestCase("placingStateTests", {
     "test state should throw exception if a paramter is wrong": function () {
         var validMove = this.validMove;
         var attacking = this.attacking;
-        var map = this.map1;
         
         assertException(function(){
             attacking.isMoveLegal();
         },'TypeError');
         
         assertException(function(){
-            attacking.isMoveLegal({},validMove);
-        },'TypeError');    
-        
-        assertException(function(){
-            attacking.isMoveLegal(map,"attack somewhere");
-        },'TypeError');   
-        
-        assertNoException(function(){
-            attacking.isMoveLegal(map,validMove);
-        });
+            attacking.isMoveLegal("attackSomeWhere");
+        },'TypeError');  
+      
     },
     "test isMoveLegal should return false if move is not Valid else true": function () {        
-        assertTrue(this.attacking.isMoveLegal(this.map1, this.validMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongBorderMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongContinentMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongCountryMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongOwnerMove));
-        assertFalse(this.attacking.isMoveLegal(this.map1, this.wrongTypeMove));
+        assertTrue(this.attacking.isMoveLegal(this.validMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongBorderMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongContinentMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongCountryMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongOwnerMove));
+        assertFalse(this.attacking.isMoveLegal(this.wrongTypeMove));
     } 
 });
 //--------- WAITING -----------------------------------
 TestCase("waitingStateTests", {
     setUp: function(){
-      this.waitingState = new tddjs.client.waitingState();  
+      this.map = generateMap();
+      this.waitingState = new tddjs.client.waitingState(this.map);  
     },
     tearDown: function(){
         this.waitingState = null;
+    },
+    "test creating WaitingState should throw exception if wrong Parameter": function () {
+        var map = this.map;        
+        assertException(function(){
+            new tddjs.client.waitingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.waitingState(null);
+        },"TypeError");           
+    },
+    "test waitingState should hold map ": function () {
+        assertNotUndefined(this.waitingState.map);   
+        assertSame(this.map,this.waitingState.map);
+        assertTrue(this.waitingState.map instanceof tddjs.client.map.map);
     },
     "test state should impelment toString function": function () {
        assertFunction(this.waitingState.toString);
@@ -304,8 +349,11 @@ TestCase("waitingStateTests", {
     "test toString should return name of the State": function () {
         assertEquals("waitingState", this.waitingState.toString());
     },
-    "test state shoulde not implement isMoveLegal function": function () {
-        assertEquals(null, this.waitingState.isMoveLegal);
+    "test state should implement isMoveLegal function": function () {
+        assertNotUndefined( this.waitingState.isMoveLegal);
+    },
+    "test state isMoveLegal should allways return false": function () {
+        assertFalse(this.waitingState.isMoveLegal());
     }
     
 });
