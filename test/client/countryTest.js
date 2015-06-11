@@ -23,6 +23,13 @@ TestCase("CountryBorderTest", {
             
         assertObject(this.country1); 
     },
+    
+    "test Should be able to get the Borders": function()
+    {
+        assertObject(this.country1.getBorders());
+        assertEquals(0, this.country1.getBorders().length);
+    },
+    
     "test country1 should store other countrys, exception if not a Country": function () {
         
         var fakeCountry = {name:"Franzaken"};
