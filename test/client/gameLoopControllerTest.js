@@ -217,14 +217,15 @@ TestCase("GameLoopCommunicationTests", {
     "test State should change to placing state if server trigger changeToPlacing event": function () {        
         assertEquals("waitingState", this.gameLoop.getStateName());
         assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
-         
-        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:"change to placing-State"});
+        var message = JSON.stringify({unitCount:4}); 
+        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
          
         assertEquals("placingState", this.gameLoop.getStateName());
         assertTrue(this.gameLoop.currentState instanceof tddjs.client.placingState);
     },
     "test State should change to waiting state if server trigger changeToWaiting event": function () {
-        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:"change to placing-State"});
+        var message = JSON.stringify({unitCount:4}); 
+        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
         assertEquals("placingState", this.gameLoop.getStateName());
         assertTrue(this.gameLoop.currentState instanceof tddjs.client.placingState);
         
