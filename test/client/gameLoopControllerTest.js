@@ -120,7 +120,7 @@ TestCase("GameLoopControllerTests", {
     },
     "test gameLoop getUrl should return Url": function () {        
          assertSame(this.url, this.gameLoop.getUrl());
-    },
+    },    
     "test gameLoop should implement establishConneciton function": function () {        
         assertFunction(this.gameLoop.establishConnection);
     },
@@ -160,12 +160,21 @@ TestCase("GameLoopControllerTests", {
         this.gameLoop.establishConnection();
         assertNotUndefined(this.gameLoop.eventSource.onchangetowaiting);
         assertFunction(this.gameLoop.eventSource.onchangetowaiting);
+    },
+    "test gameLoop should hold current State waitingState at init": function () {        
+         assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
+    },   
+    "test gameLoop should implement getStateName function": function () {        
+         assertFunction(this.gameLoop.getStateName);
+    },
+    "test gameLoop getStateName should return current State name, waitingState at init": function () {        
+         assertEquals("waitingState",this.gameLoop.getStateName());
     }
     
     
 });
 
-/*
+
 TestCase("GameLoopEventHandlerTests", {
     setUp: function () {             
         this.map = generateMap();      
@@ -174,8 +183,11 @@ TestCase("GameLoopEventHandlerTests", {
         
         this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url);
         
-        this.sandbox = tddjs.stubs.eventSourceSandbox();
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);
+        
+        this.gameLoop.establishConnection();        
+        this.sandbox.server[this.url].sendMessage(0,'changetowaitingstate',{data:"changeToWaitingState"});
     },
     tearDown: function(){
         this.gameLoop = null;
@@ -184,6 +196,7 @@ TestCase("GameLoopEventHandlerTests", {
         this.url = null;
         this.sandbox.restore();
         this.sandbox = null;
-    }   
+    }
+   
+    
 });
-*/
