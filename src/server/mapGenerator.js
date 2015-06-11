@@ -9,6 +9,7 @@ function mapGenerator()
     //Gewissermaßen die Welt
     var _grid = {};
     var countriesInContinents = [];
+    var allCountries = [];
     
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
@@ -96,7 +97,7 @@ function mapGenerator()
         return arr;
     }
     
-    //Theoretisch gehört hier die Endabfertigung rein
+    //Kompletter Aufruf aller Schritte
     function generateMap()
     {
         if(typeof(_grid.cellGrid) === "undefined")
@@ -153,14 +154,17 @@ function mapGenerator()
     {
         if(typeof(_grid.cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
-        var id=0;
+        
+        var id = 1;
+        
         //Auf gesamter Breite
         for(var i = 0; i < getMapWidth(); i++)
         {   //Auf gesamter Höhe
             for(var j = 0; j < getMapHeight(); j++)           
             {
                 _grid.cellGrid[i][j] = new tddjs.client.map.country();
-                _grid.cellGrid[i][j].id = -1;
+                _grid.cellGrid[i][j].id = id++;
+                _grid.cellGrid[i][j].setName("Id:" + id);
                 _grid.cellGrid[i][j].size = 1;
             }
         }
@@ -185,6 +189,9 @@ function mapGenerator()
             {
                 var nextX = x+1;
                 var nextY = y+1;
+                
+                var lastX= x-1;
+                var lastY= y-1;
                     
                 //Rechtsliegende Border hinzufügen
                 if(nextX < getMapWidth())
@@ -278,7 +285,7 @@ function mapGenerator()
     }
     
     //Sammelt alle Nachbarländer von Kontinenten
-    function collectNeighborCountriesOfContinent(continent)
+    function collectUnusedNeighborCountriesOfContinent(continent)
     {
         if(!calledInitBorders)
             throw new Error("There are no Borders to work with yet");
@@ -301,26 +308,41 @@ function mapGenerator()
         return neigbors;
     }
     
-    function collectBorderCountriesOfContinent(continent){
+    function calculateUnitBonus(continent)
+    {
         if(!calledInitBorders)
             throw new Error("There are no Borders to work with yet");
         if(!(continent instanceof tddjs.client.map.continent))
             throw new TypeError("Given value is not a Continent");
         
-        var neigbors = [];
+        var borderlands = 0;
         
         for(var i in continent.getCountrys())
         {
-            var countryNeigbors = collectNeighborCountries(continent.getCountrys()[i]);
+            var country = continent.getCountrys()[i];
+            var countryNeighbors = collectNeighborCountries(country);
             
-            for(j = 0; j < countryNeigbors.length; j++)
+            for(j = 0; j < countryNeighbors.length; j++)
             {
-                if(continent.hasCountryByObject(countryNeigbors[j]))
-                    neigbors.push(countryNeigbors[j]);
+                if(!continent.hasCountryByObject(countryNeighbors[j]))
+                {
+                    borderlands++;
+                    break;
+                }
             }
         }
         
-        return neigbors;
+        console.log(borderlands);
+        
+        //Anzahl an Reiche die Grenzländer sind =  neighbors.length
+        //Anzahl der Reiche
+        var numberOfCountries = continent.getCountryCount();      
+        var dividor = (numberOfCountries+borderlands)/2;
+        
+        if(dividor === 0)
+            return 0;
+        
+        return Math.round((numberOfCountries * borderlands)/dividor);
     }
     
     //Wählt ein zufälliges Element
@@ -339,21 +361,26 @@ function mapGenerator()
         //Kombinationswert
         var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
         
-        //
+        allCountries = collectAllCountries();
+        
+        //Kombinieren
         for(var i = 0; i < combineCount; i++)
         {
             //Zielland
-            var winnerCountry = getRandom(collectAllCountries());
+            var winnerCountry = getRandom(allCountries);
             //Aufgelöstes Land
             var loserCountry = getRandom(collectNeighborCountries(winnerCountry));
 
-            //Falls das gleiche Land erwischt oder es zu groß wird
-            if(winnerCountry === loserCountry || (loserCountry.size + winnerCountry.size >= maximumCountrySize))
+            //Falls das Land zu groß wird
+            if((loserCountry.size + winnerCountry.size >= maximumCountrySize))
             {
                 i--;
                 continue;
             }
 
+            //Gemergetes Land entfernen
+            allCountries.splice(allCountries.indexOf(loserCountry), 1);
+            
             mergeIntoCountry(loserCountry, winnerCountry);
             removeCircularAndDuplicateBorders();
         }
@@ -432,19 +459,23 @@ function mapGenerator()
         {           
             var loser = getRandom(remainingCountries);
             var neigbours = (collectNeighborCountries(loser));
-            var notOnly = true;
+            //var notOnly = true;
+            
+            //Prüfen
+            //Ob es merge optionen gibt!
             
             //Spezialfall falls Land umschlossen
-            if(neigbours.length === 1)
-                notOnly = false;
+            //if(neigbours.length === 1)
+                //notOnly = false;
             
             var winner = getRandom(neigbours);
             
             //Falls das gleiche Land erwischt wird oder es zu groß wird
-            if(winner === loser || (winner.size + loser.size > maximumCountrySize && notOnly))
-            {
-                continue;
-            }
+            //if(winner === loser /*|| (winner.size + loser.size > maximumCountrySize && notOnly)*/)
+            //{
+            //    throw new Error("happens");
+            //    continue;
+            //}
 
             mergeIntoCountry(loser, winner);
             removeCircularAndDuplicateBorders();
@@ -470,7 +501,8 @@ function mapGenerator()
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.collectAllCountries = collectAllCountries;
     this.collectNeighborCountries = collectNeighborCountries;  
-    this.collectNeighborCountriesOfContinent = collectNeighborCountriesOfContinent;
+    this.collectUnusedNeighborCountriesOfContinent = collectUnusedNeighborCountriesOfContinent;
+    this.calculateUnitBonus = calculateUnitBonus;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
     this.combineCountryCells = combineCountryCells;
