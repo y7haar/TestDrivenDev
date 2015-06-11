@@ -42,6 +42,11 @@ function country()
             throw new TypeError("Parameter is not instance of country.");
         _border.push(aCountry);
     }
+    
+    function getBorders()
+    {
+        return _border;
+    }
 
     function getBorderCount()
     {
@@ -131,6 +136,7 @@ function country()
     this.getName = getName;
 
     this.addBorder = addBorder;
+    this.getBorders = getBorders;
     this.getBorderCount = getBorderCount;
     this.borders = borders;
 
