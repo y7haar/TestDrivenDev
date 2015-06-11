@@ -317,6 +317,12 @@ TestCase("GameLoopCommunicationTests", {
         assertEquals("placingState",this.gameLoop.getStateName());
         assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
     },
+    "test (placing)gameLoop.makeMove should return true(validMove)": function () {
+        var message = JSON.stringify({unitCount:4}); 
+        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
+        assertEquals("placingState",this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.makeMove(this.validPlacingMove));
+    },
     "test (attacking)gameLoop.makeMove should return false(wrongMove)": function () {
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
         assertEquals("attackingState",this.gameLoop.getStateName());
