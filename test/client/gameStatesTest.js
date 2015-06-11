@@ -188,10 +188,9 @@ TestCase("placingStateTests", {
  
  //--------- ATTACKING -----------------------------------
  TestCase("attackingStateTests", {
-    setUp: function () {
-        this.attacking = new tddjs.client.attackingState();
+    setUp: function () {        
         this.map1 = generateMap();
-
+        this.attacking = new tddjs.client.attackingState(this.map1);
         this.validMove = {
             type: 'attack',
             from: {
@@ -275,6 +274,21 @@ TestCase("placingStateTests", {
     tearDown: function () {
         this.attacking = null;
         this.map1 = null;
+    },
+    "test creating AttackingState should throw exception if wrong Parameter": function () {
+        var map = this.map1;        
+        assertException(function(){
+            new tddjs.client.attackingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.attackingState(null);
+        },"TypeError");           
+    },
+    "test attackingState should hold map ": function () {
+        assertNotUndefined(this.attacking.map);   
+        assertSame(this.map1,this.attacking.map);
+        assertTrue(this.attacking.map instanceof tddjs.client.map.map);
     },
     "test state should implement relevant functions": function () {
         assertFunction(this.attacking.isMoveLegal);
