@@ -327,6 +327,11 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
         assertEquals("attackingState",this.gameLoop.getStateName());
         assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
+    },
+    "test (attacking)gameLoop.makeMove should return true(validMove)": function () {
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+        assertEquals("attackingState",this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.makeMove(this.validAttackMove));
     }
    
 });
