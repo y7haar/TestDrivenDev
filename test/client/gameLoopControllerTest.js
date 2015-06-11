@@ -161,7 +161,7 @@ TestCase("GameLoopControllerTests", {
         assertNotUndefined(this.gameLoop.eventSource.onchangetowaiting);
         assertFunction(this.gameLoop.eventSource.onchangetowaiting);
     },
-    "test gameLoop should hold current State waitingState at init": function () {        
+    "test gameLoop should hold current State, waitingState at init": function () {        
          assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
     },   
     "test gameLoop should implement getStateName function": function () {        
@@ -170,8 +170,6 @@ TestCase("GameLoopControllerTests", {
     "test gameLoop getStateName should return current State name, waitingState at init": function () {        
          assertEquals("waitingState",this.gameLoop.getStateName());
     }
-    
-    
 });
 
 
@@ -184,10 +182,9 @@ TestCase("GameLoopEventHandlerTests", {
         this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url);
         
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
-        this.sandbox.addServer(this.url);
-        
-        this.gameLoop.establishConnection();        
-        this.sandbox.server[this.url].sendMessage(0,'changetowaitingstate',{data:"changeToWaitingState"});
+        this.sandbox.addServer(this.url);        
+        this.gameLoop.establishConnection();       
+       
     },
     tearDown: function(){
         this.gameLoop = null;
@@ -196,7 +193,37 @@ TestCase("GameLoopEventHandlerTests", {
         this.url = null;
         this.sandbox.restore();
         this.sandbox = null;
+    },
+    "test State should change to attacking state if server trigger changeToAttacking event": function () {        
+        assertEquals("waitingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
+         
+        this.sandbox.server[this.url].sendMessage(0,"onchangetoattacking",{data:"change to Attacking-State"});
+         
+        assertEquals("attackingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.attackingState);
+    },
+    "test State should change to placing state if server trigger changeToPlacing event": function () {        
+        assertEquals("waitingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
+         
+        this.sandbox.server[this.url].sendMessage(0,"onchangetoplacing",{data:"change to placing-State"});
+         
+        assertEquals("placingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.placingState);
+    },
+    "test State should change to waiting state if server trigger changeToWaiting event": function () {
+        this.sandbox.server[this.url].sendMessage(0,"onchangetoplacing",{data:"change to placing-State"});
+        assertEquals("placingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.placingState);
+        
+        this.sandbox.server[this.url].sendMessage(0,"onchangetowaiting",{data:"change to waiting-State"});
+        assertEquals("waitingState", this.gameLoop.getStateName());
+        assertTrue(this.gameLoop.currentState instanceof tddjs.client.waitingState);
+         
+     
     }
+    
    
     
 });
