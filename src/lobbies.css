@@ -150,6 +150,19 @@ body
     text-align: left;
 }
 
+.playerTypeSelect
+{
+    min-width: 100px;
+    height:25px;
+    text-align: left;
+    border: 2px solid seagreen;
+    border-radius: 3px;
+    background-color: #dddddd;
+    
+    padding: 0px;
+    margin: 0px;
+}
+
 .lobbyMaxPlayers
 {
     text-align: left;
