@@ -142,8 +142,12 @@ function attackingState(aMap)
 attackingState.prototype = new state();
 attackingState.prototype.constructor = attackingState;
 
-function waitingState()
+function waitingState(aMap)
 {
+    if (!(aMap instanceof tddjs.client.map.map))
+            throw new TypeError("given Map is not instance of Map");
+    var _map = aMap;
+    
     function toString()
     {
         return "waitingState";
@@ -156,6 +160,13 @@ function waitingState()
     
     this.isMoveLegal = isMoveLegal;
     this.toString = toString;
+    
+    //test properties
+    Object.defineProperty(this, 'map', {
+        get: function () {
+            return _map;
+        }
+    }); 
 }
 waitingState.prototype = new state();
 waitingState.prototype.constructor = waitingState;
