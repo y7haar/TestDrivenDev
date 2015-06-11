@@ -76,6 +76,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _eventSource.addEventListner("changeToPlacing", changeToPlacingState);
         _eventSource.addEventListner("changeToAttacking", changeToAttackingState);
         _eventSource.addEventListner("changeToWaiting", changeToWaitingState);
+        _eventSource.addEventListner("attackResult", attackResult);
+        _eventSource.addEventListner("placeUnits", placeUnits);
         
         
     }      
@@ -94,6 +96,15 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function changeToWaitingState(e)
     {
         _currentState = new tddjs.client.waitingState();
+    }
+    function attackResult(e)
+    {
+        
+    }
+    
+    function placeUnits(e)
+    {
+        
     }
     
     //  Testing
