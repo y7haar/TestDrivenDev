@@ -14,14 +14,15 @@
         */
 
 TestCase("stateTests", {
-    setUp: function () {              
-        this.placing = new tddjs.client.placingState();
-        this.attacking = new tddjs.client.attackingState();
+    setUp: function () {
+        this.map = generateMap();
+        this.unitCount = 8;
+        this.placing = new tddjs.client.placingState(this.map, this.unitCount);
+        this.attacking = new tddjs.client.attackingState(this.map);
         this.waiting = new tddjs.client.waitingState();  
     },
     tearDown: function ()
-    {
-        this.placing = null;
+    {        this.placing = null;
         this.attacking = null;
         this.waiting = null; 
     },
@@ -33,8 +34,7 @@ TestCase("stateTests", {
     "test states should be instanace of theire state": function () {
         assertTrue(this.placing instanceof tddjs.client.placingState);
         assertTrue(this.attacking instanceof tddjs.client.attackingState);
-        assertTrue(this.waiting instanceof tddjs.client.waitingState);
-    
+        assertTrue(this.waiting instanceof tddjs.client.waitingState);    
     },
     "test states should be instance of prototype (abstract)state": function () {
         assertTrue(this.placing instanceof tddjs.client.abstractState);  
@@ -55,16 +55,30 @@ TestCase("stateTests", {
    
         assertNotUndefined(this.waiting.isMoveLegal);
         assertNotUndefined(this.waiting.toString);
-    }    
+    },
+    "test if toString Method was called": function () {
+       var state = new tddjs.client.abstractState();
+       state.toString = stubFn();
+       assertFalse(state.toString.called);
+       state.toString();
+       assertTrue(state.toString.called);
+    },
+    "test if isMoveLegal Method was called": function () {
+       var state = new tddjs.client.abstractState();
+       state.isMoveLegal = stubFn();
+       assertFalse(state.isMoveLegal.called);
+       state.isMoveLegal();
+       assertTrue(state.isMoveLegal.called);
+    } 
+    
 });
 
 //---------    PLACING -------------------------------
 TestCase("placingStateTests", {
-    setUp: function () {
-        this.placing = new tddjs.client.placingState();
+    setUp: function () {     
         this.map1 = generateMap();
         this.availableUnits = 4;
-        this.url = "/someURL";
+        this.placing = new tddjs.client.placingState(this.map1, this.availableUnits);
 
         this.validMove = {
             type: 'placing',
@@ -107,18 +121,39 @@ TestCase("placingStateTests", {
             player: 'Peter',
             continent: 'Europa',
             country: 'Country1'
-        };
-
-        // ajax stub
-        this.ajax = tddjs.util.ajax;
-        this.sandbox = sinon.sandbox.create();
-        this.sandbox.useFakeXMLHttpRequest();
+        };  
     },
     tearDown: function(){
       this.placing = null;
       this.map1 = null;
-      this.sandbox.restore();
+      this.availableUnits = null;
     },
+    "test creating PlaceState should throw exception if wrong Parameter": function () {
+        var map = this.map1;
+        var unit = this.availableUnits;
+        
+        assertException(function(){
+            new tddjs.client.placingState();
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(null,null);
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(null,unit);
+        },"TypeError");
+        
+        assertException(function(){
+            new tddjs.client.placingState(map, null);
+        },"TypeError");
+    },
+    "test placeingState should hold map ": function () {
+        
+    },
+    "test placeingState should hold unitCount": function () {
+        
+    },    
     "test should implement relevant functions": function () {
         assertFunction(this.placing.isMoveLegal);
         assertFunction(this.placing.toString);
@@ -304,8 +339,11 @@ TestCase("waitingStateTests", {
     "test toString should return name of the State": function () {
         assertEquals("waitingState", this.waitingState.toString());
     },
-    "test state shoulde not implement isMoveLegal function": function () {
-        assertEquals(null, this.waitingState.isMoveLegal);
+    "test state should implement isMoveLegal function": function () {
+        assertNotUndefined( this.waitingState.isMoveLegal);
+    },
+    "test state isMoveLegal should allways return false": function () {
+        assertFalse(this.waitingState.isMoveLegal());
     }
     
 });
