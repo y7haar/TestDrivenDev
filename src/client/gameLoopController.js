@@ -63,6 +63,29 @@ function gameLoopController(aMap, aPlayer, aUrl)
         return _currentState.toString();
     }
     
+    function endPhase()
+    {
+        var player = JSON.parse(_player.serialize());
+        var message = JSON.stringify({player:player,type:'endPhase', 'phaseName':_currentState.toString()});            
+        _toServerLogs.push(message);
+        
+        var ajax = tddjs.util.ajax;
+        var options = {
+            headers:{
+                "Content-Type": "application/json"
+            },
+            data: message,
+            onSucces: null,
+            onFailure: null
+        };
+        ajax.post(_url, options);        
+    }
+    
+    function makeMove()
+    {
+        
+    }
+    
     
     // EventSource
     function establishConnection()
@@ -133,7 +156,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     });
     
     Object.defineProperty(this, 'fromServerLogs', {
-        get: function () {
+        get: function () {          
             return _fromServerLogs;
         }
     });
@@ -143,8 +166,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
         }
     });
     
-    
-    
+    this.makeMove = makeMove;
+    this.endPhase = endPhase;
     this.establishConnection = establishConnection;
     this.getUrl = getUrl;
     this.getMap = getMap;
