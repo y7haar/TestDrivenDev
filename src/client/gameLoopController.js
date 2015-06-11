@@ -85,7 +85,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {
         if (_currentState.isMoveLegal(move))
         {   
-         
+            return true;
         }
         else
             return false;
