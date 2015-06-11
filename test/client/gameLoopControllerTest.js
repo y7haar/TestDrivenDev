@@ -184,7 +184,7 @@ TestCase("GameLoopControllerTests", {
 
 
 TestCase("GameLoopCommunicationTests", {
-    setUp: function () {             
+    setUp: function () {       
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
@@ -304,6 +304,7 @@ TestCase("GameLoopCommunicationTests", {
     "test gemeLoop.makeMove should call isMoveValid from currentState": function () {
         var state = this.gameLoop.currentState;
         state.isMoveLegal = stubFn();
+        
         assertFalse(state.isMoveLegal.called);        
         this.gameLoop.makeMove();
         assertTrue(state.isMoveLegal.called);
@@ -315,22 +316,35 @@ TestCase("GameLoopCommunicationTests", {
         var message = JSON.stringify({unitCount:4}); 
         this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
         assertEquals("placingState",this.gameLoop.getStateName());
+        
         assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
     },
     "test (placing)gameLoop.makeMove should return true(validMove)": function () {
         var message = JSON.stringify({unitCount:4}); 
         this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
         assertEquals("placingState",this.gameLoop.getStateName());
+        
         assertTrue(this.gameLoop.makeMove(this.validPlacingMove));
+    },
+    "test (placing)gameLoop.makeMove should POST to server": function () {
+        var message = JSON.stringify({unitCount:4}); 
+        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
+        assertEquals("placingState",this.gameLoop.getStateName());  
+        
+        this.gameLoop.makeMove(this.validPlacingMove);
+        
+        assertEquals(2,this.sandbox.server[this.url].requests.length);
     },
     "test (attacking)gameLoop.makeMove should return false(wrongMove)": function () {
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
         assertEquals("attackingState",this.gameLoop.getStateName());
+        
         assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
-    },
+    },   
     "test (attacking)gameLoop.makeMove should return true(validMove)": function () {
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
         assertEquals("attackingState",this.gameLoop.getStateName());
+        
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
     }
    
