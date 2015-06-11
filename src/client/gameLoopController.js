@@ -84,15 +84,16 @@ function gameLoopController(aMap, aPlayer, aUrl)
     // EventSource events
     function changeToPlacingState(e)
     {
-        
+        _currentState = new tddjs.client.placingState();
     }
     function changeToAttackingState(e)
     {
+        _currentState = new tddjs.client.attackingState();
         
     }
     function changeToWaitingState(e)
     {
-        
+        _currentState = new tddjs.client.waitingState();
     }
     
     //  Testing
