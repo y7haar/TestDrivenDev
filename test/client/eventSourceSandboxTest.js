@@ -157,11 +157,11 @@ TestCase("eventSourceSandboxServer", {
         
         // wrong message
         assertException(function(){
-            sandbox.server[url].sendMessage(0,"onmessage",null);
+            sandbox.server[url].sendMessage(0,"onmessage","");
         } ,"TypeError");
         
         assertException(function(){
-            sandbox.server[url].sendMessage(0, "onmessage");
+            sandbox.server[url].sendMessage(0, "onmessage",{information:"helloWorld"});
         } ,"TypeError");
         // wrong eventName
         assertException(function(){
