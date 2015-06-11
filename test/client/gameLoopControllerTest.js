@@ -193,7 +193,29 @@ TestCase("GameLoopCommunicationTests", {
         
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);        
-        this.gameLoop.establishConnection();       
+        this.gameLoop.establishConnection();
+        
+        this.validAttackMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        
+        this.validPlacingMove = {
+            type: 'placing',
+            unitCount: 1,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country1'
+        };
        
     },
     tearDown: function(){
@@ -258,8 +280,15 @@ TestCase("GameLoopCommunicationTests", {
     },
     "test gameLoop.toServerLogs should be empty at init": function () {
         assertEquals(0,this.gameLoop.toServerLogs.length);
-    }
-    ,"test gameLoop should implement endPhase function": function () {
+    },
+    "test gameLoop.toServerLogs should increase if message send to server": function () {
+        assertEquals(0,this.gameLoop.toServerLogs.length);
+        this.gameLoop.endPhase();
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        this.gameLoop.endPhase();
+        assertEquals(2, this.gameLoop.toServerLogs.length);
+    },
+    "test gameLoop should implement endPhase function": function () {
         assertNotUndefined(this.gameLoop.endPhase);
     },
     "test gameLoop.endPhase should send Msg to server that player want to end current Phase": function () {
@@ -278,9 +307,20 @@ TestCase("GameLoopCommunicationTests", {
         assertFalse(state.isMoveLegal.called);        
         this.gameLoop.makeMove();
         assertTrue(state.isMoveLegal.called);
+    },
+    "test (waiting)gameLoop.makeMove should always return false": function () {
+        assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
+    },
+    "test (placing)gameLoop.makeMove should return false (wrongMove)": function () {
+        var message = JSON.stringify({unitCount:4}); 
+        this.sandbox.server[this.url].sendMessage(0,"changetoplacing",{data:message});
+        assertEquals("placingState",this.gameLoop.getStateName());
+        assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
+    },
+    "test (attacking)gameLoop.makeMove should return false(wrongMove)": function () {
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+        assertEquals("attackingState",this.gameLoop.getStateName());
+        assertFalse(this.gameLoop.makeMove({type:"WinningMove"}));
     }
-    
-    
    
-    
 });
