@@ -149,10 +149,12 @@ TestCase("placingStateTests", {
         },"TypeError");
     },
     "test placeingState should hold map ": function () {
-        
+        assertNotUndefined(this.placing.map);   
+        assertSame(this.map1,this.placing.map);
+        assertTrue(this.placing.map instanceof tddjs.client.map.map);
     },
     "test placeingState should hold unitCount": function () {
-        
+        assertNotUndefined(this.placing.unitCount);
     },    
     "test should implement relevant functions": function () {
         assertFunction(this.placing.isMoveLegal);
@@ -164,37 +166,23 @@ TestCase("placingStateTests", {
     "test isMoveLegal shoulde throw exception if paramter is wrong": function () {
         var validMove = this.validMove;
         var placing = this.placing;
-        var map = this.map1;
-        var availableUnits = this.availableUnits;
 
         assertException(function () {
             placing.isMoveLegal();
         }, 'TypeError');
 
         assertException(function () {
-            placing.isMoveLegal({}, availableUnits, validMove);
-        }, 'TypeError');
-
-        assertException(function () {
-            placing.isMoveLegal(map, availableUnits, "place units somehwere");
-        }, 'TypeError');
-
-        assertException(function () {
-            placing.isMoveLegal(map, "4asd", validMove);
-        }, 'TypeError');
-
-        assertNoException(function () {
-            placing.isMoveLegal(map, availableUnits, validMove);
-        });         
+            placing.isMoveLegal("place units somehwere");
+        }, 'TypeError');       
     },
     "test isMoveLegal should return false if Move is not Valid else true": function () {
         
-        assertTrue(this.placing.isMoveLegal(this.map1,this.availableUnits,this.validMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongContinentMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongCountryMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongOwnerMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongTypeMove));
-        assertFalse(this.placing.isMoveLegal(this.map1,this.availableUnits,this.wrongUnitCountMove));
+        assertTrue(this.placing.isMoveLegal(this.validMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongContinentMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongCountryMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongOwnerMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongTypeMove));
+        assertFalse(this.placing.isMoveLegal(this.wrongUnitCountMove));
     }
  });
  
