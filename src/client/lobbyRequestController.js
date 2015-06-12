@@ -125,6 +125,9 @@ function lobbyRequestController()
         data = JSON.stringify(data);
         
         var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
             data: data
         };
         
@@ -138,6 +141,24 @@ function lobbyRequestController()
         
         if(typeof aMaxPlayers !== "number")
             throw new TypeError("Max Players must be number");
+        
+        var data = {
+          type: "lobbyUpdate",
+          data: {
+              maxPlayers: aMaxPlayers
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aId, options);
     }
     
     function updatePlayerName(aLobbyId, aId, aName)
@@ -150,6 +171,25 @@ function lobbyRequestController()
         
         if(typeof aName !== "string")
             throw new TypeError("Name must be string");
+        
+        var data = {
+          type: "playerUpdate",
+          data: {
+              id: aId,
+              name: aName
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
     function updatePlayerColor(aLobbyId, aId, aColor)
@@ -162,6 +202,25 @@ function lobbyRequestController()
         
         if(typeof aColor !== "string")
             throw new TypeError("Color must be string");
+        
+        var data = {
+          type: "playerUpdate",
+          data: {
+              id: aId,
+              color: aColor
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
     function addBot()

@@ -348,6 +348,12 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
     
+    "test updateLobbyName should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.updateLobbyName(1, "Name");
+         
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
     
     // Max Players
     
@@ -385,6 +391,13 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
+    
+    "test updateMaxPlayers should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.updateMaxPlayers(1, 3);
+         
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
     
     // Player Name
     
@@ -431,6 +444,13 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
     
+    "test updatePlayerName should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.updatePlayerName(1, 3, "Name");
+         
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
+    
     // Player Color
     
     "test controller should have function to update player color": function () {         
@@ -459,7 +479,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
     },
     
      "test updatePlayerColor should perform POST request with correct data": function () {         
-        this.lobbyRequestController.updatePlayerName(1, 3, "#000000");
+        this.lobbyRequestController.updatePlayerColor(1, 3, "#000000");
         
         var jsonObj = {
             type: "playerUpdate",
@@ -475,6 +495,13 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
+    
+    "test updatePlayerColor should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.updatePlayerColor(1, 3, "#000000");
+         
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
     
     
     "test controller should have function to add Bot": function () {         
