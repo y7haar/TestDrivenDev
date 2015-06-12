@@ -317,11 +317,18 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertFunction(this.lobbyRequestController.updateLobbyName);
     },
     
+    "test updateLobbyName should throw Exception if parameter is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateLobbyName("asd", "My Lobby"); }, "TypeError");
+        assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
+    },
+    
     "test updateLobbyName should throw Exception if parameter is no string": function () {         
         var controller = this.lobbyRequestController;
         
-        assertException(function() { controller.updateLobbyName(12); }, "TypeError");
-        assertNoException(function() { controller.updateLobbyName("My Lobby"); });
+        assertException(function() { controller.updateLobbyName("asd", 12); }, "TypeError");
+        assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
     },
     
     
@@ -332,11 +339,18 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertFunction(this.lobbyRequestController.updateMaxPlayers);
     },
     
+    "test updateMaxPlayers should throw Exception if id is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateMaxPlayers("eins", 3); }, "TypeError");
+        assertNoException(function() { controller.updateMaxPlayers(1, 3); });
+    },
+    
     "test updateMaxPlayers should throw Exception if parameter is no number": function () {         
         var controller = this.lobbyRequestController;
         
-        assertException(function() { controller.updateMaxPlayers("eins"); }, "TypeError");
-        assertNoException(function() { controller.updateMaxPlayers(3); });
+        assertException(function() { controller.updateMaxPlayers(1, "drei"); }, "TypeError");
+        assertNoException(function() { controller.updateMaxPlayers(1, 3); });
     },
     
     // Player Name
