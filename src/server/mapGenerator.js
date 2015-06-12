@@ -7,7 +7,7 @@ tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
 function mapGenerator()
 {
     //Gewissermaßen die Welt
-    var _grid = {};
+    var cellGrid;
     var countriesInContinents = [];
     var allCountries = [];
     
@@ -30,22 +30,22 @@ function mapGenerator()
         if(x <= 0 || y <= 0)
             throw new Error("A Grid is not allowed to be zero or less Width or Height");
         
-        _grid.cellGrid = createArray(x,y);
+        cellGrid = createArray(x,y);
         
         calledInitCountries = false;
         calledInitBorders = false;
     }
     
     function getMapGrid(){
-        return _grid;
+        return cellGrid;
     }
     
     function getMapWidth(){
-        return _grid.cellGrid.length;
+        return cellGrid.length;
     }
     
     function getMapHeight(){
-        return _grid.cellGrid[0].length;
+        return cellGrid[0].length;
     }
     
     function getMinimumCountrySize()
@@ -100,15 +100,15 @@ function mapGenerator()
     //Kompletter Aufruf aller Schritte
     function generateMap()
     {
-        if(typeof(_grid.cellGrid) === "undefined")
+        if(typeof(cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
         
         initCountries();
-        initBorders();
-        combineCountryCells();
-        combineRemainingCountries();
+        //initBorders();
+        //combineCountryCells();
+        //combineRemainingCountries();
         var map = new tddjs.client.map.map();
-        initLogicMap(map);
+        //initLogicMap(map);
         return map;
     }
     /*test-funktion für die UI*/
@@ -124,24 +124,24 @@ function mapGenerator()
         {
             for(var j=0;j<getMapHeight();j++)
             {
-                if(cache_id.indexOf(_grid.cellGrid[i][j].id) === -1)
+                if(cache_id.indexOf(cellGrid[i][j].id) === -1)
                 {
-                    _grid.cellGrid[i][j].setName("ID: "+_grid.cellGrid[i][j].id);
-                    continent.addCountry(_grid.cellGrid[i][j]);
+                    cellGrid[i][j].setName("ID: "+cellGrid[i][j].id);
+                    continent.addCountry(cellGrid[i][j]);
                 }
-                cache_id.push(_grid.cellGrid[i][j].id);
+                cache_id.push(cellGrid[i][j].id);
             }
         }
         for(var i=Math.floor(getMapWidth()/2);i<getMapWidth();i++)
         {
             for(var j=0;j<getMapHeight();j++)
             {
-                if(cache_id.indexOf(_grid.cellGrid[i][j].id) === -1)
+                if(cache_id.indexOf(cellGrid[i][j].id) === -1)
                 {
-                    _grid.cellGrid[i][j].setName("ID: "+_grid.cellGrid[i][j].id);
-                    continent2.addCountry(_grid.cellGrid[i][j]);
+                    cellGrid[i][j].setName("ID: "+ cellGrid[i][j].id);
+                    continent2.addCountry(cellGrid[i][j]);
                 }
-                cache_id.push(_grid.cellGrid[i][j].id);
+                cache_id.push(cellGrid[i][j].id);
             }
         }
         
@@ -152,28 +152,32 @@ function mapGenerator()
     //Belegt jede Zelle mit einem neuen Land
     function initCountries()
     {
-        if(typeof(_grid.cellGrid) === "undefined")
+        if(typeof(cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
         
         var id = 1;
         
-        //Auf gesamter Breite
-        for(var i = 0; i < getMapWidth(); i++)
-        {   //Auf gesamter Höhe
-            for(var j = 0; j < getMapHeight(); j++)           
-            {
-                _grid.cellGrid[i][j] = new tddjs.client.map.country();
-                _grid.cellGrid[i][j].id = id++;
-                _grid.cellGrid[i][j].setName("Id:" + id);
-                _grid.cellGrid[i][j].size = 1;
-                allCountries.push(_grid.cellGrid[i][j]);
+        
+        //Auf gesamter Höhe
+        for(var height = 0; height < getMapHeight(); height++)           
+        {
+            //Auf gesamter Breite
+            for(var width = 0; width < getMapWidth(); width++)
+            {   
+                //Neues Land erzeugen
+                cellGrid[width][height] = new tddjs.client.map.country();
+                
+                cellGrid[width][height].id = id++;
+                cellGrid[width][height].setName("Id:" + id);
+                cellGrid[width][height].size = 1;
+                allCountries.push(cellGrid[width][height]);
             }
         }
         
         calledInitCountries = true;
     }
     
-    //Erzeugt die alle Borders
+    //Erzeugt alle Borders in den Countries
     function initBorders()
     {
         if(!calledInitCountries)
@@ -182,40 +186,39 @@ function mapGenerator()
         if(calledInitBorders)
             throw new Error("Already generated Borders");
         
-        //Array erzeugen
-        _grid.borders = [];
         
-        //Auf gesamter Breite
-        for(var x = 0; x < getMapWidth(); x++)
+        //Auf gesamter Höhe
+        for(var height = 0; height < getMapHeight(); height++)
         {
-            //Auf gesamter Höhe
-            for(var y = 0; y < getMapHeight(); y++)
+            //Auf gesamter Breite
+            for(var width = 0; width < getMapWidth(); width++)
             {
-                var nextX = x+1;
-                var nextY = y+1;
+                var nextWidth = width+1;
+                var nextHeight = height+1;
                 
-                var lastX= x-1;
-                var lastY= y-1;
+                var lastWidth= width-1;
+                var lastHeight= height-1;
                 
                 //Nachbarländer falls vorhanden als Grenze hinzufügen
-                if(lastX >= 0)
+                //Land darunter hinzufügen
+                if(lastHeight >= 0)
                 {
-                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[lastX][y]);
+                    cellGrid[width][height].addBorder(cellGrid[width][lastHeight]);
+                }             
+                //Land links hinzufügen
+                if(lastWidth >= 0)
+                {
+                    cellGrid[width][height].addBorder(cellGrid[lastWidth][height]);
                 }
-                
-                if(lastY >= 0)
+                //Land rechts hinzufügen             
+                if(nextWidth < getMapWidth())
                 {
-                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[x][lastY]);
+                    cellGrid[width][height].addBorder(cellGrid[nextWidth][height]);
                 }
-                
-                if(nextY < getMapHeight())
+                //Land darüber hinzufügen
+                if(nextHeight < getMapHeight())
                 {
-                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[x][nextY]);
-                }
-                
-                if(nextX < getMapWidth())
-                {
-                    _grid.cellGrid[x][y].addBorder(_grid.cellGrid[nextX][y]);
+                    cellGrid[width][height].addBorder(cellGrid[width][nextHeight]);
                 }
             }
         }
@@ -340,59 +343,74 @@ function mapGenerator()
                 continue;
             }
             
+            //Land einmergen
             mergeIntoCountry(loserCountry, winnerCountry);
         }
     }
     
     //Verbindet ein Land in ein anderes
-    function mergeIntoCountry(country, targetCountry)
+    function mergeIntoCountry(loserCountry, targetCountry)
     {
         if(!calledInitBorders)
             throw new Error("There are no borders to work with yet");
         
-        if(!(country instanceof tddjs.client.map.country) || !(targetCountry instanceof tddjs.client.map.country))
+        if(!(loserCountry instanceof tddjs.client.map.country) || !(targetCountry instanceof tddjs.client.map.country))
             throw new TypeError("Can only work with countries");
         
-        if(country === targetCountry)
+        if(loserCountry === targetCountry)
             throw new Error("Cannot merge one country into himself");
         
-        //Gemergetes Land entfernen
-        allCountries.splice(allCountries.indexOf(country), 1);
         
-        //Gemergtes Land aus der BorderListe entfernen
-        var borders = targetCountry.getBorders();
-        borders.splice(borders.indexOf(country), 1);
+        //Grenzen des "gefallenen" Landes
+        var loserBorders = loserCountry.getBorders();
+        
+        //Gemergtes Land aus den BorderListen entfernen
+        for(var i = 0; i < loserBorders.length; i++)
+        {
+            //Land das an das verlorene Land angrenzt
+            var neighborCountry = loserBorders[i];
+            //Grenzen dieses Nachbarlandes
+            var neighborCountryList = neighborCountry.getBorders();
+            //Stelle des verloren Landes in der Grenzliste
+            var slot = neighborCountryList.indexOf(loserCountry);
+            
+            
+            //Tritt auf warum?
+            if(slot === -1)
+                throw new Error("Darf nicht sein");
+            
+            //Darf nicht gemacht werden wenn targetCountry sich selbst enthalten würde
+            if(neighborCountry !== targetCountry)
+                neighborCountryList[slot] = targetCountry;             
+        }
+        
+        //Grenzen des Ziellandes holen
+        var targetBorders = targetCountry.getBorders();
+        //Eingemergtes Land aus der List von targetCountry entfernen
+        targetBorders.splice(targetBorders.indexOf(loserCountry), 1);
         
         //Grenzen des anderen Landes hinzufügen, falls es nicht das Zielland ist
-        for(var i = 0; i < country.getBorders().length; i++)
+        for(var i = 0; i < loserBorders.length; i++)
         {
-            if(!(country.getBorders()[i] === targetCountry))
-                borders.push(country.getBorders()[i]);
+            if(!(loserBorders[i] === targetCountry))
+                targetBorders.push(loserBorders[i]);
         }
         
         //Größe umsetzen
-        targetCountry.size = targetCountry.size + country.size;
-        
-        //Borders umbelegen
-        for(var i = 0; i < _grid.borders.length; i++)
-        {
-           var border = _grid.borders[i];
-           if(border.getLeftCountry() === country)
-                border.setLeftCountry(targetCountry);
-            
-           if(border.getRigthCountry() === country)
-               border.setRigthCountry(targetCountry);
-        }
+        targetCountry.size = targetCountry.size + loserCountry.size;
         
         //Länderfelder umlegen
         for(var width = 0; width < getMapWidth(); width++)
         {
             for(var height = 0; height < getMapHeight(); height++)
             {
-                if(_grid.cellGrid[width][height] === country)
-                    _grid.cellGrid[width][height] = targetCountry;
+                if(cellGrid[width][height] === loserCountry)
+                    cellGrid[width][height] = targetCountry;
             }
         }
+        
+        //Gemergetes Land entfernen
+        allCountries.splice(allCountries.indexOf(loserCountry), 1);
     }
    
     //Verbindet die Verbleibenden Länder
@@ -401,12 +419,14 @@ function mapGenerator()
         if(!calledInitBorders)
             throw new Error("There are no Borders to work with yet");
         
+        //Zu kleine Länder sammeln
         var remainingCountries = collectAllCountriesBelowMinSize();
         
         while(remainingCountries.length > 0)
         {           
             var loser = getRandom(remainingCountries);
             var neigbours = loser.getBorders();
+            var winner = getRandom(neigbours);
             //var notOnly = true;
             
             //Prüfen
@@ -416,7 +436,6 @@ function mapGenerator()
             //if(neigbours.length === 1)
                 //notOnly = false;
             
-            var winner = getRandom(neigbours);
             
             //Falls das gleiche Land erwischt wird oder es zu groß wird
             //if(winner === loser /*|| (winner.size + loser.size > maximumCountrySize && notOnly)*/)
@@ -428,7 +447,8 @@ function mapGenerator()
             //Mergen
             mergeIntoCountry(loser, winner);
             //Loser entfernen
-            remainingCountries.splice(remainingCountries.indexOf(loser),1);
+            remainingCountries = collectAllCountriesBelowMinSize();
+            //remainingCountries.splice(remainingCountries.indexOf(loser),1);
         }
     }
     
@@ -502,3 +522,13 @@ function mapGenerator()
         
         return countries;
     }*/
+/*Borders umbelegen
+        for(var i = 0; i < _grid.borders.length; i++)
+        {
+           var border = _grid.borders[i];
+           if(border.getLeftCountry() === country)
+                border.setLeftCountry(targetCountry);
+            
+           if(border.getRigthCountry() === country)
+               border.setRigthCountry(targetCountry);
+        }*/
