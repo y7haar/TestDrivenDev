@@ -311,17 +311,54 @@ TestCase("LobbyRequestControllerUpdateTest", {
     
     tearDown: lobbyRequestTeardown,
     
+    // Lobby Name
+    
     "test controller should have function to update lobby name": function () {         
         assertFunction(this.lobbyRequestController.updateLobbyName);
     },
+    
+    "test updateLobbyName should throw Exception if parameter is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateLobbyName(12); }, "TypeError");
+        assertNoException(function() { controller.updateLobbyName("My Lobby"); });
+    },
+    
+    
+    
+    // Max Players
     
     "test controller should have function to update max players": function () {         
         assertFunction(this.lobbyRequestController.updateMaxPlayers);
     },
     
+    "test updateMaxPlayers should throw Exception if parameter is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateMaxPlayers("eins"); }, "TypeError");
+        assertNoException(function() { controller.updateMaxPlayers(3); });
+    },
+    
+    // Player Name
+    
     "test controller should have function to update player name": function () {         
         assertFunction(this.lobbyRequestController.updatePlayerName);
     },
+    
+    "test updatePlayerName should throw Exception if id is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName("eins", "name"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(3, "name"); });
+    },
+    
+     "test updatePlayerName should throw Exception if name is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName(3, 42); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(3, "name"); });
+    },
+    
     
     "test controller should have function to update player color": function () {         
         assertFunction(this.lobbyRequestController.updatePlayerColor);
