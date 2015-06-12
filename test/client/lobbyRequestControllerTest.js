@@ -380,10 +380,33 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
     },
     
+    // Player Color
     
     "test controller should have function to update player color": function () {         
         assertFunction(this.lobbyRequestController.updatePlayerColor);
     },
+    
+     "test updatePlayerColor should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor("number", 3, "#ffffff"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+    "test updatePlayerColor should throw Exception if playerId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor(1, "3", "#ffffff"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+    "test updatePlayerColor should throw Exception if playerColor is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor(1, 3, 5); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
     
     "test controller should have function to add Bot": function () {         
         assertFunction(this.lobbyRequestController.addBot);
