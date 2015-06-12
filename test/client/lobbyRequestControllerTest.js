@@ -459,7 +459,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
     },
     
      "test updatePlayerColor should perform POST request with correct data": function () {         
-        this.lobbyRequestController.updatePlayerName(1, 3, "#000000");
+        this.lobbyRequestController.updatePlayerColor(1, 3, "#000000");
         
         var jsonObj = {
             type: "playerUpdate",
