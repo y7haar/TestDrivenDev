@@ -125,6 +125,9 @@ function lobbyRequestController()
         data = JSON.stringify(data);
         
         var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
             data: data
         };
         
@@ -149,6 +152,9 @@ function lobbyRequestController()
         data = JSON.stringify(data);
         
         var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
             data: data
         };
         
@@ -177,6 +183,9 @@ function lobbyRequestController()
         data = JSON.stringify(data);
         
         var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
             data: data
         };
         
@@ -205,6 +214,9 @@ function lobbyRequestController()
         data = JSON.stringify(data);
         
         var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
             data: data
         };
         
