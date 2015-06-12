@@ -105,6 +105,41 @@ function lobbyRequestController()
         
     }
     
+    function updateLobbyName()
+    {
+        
+    }
+    
+    function updateMaxPlayers()
+    {
+        
+    }
+    
+    function updatePlayerName()
+    {
+        
+    }
+    
+    function updatePlayerColor()
+    {
+        
+    }
+    
+    function addBot()
+    {
+        
+    }
+    
+    function kickBot()
+    {
+        
+    }
+    
+    function kickPlayer()
+    {
+        
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
@@ -112,4 +147,13 @@ function lobbyRequestController()
     this.requestJoin = requestJoin;
     this.onJoinSuccess = onJoinSuccess;
     this.onJoinFailure = onJoinFailure;
+    
+    // Update
+    this.updateLobbyName = updateLobbyName;
+    this.updatePlayerName = updatePlayerName;
+    this.updatePlayerColor = updatePlayerColor;
+    this.updateMaxPlayers = updateMaxPlayers;
+    this.addBot = addBot;
+    this.kickBot = kickBot;
+    this.kickPlayer = kickPlayer;
 };
