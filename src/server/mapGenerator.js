@@ -10,7 +10,7 @@ function mapGenerator()
     var cellGrid;
     var countriesInContinents = [];
     var allCountries = [];
-    
+    var xx = 0;
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
     var calledInitBorders = false;
@@ -104,13 +104,14 @@ function mapGenerator()
             throw new Error("Didnt set grid before");
         
         initCountries();
-        //initBorders();
-        //combineCountryCells();
-        //combineRemainingCountries();
+        initBorders();
+        combineCountryCells();
+        combineRemainingCountries();
         var map = new tddjs.client.map.map();
         //initLogicMap(map);
         return map;
     }
+    
     /*test-funktion für die UI*/
     function initLogicMap(map)
     {
@@ -155,8 +156,8 @@ function mapGenerator()
         if(typeof(cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
         
-        var id = 1;
-        
+        //Id für Länder
+        var id = 1;        
         
         //Auf gesamter Höhe
         for(var height = 0; height < getMapHeight(); height++)           
@@ -283,9 +284,9 @@ function mapGenerator()
             throw new Error("There are no Borders to work with yet");
         if(!(continent instanceof tddjs.client.map.continent))
             throw new TypeError("Given value is not a Continent");
-        
+        //Anzahl Länder die Grenzländer sind
         var borderlands = 0;
-        
+        //
         for(var i in continent.getCountrys())
         {
             var country = continent.getCountrys()[i];
@@ -301,11 +302,12 @@ function mapGenerator()
             }
         }
         
-        //Anzahl an Reiche die Grenzländer sind =  borderlands
         //Anzahl der Reiche
-        var numberOfCountries = continent.getCountryCount();      
+        var numberOfCountries = continent.getCountryCount();
+        //Erster Teil der Formel
         var dividor = (numberOfCountries+borderlands)/2;
         
+        //Teiler darf nicht null sein
         if(dividor === 0)
             return 0;
         
@@ -342,9 +344,11 @@ function mapGenerator()
                 i--;
                 continue;
             }
-            
-            //Land einmergen
-            mergeIntoCountry(loserCountry, winnerCountry);
+            else
+            {
+                //Land einmergen
+                mergeIntoCountry(loserCountry, winnerCountry);
+            }
         }
     }
     
@@ -359,8 +363,7 @@ function mapGenerator()
         
         if(loserCountry === targetCountry)
             throw new Error("Cannot merge one country into himself");
-        
-        
+              
         //Grenzen des "gefallenen" Landes
         var loserBorders = loserCountry.getBorders();
         
@@ -376,12 +379,19 @@ function mapGenerator()
             
             
             //Tritt auf warum?
+            //Würde in dem Fall der merge abgebrochen werden?
             if(slot === -1)
                 throw new Error("Darf nicht sein");
             
             //Darf nicht gemacht werden wenn targetCountry sich selbst enthalten würde
             if(neighborCountry !== targetCountry)
-                neighborCountryList[slot] = targetCountry;             
+            {
+                //Sollte nicht doppelt hinzugefügt werden
+                //if(neighborCountryList.indexOf(targetCountry) === -1)
+                    neighborCountryList[slot] = targetCountry;
+                //else
+                   // neighborCountryList.splice(loserCountry, 1);
+            }
         }
         
         //Grenzen des Ziellandes holen
@@ -389,11 +399,24 @@ function mapGenerator()
         //Eingemergtes Land aus der List von targetCountry entfernen
         targetBorders.splice(targetBorders.indexOf(loserCountry), 1);
         
-        //Grenzen des anderen Landes hinzufügen, falls es nicht das Zielland ist
+        
+        //Grenzen des anderen Landes hinzufügen
         for(var i = 0; i < loserBorders.length; i++)
         {
+            //Zielland darf nicht nochmal eingefügt werden
             if(!(loserBorders[i] === targetCountry))
-                targetBorders.push(loserBorders[i]);
+            {
+                //Keine Grenze sollte doppelt sein oder?
+                if(targetBorders.indexOf(loserBorders) === -1)
+                {                
+                    targetBorders.push(loserBorders[i]);
+                }
+                else
+                {
+                    //Tritt nie auf hm
+                    console.log(xx++);
+                }
+            }
         }
         
         //Größe umsetzen
