@@ -114,6 +114,21 @@ function lobbyRequestController()
         
         if(typeof aName !== "string")
             throw new TypeError("Name must be string");
+        
+        var data = {
+          type: "lobbyUpdate",
+          data: {
+              name: aName
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aId, options);
     }
     
     function updateMaxPlayers(aId, aMaxPlayers)
