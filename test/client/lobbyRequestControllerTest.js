@@ -327,7 +327,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
     "test updateLobbyName should throw Exception if parameter is no string": function () {         
         var controller = this.lobbyRequestController;
         
-        assertException(function() { controller.updateLobbyName("asd", 12); }, "TypeError");
+        assertException(function() { controller.updateLobbyName(1, 12); }, "TypeError");
         assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
     },
     
@@ -359,18 +359,25 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertFunction(this.lobbyRequestController.updatePlayerName);
     },
     
+    "test updatePlayerName should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName("eins", "eins", "name"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
+    },
+    
     "test updatePlayerName should throw Exception if id is no number": function () {         
         var controller = this.lobbyRequestController;
         
-        assertException(function() { controller.updatePlayerName("eins", "name"); }, "TypeError");
-        assertNoException(function() { controller.updatePlayerName(3, "name"); });
+        assertException(function() { controller.updatePlayerName(1, "eins", "name"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
     },
     
      "test updatePlayerName should throw Exception if name is no string": function () {         
         var controller = this.lobbyRequestController;
         
-        assertException(function() { controller.updatePlayerName(3, 42); }, "TypeError");
-        assertNoException(function() { controller.updatePlayerName(3, "name"); });
+        assertException(function() { controller.updatePlayerName(1, 3, 42); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
     },
     
     
