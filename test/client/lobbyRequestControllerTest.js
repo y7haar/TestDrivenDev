@@ -2,9 +2,9 @@
  *  Test cases for Lobby Requests
  */
 
-TestCase("LobbyRequestControllerTest", {
-    setUp: function () {
-        this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+function lobbyRequestSetup()
+{
+    this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
         
         this.ajax = tddjs.util.ajax;
         this.sandbox = sinon.sandbox.create();
@@ -59,14 +59,18 @@ TestCase("LobbyRequestControllerTest", {
       this.player = new tddjs.client.player();
       this.player.setName("Peter");
       this.player.setColor("#ffffff");
-      
-        
-    }, 
-    tearDown: function ()
-    {
-        delete this.lobbyRequestController;
-        this.sandbox.restore();
-    },
+}
+
+function lobbyRequestTeardown()
+{
+    delete this.lobbyRequestController;
+    this.sandbox.restore();
+}
+
+TestCase("LobbyRequestControllerTest", {
+    setUp: lobbyRequestSetup,
+    
+    tearDown: lobbyRequestTeardown,
     
     "test lobbyRequestController should not be undefined after constructor call": function () {  
         assertObject(this.lobbyRequestController);
@@ -299,5 +303,40 @@ TestCase("LobbyRequestControllerTest", {
         
         this.sandbox.server.requests[0].respond(400, "", "");
         sinon.assert.calledOnce(callback); 
+    }
+});
+
+TestCase("LobbyRequestControllerUpdateTest", {
+    setUp: lobbyRequestSetup,
+    
+    tearDown: lobbyRequestTeardown,
+    
+    "test controller should have function to update lobby name": function () {         
+        assertFunction(this.lobbyRequestController.updateLobbyName);
     },
+    
+    "test controller should have function to update max players": function () {         
+        assertFunction(this.lobbyRequestController.updateMaxPlayers);
+    },
+    
+    "test controller should have function to update player name": function () {         
+        assertFunction(this.lobbyRequestController.updatePlayerName);
+    },
+    
+    "test controller should have function to update player color": function () {         
+        assertFunction(this.lobbyRequestController.updatePlayerColor);
+    },
+    
+    "test controller should have function to add Bot": function () {         
+        assertFunction(this.lobbyRequestController.addBot);
+    },
+    
+    "test controller should have function to kick Bot": function () {         
+        assertFunction(this.lobbyRequestController.kickBot);
+    },
+    
+     "test controller should have function to kick Player": function () {         
+        assertFunction(this.lobbyRequestController.kickPlayer);
+    }
+    
 });
