@@ -331,6 +331,22 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
     },
     
+     "test updateLobbyName should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updateLobbyName(1, "NewName");
+        
+        var jsonObj = {
+            type: "lobbyUpdate",
+            data: {
+                name: "NewName"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
     
     
     // Max Players
