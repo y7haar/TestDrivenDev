@@ -22,79 +22,82 @@ TestCase("MapGeneratorTest for private Functions", {
     {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
-        var grid = this.mapGenerator.getMapGrid();
+        var cellGrid = this.mapGenerator.getMapGrid();
         
-        assertTrue(grid.cellGrid[0][0] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[1][0] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[0][1] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[3][3] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[6][5] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[5][6] instanceof(tddjs.client.map.country));
-        assertTrue(grid.cellGrid[6][6] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[0][0] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[1][0] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[0][1] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[3][3] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[6][5] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[5][6] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[6][6] instanceof(tddjs.client.map.country));
     },
     
     "test After initCountries every gridCell should contain a contry with a valid id": function()
     {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
-        var grid = this.mapGenerator.getMapGrid();
+        var cellGrid = this.mapGenerator.getMapGrid();
         
-        assertEquals(1, grid.cellGrid[0][0].id);
-        assertEquals(2, grid.cellGrid[0][1].id);
-        assertEquals(8, grid.cellGrid[1][0].id);
-        assertEquals(25, grid.cellGrid[3][3].id);
-        assertEquals(41, grid.cellGrid[5][5].id);
-        assertEquals(42, grid.cellGrid[5][6].id);
-        assertEquals(48, grid.cellGrid[6][5].id);
-        assertEquals(49, grid.cellGrid[6][6].id);
+        console.log(cellGrid);
+        
+        assertEquals(1, cellGrid[0][0].id);
+        assertEquals(3, cellGrid[2][0].id);
+        assertEquals(7, cellGrid[6][0].id);
+        assertEquals(8, cellGrid[0][1].id);
+        assertEquals(25, cellGrid[3][3].id);
+        assertEquals(41, cellGrid[5][5].id);
+        assertEquals(42, cellGrid[6][5].id);
+        assertEquals(48, cellGrid[5][6].id);
+        assertEquals(49, cellGrid[6][6].id);
     },
     
     "test After Initialisation every country should have the size 1": function()
     {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
-        var grid = this.mapGenerator.getMapGrid();
+        var cellGrid = this.mapGenerator.getMapGrid();
         
-        assertEquals(1, grid.cellGrid[0][0].size);
-        assertEquals(1, grid.cellGrid[1][0].size);
-        assertEquals(1, grid.cellGrid[0][1].size);
-        assertEquals(1, grid.cellGrid[3][3].size);
-        assertEquals(1, grid.cellGrid[5][5].size);
-        assertEquals(1, grid.cellGrid[5][6].size);
-        assertEquals(1, grid.cellGrid[6][5].size);
-        assertEquals(1, grid.cellGrid[6][6].size);
+        assertEquals(1, cellGrid[0][0].size);
+        assertEquals(1, cellGrid[1][0].size);
+        assertEquals(1, cellGrid[0][1].size);
+        assertEquals(1, cellGrid[3][3].size);
+        assertEquals(1, cellGrid[5][5].size);
+        assertEquals(1, cellGrid[5][6].size);
+        assertEquals(1, cellGrid[6][5].size);
+        assertEquals(1, cellGrid[6][6].size);
     },
     
     "test After initBorders every possible Border should have been created correctly": function()
     {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
-        var grid = this.mapGenerator.getMapGrid().cellGrid;
+        var grid = this.mapGenerator.getMapGrid();
         var country1 = grid[0][0];
-        var country2 = grid[0][1];
+        var country2 = grid[1][0];
         var country3 = grid[1][1];
         var country4 = grid[2][2];
         
         this.mapGenerator.initBorders();
         
         assertEquals(2, country1.getBorderCount());
-        assertEquals(grid[0][1], country1.getBorders()[0]);
-        assertEquals(grid[1][0], country1.getBorders()[1]);
+        assertEquals(grid[1][0], country1.getBorders()[0]);
+        assertEquals(grid[0][1], country1.getBorders()[1]);
         
         assertEquals(3, country2.getBorderCount());
         assertEquals(grid[0][0], country2.getBorders()[0]);
-        assertEquals(grid[0][2], country2.getBorders()[1]);
+        assertEquals(grid[2][0], country2.getBorders()[1]);
         assertEquals(grid[1][1], country2.getBorders()[2]);
         
         assertEquals(4, country3.getBorderCount());
-        assertEquals(grid[0][1], country3.getBorders()[0]);
-        assertEquals(grid[1][0], country3.getBorders()[1]);
-        assertEquals(grid[1][2], country3.getBorders()[2]);
-        assertEquals(grid[2][1], country3.getBorders()[3]);
+        assertEquals(grid[1][0], country3.getBorders()[0]);
+        assertEquals(grid[0][1], country3.getBorders()[1]);
+        assertEquals(grid[2][1], country3.getBorders()[2]);
+        assertEquals(grid[1][2], country3.getBorders()[3]);
         
         assertEquals(2, country4.getBorderCount());
-        assertEquals(grid[1][2], country4.getBorders()[0]);
-        assertEquals(grid[2][1], country4.getBorders()[1]);
+        assertEquals(grid[2][1], country4.getBorders()[0]);
+        assertEquals(grid[1][2], country4.getBorders()[1]);
     },
     
     "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
@@ -153,39 +156,65 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var grid = this.mapGenerator.getMapGrid().cellGrid;
+        var grid = this.mapGenerator.getMapGrid();
         
-        this.mapGenerator.mergeIntoCountry(grid[0][0], grid[0][1]);
+        this.mapGenerator.mergeIntoCountry(grid[0][0], grid[1][0]);
+        
+        assertEquals(3, grid[1][0].getBorderCount());
+        assertEquals(grid[2][0], grid[1][0].getBorders()[0]);
+        assertEquals(grid[1][1], grid[1][0].getBorders()[1]);
+        assertEquals(grid[0][1], grid[1][0].getBorders()[2]);
+        assertEquals(3, grid[0][1].getBorderCount());
+        assertEquals(grid[1][0], grid[0][1].getBorders()[0]);
+        assertEquals(grid[1][1], grid[0][1].getBorders()[1]);
+        assertEquals(grid[0][2], grid[0][1].getBorders()[2]);
+        
+        
+        this.mapGenerator.mergeIntoCountry(grid[2][0], grid[1][0]);
         
         assertEquals(3, grid[0][0].getBorderCount());
-        assertEquals(grid[0][2], grid[0][1].getBorders()[0]);
+        assertEquals(grid[1][1], grid[1][0].getBorders()[0]);
+        assertEquals(grid[0][1], grid[1][0].getBorders()[1]);
+        assertEquals(grid[2][1], grid[1][0].getBorders()[2]);
+        assertEquals(3, grid[1][0].getBorderCount());
+        assertEquals(grid[1][0], grid[0][1].getBorders()[0]);
         assertEquals(grid[1][1], grid[0][1].getBorders()[1]);
-        assertEquals(grid[1][0], grid[0][1].getBorders()[2]);
+        assertEquals(grid[0][2], grid[0][1].getBorders()[2]);
+        assertEquals(3, grid[2][1].getBorderCount());
+        assertEquals(grid[1][0], grid[2][1].getBorders()[0]);
+        assertEquals(grid[1][1], grid[2][1].getBorders()[1]);
+        assertEquals(grid[2][2], grid[2][1].getBorders()[2]);
+        assertEquals(4, grid[1][1].getBorderCount());
+        assertEquals(grid[1][0], grid[1][1].getBorders()[0]);
+        assertEquals(grid[0][1], grid[1][1].getBorders()[1]);
+        assertEquals(grid[2][1], grid[1][1].getBorders()[2]);
+        assertEquals(grid[1][2], grid[1][1].getBorders()[3]);
     },
      
     "test mergeIntoCountry should combine two countries into one": function()
     {
         this.mapGenerator.setGridSize(7,6);
         this.mapGenerator.initCountries();
-        this.mapGenerator.initBorders();        
-        var country1 = this.mapGenerator.getMapGrid().cellGrid[0][0];
-        var country2 = this.mapGenerator.getMapGrid().cellGrid[0][1];
-        var country3 = this.mapGenerator.getMapGrid().cellGrid[1][1];
-        var country4 = this.mapGenerator.getMapGrid().cellGrid[1][0];
+        this.mapGenerator.initBorders();
+        var cellGrid = this.mapGenerator.getMapGrid();
+        var country1 = cellGrid[0][0];
+        var country2 = cellGrid[0][1];
+        var country3 = cellGrid[1][1];
+        var country4 = cellGrid[1][0];
         
         this.mapGenerator.mergeIntoCountry(country1, country2);   
         
-        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country2);
+        assertEquals(cellGrid[0][0], country2);
         
         this.mapGenerator.mergeIntoCountry(country4,country3);
         
-        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
+        assertEquals(cellGrid[1][0], country3);
         
         this.mapGenerator.mergeIntoCountry(country2, country3);
         
-        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][0], country3);
-        assertEquals(this.mapGenerator.getMapGrid().cellGrid[1][0], country3);
-        assertEquals(this.mapGenerator.getMapGrid().cellGrid[0][1], country3);     
+        assertEquals(cellGrid[0][0], country3);
+        assertEquals(cellGrid[1][0], country3);
+        assertEquals(cellGrid[0][1], country3);     
         assertEquals(39, this.mapGenerator.getAllCountries().length);
     },
     
@@ -238,11 +267,11 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(7,6);    
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
+        var cellGrid = this.mapGenerator.getMapGrid();
         
-        this.mapGenerator.mergeIntoCountry(this.mapGenerator.getMapGrid().cellGrid[0][0],
-                                           this.mapGenerator.getMapGrid().cellGrid[0][1]);
+        this.mapGenerator.mergeIntoCountry(cellGrid[0][0], cellGrid[0][1]);
                                            
-        assertEquals(2, this.mapGenerator.getMapGrid().cellGrid[0][0].size);
+        assertEquals(2, cellGrid[0][0].size);
     },
     
     //Hier
@@ -327,10 +356,10 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var grid = this.mapGenerator.getMapGrid();
-        this.mapGenerator.mergeIntoCountry(grid.cellGrid[0][0], grid.cellGrid[0][1]);
-        this.mapGenerator.mergeIntoCountry(grid.cellGrid[1][0], grid.cellGrid[0][1]); 
-        this.mapGenerator.mergeIntoCountry(grid.cellGrid[2][2], grid.cellGrid[2][1]);
+        var cellGrid = this.mapGenerator.getMapGrid();
+        this.mapGenerator.mergeIntoCountry(cellGrid[0][0], cellGrid[1][0]);
+        this.mapGenerator.mergeIntoCountry(cellGrid[0][1], cellGrid[1][0]); 
+        this.mapGenerator.mergeIntoCountry(cellGrid[2][2], cellGrid[1][2]);
         
         var result = this.mapGenerator.collectAllCountriesBelowMinSize();
         
@@ -371,27 +400,27 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var grid = this.mapGenerator.getMapGrid().cellGrid;
+        var grid = this.mapGenerator.getMapGrid();
         this.mapGenerator.getCountriesInContinents().push(grid[1][1]);
         continent.addCountry(grid[1][1]);
         
         var neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
         
         assertEquals(4, neigbors.length);
-        assertEquals(grid[0][1], neigbors[0]);
-        assertEquals(grid[1][0], neigbors[1]);
-        assertEquals(grid[1][2], neigbors[2]);
-        assertEquals(grid[2][1], neigbors[3]);
+        assertEquals(grid[1][0], neigbors[0]);
+        assertEquals(grid[0][1], neigbors[1]);
+        assertEquals(grid[2][1], neigbors[2]);
+        assertEquals(grid[1][2], neigbors[3]);
         
-        this.mapGenerator.getCountriesInContinents().push(grid[1][2]);
-        continent.addCountry(grid[1][2]);
+        this.mapGenerator.getCountriesInContinents().push(grid[2][1]);
+        continent.addCountry(grid[2][1]);
         neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
         
         assertEquals(5, neigbors.length);
-        assertEquals(grid[0][1], neigbors[0]);
-        assertEquals(grid[1][0], neigbors[1]);
-        assertEquals(grid[2][1], neigbors[2]);
-        assertEquals(grid[0][2], neigbors[3]);
+        assertEquals(grid[1][0], neigbors[0]);
+        assertEquals(grid[0][1], neigbors[1]);
+        assertEquals(grid[1][2], neigbors[2]);
+        assertEquals(grid[2][0], neigbors[3]);
         assertEquals(grid[2][2], neigbors[4]);
     },
     
@@ -442,7 +471,7 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var grid = this.mapGenerator.getMapGrid().cellGrid;
+        var grid = this.mapGenerator.getMapGrid();
         continent1.addCountry(grid[2][2]);
         continent2.addCountry(grid[2][2]);
         continent2.addCountry(grid[2][1]);
@@ -543,9 +572,17 @@ TestCase("MapGeneratorTest", {
         assertFunction(this.mapGenerator.setMinimumCountrySize);
     },
     
-     "test grid should be a object": function()
+     "test grid should be a Array": function()
     {
-        assertObject(this.mapGenerator.getMapGrid());
+        this.mapGenerator.setGridSize(5,5);
+        assertArray(this.mapGenerator.getMapGrid());
+    },
+    
+    "test grid should have the correc width and height": function ()
+    {
+        this.mapGenerator.setGridSize(10,5);
+        assertEquals(10, this.mapGenerator.getMapWidth());
+        assertEquals(5, this.mapGenerator.getMapHeight()); 
     },
     
     "test if MapGenerator can get a correct GridSize": function()
