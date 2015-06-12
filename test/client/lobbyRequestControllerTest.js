@@ -369,6 +369,23 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.updateMaxPlayers(1, 3); });
     },
     
+     "test updateMaxPlayers should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updateMaxPlayers(1, 3);
+        
+        var jsonObj = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
     // Player Name
     
     "test controller should have function to update player name": function () {         
@@ -396,6 +413,24 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
     },
     
+    "test updatePlayerName should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updatePlayerName(1, 3, "NewName");
+        
+        var jsonObj = {
+            type: "playerUpdate",
+            data: {
+                id: 3,
+                name: "NewName"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
     // Player Color
     
     "test controller should have function to update player color": function () {         
@@ -421,6 +456,24 @@ TestCase("LobbyRequestControllerUpdateTest", {
         
         assertException(function() { controller.updatePlayerColor(1, 3, 5); }, "TypeError");
         assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+     "test updatePlayerColor should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updatePlayerName(1, 3, "#000000");
+        
+        var jsonObj = {
+            type: "playerUpdate",
+            data: {
+                id: 3,
+                color: "#000000"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
     
     
