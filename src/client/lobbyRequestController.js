@@ -105,6 +105,80 @@ function lobbyRequestController()
         
     }
     
+    
+    
+    function updateLobbyName(aId, aName)
+    {
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aName !== "string")
+            throw new TypeError("Name must be string");
+        
+        var data = {
+          type: "lobbyUpdate",
+          data: {
+              name: aName
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aId, options);
+    }
+    
+    function updateMaxPlayers(aId, aMaxPlayers)
+    {
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aMaxPlayers !== "number")
+            throw new TypeError("Max Players must be number");
+    }
+    
+    function updatePlayerName(aLobbyId, aId, aName)
+    {
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aName !== "string")
+            throw new TypeError("Name must be string");
+    }
+    
+    function updatePlayerColor(aLobbyId, aId, aColor)
+    {
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aColor !== "string")
+            throw new TypeError("Color must be string");
+    }
+    
+    function addBot()
+    {
+        
+    }
+    
+    function kickBot()
+    {
+        
+    }
+    
+    function kickPlayer()
+    {
+        
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
@@ -112,4 +186,13 @@ function lobbyRequestController()
     this.requestJoin = requestJoin;
     this.onJoinSuccess = onJoinSuccess;
     this.onJoinFailure = onJoinFailure;
+    
+    // Update
+    this.updateLobbyName = updateLobbyName;
+    this.updatePlayerName = updatePlayerName;
+    this.updatePlayerColor = updatePlayerColor;
+    this.updateMaxPlayers = updateMaxPlayers;
+    this.addBot = addBot;
+    this.kickBot = kickBot;
+    this.kickPlayer = kickPlayer;
 };

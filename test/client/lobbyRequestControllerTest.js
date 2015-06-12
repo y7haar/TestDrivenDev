@@ -2,9 +2,9 @@
  *  Test cases for Lobby Requests
  */
 
-TestCase("LobbyRequestControllerTest", {
-    setUp: function () {
-        this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+function lobbyRequestSetup()
+{
+    this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
         
         this.ajax = tddjs.util.ajax;
         this.sandbox = sinon.sandbox.create();
@@ -59,14 +59,18 @@ TestCase("LobbyRequestControllerTest", {
       this.player = new tddjs.client.player();
       this.player.setName("Peter");
       this.player.setColor("#ffffff");
-      
-        
-    }, 
-    tearDown: function ()
-    {
-        delete this.lobbyRequestController;
-        this.sandbox.restore();
-    },
+}
+
+function lobbyRequestTeardown()
+{
+    delete this.lobbyRequestController;
+    this.sandbox.restore();
+}
+
+TestCase("LobbyRequestControllerTest", {
+    setUp: lobbyRequestSetup,
+    
+    tearDown: lobbyRequestTeardown,
     
     "test lobbyRequestController should not be undefined after constructor call": function () {  
         assertObject(this.lobbyRequestController);
@@ -299,5 +303,190 @@ TestCase("LobbyRequestControllerTest", {
         
         this.sandbox.server.requests[0].respond(400, "", "");
         sinon.assert.calledOnce(callback); 
+    }
+});
+
+TestCase("LobbyRequestControllerUpdateTest", {
+    setUp: lobbyRequestSetup,
+    
+    tearDown: lobbyRequestTeardown,
+    
+    // Lobby Name
+    
+    "test controller should have function to update lobby name": function () {         
+        assertFunction(this.lobbyRequestController.updateLobbyName);
     },
+    
+    "test updateLobbyName should throw Exception if parameter is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateLobbyName("asd", "My Lobby"); }, "TypeError");
+        assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
+    },
+    
+    "test updateLobbyName should throw Exception if parameter is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateLobbyName(1, 12); }, "TypeError");
+        assertNoException(function() { controller.updateLobbyName(1, "My Lobby"); });
+    },
+    
+     "test updateLobbyName should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updateLobbyName(1, "NewName");
+        
+        var jsonObj = {
+            type: "lobbyUpdate",
+            data: {
+                name: "NewName"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    
+    // Max Players
+    
+    "test controller should have function to update max players": function () {         
+        assertFunction(this.lobbyRequestController.updateMaxPlayers);
+    },
+    
+    "test updateMaxPlayers should throw Exception if id is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateMaxPlayers("eins", 3); }, "TypeError");
+        assertNoException(function() { controller.updateMaxPlayers(1, 3); });
+    },
+    
+    "test updateMaxPlayers should throw Exception if parameter is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updateMaxPlayers(1, "drei"); }, "TypeError");
+        assertNoException(function() { controller.updateMaxPlayers(1, 3); });
+    },
+    
+     "test updateMaxPlayers should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updateMaxPlayers(1, 3);
+        
+        var jsonObj = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    // Player Name
+    
+    "test controller should have function to update player name": function () {         
+        assertFunction(this.lobbyRequestController.updatePlayerName);
+    },
+    
+    "test updatePlayerName should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName("eins", "eins", "name"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
+    },
+    
+    "test updatePlayerName should throw Exception if id is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName(1, "eins", "name"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
+    },
+    
+     "test updatePlayerName should throw Exception if name is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerName(1, 3, 42); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerName(1, 3, "name"); });
+    },
+    
+    "test updatePlayerName should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updatePlayerName(1, 3, "NewName");
+        
+        var jsonObj = {
+            type: "playerUpdate",
+            data: {
+                id: 3,
+                name: "NewName"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    // Player Color
+    
+    "test controller should have function to update player color": function () {         
+        assertFunction(this.lobbyRequestController.updatePlayerColor);
+    },
+    
+     "test updatePlayerColor should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor("number", 3, "#ffffff"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+    "test updatePlayerColor should throw Exception if playerId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor(1, "3", "#ffffff"); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+    "test updatePlayerColor should throw Exception if playerColor is no string": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.updatePlayerColor(1, 3, 5); }, "TypeError");
+        assertNoException(function() { controller.updatePlayerColor(1, 3, "ffffff"); });
+    },
+    
+     "test updatePlayerColor should perform POST request with correct data": function () {         
+        this.lobbyRequestController.updatePlayerName(1, 3, "#000000");
+        
+        var jsonObj = {
+            type: "playerUpdate",
+            data: {
+                id: 3,
+                color: "#000000"
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    
+    "test controller should have function to add Bot": function () {         
+        assertFunction(this.lobbyRequestController.addBot);
+    },
+    
+    "test controller should have function to kick Bot": function () {         
+        assertFunction(this.lobbyRequestController.kickBot);
+    },
+    
+     "test controller should have function to kick Player": function () {         
+        assertFunction(this.lobbyRequestController.kickPlayer);
+    }
+    
 });
