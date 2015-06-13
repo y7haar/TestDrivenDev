@@ -298,6 +298,27 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
+    function startGame(aLobbyId)
+    {
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
+        
+        var data = {
+          type: "gameStart"
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
+    }
+    
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
     this.onAllLobbiesFailure = onAllLobbiesFailure;
@@ -314,4 +335,5 @@ function lobbyRequestController()
     this.addBot = addBot;
     this.kickBot = kickBot;
     this.kickPlayer = kickPlayer;
+    this.startGame = startGame;
 };
