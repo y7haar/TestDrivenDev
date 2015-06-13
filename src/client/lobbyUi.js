@@ -8,9 +8,11 @@ function lobbyUi(aRequestController)
 {   
     var _lobbyRequestController = aRequestController;
     
-    var _colors = [ "Blue", "LightGreen", "Coral", "CornflowerBlue", "ForestGreen", "Red", "DarkOrange", "Yellow", "LawnGreen", "Khaki", "Violet"];
+    var _colors = [ "#0000ff", "#90ee90", "#ff7f50", "#6495ed", "#228b22", "#ff0000", "#ff8c00", "#ffff00", "#7cfc00", "#f0e68c", "#ee82ee"];
     var _colorIndex = 0;
     var _currentLobby;
+    
+    var _startButton;
     
     function createContent()
     {
@@ -269,7 +271,7 @@ function lobbyUi(aRequestController)
         var playerColor = document.createElement("td");
         var playerName = document.createElement("td");
         var playerType = document.createElement("td");
-
+        
         playerColor.className = "playerColor";
         playerName.className = "playerName";
         playerType.className = "playerType";
@@ -394,6 +396,9 @@ function lobbyUi(aRequestController)
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
         playerName.contentEditable = true;
         playerName.innerHTML = "";
+        playerName.onblur = function(){
+            _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.innerHTML)
+        };
         
         playerName.onclick = function(){
           this.innerHTML = "";  
@@ -404,6 +409,8 @@ function lobbyUi(aRequestController)
         
         colorBox.onclick = function() {
             colorBox.style.backgroundColor = _colors[_colorIndex % _colors.length];
+
+            _lobbyRequestController.updatePlayerColor(_currentLobby.getId(), aId, _colors[_colorIndex % _colors.length]);
             _colorIndex++;
         };
         
@@ -416,8 +423,10 @@ function lobbyUi(aRequestController)
         var div = document.createElement("div");
         div.className = "lobbyStartButton";
         div.innerHTML = "Start";
+        div.onclick = submitLobbyStart;
         
         aLobbyWrapper.appendChild(div);
+        _startButton = div;
     }
     
     function submitPlayerName(aId, aName)
