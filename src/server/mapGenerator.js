@@ -106,7 +106,7 @@ function mapGenerator()
         initCountries();
         initBorders();
         combineCountryCells();
-        combineRemainingCountries();
+        //combineRemainingCountries();
         var map = new tddjs.client.map.map();
         //initLogicMap(map);
         return map;
@@ -173,6 +173,8 @@ function mapGenerator()
                 cellGrid[width][height].name = "Id:" + id;                      //<<------------------
                 cellGrid[width][height].borders = [];                           //<<------------------
                 cellGrid[width][height].size = 1;
+                cellGrid[width][height].x=width;
+                cellGrid[width][height].y=height;
                 allCountries.push(cellGrid[width][height]);
             }
         }
@@ -326,7 +328,7 @@ function mapGenerator()
     //Wählt ein zufälliges Element
     function getRandom(countries)
     {
-        var random = Math.round(Math.random()*(countries.length-1));
+        var random = Math.floor(Math.random()*(countries.length));
         return countries[random];
     }
     
@@ -338,7 +340,7 @@ function mapGenerator()
         
         //Kombinationswert
         var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
-        
+
         //Kombinieren
         for(var i = 0; i < combineCount; i++)
         {
@@ -365,14 +367,14 @@ function mapGenerator()
     //Verbindet ein Land in ein anderes
     function mergeIntoCountry(loserCountry, targetCountry)
     {
-        if(!calledInitBorders)
+       /* if(!calledInitBorders)
             throw new Error("There are no borders to work with yet");
         
         if(!(loserCountry instanceof tddjs.client.map.country) || !(targetCountry instanceof tddjs.client.map.country))
             throw new TypeError("Can only work with countries");
         
         if(loserCountry === targetCountry)
-            throw new Error("Cannot merge one country into himself");
+            throw new Error("Cannot merge one country into himself");*/
               
         //Grenzen des "gefallenen" Landes
         //var loserBorders = loserCountry.getBorders();
@@ -389,25 +391,37 @@ function mapGenerator()
             //Stelle des verloren Landes in der Grenzliste
             var slot = neighborCountryList.indexOf(loserCountry);
             
+            //console.log(neighborCountryList === targetCountry.borders);
+            
             
             //Tritt auf warum?
             //Würde in dem Fall der merge abgebrochen werden?
-            if(slot === -1)
-                throw new Error("Darf nicht sein");
+            if(slot === -1){
+                //throw new Error("Darf nicht sein");
+                console.log("DARF NICHT SEIN! -> "+i);
+                /*console.log("X: "+neighborCountry.x);
+                console.log("Y: "+neighborCountry.y);
+                console.log("->X: "+loserCountry.x);
+                console.log("->Y: "+loserCountry.y);*/
+            }
+            
+            neighborCountryList.splice(slot,1);
             
             //Darf nicht gemacht werden wenn targetCountry sich selbst enthalten würde
             if(neighborCountry !== targetCountry)
             {
                 //Sollte nicht doppelt hinzugefügt werden
-                //if(neighborCountryList.indexOf(targetCountry) === -1)
-                    neighborCountryList[slot] = targetCountry;
+                if(neighborCountryList.indexOf(targetCountry) === -1){
+                    neighborCountryList.push(targetCountry);
+                }
                 //else
                    // neighborCountryList.splice(loserCountry, 1);
             }
         }
         
         //Grenzen des Ziellandes holen
-        var targetBorders = targetCountry.getBorders();
+        //var targetBorders = targetCountry.getBorders();
+        var targetBorders = targetCountry.borders;
         //Eingemergtes Land aus der List von targetCountry entfernen
         targetBorders.splice(targetBorders.indexOf(loserCountry), 1);
         
@@ -419,14 +433,14 @@ function mapGenerator()
             if(!(loserBorders[i] === targetCountry))
             {
                 //Keine Grenze sollte doppelt sein oder?
-                if(targetBorders.indexOf(loserBorders) === -1)
+                if(targetBorders.indexOf(loserBorders[i]) === -1)
                 {                
                     targetBorders.push(loserBorders[i]);
                 }
                 else
                 {
                     //Tritt nie auf hm
-                    console.log(xx++);
+                    //console.log(xx++);
                 }
             }
         }
@@ -460,7 +474,8 @@ function mapGenerator()
         while(remainingCountries.length > 0)
         {           
             var loser = getRandom(remainingCountries);
-            var neigbours = loser.getBorders();
+            //var neigbours = loser.getBorders();
+            var neigbours = loser.borders;
             var winner = getRandom(neigbours);
             //var notOnly = true;
             
