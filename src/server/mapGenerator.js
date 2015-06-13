@@ -29,6 +29,11 @@ function mapGenerator()
     var minimumCountrySize = 3;
     var maximumCountrySize = 20;
     
+    //Variablen für Kontinentgrößen
+    var minimumContinentNumber;
+    var maximumContinentNumber;
+    var minimumContinentSize;
+    
     //Setzt das Grid neu
     function setGridSize(x,y)
     {
