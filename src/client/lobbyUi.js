@@ -214,12 +214,16 @@ function lobbyUi(aRequestController)
         maxPlayersSelect.add(playersOptions[1]);
         maxPlayersSelect.add(playersOptions[2]);
         maxPlayersSelect.className = "lobbyMaxPlayersSelect";
+        maxPlayersSelect.onchange = function(){
+            var maxPlayersNumber = parseInt(maxPlayersSelect.value);
+            _lobbyRequestController.updateMaxPlayers(_currentLobby.getId(), maxPlayersNumber);
+        };
+        
         
         maxPlayersSpan.innerHTML = "Max Players";
         maxPlayersSpan.className = "lobbyMaxPlayersSpan";
         
-        
-        
+
         td1.appendChild(id);
         td2.appendChild(title);
         td3.appendChild(maxPlayersSpan);
