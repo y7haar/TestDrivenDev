@@ -29,6 +29,11 @@ function mapGenerator()
     var minimumCountrySize = 3;
     var maximumCountrySize = 20;
     
+    //Variablen für Kontinentgrößen
+    var minimumContinentNumber;
+    var maximumContinentNumber;
+    var minimumContinentSize;
+    
     //Setzt das Grid neu
     function setGridSize(x,y)
     {
@@ -436,11 +441,6 @@ function mapGenerator()
             //Stelle des verloren Landes in der Grenzliste
             var slot = neighborCountryList.indexOf(loserCountry);           
             
-            //Passiert nicht mehr!
-            if(slot === -1){
-                throw new Error("Darf nicht sein");
-            }
-            
             //Grenze entfernen
             neighborCountryList.splice(slot,1);
             
@@ -501,12 +501,10 @@ function mapGenerator()
             if(notGettingToBig.length === 0)
             {
                 winner = getRandom(neigbours);
-                console.log("Unusual case");
             }
             else 
             {
                 winner = getRandom(notGettingToBig);
-                console.log("happens");
             }
 
             //Mergen
@@ -557,6 +555,42 @@ function mapGenerator()
         map.continents = [];
         map.isMap = true;
         return map;
+    }
+    
+    //Serialisieren
+    function serializeAsJSON(map){
+        var json = {};
+        json.continents = [];
+        
+        for(var c=0;c<map.continents.length;c++){
+            json.continents[c]={};
+            json.continents[c].id = map.continents[c].id;
+            json.continents[c].name = map.continents[c].name;
+            json.continents[c].unitBonus = map.continents[c].unitBonus;
+            
+            json.continents[c].countries = [];
+            for(var countr=0;countr<map.continents[c].countries.length;countr++){
+                json.continents[c].countries[countr] = {};
+                json.continents[c].countries[countr].id = map.continents[c].countries[countr].id;
+                json.continents[c].countries[countr].name = map.continents[c].countries[countr].name;
+                json.continents[c].countries[countr].size = map.continents[c].countries[countr].size;
+                
+                json.continents[c].countries[countr].borders = [];
+                for(var b=0;b<map.continents[c].countries[countr].borders.length;b++){
+                    json.continents[c].countries[countr].borders[b] = map.continents[c].countries[countr].borders[b].id;
+                }
+            }
+        }
+        
+        json.gridMap = createArray(getWidth(),getHeight());
+        for(var x=0; x<getWidth(); x++){
+            for(var y=0; y<getHeight(); y++){
+                json.gridMap[x][y].id = cellGrid[x][y].id;
+            }
+        }
+        
+        
+        return JSON.stringify(json);
     }
     //###############################################################################################################
     //Funktionsdeklaration
