@@ -515,6 +515,20 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.addBot(1); });
     },
     
+    "test addBot should perform POST request with correct data": function () {         
+        this.lobbyRequestController.addBot(1);
+        
+        var jsonObj = {
+            type: "botJoin"
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
     
     // Kick Bot
     "test controller should have function to kick Bot": function () {         
@@ -535,6 +549,24 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertNoException(function() { controller.kickBot(1, 3); });
     },
     
+    "test kickBot should perform POST request with correct data": function () {         
+        this.lobbyRequestController.kickBot(1, 3);
+        
+        var jsonObj = {
+            type: "playerKick",
+            data: {
+                playerId: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    
     
     // kick Player
      "test controller should have function to kick Player": function () {         
@@ -553,6 +585,23 @@ TestCase("LobbyRequestControllerUpdateTest", {
         
         assertException(function() { controller.kickPlayer(1, "3"); }, "TypeError");
         assertNoException(function() { controller.kickPlayer(1, 3); });
+    },
+    
+    "test kickPlayer should perform POST request with correct data": function () {         
+        this.lobbyRequestController.kickPlayer(1, 3);
+        
+        var jsonObj = {
+            type: "playerKick",
+            data: {
+                playerId: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
     }
     
 });
