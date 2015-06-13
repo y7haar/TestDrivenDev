@@ -588,6 +588,6 @@ TestCase("SingleLobbyUiLeaderTest", {
         var wrapper = document.getElementById("lobbyWrapper");
         assertTagName("div", wrapper.childNodes[wrapper.childNodes.length - 1]);
         assertEquals("lobbyStartButton", wrapper.childNodes[wrapper.childNodes.length - 1].className);
-        assertEquals("Start", wrapper.childNodes[wrapper.childNodes.length - 1].value);
+        assertEquals("Start", wrapper.childNodes[wrapper.childNodes.length - 1].innerHTML);
     }
 });
