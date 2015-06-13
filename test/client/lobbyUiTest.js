@@ -475,6 +475,21 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("#0", h12.innerHTML);
     },
     
+    "test title name should be editable": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLeaderLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes[0].childNodes[0];
+        
+        var h1 = wrapperNodes.childNodes[1].childNodes[0];
+        var h12 = wrapperNodes.childNodes[0].childNodes[0];
+        
+        assertEquals("true", h1.contentEditable);
+        
+    },
+    
     "test player Div should contain correct container": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyUi.createWrapper();
