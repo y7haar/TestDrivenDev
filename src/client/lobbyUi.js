@@ -194,6 +194,7 @@ function lobbyUi(aRequestController)
         var td4 = document.createElement("td");
         
         title.innerHTML = aLobby.getName();
+        title.contentEditable = true;
         title.className = "lobbyTitle";
         
         id.innerHTML = "#" + aLobby.getId();
