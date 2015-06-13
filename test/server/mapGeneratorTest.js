@@ -588,11 +588,9 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         assertArray(map.continents);
     }
 }),
-
-
-
-TestCase("MapGeneratorTest", {
-    
+        
+TestCase("MapGeneratorTest for Setter and Getters",
+{   
     setUp: function () {
         this.mapGenerator = new tddjs.server.controller.mapGenerator();
         this.x = 15;
@@ -601,30 +599,10 @@ TestCase("MapGeneratorTest", {
     
     tearDown: function () {},
     
-    "test object of MapGenerator should not be undefined": function () { 
-       assertObject(this.mapGenerator);
-    },
-    
-    "test Object of MapGenerator should have the needed functions": function (){
-        assertFunction(this.mapGenerator.setGridSize);
-        assertFunction(this.mapGenerator.getMapHeight);
-        assertFunction(this.mapGenerator.getMapWidth);
-        assertFunction(this.mapGenerator.generateMap);
-        assertFunction(this.mapGenerator.getMaximumCountrySize);
-        assertFunction(this.mapGenerator.setMaximumCountrySize);
-        assertFunction(this.mapGenerator.getMinimumCountrySize);
-        assertFunction(this.mapGenerator.setMinimumCountrySize);
-    },
-    
-     "test grid should be a Array": function()
-    {
-        this.mapGenerator.setGridSize(5,5);
-        assertArray(this.mapGenerator.getMapGrid());
-    },
-    
-    "test grid should have the correct width and height": function ()
+     "test grid should have set the correct width and height": function ()
     {
         this.mapGenerator.setGridSize(10,5);
+        
         assertEquals(10, this.mapGenerator.getMapWidth());
         assertEquals(5, this.mapGenerator.getMapHeight()); 
     },
@@ -686,6 +664,7 @@ TestCase("MapGeneratorTest", {
         
         assertException(function(){gen.setMaximumCountrySize("fff");}, "TypeError");
         assertException(function(){gen.setMaximumCountrySize(-10);}, "Error");
+        assertException(function(){gen.setMaximumCountrySize(2);}, "Error");
     },
     
     "test Should be able to get Variable CountriesInContinents": function()
@@ -693,6 +672,82 @@ TestCase("MapGeneratorTest", {
         var array = this.mapGenerator.getCountriesInContinents();
         
         assertObject(array);
+    },
+    
+    "test Shoult be able to get MinimumContinentNumber": function()
+    {
+        assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
+    },
+    
+    "test Shoult be able to set MinimumContinentNumber": function()
+    {
+        this.mapGenerator.setMinimumContinentNumber(4);
+        
+        assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
+    },
+    
+    "test Shouldnt be able to set invalid MinimumContinentNumber": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumContinentNumber("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumContinentNumber(-10);}, "Error");
+        assertException(function(){gen.setMinimumContinentNumber(1);}, "Error");
+    },
+    
+    "test Shoult be able to get MaximumContinentNumber": function()
+    {
+        assertEquals(8, this.mapGenerator.getMaximumContinentNumber());
+    },
+    
+    "test Shoult be able to setMaximumContinentNumber": function()
+    {
+        this.mapGenerator.setMaximumContinentNumber(6);
+        
+        assertEquals(6, this.mapGenerator.getMaximumContinentNumber());
+    },
+    
+    "test Shouldnt be able to set invalid MaximumContinentNumber": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMaximumContinentNumber("fff");}, "TypeError");
+        assertException(function(){gen.setMaximumContinentNumber(-10);}, "Error");
+        assertException(function(){gen.setMaximumContinentNumber(3);}, "Error");
+    }
+});
+
+
+
+TestCase("MapGeneratorTest", {
+    
+    setUp: function () {
+        this.mapGenerator = new tddjs.server.controller.mapGenerator();
+        this.x = 15;
+        this.y = 15;
+    },
+    
+    tearDown: function () {},
+    
+    "test object of MapGenerator should not be undefined": function () { 
+       assertObject(this.mapGenerator);
+    },
+    
+    "test Object of MapGenerator should have the needed functions": function (){
+        assertFunction(this.mapGenerator.setGridSize);
+        assertFunction(this.mapGenerator.getMapHeight);
+        assertFunction(this.mapGenerator.getMapWidth);
+        assertFunction(this.mapGenerator.generateMap);
+        assertFunction(this.mapGenerator.getMaximumCountrySize);
+        assertFunction(this.mapGenerator.setMaximumCountrySize);
+        assertFunction(this.mapGenerator.getMinimumCountrySize);
+        assertFunction(this.mapGenerator.setMinimumCountrySize);
+    },
+    
+     "test grid should be a Array": function()
+    {
+        this.mapGenerator.setGridSize(5,5);
+        assertArray(this.mapGenerator.getMapGrid());
     },
     
     "test generateMap() should return a Map-Object":  function()
@@ -722,12 +777,12 @@ TestCase("MapGeneratorTest", {
         assertEquals(0, this.mapGenerator.collectAllCountriesBelowMinSize().length);
     },
     
-    "test generateMap should return a map-object with atleast one continent": function()
+    "test generateMap should return a map-object with atleast minimumContinents": function()
     {
         this.mapGenerator.setGridSize(this.x,this.y);
         var map = this.mapGenerator.generateMap();
         
-        assertTrue(map.continents.length > 0);
+        assertTrue(this.mapGenerator.getMinimumContinentNumber() >= map.continents.length);
     },
     
     "test generateMap should only generate maps with continents above minContinentSize": function()

@@ -475,6 +475,21 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("#0", h12.innerHTML);
     },
     
+    "test title name should be editable": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLeaderLobby(this.lobby1);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var wrapperNodes = wrapper.childNodes[0].childNodes[0];
+        
+        var h1 = wrapperNodes.childNodes[1].childNodes[0];
+        var h12 = wrapperNodes.childNodes[0].childNodes[0];
+        
+        assertEquals("true", h1.contentEditable);
+        
+    },
+    
     "test player Div should contain correct container": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         this.lobbyUi.createWrapper();
@@ -622,4 +637,35 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("lobbyMaxPlayersSpan", maxPlayersSpan.className);
         assertEquals("lobbyMaxPlayersSelect", maxPlayersSelect.className);
     }
+});
+
+TestCase("LobbyUiEventTest", {
+    
+    setUp: lobbyUiSetup,
+    tearDown: lobbyUiTeardown,
+    
+    "test ui should have function submitPlayerName": function () {  
+        assertFunction(this.lobbyUi.submitPlayerName);
+    },
+    
+    "test ui should have function submitPlayerColor": function () {  
+        assertFunction(this.lobbyUi.submitPlayerColor);
+    },
+    
+    "test ui should have function submitLobbyName": function () {  
+        assertFunction(this.lobbyUi.submitLobbyName);
+    },
+    
+    "test ui should have function submitMaxPlayers": function () {  
+        assertFunction(this.lobbyUi.submitMaxPlayers);
+    },
+    
+    "test ui should have function submitPlayerType": function () {  
+        assertFunction(this.lobbyUi.submitPlayerType);
+    },
+    
+    "test ui should have function submitLobbyStart": function () {  
+        assertFunction(this.lobbyUi.submitLobbyStart);
+    }
+    
 });
