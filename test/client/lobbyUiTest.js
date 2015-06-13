@@ -730,6 +730,18 @@ TestCase("LobbyUiEventTest", {
         
         this.lobbyUi.submitLobbyStart();
         sinon.assert.notCalled(spy);
+    },
+    
+     "test submitLobbyStart should call alert if player count is less than 2": function () {  
+        this.lobby3.kickPlayer(this.player4);
+        this.lobby3.kickPlayer(this.player5);
+        
+        var spy = this.sandbox.spy(window, "alert");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitLobbyStart();
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, "Player count must be greater than 2");
     }
     
 });
