@@ -4,7 +4,8 @@
 
 function lobbyUiSetup()
 {
-    this.lobbyUi = new tddjs.client.ui.lobbyUi(new tddjs.client.controller.lobbyRequestController());
+    this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+    this.lobbyUi = new tddjs.client.ui.lobbyUi(this.lobbyRequestController);
         
     this.lobby1 = new tddjs.client.model.lobby();
     this.lobby2 = new tddjs.client.model.lobby();
@@ -641,11 +642,23 @@ TestCase("SingleLobbyUiLeaderTest", {
 
 TestCase("LobbyUiEventTest", {
     
-    setUp: lobbyUiSetup,
+    setUp: function() {
+        lobbyUiSetup();
+        this.lobbyUi.setCurrentLobby(this.lobby3);
+    },
     tearDown: lobbyUiTeardown,
     
     "test ui should have function submitPlayerName": function () {  
         assertFunction(this.lobbyUi.submitPlayerName);
+    },
+    
+    "test submitPlayerName should call correct request in controller": function () {  
+        var spy = this.sandbox.spy(this.lobbyRequestController, "updatePlayerName");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitPlayerName(3, "NewName");
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1, 3, "NewName");
     },
     
     "test ui should have function submitPlayerColor": function () {  
