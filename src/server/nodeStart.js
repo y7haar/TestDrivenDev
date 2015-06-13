@@ -58,7 +58,6 @@ app.all("*", function (req, res, next) {
     useCors(req, res);
     
     req.accepts("application/json");
-    console.log(req.headers);
     
     next();
 });
@@ -113,8 +112,7 @@ app.get('/lobbies/:id', function (req, res) {
 });
 
 app.post('/lobbies/:id', function (req, res) {
-   
-   console.log("POST to " + req.path);
+
    console.log(req.body);
    
     if(typeof req.session.token === "undefined")
