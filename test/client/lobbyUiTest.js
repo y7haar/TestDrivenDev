@@ -710,6 +710,15 @@ TestCase("LobbyUiEventTest", {
     
     "test ui should have function submitLobbyStart": function () {  
         assertFunction(this.lobbyUi.submitLobbyStart);
+    },
+    
+    "test submitLobbyStart should call correct request in controller": function () {  
+        var spy = this.sandbox.spy(this.lobbyRequestController, "startGame");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitLobbyStart(1);
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1);
     }
     
 });
