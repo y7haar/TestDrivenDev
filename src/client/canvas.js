@@ -287,7 +287,9 @@ function click_test(){
     console.log(count+" selected!");
 }
 function init_map(){ //nur zum testen
-    mapGen.setGridSize(5,5);
+    mapGen.setGridSize(75,75);
+    mapGen.setMaximumCountrySize(200);
+    mapGen.setMinimumCountrySize(75);
     logicMap = mapGen.generateMap();
     map = mapGen.getMapGrid();
     console.log(map);
