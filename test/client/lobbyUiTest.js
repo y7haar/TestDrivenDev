@@ -67,6 +67,8 @@ function lobbyUiSetup()
     this.lobby1Json = this.lobby1.serialize();
     this.lobby2Json = this.lobby2.serialize();
 
+    this.lobbyUi.setCurrentLobby(this.lobby3);
+
     this.sandbox = sinon.sandbox.create();
 }
 
@@ -642,10 +644,7 @@ TestCase("SingleLobbyUiLeaderTest", {
 
 TestCase("LobbyUiEventTest", {
     
-    setUp: function() {
-        lobbyUiSetup();
-        this.lobbyUi.setCurrentLobby(this.lobby3);
-    },
+    setUp: lobbyUiSetup,
     tearDown: lobbyUiTeardown,
     
     "test ui should have function submitPlayerName": function () {  
@@ -661,17 +660,49 @@ TestCase("LobbyUiEventTest", {
         sinon.assert.calledWith(spy, 1, 3, "NewName");
     },
     
+    
     "test ui should have function submitPlayerColor": function () {  
         assertFunction(this.lobbyUi.submitPlayerColor);
     },
+    
+    "test submitPlayerColor should call correct request in controller": function () {  
+        var spy = this.sandbox.spy(this.lobbyRequestController, "updatePlayerColor");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitPlayerColor(3, "#ffffff");
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1, 3, "#ffffff");
+    },
+    
     
     "test ui should have function submitLobbyName": function () {  
         assertFunction(this.lobbyUi.submitLobbyName);
     },
     
+    "test submitLobbyName should call correct request in controller": function () {  
+        var spy = this.sandbox.spy(this.lobbyRequestController, "updateLobbyName");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitLobbyName("NewName");
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1, "NewName");
+    },
+    
+    
     "test ui should have function submitMaxPlayers": function () {  
         assertFunction(this.lobbyUi.submitMaxPlayers);
     },
+    
+    "test submitMaxPlayers should call correct request in controller": function () {  
+        var spy = this.sandbox.spy(this.lobbyRequestController, "updateMaxPlayers");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitMaxPlayers(3);
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1, 3);
+    },
+    
+    
     
     "test ui should have function submitPlayerType": function () {  
         assertFunction(this.lobbyUi.submitPlayerType);
