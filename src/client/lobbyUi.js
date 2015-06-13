@@ -450,6 +450,16 @@ function lobbyUi(aRequestController)
         
     }
     
+    function setCurrentLobby(aLobby)
+    {
+        _currentLobby = aLobby;
+    }
+    
+    function getCurrentLobby()
+    {
+        return _currentLobby;
+    }
+    
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
@@ -461,6 +471,9 @@ function lobbyUi(aRequestController)
     this.showLobby = showLobby;
     this.showLeaderLobby = showLeaderLobby;
     this.setPlayerEditable = setPlayerEditable;
+    
+    this.setCurrentLobby = setCurrentLobby;
+    this.getCurrentLobby = getCurrentLobby;
     
     //Events
     this.submitPlayerName = submitPlayerName;
