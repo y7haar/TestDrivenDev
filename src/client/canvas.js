@@ -292,8 +292,6 @@ function init_map(){ //nur zum testen
     mapGen.setMinimumCountrySize(75);
     logicMap = mapGen.generateMap();
     map = mapGen.getMapGrid();
-    console.log(map);
-    console.log(mapGen.getAllCountries());
     for(x=0;x<map.length;x++){
         for(y=0;y<map[0].length;y++){
             map[x][y].selected=false;
