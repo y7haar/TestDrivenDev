@@ -436,11 +436,6 @@ function mapGenerator()
             //Stelle des verloren Landes in der Grenzliste
             var slot = neighborCountryList.indexOf(loserCountry);           
             
-            //Passiert nicht mehr!
-            if(slot === -1){
-                throw new Error("Darf nicht sein");
-            }
-            
             //Grenze entfernen
             neighborCountryList.splice(slot,1);
             
@@ -501,12 +496,10 @@ function mapGenerator()
             if(notGettingToBig.length === 0)
             {
                 winner = getRandom(neigbours);
-                console.log("Unusual case");
             }
             else 
             {
                 winner = getRandom(notGettingToBig);
-                console.log("happens");
             }
 
             //Mergen
