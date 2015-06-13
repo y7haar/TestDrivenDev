@@ -503,17 +503,120 @@ TestCase("LobbyRequestControllerUpdateTest", {
     },
     
     
-    
+    // Add Bot
     "test controller should have function to add Bot": function () {         
         assertFunction(this.lobbyRequestController.addBot);
     },
     
+    "test addBot should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.addBot("number"); }, "TypeError");
+        assertNoException(function() { controller.addBot(1); });
+    },
+    
+    "test addBot should perform POST request with correct data": function () {         
+        this.lobbyRequestController.addBot(1);
+        
+        var jsonObj = {
+            type: "botJoin"
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    "test addBot should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.addBot(1);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
+    
+    // Kick Bot
     "test controller should have function to kick Bot": function () {         
         assertFunction(this.lobbyRequestController.kickBot);
     },
     
+     "test kickBot should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.kickBot("number", 3); }, "TypeError");
+        assertNoException(function() { controller.kickBot(1, 3); });
+    },
+    
+     "test kickBot should throw Exception if playerId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.kickBot(1, "3"); }, "TypeError");
+        assertNoException(function() { controller.kickBot(1, 3); });
+    },
+    
+    "test kickBot should perform POST request with correct data": function () {         
+        this.lobbyRequestController.kickBot(1, 3);
+        
+        var jsonObj = {
+            type: "playerKick",
+            data: {
+                id: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    "test kickBot should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.kickBot(1, 3);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
+    
+    
+    // kick Player
      "test controller should have function to kick Player": function () {         
         assertFunction(this.lobbyRequestController.kickPlayer);
+    },
+    
+    "test kickPlayer should throw Exception if lobbyId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.kickPlayer("number", 3); }, "TypeError");
+        assertNoException(function() { controller.kickPlayer(1, 3); });
+    },
+    
+     "test kickPlayer should throw Exception if playerId is no number": function () {         
+        var controller = this.lobbyRequestController;
+        
+        assertException(function() { controller.kickPlayer(1, "3"); }, "TypeError");
+        assertNoException(function() { controller.kickPlayer(1, 3); });
+    },
+    
+    "test kickPlayer should perform POST request with correct data": function () {         
+        this.lobbyRequestController.kickPlayer(1, 3);
+        
+        var jsonObj = {
+            type: "playerKick",
+            data: {
+                id: 3
+            }
+        };
+        
+        var json = JSON.stringify(jsonObj);
+        
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
+        assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+     "test kickPlayer should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.kickPlayer(1, 3);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     }
     
 });

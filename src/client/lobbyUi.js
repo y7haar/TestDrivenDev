@@ -175,10 +175,23 @@ function lobbyUi(aRequestController)
         
         var title = document.createElement("h1");
         var id = document.createElement("h1");
+        var maxPlayersSpan = document.createElement("span");
+        var maxPlayersSelect = document.createElement("select");
+        var playersOptions = [];
+        playersOptions[0] = document.createElement("option");
+        playersOptions[1] = document.createElement("option");
+        playersOptions[2] = document.createElement("option");
+        
+        playersOptions[0].text = "2";
+        playersOptions[1].text = "3";
+        playersOptions[2].text = "4";
+        
         var table = document.createElement("table");
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
         
         title.innerHTML = aLobby.getName();
         title.className = "lobbyTitle";
@@ -186,11 +199,25 @@ function lobbyUi(aRequestController)
         id.innerHTML = "#" + aLobby.getId();
         id.className = "lobbyTitle";
         
+        maxPlayersSelect.add(playersOptions[0]);
+        maxPlayersSelect.add(playersOptions[1]);
+        maxPlayersSelect.add(playersOptions[2]);
+        maxPlayersSelect.className = "lobbyMaxPlayersSelect";
+        
+        maxPlayersSpan.innerHTML = "Max Players";
+        maxPlayersSpan.className = "lobbyMaxPlayersSpan";
+        
+        
+        
         td1.appendChild(id);
         td2.appendChild(title);
+        td3.appendChild(maxPlayersSpan);
+        td4.appendChild(maxPlayersSelect);
         
         tr.appendChild(td1);
         tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
         
         var playerWrapper = document.createElement("div");
         playerWrapper.id = "playerWrapper";
@@ -214,6 +241,9 @@ function lobbyUi(aRequestController)
         table.appendChild(tr);
         wrapper.appendChild(table);
         wrapper.appendChild(playerWrapper);
+        
+        addStartButton(wrapper);
+        
     }
     
     
@@ -373,6 +403,15 @@ function lobbyUi(aRequestController)
         
         
         playerName.focus();
+    }
+    
+    function addStartButton(aLobbyWrapper)
+    {
+        var div = document.createElement("div");
+        div.className = "lobbyStartButton";
+        div.innerHTML = "Start";
+        
+        aLobbyWrapper.appendChild(div);
     }
     
     this.createContent = createContent;

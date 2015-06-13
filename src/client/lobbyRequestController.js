@@ -223,19 +223,79 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
-    function addBot()
+    function addBot(aLobbyId)
     {
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
         
+        var data = {
+          type: "botJoin"
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
-    function kickBot()
+    function kickBot(aLobbyId, aId)
     {
+         if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
         
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        var data = {
+          type: "playerKick",
+          data: {
+              id: aId
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
-    function kickPlayer()
+    function kickPlayer(aLobbyId, aId)
     {
+         if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
         
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
+        
+        var data = {
+          type: "playerKick",
+          data: {
+              id: aId
+          }
+        };
+        
+        data = JSON.stringify(data);
+        
+        var options = {  
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            data: data
+        };
+        
+        ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
     this.requestAllLobbies = requestAllLobbies;
