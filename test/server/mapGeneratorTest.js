@@ -24,13 +24,13 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initCountries();
         var cellGrid = this.mapGenerator.getMapGrid();
         
-        assertTrue(cellGrid[0][0] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[1][0] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[0][1] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[3][3] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[6][5] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[5][6] instanceof(tddjs.client.map.country));
-        assertTrue(cellGrid[6][6] instanceof(tddjs.client.map.country));
+        assertTrue(cellGrid[0][0].isCountry);
+        assertTrue(cellGrid[1][0].isCountry);
+        assertTrue(cellGrid[0][1].isCountry);
+        assertTrue(cellGrid[3][3].isCountry);
+        assertTrue(cellGrid[6][5].isCountry);
+        assertTrue(cellGrid[5][6].isCountry);
+        assertTrue(cellGrid[6][6].isCountry);
     },
     
     "test After initCountries every gridCell should contain a contry with a valid id": function()
@@ -38,8 +38,6 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(7,7);
         this.mapGenerator.initCountries();
         var cellGrid = this.mapGenerator.getMapGrid();
-        
-        console.log(cellGrid);
         
         assertEquals(1, cellGrid[0][0].id);
         assertEquals(3, cellGrid[2][0].id);
@@ -80,24 +78,24 @@ TestCase("MapGeneratorTest for private Functions", {
         
         this.mapGenerator.initBorders();
         
-        assertEquals(2, country1.getBorderCount());
-        assertEquals(grid[1][0], country1.getBorders()[0]);
-        assertEquals(grid[0][1], country1.getBorders()[1]);
+        assertEquals(2, country1.borders.length);
+        assertEquals(grid[1][0], country1.borders[0]);
+        assertEquals(grid[0][1], country1.borders[1]);
         
-        assertEquals(3, country2.getBorderCount());
-        assertEquals(grid[0][0], country2.getBorders()[0]);
-        assertEquals(grid[2][0], country2.getBorders()[1]);
-        assertEquals(grid[1][1], country2.getBorders()[2]);
+        assertEquals(3, country2.borders.length);
+        assertEquals(grid[0][0], country2.borders[0]);
+        assertEquals(grid[2][0], country2.borders[1]);
+        assertEquals(grid[1][1], country2.borders[2]);
         
-        assertEquals(4, country3.getBorderCount());
-        assertEquals(grid[1][0], country3.getBorders()[0]);
-        assertEquals(grid[0][1], country3.getBorders()[1]);
-        assertEquals(grid[2][1], country3.getBorders()[2]);
-        assertEquals(grid[1][2], country3.getBorders()[3]);
+        assertEquals(4, country3.borders.length);
+        assertEquals(grid[1][0], country3.borders[0]);
+        assertEquals(grid[0][1], country3.borders[1]);
+        assertEquals(grid[2][1], country3.borders[2]);
+        assertEquals(grid[1][2], country3.borders[3]);
         
-        assertEquals(2, country4.getBorderCount());
-        assertEquals(grid[2][1], country4.getBorders()[0]);
-        assertEquals(grid[1][2], country4.getBorders()[1]);
+        assertEquals(2, country4.borders.length);
+        assertEquals(grid[2][1], country4.borders[0]);
+        assertEquals(grid[1][2], country4.borders[1]);
     },
     
     "test Shouldnt be able to call initBorders without calling initCountries and setGrid first": function()
@@ -159,36 +157,42 @@ TestCase("MapGeneratorTest for private Functions", {
         var grid = this.mapGenerator.getMapGrid();
         
         this.mapGenerator.mergeIntoCountry(grid[0][0], grid[1][0]);
-        
-        assertEquals(3, grid[1][0].getBorderCount());
-        assertEquals(grid[2][0], grid[1][0].getBorders()[0]);
-        assertEquals(grid[1][1], grid[1][0].getBorders()[1]);
-        assertEquals(grid[0][1], grid[1][0].getBorders()[2]);
-        assertEquals(3, grid[0][1].getBorderCount());
-        assertEquals(grid[1][0], grid[0][1].getBorders()[0]);
-        assertEquals(grid[1][1], grid[0][1].getBorders()[1]);
-        assertEquals(grid[0][2], grid[0][1].getBorders()[2]);
+        //Zielland
+        assertEquals(3, grid[1][0].borders.length);
+        assertEquals(grid[2][0], grid[1][0].borders[0]);
+        assertEquals(grid[1][1], grid[1][0].borders[1]);
+        assertEquals(grid[0][1], grid[1][0].borders[2]);
+        //Land neben dem gemergten
+        assertEquals(3, grid[0][1].borders.length);
+        assertEquals(grid[1][1], grid[0][1].borders[0]);
+        assertEquals(grid[0][2], grid[0][1].borders[1]);
+        assertEquals(grid[1][0], grid[0][1].borders[2]);
         
         
         this.mapGenerator.mergeIntoCountry(grid[2][0], grid[1][0]);
         
-        assertEquals(3, grid[0][0].getBorderCount());
-        assertEquals(grid[1][1], grid[1][0].getBorders()[0]);
-        assertEquals(grid[0][1], grid[1][0].getBorders()[1]);
-        assertEquals(grid[2][1], grid[1][0].getBorders()[2]);
-        assertEquals(3, grid[1][0].getBorderCount());
-        assertEquals(grid[1][0], grid[0][1].getBorders()[0]);
-        assertEquals(grid[1][1], grid[0][1].getBorders()[1]);
-        assertEquals(grid[0][2], grid[0][1].getBorders()[2]);
-        assertEquals(3, grid[2][1].getBorderCount());
-        assertEquals(grid[1][0], grid[2][1].getBorders()[0]);
-        assertEquals(grid[1][1], grid[2][1].getBorders()[1]);
-        assertEquals(grid[2][2], grid[2][1].getBorders()[2]);
-        assertEquals(4, grid[1][1].getBorderCount());
-        assertEquals(grid[1][0], grid[1][1].getBorders()[0]);
-        assertEquals(grid[0][1], grid[1][1].getBorders()[1]);
-        assertEquals(grid[2][1], grid[1][1].getBorders()[2]);
-        assertEquals(grid[1][2], grid[1][1].getBorders()[3]);
+        //Zielland
+        assertEquals(3, grid[1][0].borders.length);
+        assertEquals(grid[1][1], grid[1][0].borders[0]);
+        assertEquals(grid[0][1], grid[1][0].borders[1]);
+        assertEquals(grid[2][1], grid[1][0].borders[2]);
+        //Land über 0/0
+        assertEquals(3, grid[0][1].borders.length);
+        assertEquals(grid[1][1], grid[0][1].borders[0]);
+        assertEquals(grid[0][2], grid[0][1].borders[1]);
+        assertEquals(grid[1][0], grid[0][1].borders[2]);
+        //Land über 1/0
+        assertEquals(4, grid[1][1].borders.length);
+        assertEquals(grid[1][0], grid[1][1].borders[0]);
+        assertEquals(grid[0][1], grid[1][1].borders[1]);
+        assertEquals(grid[2][1], grid[1][1].borders[2]);
+        assertEquals(grid[1][2], grid[1][1].borders[3]);
+        console.log(grid[2][1].borders);
+          //Land über 2/0
+        assertEquals(3, grid[2][1].borders.length);
+        assertEquals(grid[1][1], grid[2][1].borders[0]);
+        assertEquals(grid[2][2], grid[2][1].borders[1]);
+        assertEquals(grid[1][0], grid[2][1].borders[2]);
     },
      
     "test mergeIntoCountry should combine two countries into one": function()
@@ -221,8 +225,8 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Shouldn´t be able to call merge without initialisation": function()
     {
         var gen = this.mapGenerator;
-        var country = new tddjs.client.map.country();
-        var country2 = new tddjs.client.map.country();
+        var country = this.mapGenerator.createCountry(0);
+        var country2 = this.mapGenerator.createCountry(0);
         
         assertException(function(){gen.mergeIntoCountry(country,country2);}, "Error");
         
@@ -236,8 +240,8 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Should be able to call merge after initialisation": function()
     {
         var gen = this.mapGenerator;
-        var country = new tddjs.client.map.country();
-        var country2 = new tddjs.client.map.country();
+        var country = this.mapGenerator.createCountry(0);
+        var country2 = this.mapGenerator.createCountry(0);
         
         this.mapGenerator.setGridSize(7,6);    
         this.mapGenerator.initCountries();
@@ -249,7 +253,7 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Should only able to call mergeCountries with valid countries": function()
     {
         var x =5;
-        var country = new tddjs.client.map.country();
+        var country = this.mapGenerator.createCountry(0);
         var gen =this.mapGenerator;
         
         this.mapGenerator.setGridSize(7,6);    
@@ -396,13 +400,13 @@ TestCase("MapGeneratorTest for private Functions", {
     
     "test CollectUnusedNeigborCountriesOfContinent Should Collect All unused Neighbor-Countries of a Continent": function()
     {
-        var continent = new tddjs.client.map.continent();
+        var continent = this.mapGenerator.createContinent(0);
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var grid = this.mapGenerator.getMapGrid();
         this.mapGenerator.getCountriesInContinents().push(grid[1][1]);
-        continent.addCountry(grid[1][1]);
+        continent.countries.push(grid[1][1]);
         
         var neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
         
@@ -413,7 +417,7 @@ TestCase("MapGeneratorTest for private Functions", {
         assertEquals(grid[1][2], neigbors[3]);
         
         this.mapGenerator.getCountriesInContinents().push(grid[2][1]);
-        continent.addCountry(grid[2][1]);
+        continent.countries.push(grid[2][1]);
         neigbors = this.mapGenerator.collectUnusedNeighborCountriesOfContinent(continent);
         
         assertEquals(5, neigbors.length);
@@ -427,7 +431,7 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Shouldnt be able to call CollectUnusedNeighborCountriesOfContinent before initialisation": function()
     {
         var gen = this.mapGenerator;
-         var continent = new tddjs.client.map.continent();
+        var continent = gen.createContinent(0);
         
         assertException(function(){gen.collectUnusedNeighborCountriesOfContinent(continent);}, "Error");
         
@@ -441,7 +445,7 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Should be able to call CollectUnusedNeighborCountriesOfContinent after initialisation": function()
     {
         var gen = this.mapGenerator;
-        var continent = new tddjs.client.map.continent();
+        var continent = gen.createContinent(0);
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
@@ -461,30 +465,31 @@ TestCase("MapGeneratorTest for private Functions", {
     
     "test calculateUnitBonus Should calculate the correctBonus": function()
     {
-        var continent = new tddjs.client.map.continent();
-        var continent1 = new tddjs.client.map.continent();
-        var continent2 = new tddjs.client.map.continent();
-        var continent3 = new tddjs.client.map.continent();
-        var continent4 = new tddjs.client.map.continent();
-        var continent5 = new tddjs.client.map.continent();
-        var continent6 = new tddjs.client.map.continent();
+        var gen = this.mapGenerator;
+        var continent = gen.createContinent(0);
+        var continent1 = gen.createContinent(0);
+        var continent2 = gen.createContinent(0);
+        var continent3 = gen.createContinent(0);
+        var continent4 = gen.createContinent(0);
+        var continent5 = gen.createContinent(0);
+        var continent6 = gen.createContinent(0);
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
         var grid = this.mapGenerator.getMapGrid();
-        continent1.addCountry(grid[2][2]);
-        continent2.addCountry(grid[2][2]);
-        continent2.addCountry(grid[2][1]);
-        continent3.addCountry(grid[2][2]);
-        continent3.addCountry(grid[2][1]);
-        continent3.addCountry(grid[2][0]);
-        continent4.addCountry(grid[1][1]);
-        continent5.addCountry(grid[1][1]);
-        continent5.addCountry(grid[0][1]);
-        continent6.addCountry(grid[1][1]);
-        continent6.addCountry(grid[1][2]);
-        continent6.addCountry(grid[2][1]);
-        continent6.addCountry(grid[2][2]);
+        continent1.countries.push(grid[2][2]);
+        continent2.countries.push(grid[2][2]);
+        continent2.countries.push(grid[2][1]);
+        continent3.countries.push(grid[2][2]);
+        continent3.countries.push(grid[2][1]);
+        continent3.countries.push(grid[2][0]);
+        continent4.countries.push(grid[1][1]);
+        continent5.countries.push(grid[1][1]);
+        continent5.countries.push(grid[0][1]);
+        continent6.countries.push(grid[1][1]);
+        continent6.countries.push(grid[1][2]);
+        continent6.countries.push(grid[2][1]);
+        continent6.countries.push(grid[2][2]);
         
         var i = this.mapGenerator.calculateUnitBonus(continent);
         assertEquals(0, i);
@@ -511,7 +516,7 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Shouldnt be able to call calculateUnitBonus before initialisation": function()
     {
         var gen = this.mapGenerator;
-        var continent = new tddjs.client.map.continent();
+        var continent = gen.createContinent(0);
         
         assertException(function(){gen.calculateUnitBonus(continent);}, "Error");
         
@@ -525,7 +530,7 @@ TestCase("MapGeneratorTest for private Functions", {
     "test Should be able to call calculateUnitBonus after initialisation": function()
     {
         var gen = this.mapGenerator;
-        var continent = new tddjs.client.map.continent();
+        var continent = gen.createContinent(0);
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
@@ -543,7 +548,46 @@ TestCase("MapGeneratorTest for private Functions", {
         assertException(function(){gen.calculateUnitBonus(5);}, "TypeError");
     }
 }),
-
+        
+        
+TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
+    setUp: function ()
+    {
+        this.mapGenerator = new tddjs.server.controller.mapGenerator();
+    },
+    
+    tearDown: function () {},
+    
+    "test Should be able to create some object like a country": function()
+    {
+        var country = this.mapGenerator.createCountry(0);
+        
+        assertEquals(true, country.isCountry);
+        assertEquals(0, country.id);
+        assertEquals("Id:0", country.name);
+        assertEquals(1, country.size);
+        assertArray(country.borders);
+    },
+    
+    "test Should be able to create some object like a continent": function()
+    {
+        var continent = this.mapGenerator.createContinent(0);
+        
+        assertEquals(true, continent.isContinent);
+        assertEquals(0, continent.id);
+        assertEquals("Id:0", continent.name);
+        assertEquals(0, continent.unitBonus);
+        assertArray(continent.countries);
+    },
+    
+    "test Should be able to create some object like a map": function()
+    {
+        var map = this.mapGenerator.createMap();
+        
+        assertEquals(true, map.isMap);
+        assertArray(map.continents);
+    }
+}),
 
 
 
@@ -578,7 +622,7 @@ TestCase("MapGeneratorTest", {
         assertArray(this.mapGenerator.getMapGrid());
     },
     
-    "test grid should have the correc width and height": function ()
+    "test grid should have the correct width and height": function ()
     {
         this.mapGenerator.setGridSize(10,5);
         assertEquals(10, this.mapGenerator.getMapWidth());
@@ -658,7 +702,7 @@ TestCase("MapGeneratorTest", {
         var map = this.mapGenerator.generateMap();
         
         assertObject(map);
-        assertTrue(map instanceof tddjs.client.map.map);
+        assertTrue(map.isMap);
     },
     
     //??
@@ -683,7 +727,7 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.setGridSize(this.x,this.y);
         var map = this.mapGenerator.generateMap();
         
-        assertTrue(map.getContinentCount() > 0);
+        assertTrue(map.continents.length > 0);
     },
     
     "test generateMap should only generate maps with continents above minContinentSize": function()
@@ -691,12 +735,11 @@ TestCase("MapGeneratorTest", {
         this.mapGenerator.setGridSize(this.x,this.y);
         
         var map = this.mapGenerator.generateMap();
-        var continent = map.getContinents();
-        var array = Object.keys(continent);      
+        var continents = map.continents;      
         
-        assertTrue(continent[array[0]].getCountryCount() >= 2);
-        assertTrue(continent[array[Math.floor(array.length/2)]].getCountryCount() >= 2);
-        assertTrue(continent[array[array.length-1]].getCountryCount() >= 2);
+        assertTrue(continents[0].countries.length >= 2);
+        assertTrue(continents[Math.floor(continents.length/2)].countries.length >= 2);
+        assertTrue(continents[continents.length-1].countries.length >= 2);
     }
 });
 
