@@ -579,4 +579,15 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
         
     },
+    
+     "test ui should have a button to start the game": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLeaderLobby(this.lobby3);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        assertTagName("div", wrapper.childNodes[wrapper.childNodes.length - 1]);
+        assertEquals("lobbyStartButton", wrapper.childNodes[wrapper.childNodes.length - 1].className);
+        assertEquals("Start", wrapper.childNodes[wrapper.childNodes.length - 1].value);
+    }
 });
