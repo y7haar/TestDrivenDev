@@ -223,19 +223,28 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
     
-    function addBot()
+    function addBot(aLobbyId)
     {
-        
+        if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
     }
     
-    function kickBot()
+    function kickBot(aLobbyId, aId)
     {
+         if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
         
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
     }
     
-    function kickPlayer()
+    function kickPlayer(aLobbyId, aId)
     {
+         if(typeof aLobbyId !== "number")
+            throw new TypeError("Id must be number");
         
+        if(typeof aId !== "number")
+            throw new TypeError("Id must be number");
     }
     
     this.requestAllLobbies = requestAllLobbies;
