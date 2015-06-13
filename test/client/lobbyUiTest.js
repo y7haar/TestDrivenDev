@@ -598,8 +598,9 @@ TestCase("SingleLobbyUiLeaderTest", {
         
         var wrapper = document.getElementById("lobbyWrapper");
         var table = wrapper.childNodes[0];
-        var td1 = table.childNodes[2];
-        var td2 = table.childNodes[3];
+        var tr = table.childNodes[0];
+        var td1 = tr.childNodes[2];
+        var td2 = tr.childNodes[3];
         
         var maxPlayersSpan = td1.childNodes[0];
         var maxPlayersSelect = td2.childNodes[0];
