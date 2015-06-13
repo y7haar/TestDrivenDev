@@ -17,6 +17,7 @@ function gameUiController(aGLC,aCtx){
     var _btn =[];
     var _countries =[];
     var _gridMap;
+    var map;
     
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
@@ -159,6 +160,16 @@ function gameUiController(aGLC,aCtx){
     
     
     // <editor-fold defaultstate="collapsed" desc="Map-functions">
+    function _getMap(){
+        map = null; //daten vom server
+        _gridMap = map.gridMap;
+    }
+    
+    function _initGridMap(){
+        //for-each country in map
+        //_gridMap[x][y]=country (der id an x,y)
+    }
+    
     function _initMap(aGridMap){
         _gridMap = aGridMap;
         for(x=0;x<_gridMap.cellGrid.length;x++){
