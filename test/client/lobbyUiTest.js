@@ -589,5 +589,36 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertTagName("div", wrapper.childNodes[wrapper.childNodes.length - 1]);
         assertEquals("lobbyStartButton", wrapper.childNodes[wrapper.childNodes.length - 1].className);
         assertEquals("Start", wrapper.childNodes[wrapper.childNodes.length - 1].innerHTML);
+    },
+    
+    "test ui should have a max Players select input": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        this.lobbyUi.createWrapper();
+        this.lobbyUi.showLeaderLobby(this.lobby3);
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        var table = wrapper.childNodes[0];
+        var td1 = table.childNodes[2];
+        var td2 = table.childNodes[3];
+        
+        var maxPlayersSpan = td1.childNodes[0];
+        var maxPlayersSelect = td2.childNodes[0];
+        
+        assertTagName("span", maxPlayersSpan);
+        assertTagName("select", maxPlayersSelect);
+        
+        assertEquals("Max Players", maxPlayersSpan.innerHTML);
+        assertEquals(3, maxPlayersSelect.childNodes.length);
+        
+        assertTagName("option", maxPlayersSelect.childNodes[0]);
+        assertTagName("option", maxPlayersSelect.childNodes[1]);
+        assertTagName("option", maxPlayersSelect.childNodes[2]);
+        
+        assertEquals("2", maxPlayersSelect.childNodes[0].innerHTML);
+        assertEquals("3", maxPlayersSelect.childNodes[1].innerHTML);
+        assertEquals("4", maxPlayersSelect.childNodes[2].innerHTML);
+        
+        assertEquals("lobbyMaxPlayersSpan", maxPlayersSpan.className);
+        assertEquals("lobbyMaxPlayersSelect", maxPlayersSelect.className);
     }
 });
