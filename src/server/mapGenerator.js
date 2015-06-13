@@ -582,6 +582,14 @@ function mapGenerator()
             }
         }
         
+        json.gridMap = createArray(getWidth(),getHeight());
+        for(var x=0; x<getWidth(); x++){
+            for(var y=0; y<getHeight(); y++){
+                json.gridMap[x][y].id = cellGrid[x][y].id;
+            }
+        }
+        
+        
         return JSON.stringify(json);
     }
     //###############################################################################################################
