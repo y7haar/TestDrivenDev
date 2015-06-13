@@ -664,6 +664,7 @@ TestCase("MapGeneratorTest for Setter and Getters",
         
         assertException(function(){gen.setMaximumCountrySize("fff");}, "TypeError");
         assertException(function(){gen.setMaximumCountrySize(-10);}, "Error");
+        assertException(function(){gen.setMaximumCountrySize(2);}, "Error");
     },
     
     "test Should be able to get Variable CountriesInContinents": function()
@@ -675,7 +676,7 @@ TestCase("MapGeneratorTest for Setter and Getters",
     
     "test Shoult be able to get MinimumContinentNumber": function()
     {
-        assertEquals(2, this.mapGenerator.getMinimumContinentNumber());
+        assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
     },
     
     "test Shoult be able to set MinimumContinentNumber": function()

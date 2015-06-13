@@ -30,9 +30,13 @@ function mapGenerator()
     var maximumCountrySize = 20;
     
     //Variablen für Kontinentgrößen
-    var minimumContinentNumber;
-    var maximumContinentNumber;
-    var minimumContinentSize;
+    var minimumContinentNumber = 4;
+    var maximumContinentNumber = 8;
+    var minimumContinentSize = 2;
+    
+    //###############################################################################################################
+    //Setter und Getter
+    //###############################################################################################################
     
     //Setzt das Grid neu
     function setGridSize(x,y)
@@ -98,7 +102,49 @@ function mapGenerator()
         if(size <= 0)
             throw new Error("Size musst be one or higher");
         
+        if(size < minimumCountrySize)
+            throw new Error("Size cant be below minCountrySize");
+        
         maximumCountrySize = size;
+    }
+    
+    //Holt Minimale Ländergröße
+    function getMinimumContinentNumber()
+    {
+        return minimumContinentNumber;
+    }
+    
+    //Setzt minimale Ländergröße
+    function setMinimumContinentNumber(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        minimumContinentNumber = size;
+    }
+    
+    //Holt maximal Größe
+    function getMaximumContinentNumber()
+    {
+        return maximumContinentNumber;
+    }
+    
+    //Setzt maximale Größe
+    function setMaximumContinentNumber(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        if(size < minimumContinentNumber)
+            throw new Error("Size cant be below minimumContinentNumber");
+        
+        maximumContinentNumber = size;
     }
     
     //Holt Länder in Kontinenten
@@ -140,6 +186,10 @@ function mapGenerator()
         //initLogicMap(map);
         return map;
     }
+    
+    //###############################################################################################################
+    //Funktionen
+    //###############################################################################################################
     
     /*test-funktion für die UI*/
     function initLogicMap(map)
@@ -603,6 +653,10 @@ function mapGenerator()
     this.setMinimumCountrySize = setMinimumCountrySize;
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
+    this.getMinimumContinentNumber = getMinimumContinentNumber;
+    this.setMinimumContinentNumber = setMinimumContinentNumber;
+    this.getMaximumContinentNumber = getMaximumContinentNumber;
+    this.setMaximumContinentNumber = setMaximumContinentNumber;
     this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
    
