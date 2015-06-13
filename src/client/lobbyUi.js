@@ -420,9 +420,15 @@ function lobbyUi(aRequestController)
         aLobbyWrapper.appendChild(div);
     }
     
-    function submitPlayerName()
+    function submitPlayerName(aId, aName)
     {
-        
+        try
+        {
+            _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, aName);
+        }
+        catch(e)
+        {
+        }
     }
     
     function submitPlayerColor()
