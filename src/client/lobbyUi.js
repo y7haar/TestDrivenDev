@@ -214,6 +214,9 @@ function lobbyUi(aRequestController)
         table.appendChild(tr);
         wrapper.appendChild(table);
         wrapper.appendChild(playerWrapper);
+        
+        addStartButton(wrapper);
+        
     }
     
     
@@ -373,6 +376,15 @@ function lobbyUi(aRequestController)
         
         
         playerName.focus();
+    }
+    
+    function addStartButton(aLobbyWrapper)
+    {
+        var div = document.createElement("div");
+        div.className = "lobbyStartButton";
+        div.innerHTML = "Start";
+        
+        aLobbyWrapper.appendChild(div);
     }
     
     this.createContent = createContent;
