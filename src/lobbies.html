@@ -26,7 +26,8 @@ and open the template in the editor.
     </head>
     <body>
         <script>
-            var ui = new tddjs.client.ui.lobbyUi();
+            var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+            var ui = new tddjs.client.ui.lobbyUi(lobbyRequestController);
             //ui.createContent();
             ui.createLobbyContent();
             ui.createWrapper();
@@ -65,7 +66,7 @@ and open the template in the editor.
             this.lobby2.setMaxPlayers(4);
             
             
-            var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+            
            // lobbyRequestController.requestAllLobbies();
             ui.showLeaderLobby(this.lobby2);
             ui.setPlayerEditable(3);
