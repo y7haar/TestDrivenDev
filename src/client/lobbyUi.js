@@ -64,10 +64,10 @@ function lobbyUi(aRequestController)
         div.className = "lobby";
         
         var td1 = document.createElement("td");
-        td1.className = "lobbyId";
+        td1.className = "lobbiesId";
         
         var td2 = document.createElement("td");
-        td2.className = "lobbyName";
+        td2.className = "lobbiesName";
         
         var td3 = document.createElement("td");
         td3.className = "lobbyPlayers";
