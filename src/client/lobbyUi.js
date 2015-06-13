@@ -197,7 +197,7 @@ function lobbyUi(aRequestController)
         title.className = "lobbyTitle";
         
         id.innerHTML = "#" + aLobby.getId();
-        id.className = "lobbyTitle";
+        id.className = "lobbyId";
         
         maxPlayersSelect.add(playersOptions[0]);
         maxPlayersSelect.add(playersOptions[1]);
