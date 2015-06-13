@@ -168,6 +168,20 @@ function gameUiController(aGLC,aCtx){
     function _initGridMap(){
         //for-each country in map
         //_gridMap[x][y]=country (der id an x,y)
+        for(var x=0; x<map.gridMap.length; x++){
+            for(var y=0; y<map.gridMap[0].length; y++){
+                _gridMap[x][y] = _getCountryById(_gridMap[x][y].id);
+            }
+        }
+    }
+    
+    function _getCountryById(id){
+        for(var c=0; c<map.continents.length; c++){
+            for(var countr=0; countr<map.continents[c].countries.length; countr++){
+                if(map.continents[c].countries[countr].id === id)
+                    return map.continents[c].countries[countr];
+            }
+        }
     }
     
     function _initMap(aGridMap){
