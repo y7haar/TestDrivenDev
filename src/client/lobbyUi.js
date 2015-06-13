@@ -475,6 +475,9 @@ function lobbyUi(aRequestController)
         {
             if(_currentLobby.getPlayers().length >= 2)
                 _lobbyRequestController.startGame(_currentLobby.getId());
+            
+            else
+                window.alert("Player count must be greater than 2");
         }
         catch(e)
         {
