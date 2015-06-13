@@ -555,7 +555,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
         var jsonObj = {
             type: "playerKick",
             data: {
-                playerId: 3
+                id: 3
             }
         };
         
@@ -593,7 +593,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
         var jsonObj = {
             type: "playerKick",
             data: {
-                playerId: 3
+                id: 3
             }
         };
         
