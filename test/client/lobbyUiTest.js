@@ -716,9 +716,20 @@ TestCase("LobbyUiEventTest", {
         var spy = this.sandbox.spy(this.lobbyRequestController, "startGame");
         sinon.assert.notCalled(spy);
         
-        this.lobbyUi.submitLobbyStart(1);
+        this.lobbyUi.submitLobbyStart();
         sinon.assert.calledOnce(spy);
         sinon.assert.calledWith(spy, 1);
+    },
+    
+    "test submitLobbyStart should not call request in controller if player count is less than 2": function () {  
+        this.lobby3.kickPlayer(this.player4);
+        this.lobby3.kickPlayer(this.player5);
+        
+        var spy = this.sandbox.spy(this.lobbyRequestController, "startGame");
+        sinon.assert.notCalled(spy);
+        
+        this.lobbyUi.submitLobbyStart();
+        sinon.assert.notCalled(spy);
     }
     
 });
