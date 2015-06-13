@@ -638,3 +638,34 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("lobbyMaxPlayersSelect", maxPlayersSelect.className);
     }
 });
+
+TestCase("LobbyUiEventTest", {
+    
+    setUp: lobbyUiSetup,
+    tearDown: lobbyUiTeardown,
+    
+    "test ui should have function submitPlayerName": function () {  
+        assertFunction(this.lobbyUi.submitPlayerName);
+    },
+    
+    "test ui should have function submitPlayerColor": function () {  
+        assertFunction(this.lobbyUi.submitPlayerColor);
+    },
+    
+    "test ui should have function submitLobbyName": function () {  
+        assertFunction(this.lobbyUi.submitLobbyName);
+    },
+    
+    "test ui should have function submitMaxPlayers": function () {  
+        assertFunction(this.lobbyUi.submitMaxPlayers);
+    },
+    
+    "test ui should have function submitPlayerType": function () {  
+        assertFunction(this.lobbyUi.submitPlayerType);
+    },
+    
+    "test ui should have function submitLobbyStart": function () {  
+        assertFunction(this.lobbyUi.submitLobbyStart);
+    }
+    
+});
