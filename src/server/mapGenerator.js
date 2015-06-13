@@ -558,6 +558,34 @@ function mapGenerator()
         map.isMap = true;
         return map;
     }
+    
+    //Serialisieren
+    function serializeAsJSON(map){
+        var json = {};
+        json.continents = [];
+        
+        for(var c=0;c<map.continents.length;c++){
+            json.continents[c]={};
+            json.continents[c].id = map.continents[c].id;
+            json.continents[c].name = map.continents[c].name;
+            json.continents[c].unitBonus = map.continents[c].unitBonus;
+            
+            json.continents[c].countries = [];
+            for(var countr=0;countr<map.continents[c].countries.length;countr++){
+                json.continents[c].countries[countr] = {};
+                json.continents[c].countries[countr].id = map.continents[c].countries[countr].id;
+                json.continents[c].countries[countr].name = map.continents[c].countries[countr].name;
+                json.continents[c].countries[countr].size = map.continents[c].countries[countr].size;
+                
+                json.continents[c].countries[countr].borders = [];
+                for(var b=0;b<map.continents[c].countries[countr].borders.length;b++){
+                    json.continents[c].countries[countr].borders[b] = map.continents[c].countries[countr].borders[b].id;
+                }
+            }
+        }
+        
+        return JSON.stringify(json);
+    }
     //###############################################################################################################
     //Funktionsdeklaration
     //###############################################################################################################
