@@ -431,19 +431,37 @@ function lobbyUi(aRequestController)
         }
     }
     
-    function submitPlayerColor()
+    function submitPlayerColor(aId, aColor)
     {
-        
+        try
+        {
+            _lobbyRequestController.updatePlayerColor(_currentLobby.getId(), aId, aColor);
+        }
+        catch(e)
+        {
+        }
     }
     
-    function submitLobbyName()
+    function submitLobbyName(aName)
     {
-        
+        try
+        {
+            _lobbyRequestController.updateLobbyName(_currentLobby.getId(), aName);
+        }
+        catch(e)
+        {
+        }
     }
     
-    function submitMaxPlayers()
+    function submitMaxPlayers(aMaxPlayers)
     {
-        
+        try
+        {
+            _lobbyRequestController.updateMaxPlayers(_currentLobby.getId(), aMaxPlayers);
+        }
+        catch(e)
+        {
+        }
     }
     
     function submitPlayerType()
