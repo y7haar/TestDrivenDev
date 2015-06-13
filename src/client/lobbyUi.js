@@ -473,7 +473,8 @@ function lobbyUi(aRequestController)
     {
         try
         {
-            _lobbyRequestController.startGame(_currentLobby.getId());
+            if(_currentLobby.getPlayers().length >= 2)
+                _lobbyRequestController.startGame(_currentLobby.getId());
         }
         catch(e)
         {
