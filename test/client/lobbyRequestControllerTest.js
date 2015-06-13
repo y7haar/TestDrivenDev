@@ -529,6 +529,11 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
     },
     
+    "test addBot should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.addBot(1);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
     
     // Kick Bot
     "test controller should have function to kick Bot": function () {         
@@ -564,6 +569,11 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals("POST", this.sandbox.server.requests[0].method);
         assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+    "test kickBot should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.kickBot(1, 3);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     },
     
     
@@ -602,6 +612,11 @@ TestCase("LobbyRequestControllerUpdateTest", {
         assertEquals("POST", this.sandbox.server.requests[0].method);
         assertEquals(BASE_URL + "lobbies/1", this.sandbox.server.requests[0].url);
         assertEquals(json, this.sandbox.server.requests[0].requestBody);
+    },
+    
+     "test kickPlayer should perform a POST request with correct Content-Type header": function () {         
+         this.lobbyRequestController.kickPlayer(1, 3);
+         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
     }
     
 });
