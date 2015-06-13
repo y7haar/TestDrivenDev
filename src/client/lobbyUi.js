@@ -203,6 +203,9 @@ function lobbyUi(aRequestController)
         title.innerHTML = aLobby.getName();
         title.contentEditable = true;
         title.className = "lobbyTitle";
+        title.onblur = function() {
+            _lobbyRequestController.updateLobbyName(_currentLobby.getId(), title.textContent);
+        };
         
         id.innerHTML = "#" + aLobby.getId();
         id.className = "lobbyId";
@@ -397,7 +400,7 @@ function lobbyUi(aRequestController)
         playerName.contentEditable = true;
         playerName.innerHTML = "";
         playerName.onblur = function(){
-            _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.innerHTML)
+            _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.textContent);
         };
         
         playerName.onclick = function(){
