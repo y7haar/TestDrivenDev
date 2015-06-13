@@ -471,7 +471,13 @@ function lobbyUi(aRequestController)
     
     function submitLobbyStart()
     {
-        
+        try
+        {
+            _lobbyRequestController.startGame(_currentLobby.getId());
+        }
+        catch(e)
+        {
+        }
     }
     
     function setCurrentLobby(aLobby)
