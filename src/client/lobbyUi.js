@@ -10,6 +10,7 @@ function lobbyUi(aRequestController)
     
     var _colors = [ "Blue", "LightGreen", "Coral", "CornflowerBlue", "ForestGreen", "Red", "DarkOrange", "Yellow", "LawnGreen", "Khaki", "Violet"];
     var _colorIndex = 0;
+    var _currentLobby;
     
     function createContent()
     {
@@ -140,6 +141,8 @@ function lobbyUi(aRequestController)
     
     function showLobby(aLobby)
     {
+        _currentLobby = aLobby;
+        
         clearLobbies();
         
         var wrapper = document.getElementById("lobbyWrapper");
@@ -169,6 +172,8 @@ function lobbyUi(aRequestController)
     
     function showLeaderLobby(aLobby)
     {
+        _currentLobby = aLobby;
+        
         clearLobbies();
         
         var wrapper = document.getElementById("lobbyWrapper");
@@ -415,6 +420,36 @@ function lobbyUi(aRequestController)
         aLobbyWrapper.appendChild(div);
     }
     
+    function submitPlayerName()
+    {
+        
+    }
+    
+    function submitPlayerColor()
+    {
+        
+    }
+    
+    function submitLobbyName()
+    {
+        
+    }
+    
+    function submitMaxPlayers()
+    {
+        
+    }
+    
+    function submitPlayerType()
+    {
+        
+    }
+    
+    function submitLobbyStart()
+    {
+        
+    }
+    
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
@@ -426,4 +461,12 @@ function lobbyUi(aRequestController)
     this.showLobby = showLobby;
     this.showLeaderLobby = showLeaderLobby;
     this.setPlayerEditable = setPlayerEditable;
+    
+    //Events
+    this.submitPlayerName = submitPlayerName;
+    this.submitPlayerColor = submitPlayerColor;
+    this.submitLobbyName = submitLobbyName;
+    this.submitMaxPlayers = submitMaxPlayers;
+    this.submitPlayerType = submitPlayerType;
+    this.submitLobbyStart = submitLobbyStart;
 }
