@@ -471,7 +471,7 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("L1", h1.innerHTML);
         
         assertTagName("h1", h12);
-        assertEquals("lobbyTitle", h12.className);
+        assertEquals("lobbyId", h12.className);
         assertEquals("#0", h12.innerHTML);
     },
     
