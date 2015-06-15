@@ -187,7 +187,6 @@ TestCase("MapGeneratorTest for private Functions", {
         assertEquals(grid[0][1], grid[1][1].borders[1]);
         assertEquals(grid[2][1], grid[1][1].borders[2]);
         assertEquals(grid[1][2], grid[1][1].borders[3]);
-        console.log(grid[2][1].borders);
           //Land über 2/0
         assertEquals(3, grid[2][1].borders.length);
         assertEquals(grid[1][1], grid[2][1].borders[0]);
@@ -777,12 +776,43 @@ TestCase("MapGeneratorTest", {
         assertEquals(0, this.mapGenerator.collectAllCountriesBelowMinSize().length);
     },
     
+    "test generateMap should return a Map-Object with a continentArray": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertArray(map.continents);
+    },
+    
     "test generateMap should return a map-object with atleast minimumContinents": function()
     {
         this.mapGenerator.setGridSize(this.x,this.y);
         var map = this.mapGenerator.generateMap();
         
-        assertTrue(this.mapGenerator.getMinimumContinentNumber() >= map.continents.length);
+        assertTrue(this.mapGenerator.getMinimumContinentNumber() <= map.continents.length);
+    },
+    
+    "test generateMap should return a map-object with may maximumContinents": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(this.mapGenerator.getMaximumContinentNumber() >= map.continents.length);
+    },
+    
+    "test generateMap should return a map-object with continents that have a valid unitBonus": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();      
+        var continents = map.continents;
+        
+        assertTrue(continents[0].unitBonus >= 1);
+        assertTrue(continents[1].unitBonus >= 1);
+        assertTrue(continents[2].unitBonus >= 1);
+        assertTrue(continents[3].unitBonus >= 1);
+        assertTrue(continents[continents.length-1].unitBonus >= 1);
     },
     
     "test generateMap should only generate maps with continents above minContinentSize": function()
