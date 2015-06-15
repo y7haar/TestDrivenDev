@@ -16,7 +16,7 @@ function mapGenerator()
     //Alle Länder
     var allCountries = [];
     //Länder die nicht in Kontinenten sind
-    
+    var countriesNotInContinents = [];
     
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
@@ -120,8 +120,8 @@ function mapGenerator()
         if(isNaN(size))
             throw new TypeError;
         
-        if(size <= 0)
-            throw new Error("Size musst be one or higher");
+        if(size <= 1)
+            throw new Error("Size musst be two or higher");
         
         minimumContinentNumber = size;
     }
@@ -183,6 +183,7 @@ function mapGenerator()
         //Karte erzeugen
         var map = createMap();
         //Kontinente erzeugen
+        map.continents = buildContinents();
         //initLogicMap(map);
         return map;
     }
@@ -358,7 +359,8 @@ function mapGenerator()
             {
                 //Wenn nicht bereits ein land in einem Kontinent hinzufügen
                 if(countriesInContinents.indexOf(countryNeigbors[j]) === -1)
-                    neigbors.push(countryNeigbors[j]);
+                    if(neigbors.indexOf(countryNeigbors[j]) === -1)
+                        neigbors.push(countryNeigbors[j]);
             }
         }
         
@@ -569,6 +571,114 @@ function mapGenerator()
                     remainingCountries.splice(remainingCountries.indexOf(winner),1);
             }
         }
+    }
+    
+    //Erstellt die Kontinente
+    function buildContinents()
+    {
+        //Anzahl konnte würfeln
+        var factor = maximumContinentNumber - minimumContinentNumber;
+        var random = Math.round(Math.random()*factor + minimumContinentNumber);
+        
+        //Wenn es zu wenige Länder gibt gehts halt nicht
+        if(random*minimumContinentSize > allCountries.length)
+        {
+            random = minimumContinentNumber;
+            if(minimumContinentNumber*minimumContinentSize > allCountries.length)
+                throw new Error("This grid might be to small for map-generation");
+                
+        }
+        
+        //Array anlegen
+        countriesNotInContinents = allCountries.slice();
+        
+        //Kontinente anlegen
+        var continents = [];
+        
+        //id
+        var id = 1;
+        
+        while(random > 0)
+        {
+            var worked = true;
+            
+            //Neuer Kontinent
+            var newContinent = createContinent(id++);
+            //Startland
+            var seed = getRandom(countriesNotInContinents);
+            //Startland hinzufügen
+            newContinent.countries.push(seed);
+            //Arrays bearbeiten
+            countriesInContinents.push(seed);
+            countriesNotInContinents.splice(countriesNotInContinents.indexOf(seed), 1);
+            
+            //Bis zur Mindestgröße mergen
+            while(newContinent.countries.length < minimumContinentSize)
+            {
+                //Hinzufügbare Länder sammeln
+                var neighbors = collectUnusedNeighborCountriesOfContinent(newContinent);
+                
+                if(neighbors.length < 1)
+                {
+                    worked = false;
+                    break;
+                }
+                
+                //Land auswählen
+                var countrie = getRandom(neighbors);
+                //Land dem Kontinent hinzufügen
+                newContinent.countries.push(countrie);
+                //Arrays bearbeiten
+                countriesInContinents.push(countrie);
+                countriesNotInContinents.splice(countriesNotInContinents.indexOf(countrie),1);
+            }
+            
+            if(!worked)
+            {
+                console.log("Happened");
+
+                //Rückgängig machen
+                while(newContinent.countries.length > 0)
+                {
+                    var x = newContinent.countries.pop();
+                    countriesNotInContinents.push(x);
+                    countriesInContinents.splice(countriesInContinents.indexOf(x),1);
+                }
+            }
+            else
+            {
+                //Mindestgröße hat Funtioniert
+                random--;
+                //-> Kontinent hinzufügen
+                continents.push(newContinent);
+            }
+        }
+        
+        //Weiter mergen
+        while(countriesNotInContinents.length > 0)
+        {
+            //Kontinent aussuchen
+            var continent = getRandom(continents);
+            //Kandidaten sammeln
+            var candidates = collectUnusedNeighborCountriesOfContinent(continent);
+            
+            //Kann ja sein
+            if(candidates.length === 0)
+                continue;
+  
+            var country = getRandom(candidates);
+            continent.countries.push(country);
+            countriesInContinents.push(country);
+            countriesNotInContinents.splice(countriesNotInContinents.indexOf(country),1);
+        }
+        
+        //Bonus berechnen
+        for(var i = 0; i < continents.length; i++)
+        {
+            continents[i].unitBonus = calculateUnitBonus(continents[i]);
+        }
+        
+        return continents;
     }
     
     //###############################################################################################################
