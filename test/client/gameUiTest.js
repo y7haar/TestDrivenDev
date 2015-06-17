@@ -55,9 +55,8 @@ TestCase("GameUiTest", {
     "test if _initMap can store Countrys":function(){
         var mapGen = new tddjs.server.controller.mapGenerator();
         mapGen.setGridSize(50,50);
-        mapGen.generateMap();
-        var map = mapGen.getMapGrid();
         
+        var map = JSON.parse(mapGen.generateMap()).gridMap;
         
         assertException(this.gameUi._getCountries(),"Error");
         this.gameUi._initMap(map);

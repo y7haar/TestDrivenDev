@@ -17,7 +17,9 @@ function gameUiController(aGLC,aCtx){
     var _btn =[];
     var _countries =[];
     var _gridMap;
-    var _map ={};
+    var _gridMapW;
+    var _gridMapH;
+    var _map;
     
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
@@ -163,6 +165,9 @@ function gameUiController(aGLC,aCtx){
     function _deserialize(map){
         map=JSON.parse(map);
         
+        _gridMapW=map.gridMap.length;
+        _gridMapH=map.gridMap[0].length;
+        
         var cache_countrys=[];
         var countrys=[];
         //get all Countrys
@@ -265,35 +270,39 @@ function gameUiController(aGLC,aCtx){
         //daten vom server
         _deserialize(null);
         
-        _gridMap = _map.gridMap;
         _initGridMap();
     }
     
     function _initGridMap(){
         //for-each country in map
         //_gridMap[x][y]=country (der id an x,y)
-        for(var x=0; x<_map.gridMap.length; x++){
-            for(var y=0; y<_map.gridMap[0].length; y++){
+        for(var x=0; x<_gridMapW; x++){
+            for(var y=0; y<_gridMapH; y++){
                 _gridMap[x][y] = _getCountryById(_gridMap[x][y].id);
             }
         }
     }
     
     function _getCountryById(id){
-        for(var c=0; c<_map.continents.length; c++){
+        /*for(var c=0; c<_map.continents.length; c++){
             for(var countr=0; countr<_map.continents[c].countries.length; countr++){
                 if(_map.continents[c].countries[countr].id === id)
                     return _map.continents[c].countries[countr];
             }
+        }*/
+        for(var c in _map.getContinents()){
+            for(var countr in _map.getContinents()[c].getCountrys())
+                if(_map.getContinents()[c].getCountrys()[countr].id === id)
+                    return _map.getContinents()[c].getCountrys()[countr];
         }
     }
     
     function _initMap(aGridMap){
         _gridMap = aGridMap;
-        for(x=0;x<_gridMap.cellGrid.length;x++){
-            for(y=0;y<_gridMap.cellGrid[0].length;y++){
-                if(_countries.indexOf(_gridMap.cellGrid[x][y]) === -1)
-                    _countries.push(_gridMap.cellGrid[x][y]);
+        for(x=0;x<_gridMap.length;x++){
+            for(y=0;y<_gridMap[0].length;y++){
+                if(_countries.indexOf(_gridMap[x][y]) === -1)
+                    _countries.push(_gridMap[x][y]);
             }
         }
     }
