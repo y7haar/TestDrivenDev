@@ -247,10 +247,13 @@ TestCase("LobbyUiTest", {
     
     "test lobbyUi should call methods to create Lobby Overview UI": function () {  
         
+        var requestController = this.lobbyUi.getLobbyRequestController();
+        
         var createContentSpy = this.sandbox.spy(this.lobbyUi, "createContent");
         var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
-        var requestAllLobbiesSpy = this.sandbox.spy(this.lobbyUi, "requestAllLobbies");
+        var requestAllLobbiesSpy = this.sandbox.spy(requestController, "requestAllLobbies");
         var addNewLobbyButtonSpy = this.sandbox.spy(this.lobbyUi, "addNewLobbyButton");
+        
         
         sinon.assert.notCalled(createContentSpy);
         sinon.assert.notCalled(createWrapperSpy);
