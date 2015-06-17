@@ -169,6 +169,7 @@ function gameUiController(aGLC,aCtx){
         
         _gridMapW=map.gridMap.length;
         _gridMapH=map.gridMap[0].length;
+        _gridMap=map.gridMap;
         
         var cache_countrys=[];
         var countrys=[];
@@ -221,6 +222,7 @@ function gameUiController(aGLC,aCtx){
         for(var i=0; i<cache_continents.length; i++){
             continents[i] = new tddjs.client.map.continent();
             continents[i].id=cache_continents[i];
+            continents[i].setName("ID:"+cache_continents[i]);
         }
         
         //init Countinents
@@ -268,9 +270,9 @@ function gameUiController(aGLC,aCtx){
         return _map;
     }
     
-    function _getMap(){
+    function _getMap(map){
         //daten vom server
-        _deserialize(null);
+        _deserialize(map);
         
         _initGridMap();
     }
@@ -326,6 +328,7 @@ function gameUiController(aGLC,aCtx){
     
     //private
     this._initMap = _initMap;
+    this._getMap = _getMap;
     this._getCountries = _getCountries;
     this._deserialize = _deserialize;
     
