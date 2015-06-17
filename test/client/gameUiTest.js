@@ -11,7 +11,7 @@ function gameUiSetup()
     this.ctx = this.canvas.getContext("2d");
     assertObject(this.ctx);
     
-    this.gameUi = new tddjs.client.ui.gameUiController(new tddjs.client.gameLoopController(),this.ctx);
+    this.gameUi = new tddjs.client.ui.gameUiController(null,this.ctx);
     this.button = new tddjs.client.ui.button(170,65,"button",this.ctx);
     this.buttonW = this.ctx.measureText("button").width;
     this.buttonH = this.ctx.measureText("button").height;
@@ -54,7 +54,7 @@ TestCase("GameUiTest", {
     
     "test if _initMap can store Countrys":function(){
         var mapGen = new tddjs.server.controller.mapGenerator();
-        mapGen.setGridSize(5,5);
+        mapGen.setGridSize(50,50);
         mapGen.generateMap();
         var map = mapGen.getMapGrid();
         
@@ -69,5 +69,27 @@ TestCase("GameUiTest", {
         assert(this.button.isCoordOnButton(this.buttonW+170,65));
         assert(this.button.isCoordOnButton(170,this.buttonH+65));
         assert(this.button.isCoordOnButton(this.buttonW+170,this.buttonH+65));
+    },
+    
+    "test if _deserialze generates a valid map":function(){
+        
+        var mapGen = new tddjs.server.controller.mapGenerator();
+        mapGen.setGridSize(50,50);
+        var map = this.gameUi._deserialize(mapGen.generateMap());
+        
+        var continent;
+        var country;
+        for(var i in map.getContinents()){
+            continent=map.getContinents()[i];
+            break;
+        }
+        for(var i in continent.getCountrys()){
+            country=continent.getCountrys()[i];
+            break;
+        }
+        
+        assertInstanceOf("map should be instance of map",tddjs.client.ui.map,map);
+        assertInstanceOf(tddjs.client.ui.continent,continent);
+        assertInstanceOf(tddjs.client.ui.country,country);
     }
 });
