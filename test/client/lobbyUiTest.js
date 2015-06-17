@@ -239,6 +239,27 @@ TestCase("LobbyUiTest", {
         assertTagName("div", buttonDiv);
         assertEquals("newLobbyButton", buttonDiv.className);
         assertEquals("New Lobby", buttonDiv.innerHTML);
+    },
+    
+    "test lobbyUi should have function to show lobby overview": function () {  
+        assertFunction(this.lobbyUi.showLobbyOverview);
+    },
+    
+    "test lobbyUi should call methods to create Lobby Overview UI": function () {  
+        
+        var createContentSpy = this.sandbox.spy(this.lobbyUi, "createContent");
+        var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
+        var requestAllLobbiesSpy = this.sandbox.spy(this.lobbyUi, "requestAllLobbies")
+        
+        sinon.assert.notCalled(createContentSpy);
+        sinon.assert.notCalled(createWrapperSpy);
+        sinon.assert.notCalled(requestAllLobbiesSpy);
+        
+        this.lobbyUi.showLobbyOverview();
+        
+        sinon.assert.calledOnce(createContentSpy);
+        sinon.assert.calledOnce(createWrapperSpy);
+        sinon.assert.calledOnce(requestAllLobbiesSpy);
     }
 });
 
