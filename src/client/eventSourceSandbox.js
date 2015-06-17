@@ -26,12 +26,13 @@ function eventSourceSandbox()
     {        
         // ------------- INIT -------------------------------------
         if(typeof serverURL !== 'string') throw new TypeError("serverURL is not a String.");    
-        if(typeof credentials !== 'boolean' && typeof credentials !== 'undefined')
-            throw new TypeError("withCredentials is not a Boolean.");
+        if(typeof credentials !== 'object' && typeof credentials !== 'undefined' )
+            throw new TypeError("withCredentials expected Object with boolean Member");
         
         var withCredentials = false;
-        if(typeof credentials !== 'undefined')
-            withCredentials = credentials;
+        if(typeof credentials !== 'undefined' && typeof credentials.withCredentials == 'boolean')
+            withCredentials = credentials.withCredentials;
+       
         
         var url = serverURL;        
         var readyState;
