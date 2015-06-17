@@ -211,19 +211,6 @@ function gameUiController(aGLC,aCtx){
         }
     }
     
-    function _extendCountries(){
-        if(_countries.length === 0)
-            throw new Error("Call _initMap first!");
-        for (var i=0; i<_countries.length; ++i)
-            _countries[i]._isOnCoord=_isOnCoord;
-    }
-    // <editor-fold defaultstate="collapsed" desc="Country helper">
-    function _isOnCoord(x,y){
-        console.log(this);
-        return null;
-    }
-    // </editor-fold>
-    
     function _getCountries(){
         if(_countries.length === 0)
             throw new Error("Call _initMap first!");

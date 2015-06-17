@@ -64,19 +64,6 @@ TestCase("GameUiTest", {
         assertTrue(this.gameUi._getCountries().length !== 0);
     },
     
-    "test if countrys get helper-functions":function(){
-        var mapGen = new tddjs.server.controller.mapGenerator();
-        mapGen.setGridSize(5,5);
-        mapGen.generateMap();
-        var map = mapGen.getMapGrid();
-        this.gameUi._initMap(map);
-        
-        this.gameUi._extendCountries();
-        var countrys = this.gameUi._getCountries();
-        
-        assertFunction(countrys[0]._isOnCoord);
-    },
-    
     "test gameUi button: coord should be on the Button": function () {        
         assert(this.button.isCoordOnButton(170,65));
         assert(this.button.isCoordOnButton(this.buttonW+170,65));
