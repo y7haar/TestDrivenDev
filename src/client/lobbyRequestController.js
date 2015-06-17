@@ -63,7 +63,7 @@ function lobbyRequestController()
             _lobbyUi.addLobby(data[i]);
         }
         
-        _lobbyUi.addNewLobbyButton();
+    _lobbyUi.addNewLobbyButton();
     }
     
     function onAllLobbiesFailure()
