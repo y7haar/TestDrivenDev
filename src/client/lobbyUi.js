@@ -14,6 +14,7 @@ function lobbyUi(aRequestController)
     
     var _startButton;
     
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -436,6 +437,26 @@ function lobbyUi(aRequestController)
         _startButton = div;
     }
     
+    function addNewLobbyButton()
+    {
+        var wrapper = document.getElementById("lobbyWrapper");
+        
+        var div = document.createElement("div");
+        div.className = "newLobbyButton";
+        div.innerHTML = "New Lobby";
+        
+        wrapper.appendChild(div);
+    }
+    
+    function showLobbyOverview()
+    {
+        this.createContent();
+        this.createWrapper();
+        
+        var wrapper = document.getElementById("lobbyWrapper");
+        _lobbyRequestController.requestAllLobbies();
+    }
+    
     function submitPlayerName(aId, aName)
     {
         try
@@ -521,6 +542,8 @@ function lobbyUi(aRequestController)
     this.showLobby = showLobby;
     this.showLeaderLobby = showLeaderLobby;
     this.setPlayerEditable = setPlayerEditable;
+    this.addNewLobbyButton = addNewLobbyButton;
+    this.showLobbyOverview = showLobbyOverview;
     
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;

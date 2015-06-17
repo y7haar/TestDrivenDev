@@ -125,7 +125,7 @@ TestCase("LobbyRequestControllerTest", {
         this.sandbox.server.requests[0].respond(200, "", this.lobbyController.serialize());
         
         var lobbies = this.wrapper.childNodes;
-        assertEquals(2, lobbies.length);
+        assertEquals(3, lobbies.length);
         
         assertTagName("div", lobbies[0]);
         assertTagName("div", lobbies[1]);
