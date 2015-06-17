@@ -249,17 +249,20 @@ TestCase("LobbyUiTest", {
         
         var createContentSpy = this.sandbox.spy(this.lobbyUi, "createContent");
         var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
-        var requestAllLobbiesSpy = this.sandbox.spy(this.lobbyUi, "requestAllLobbies")
+        var requestAllLobbiesSpy = this.sandbox.spy(this.lobbyUi, "requestAllLobbies");
+        var addNewLobbyButtonSpy = this.sandbox.spy(this.lobbyUi, "addNewLobbyButton");
         
         sinon.assert.notCalled(createContentSpy);
         sinon.assert.notCalled(createWrapperSpy);
         sinon.assert.notCalled(requestAllLobbiesSpy);
+        sinon.assert.notCalled(addNewLobbyButtonSpy);
         
         this.lobbyUi.showLobbyOverview();
         
         sinon.assert.calledOnce(createContentSpy);
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(requestAllLobbiesSpy);
+        sinon.assert.notCalled(addNewLobbyButtonSpy);
     }
 });
 
