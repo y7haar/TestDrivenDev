@@ -7,7 +7,7 @@ var controller;
 
 function test(){
     var m=new tddjs.server.controller.mapGenerator()
-    m.setGridSize(75,75);
+    m.setGridSize(120,120);
     m.setMaximumCountrySize(200);
     m.setMinimumCountrySize(75);
      canvas = document.getElementById('game');
@@ -16,7 +16,22 @@ function test(){
        if (ctx) {
            controller = new tddjs.client.ui.gameUiController(null,ctx);
            controller._getMap(m.generateMap());
-           controller.drawGame();
+           
+           canvas.addEventListener('mousemove', onCanvasMouseMove, false);
+           window.requestAnimationFrame(mainloop);
        }
    }
+}
+
+function mainloop(){
+    controller.drawGame();
+}
+
+function onCanvasMouseMove(oEvent){
+    mainloop();
+    //console.log(oEvent.offsetX);
+    ctx.strokeStyle="#000";
+    ctx.fillStyle = "#552700";
+    ctx.lineWidth="1";
+    ctx.fillRect(oEvent.offsetX,oEvent.offsetY,50,50);
 }
