@@ -220,6 +220,25 @@ TestCase("LobbyUiTest", {
         assertEquals("L2", lobbyTrContent2[1].innerHTML);
         assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
         assertEquals("Join", lobbyTrContent2[3].childNodes[0].innerHTML);
+    },
+    
+    "test lobbyUi should have function to add new lobby button": function () {  
+        assertFunction(this.lobbyUi.addNewLobbyButton);
+    },
+    
+    "test addNewLobbyButton should append a button ": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        
+        this.wrapper = document.getElementById("lobbyWrapper");
+        
+        this.lobbyUi.addNewLobbyButton();
+        
+        var lobbies = this.wrapper.childNodes;
+        var buttonDiv = lobbies[lobbies.length - 1];
+        
+        assertTagName("div", buttonDiv);
+        assertEquals("newLobyyButton", buttonDiv.className);
+        assertEquals("New Lobby", buttonDiv.innerHTML);
     }
 });
 
