@@ -231,13 +231,13 @@ TestCase("LobbyUiTest", {
         
         this.wrapper = document.getElementById("lobbyWrapper");
         
-        this.lobbyUi.addNewLobbyButton();
+        this.lobbyUi.addNewLobbyButton(this.wrapper);
         
         var lobbies = this.wrapper.childNodes;
         var buttonDiv = lobbies[lobbies.length - 1];
         
         assertTagName("div", buttonDiv);
-        assertEquals("newLobyyButton", buttonDiv.className);
+        assertEquals("newLobbyButton", buttonDiv.className);
         assertEquals("New Lobby", buttonDiv.innerHTML);
     }
 });
