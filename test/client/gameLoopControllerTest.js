@@ -356,6 +356,23 @@ TestCase("GameLoopCommunicationTests", {
         assertEquals("attackingState",this.gameLoop.getStateName());
         
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
+    },
+    "test (attacking)gameLoop.makeMove should POST to server": function () {
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+        assertEquals("attackingState",this.gameLoop.getStateName());
+        
+        assertTrue(this.gameLoop.makeMove(this.validAttackMove));
+        this.sandbox.update();
+        assertEquals(2, this.sandbox.server[this.url].requests.length);
+    },
+    "test (attacking)gameLoop.makeMove move should be same on server": function () {
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+        assertEquals("attackingState",this.gameLoop.getStateName());
+        
+        assertTrue(this.gameLoop.makeMove(this.validAttackMove));
+        this.sandbox.update();
+        assertEquals(this.validAttackMove, JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
     }
+    
    
 });
