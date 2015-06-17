@@ -230,6 +230,8 @@ TestCase("LobbyUiTest", {
     "test addNewLobbyButton should append a button ": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         
+        this.wrapper = document.getElementById("lobbyWrapper");
+        
         this.lobbyUi.addNewLobbyButton();
         
         var lobbies = this.wrapper.childNodes;
