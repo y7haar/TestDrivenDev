@@ -28,7 +28,9 @@ function gameUiController(aGLC,aCtx){
     
     
     function init(){
-        
+        _getMap();
+        _initMap();
+        drawGame();
     }
     
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
@@ -41,23 +43,23 @@ function gameUiController(aGLC,aCtx){
     var border=50; //25 an jeder seite
     var bottom=50; //insg 75 unten frei für menü etc
     function drawMap(){
-        var w = (_ctx.canvas.width-border-_gridMap.cellGrid.length)/_gridMap.cellGrid.length;
-        var h = (_ctx.canvas.height-border-bottom-_gridMap.cellGrid[0].length)/_gridMap.cellGrid[0].length;
+        var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
+        var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
 
-        for(x=0;x<_gridMap.cellGrid.length;x++){
-            for(y=0;y<_gridMap.cellGrid[0].length;y++){
+        for(x=0;x<_gridMap.length;x++){
+            for(y=0;y<_gridMap[0].length;y++){
                 _ctx.strokeStyle="#000";
                 _ctx.fillStyle = "#552700";
-                _ctx.fillStyle=_gridMap.cellGrid[x][y].color;
+                _ctx.fillStyle=_gridMap[x][y].color;
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-                if(_gridMap.cellGrid[x][y].hover){
+                if(_gridMap[x][y].hover){
                     _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
                 }
 
-                if(_gridMap.cellGrid[x][y].selected){
+                if(_gridMap[x][y].selected){
                     _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                 }
 
@@ -70,14 +72,14 @@ function gameUiController(aGLC,aCtx){
         _ctx.lineWidth="2";
         _ctx.strokeStyle="#00F";
         if(x>0 && y>0){
-            if(_gridMap.cellGrid[x][y].id !== _gridMap.cellGrid[x-1][y].id)
+            if(_gridMap[x][y].id !== _gridMap[x-1][y].id)
             {
                 _ctx.beginPath();
                 _ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
                 _ctx.lineTo(x+(x*w)+border/2+0, y+(y*h)+border/2+h+offset);
                 _ctx.stroke();
             }
-            if(_gridMap.cellGrid[x][y].id !== _gridMap.cellGrid[x][y-1].id)
+            if(_gridMap[x][y].id !== _gridMap[x][y-1].id)
             {
                 _ctx.beginPath();
                 _ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
@@ -88,7 +90,7 @@ function gameUiController(aGLC,aCtx){
         else{
             if(x===0 && y>0 )
             {
-                if(_gridMap.cellGrid[x][y].id !== _gridMap.cellGrid[x][y-1].id)
+                if(_gridMap[x][y].id !== _gridMap[x][y-1].id)
                 {
                     _ctx.beginPath();
                     _ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
@@ -98,7 +100,7 @@ function gameUiController(aGLC,aCtx){
             }
             else if(y===0 && x>0 )
             {
-                if(_gridMap.cellGrid[x][y].id !== _gridMap.cellGrid[x-1][y].id)
+                if(_gridMap[x][y].id !== _gridMap[x-1][y].id)
                 {
                     _ctx.beginPath();
                     _ctx.moveTo(x+(x*w)+border/2, y+(y*h)+border/2);
