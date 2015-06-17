@@ -42,7 +42,11 @@ function gameUiController(aGLC,aCtx){
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
     _hoverImg.src = "client/ui/hoverImg.png";
-    var cache_img;
+    
+    var imgCacheMap;
+    var imgCacheHover=[];
+    var imgCacheSelected=[];
+    
     
     
     function init(){
@@ -54,13 +58,15 @@ function gameUiController(aGLC,aCtx){
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
     function drawGame(){
         clear();
-        if(!cache_img)
+        if(!imgCacheMap)
             drawMap();
         drawCache();
         //drawUI();
     }
     function drawCache(){
-        _ctx.putImageData(cache_img,0,0);
+        _ctx.putImageData(imgCacheMap,0,0);
+        _ctx.drawImage(imgCacheHover[0],0,0);
+        _ctx.drawImage(imgCacheSelected[5],0,0);
     }
     
     var border=50; //25 an jeder seite
@@ -77,19 +83,53 @@ function gameUiController(aGLC,aCtx){
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-                if(_gridMap[x][y].hover){
+                /*if(_gridMap[x][y].hover){
                     _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
                 }
 
                 if(_gridMap[x][y].selected){
                     _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-                }
+                }*/
 
                 drawMapBorder(x,y,w,h);
             }
         }
-        cache_img=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
+        imgCacheMap=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
+        cacheHover(w,h);
+        cacheSelected(w,h);
+    }
+    function cacheHover(w,h){
+        clear();
+        for(var i in _countries){
+            var id = _countries[i].id;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id)
+                        _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                }
+            }
+            var img = new Image();
+            img.src=_ctx.canvas.toDataURL('image/png');
+            imgCacheHover.push(img);
+            clear();
+        }
+    }
+    function cacheSelected(w,h){
+        clear();
+        for(var i in _countries){
+            var id = _countries[i].id;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id)
+                        _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                }
+            }
+            var img = new Image();
+            img.src=_ctx.canvas.toDataURL('image/png');
+            imgCacheSelected.push(img);
+            clear();
+        }
     }
     function drawMapBorder(x,y,w,h){
         var offset=1;
@@ -170,6 +210,7 @@ function gameUiController(aGLC,aCtx){
     function clear(){
         _ctx.fillStyle = "#ebebeb";
         _ctx.fillRect(0,0,_ctx.canvas.width, _ctx.canvas.height);
+        _ctx.clearRect(0,0,_ctx.canvas.width,_ctx.canvas.height);
     }
     // </editor-fold>
     
@@ -329,7 +370,7 @@ function gameUiController(aGLC,aCtx){
     }
     
     function _initMap(aGridMap){
-        _gridMap = aGridMap;
+        //_gridMap = aGridMap;
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
                 if(_countries.indexOf(_gridMap[x][y]) === -1)

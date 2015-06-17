@@ -16,6 +16,7 @@ function test(){
        if (ctx) {
            controller = new tddjs.client.ui.gameUiController(null,ctx);
            controller._getMap(m.generateMap());
+           controller._initMap();
            
            canvas.addEventListener('mousemove', onCanvasMouseMove, false);
            window.requestAnimationFrame(mainloop);
