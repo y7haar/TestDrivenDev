@@ -161,7 +161,91 @@ function gameUiController(aGLC,aCtx){
     
     // <editor-fold defaultstate="collapsed" desc="Map-functions">
     function _deserialize(map){
+        map=JSON.parse(map);
         
+        var cache_countrys=[];
+        var countrys=[];
+        //get all Countrys
+        for(var x=0; x<map.gridMap.length; x++){
+            for(var y=0; y<map.gridMap[0].length; y++){
+                if(cache_countrys.indexOf(map.gridMap[x][y].id) === -1)
+                    cache_countrys.push(map.gridMap[x][y].id);
+            }
+        }
+        for(var i=0; i<cache_countrys.length; i++){
+            countrys[i] = new tddjs.client.map.country();
+            countrys[i].id=cache_countrys[i];
+            countrys[i].setName("ID:"+cache_countrys[i]);
+        }
+        
+        //init Borders
+        for(var c=0;c<map.continents.length;c++){
+            for(var countr=0;countr<map.continents[c].countries.length;countr++){
+                for(var b=0; b<map.continents[c].countries[countr].borders.length; b++){
+                    _addBorder(map.continents[c].countries[countr].id,map.continents[c].countries[countr].borders[b]);
+                }
+            }
+        }
+        function _addBorder(id,idBorder){
+            var c;
+            var cBorder;
+            for(var i=0; i<countrys.length; i++){
+                if(countrys[i].id === id){
+                    c=i;
+                    break;
+                }
+            }
+            for(var i=0; i<countrys.length; i++){
+                if(countrys[i].id === idBorder){
+                    cBorder=i;
+                    break;
+                }
+            }
+            countrys[c].addBorder(countrys[cBorder]);
+        }
+       
+        var cache_continents=[];
+        var continents=[];
+        //get all Continents
+        for(var c=0;c<map.continents.length;c++){
+            if(cache_continents.indexOf(map.continents[c].id) === -1)
+                    cache_continents.push(map.continents[c].id);
+        }
+        for(var i=0; i<cache_continents.length; i++){
+            continents[i] = new tddjs.client.map.continent();
+            continents[i].id=cache_continents[i];
+        }
+        
+        //init Countinents
+        for(var c=0;c<map.continents.length;c++){
+            for(var country=0; country<map.continents[c].countries.length; country++){
+                _addCountry(map.continents[c].id,map.continents[c].countries[country].id);
+            }
+        }
+        function _addCountry(id,idCountry){
+            var c;
+            var cCountry;
+            for(var i=0; i<continents.length; i++){
+                if(continents[i].id === id){
+                    c=i;
+                    break;
+                }
+            }
+            for(var i=0; i<countrys.length; i++){
+                if(countrys[i].id === idCountry){
+                    cCountry=i;
+                    break;
+                }
+            }
+            continents[c].addCountry(countrys[cCountry]);
+        }
+        
+        //generate Map
+        _map = new tddjs.client.map.map();
+        for(var i=0; i<continents.length; i++)
+            _map.addContinent(continents[i]);
+        
+        /* 
         _map.continents = [];
         for(var c=0;c<map.continents.length;c++){
             _map.continents[c] = new tddjs.client.map.continent();
@@ -173,6 +257,8 @@ function gameUiController(aGLC,aCtx){
                 _map.continents[c].addCountry(country);
             }
         }
+        */
+        return _map;
     }
     
     function _getMap(){
@@ -180,6 +266,7 @@ function gameUiController(aGLC,aCtx){
         _deserialize(null);
         
         _gridMap = _map.gridMap;
+        _initGridMap();
     }
     
     function _initGridMap(){
@@ -229,7 +316,7 @@ function gameUiController(aGLC,aCtx){
     //private
     this._initMap = _initMap;
     this._getCountries = _getCountries;
-    this._extendCountries = _extendCountries;
+    this._deserialize = _deserialize;
     
     //helper
 }
