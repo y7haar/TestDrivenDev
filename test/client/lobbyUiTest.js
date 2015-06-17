@@ -6,6 +6,7 @@ function lobbyUiSetup()
 {
     this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
     this.lobbyUi = new tddjs.client.ui.lobbyUi(this.lobbyRequestController);
+    this.lobbyRequestController.setLobbyUi(this.lobbyUi);
         
     this.lobby1 = new tddjs.client.model.lobby();
     this.lobby2 = new tddjs.client.model.lobby();
@@ -220,6 +221,49 @@ TestCase("LobbyUiTest", {
         assertEquals("L2", lobbyTrContent2[1].innerHTML);
         assertEquals("2 / 3", lobbyTrContent2[2].innerHTML);
         assertEquals("Join", lobbyTrContent2[3].childNodes[0].innerHTML);
+    },
+    
+    "test lobbyUi should have function to add new lobby button": function () {  
+        assertFunction(this.lobbyUi.addNewLobbyButton);
+    },
+    
+    "test addNewLobbyButton should append a button ": function () {  
+        /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
+        
+        this.wrapper = document.getElementById("lobbyWrapper");
+        
+        this.lobbyUi.addNewLobbyButton();
+        
+        var lobbies = this.wrapper.childNodes;
+        var buttonDiv = lobbies[lobbies.length - 1];
+        
+        assertTagName("div", buttonDiv);
+        assertEquals("newLobbyButton", buttonDiv.className);
+        assertEquals("New Lobby", buttonDiv.innerHTML);
+    },
+    
+    "test lobbyUi should have function to show lobby overview": function () {  
+        assertFunction(this.lobbyUi.showLobbyOverview);
+    },
+    
+    "test lobbyUi should call methods to create Lobby Overview UI": function () {  
+        
+        var requestController = this.lobbyUi.getLobbyRequestController();
+        
+        var createContentSpy = this.sandbox.spy(this.lobbyUi, "createContent");
+        var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
+        var requestAllLobbiesSpy = this.sandbox.spy(requestController, "requestAllLobbies");
+        
+        
+        sinon.assert.notCalled(createContentSpy);
+        sinon.assert.notCalled(createWrapperSpy);
+        sinon.assert.notCalled(requestAllLobbiesSpy);
+        
+        this.lobbyUi.showLobbyOverview();
+        
+        sinon.assert.calledOnce(createContentSpy);
+        sinon.assert.calledOnce(createWrapperSpy);
+        sinon.assert.calledOnce(requestAllLobbiesSpy);
     }
 });
 
