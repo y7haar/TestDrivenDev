@@ -84,7 +84,17 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function makeMove(move)
     {
         if (_currentState.isMoveLegal(move))
-        {   
+        {
+            var ajax = tddjs.util.ajax; 
+            var options = {
+              headers:{
+                  "Content-Type": "application/json"
+              },
+              data: JSON.stringify(move),
+              onSucces: null,
+              onFailure: null
+            };
+            ajax.post(_url, options);
             return true;
         }
         else
