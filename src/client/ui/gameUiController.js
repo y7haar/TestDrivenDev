@@ -13,7 +13,17 @@ function gameUiController(aGLC,aCtx){
         gameLoopController = aGLC;
         _ctx = aCtx;
     }
-    
+    // <editor-fold defaultstate="collapsed" desc="color-array">
+    var _colors=[
+        "#f00",
+        "#0f0",
+        "#055"
+    ];
+    var _usedColor=[];
+    function getRandomColor(){
+        return "#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
+    }
+    // </editor-fold>
     var _btn =[];
     var _countries =[];
     var _gridMap;
@@ -50,7 +60,7 @@ function gameUiController(aGLC,aCtx){
             for(y=0;y<_gridMap[0].length;y++){
                 _ctx.strokeStyle="#000";
                 _ctx.fillStyle = "#552700";
-                _ctx.fillStyle=_gridMap[x][y].color;
+                _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
@@ -223,6 +233,7 @@ function gameUiController(aGLC,aCtx){
             continents[i] = new tddjs.client.map.continent();
             continents[i].id=cache_continents[i];
             continents[i].setName("ID:"+cache_continents[i]);
+            continents[i].color=getRandomColor();
         }
         
         //init Countinents
@@ -288,16 +299,18 @@ function gameUiController(aGLC,aCtx){
     }
     
     function _getCountryById(id){
-        /*for(var c=0; c<_map.continents.length; c++){
-            for(var countr=0; countr<_map.continents[c].countries.length; countr++){
-                if(_map.continents[c].countries[countr].id === id)
-                    return _map.continents[c].countries[countr];
-            }
-        }*/
         for(var c in _map.getContinents()){
             for(var countr in _map.getContinents()[c].getCountrys())
                 if(_map.getContinents()[c].getCountrys()[countr].id === id)
                     return _map.getContinents()[c].getCountrys()[countr];
+        }
+    }
+    
+    function _getContinentFromCountryById(id){
+        for(var c in _map.getContinents()){
+            for(var countr in _map.getContinents()[c].getCountrys())
+                if(_map.getContinents()[c].getCountrys()[countr].id === id)
+                    return _map.getContinents()[c];
         }
     }
     
