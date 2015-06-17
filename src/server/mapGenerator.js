@@ -185,7 +185,7 @@ function mapGenerator()
         //Kontinente erzeugen
         map.continents = buildContinents();
         //initLogicMap(map);
-        return map;
+        return serializeAsJSON(map);
     }
     
     //###############################################################################################################
@@ -742,9 +742,10 @@ function mapGenerator()
             }
         }
         
-        json.gridMap = createArray(getWidth(),getHeight());
-        for(var x=0; x<getWidth(); x++){
-            for(var y=0; y<getHeight(); y++){
+        json.gridMap = createArray(getMapWidth(),getMapHeight());
+        for(var x=0; x<getMapWidth(); x++){
+            for(var y=0; y<getMapHeight(); y++){
+                json.gridMap[x][y] = {};
                 json.gridMap[x][y].id = cellGrid[x][y].id;
             }
         }
