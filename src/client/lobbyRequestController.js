@@ -11,6 +11,11 @@ function lobbyRequestController()
     var ajax = tddjs.util.ajax;
     var _lobbyUi = new tddjs.client.ui.lobbyUi(this);
     
+    function setLobbyUi(aUi)
+    {
+        _lobbyUi = aUi;
+    }
+    
     function requestAllLobbies()
     {
         var options = {
@@ -57,6 +62,8 @@ function lobbyRequestController()
         {
             _lobbyUi.addLobby(data[i]);
         }
+        
+        _lobbyUi.addNewLobbyButton();
     }
     
     function onAllLobbiesFailure()
@@ -318,6 +325,8 @@ function lobbyRequestController()
         
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
+    
+    this.setLobbyUi = setLobbyUi;
     
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
