@@ -14,6 +14,7 @@ function lobbyUi(aRequestController)
     
     var _startButton;
     
+    
     function createContent()
     {
         var body = document.getElementsByTagName("body")[0];
@@ -436,6 +437,20 @@ function lobbyUi(aRequestController)
         _startButton = div;
     }
     
+    function addNewLobbyButton(aLobbyWrapper)
+    {
+        var div = document.createElement("div");
+        div.className = "newLobbyButton";
+        div.innerHTML = "New Lobby";
+        
+        aLobbyWrapper.appendChild(div);
+    }
+    
+    function showLobbyOverview()
+    {
+        
+    }
+    
     function submitPlayerName(aId, aName)
     {
         try
@@ -521,6 +536,8 @@ function lobbyUi(aRequestController)
     this.showLobby = showLobby;
     this.showLeaderLobby = showLeaderLobby;
     this.setPlayerEditable = setPlayerEditable;
+    this.addNewLobbyButton = addNewLobbyButton;
+    this.showLobbyOverview = showLobbyOverview;
     
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
