@@ -6,6 +6,7 @@ function lobbyUiSetup()
 {
     this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
     this.lobbyUi = new tddjs.client.ui.lobbyUi(this.lobbyRequestController);
+    this.lobbyRequestController.setLobbyUi(this.lobbyUi);
         
     this.lobby1 = new tddjs.client.model.lobby();
     this.lobby2 = new tddjs.client.model.lobby();
@@ -229,9 +230,7 @@ TestCase("LobbyUiTest", {
     "test addNewLobbyButton should append a button ": function () {  
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
         
-        this.wrapper = document.getElementById("lobbyWrapper");
-        
-        this.lobbyUi.addNewLobbyButton(this.wrapper);
+        this.lobbyUi.addNewLobbyButton();
         
         var lobbies = this.wrapper.childNodes;
         var buttonDiv = lobbies[lobbies.length - 1];
@@ -252,20 +251,17 @@ TestCase("LobbyUiTest", {
         var createContentSpy = this.sandbox.spy(this.lobbyUi, "createContent");
         var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
         var requestAllLobbiesSpy = this.sandbox.spy(requestController, "requestAllLobbies");
-        var addNewLobbyButtonSpy = this.sandbox.spy(this.lobbyUi, "addNewLobbyButton");
         
         
         sinon.assert.notCalled(createContentSpy);
         sinon.assert.notCalled(createWrapperSpy);
         sinon.assert.notCalled(requestAllLobbiesSpy);
-        sinon.assert.notCalled(addNewLobbyButtonSpy);
         
         this.lobbyUi.showLobbyOverview();
         
         sinon.assert.calledOnce(createContentSpy);
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(requestAllLobbiesSpy);
-        sinon.assert.notCalled(addNewLobbyButtonSpy);
     }
 });
 
