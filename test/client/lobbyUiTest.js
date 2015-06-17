@@ -725,6 +725,8 @@ TestCase("LobbyUiEventTest", {
         this.lobby3.kickPlayer(this.player4);
         this.lobby3.kickPlayer(this.player5);
         
+        var alertStub = this.sandbox.stub(window, "alert");
+        
         var spy = this.sandbox.spy(this.lobbyRequestController, "startGame");
         sinon.assert.notCalled(spy);
         
