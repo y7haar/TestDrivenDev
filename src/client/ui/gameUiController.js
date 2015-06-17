@@ -15,13 +15,20 @@ function gameUiController(aGLC,aCtx){
     }
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
-        "#f00",
-        "#0f0",
-        "#055"
+        "#FF8F3D",
+        "#0ff",
+        "#733ECA",
+        "#FFEF3D",
+        "#7AEA38",
+        "#F13964",
+        "#7B3DCA"
     ];
-    var _usedColor=[];
+    var _usedColor=0;
     function getRandomColor(){
-        return "#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
+        //return "#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
+        if(_usedColor>=_colors.length)
+            _usedColor=0;
+        return _colors[_usedColor++];
     }
     // </editor-fold>
     var _btn =[];
@@ -35,6 +42,7 @@ function gameUiController(aGLC,aCtx){
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
     _hoverImg.src = "client/ui/hoverImg.png";
+    var cache_img;
     
     
     function init(){
@@ -46,8 +54,13 @@ function gameUiController(aGLC,aCtx){
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
     function drawGame(){
         clear();
-        drawMap();
-        drawUI();
+        if(!cache_img)
+            drawMap();
+        drawCache();
+        //drawUI();
+    }
+    function drawCache(){
+        _ctx.putImageData(cache_img,0,0);
     }
     
     var border=50; //25 an jeder seite
@@ -76,11 +89,12 @@ function gameUiController(aGLC,aCtx){
                 drawMapBorder(x,y,w,h);
             }
         }
+        cache_img=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
     }
     function drawMapBorder(x,y,w,h){
         var offset=1;
         _ctx.lineWidth="2";
-        _ctx.strokeStyle="#00F";
+        _ctx.strokeStyle="#000";
         if(x>0 && y>0){
             if(_gridMap[x][y].id !== _gridMap[x-1][y].id)
             {

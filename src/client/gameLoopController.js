@@ -95,7 +95,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     // EventSource
     function establishConnection()
     {
-        _eventSource = new EventSource(_url, true);
+        _eventSource = new EventSource(_url, {withCredentials:true});
         addAllEventListner();
     }
     
