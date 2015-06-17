@@ -437,18 +437,24 @@ function lobbyUi(aRequestController)
         _startButton = div;
     }
     
-    function addNewLobbyButton(aLobbyWrapper)
+    function addNewLobbyButton()
     {
+        var wrapper = document.getElementById("lobbyWrapper");
+        
         var div = document.createElement("div");
         div.className = "newLobbyButton";
         div.innerHTML = "New Lobby";
         
-        aLobbyWrapper.appendChild(div);
+        wrapper.appendChild(div);
     }
     
     function showLobbyOverview()
     {
+        this.createContent();
+        this.createWrapper();
         
+        var wrapper = document.getElementById("lobbyWrapper");
+        _lobbyRequestController.requestAllLobbies();
     }
     
     function submitPlayerName(aId, aName)
