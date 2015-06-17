@@ -1,8 +1,12 @@
 /* 
  * Source-Code for MapGenerator
  */
-
-tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
+if(typeof module !== "undefined")
+{
+    module.exports = mapGenerator;
+}
+else
+    tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
 
 function mapGenerator()
 {
@@ -172,6 +176,9 @@ function mapGenerator()
         if(typeof(cellGrid) === "undefined")
             throw new Error("Didnt set grid before");
         
+        //Von einem eventuell vorgerigen Aufruf leeren
+        allCountries = [];
+        
         //Länder initialisieren
         initCountries();
         //Grenzen initializieren
@@ -185,14 +192,14 @@ function mapGenerator()
         //Kontinente erzeugen
         map.continents = buildContinents();
         //initLogicMap(map);
-        return serializeAsJSON(map);
+        return map;
     }
     
     //###############################################################################################################
     //Funktionen
     //###############################################################################################################
     
-    /*test-funktion für die UI*/
+    /*test-funktion für die UI
     function initLogicMap(map)
     {
         var continent = new tddjs.client.map.continent();
@@ -228,7 +235,7 @@ function mapGenerator()
         
         map.addContinent(continent);
         map.addContinent(continent2);
-    }
+    }*/
     
     //Belegt jede Zelle mit einem neuen Land
     function initCountries()
@@ -591,6 +598,7 @@ function mapGenerator()
         
         //Array anlegen
         countriesNotInContinents = allCountries.slice();
+        countriesInContinents = [];
         
         //Kontinente anlegen
         var continents = [];
