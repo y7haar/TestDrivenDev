@@ -380,10 +380,13 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
         
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
-        assertEquals(1, this.gameLoop.toServerLogs.length);
-        assertEquals(2,this.sandbox.server[this.url].requests.length);
+        
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
         
         this.sandbox.update();
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        assertEquals(2,this.sandbox.server[this.url].requests.length);
         assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
     }
     
