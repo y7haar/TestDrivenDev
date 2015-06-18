@@ -291,11 +291,27 @@ TestCase("GameLoopCommunicationTests", {
     },
     "test gameLoop should implement endPhase function": function () {
         assertNotUndefined(this.gameLoop.endPhase);
-    },
-    "test gameLoop.endPhase should send Msg to server that player want to end current Phase": function () {
+    },    
+    "test gameLoop.endPhase should save sended move in Logs if Server got msg = Status 200": function () {
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
         this.gameLoop.endPhase();
-        assertEquals(1, this.gameLoop.toServerLogs.length);
+        
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
         this.sandbox.update();
+        
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        assertEquals(2,this.sandbox.server[this.url].requests.length);       
+    }
+    ,"test gameLoop.endPhase should send Msg to server that player want to end current Phase": function () {
+        this.gameLoop.endPhase();         
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.update();        
+
         assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request       
         assertSame(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);
     },
@@ -373,20 +389,19 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.update();
         assertEquals(this.validAttackMove, JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
     },    
-    "test gameLoop.makeMove should write to toServerLogs if POSTED to Server": function () {
+    "test gameLoop.makeMove should save sended move in Logs if Server got msg = Status 200": function () {
         assertEquals(0, this.gameLoop.toServerLogs.length);
         assertEquals(1,this.sandbox.server[this.url].requests.length);
         
         this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
-        
+   
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
-        
         assertEquals(0, this.gameLoop.toServerLogs.length);
         assertEquals(1,this.sandbox.server[this.url].requests.length);
         
         this.sandbox.update();
-        assertEquals(1, this.gameLoop.toServerLogs.length);
         assertEquals(2,this.sandbox.server[this.url].requests.length);
+        assertEquals(1, this.gameLoop.toServerLogs.length);
         assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
     }
     
