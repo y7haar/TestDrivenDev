@@ -75,7 +75,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
                 "Content-Type": "application/json"
             },
             data: message,
-            onSucces: null,
+            onSuccess: null,
             onFailure: null
         };
         ajax.post(_url, options);        
@@ -91,14 +91,20 @@ function gameLoopController(aMap, aPlayer, aUrl)
                   "Content-Type": "application/json"
               },
               data: JSON.stringify(move),
-              onSucces: null,
+              onSuccess: writeToLogs,
               onFailure: null
             };
-            ajax.post(_url, options);
+            ajax.post(_url, options);           
             return true;
         }
         else
-            return false;
+            return false;           
+     
+        function writeToLogs()
+        {
+            _toServerLogs.push(move);
+        }
+        
     }
     
     
