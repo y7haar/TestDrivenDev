@@ -7,12 +7,12 @@
 
 TestCase("LobbyEventSourceControllerTest", {
     setUp: function() {
-        this.url = BASE_URL + "";
-        
         this.lobby = new tddjs.client.model.lobby();
         this.lobby.setId(1);
         this.lobby.setName("L1");
         this.lobby.setMaxPlayers(4);
+        
+        this.url = BASE_URL + "lobbies/" + this.lobby.getId();
         
         this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
@@ -38,21 +38,27 @@ TestCase("LobbyEventSourceControllerTest", {
         assertFunction(this.lobbyEventSourceController.getLobby);
     },
     
-    "test lobby getter / setter should work properly": function() {
+    "test setter and getter for lobby should set and get lobby": function() {
         assertUndefined(this.lobbyEventSourceController.getLobby());
         this.lobbyEventSourceController.setLobby(this.lobby);
         assertSame(this.lobby, this.lobbyEventSourceController.getLobby());
     },
     
-    "test LobbyEventSourceController should have function to set lobbyUi": function() {
+    "test setter for lobby should throw Error if parameter is no lobby": function() {
+        var controller = this.lobbyEventSourceController;
+        var lobby = this.lobby;
+        
+        assertNoException(function() { controller.setLobby(lobby); });
+        assertException(function() { controller.setLobby(lobby) }, "TypeError");
+    },
+    
+    "test LobbyEventSourceController should have function to set a lobbyUi": function() {
         assertFunction(this.lobbyEventSourceController.setLobbyUi);
     },
     
-    "test establishConnection should establish a new EventSource connection": function() {
-        assertEquals(0,this.sandbox.server[this.url].clients.length);        
+    "test establishConnection should do an EventSource request": function() {
+        assertEquals(0, this.sandbox.server[this.url].clients.length);
         this.lobbyEventSourceController.establishConnection();
-        
-        assertEquals(1,this.sandbox.server[this.url].clients.length);
+        assertEquals(1, this.sandbox.server[this.url].clients.length);
     }
-    
     });
