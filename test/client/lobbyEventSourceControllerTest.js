@@ -49,11 +49,19 @@ TestCase("LobbyEventSourceControllerTest", {
         var lobby = this.lobby;
         
         assertNoException(function() { controller.setLobby(lobby); });
-        assertException(function() { controller.setLobby(lobby) }, "TypeError");
+        assertException(function() { controller.setLobby("5"); }, "TypeError");
     },
     
     "test LobbyEventSourceController should have function to set a lobbyUi": function() {
         assertFunction(this.lobbyEventSourceController.setLobbyUi);
+    },
+    
+     "test setter for lobbyUi should throw Error if parameter is no lobbyUi": function() {
+        var controller = this.lobbyEventSourceController;
+        var lobbyUi = new tddjs.client.ui.lobbyUi();
+        
+        assertNoException(function() { controller.setLobbyUi(lobbyUi); });
+        assertException(function() { controller.setLobbyUi("6"); }, "TypeError");
     },
     
     "test establishConnection should do an EventSource request": function() {
