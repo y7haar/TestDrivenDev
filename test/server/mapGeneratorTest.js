@@ -545,6 +545,29 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertException(function(){gen.calculateUnitBonus(5);}, "TypeError");
+    },
+    
+    "test Shouldnt be able to call buildContients before Initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.buildContinents();}, "Error");
+        
+        this.mapGenerator.setGridSize(15, 15);
+        assertException(function(){gen.buildContinents();}, "Error");
+        
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.buildContinents();}, "Error");
+    },
+    
+    "test Should be able to call buildContients after Initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(15, 15);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.buildContinents();});
     }
 }),
         
@@ -563,7 +586,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, country.isCountry);
         assertEquals(0, country.id);
-        assertEquals("Id:0", country.name);
+        assertEquals("Id: 0", country.name);
         assertEquals(1, country.size);
         assertArray(country.borders);
     },
@@ -574,7 +597,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, continent.isContinent);
         assertEquals(0, continent.id);
-        assertEquals("Id:0", continent.name);
+        assertEquals("Id: 0", continent.name);
         assertEquals(0, continent.unitBonus);
         assertArray(continent.countries);
     },
@@ -585,6 +608,17 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
+    },
+    
+    "test Should be able to create some object like water": function()
+    {
+        var water = this.mapGenerator.createWater(-1);
+        
+        assertEquals(true, water.isWater);
+        assertEquals(-1, water.id);
+        assertEquals(1, water.size);
+        assertEquals("Id: -1", water.name);
+        assertArray(water.borders);
     }
 }),
         
@@ -831,9 +865,49 @@ TestCase("MapGeneratorTest", {
         var continents = map.continents;      
         
         assertTrue(continents[0].countries.length >= 2);
-        assertTrue(continents[Math.floor(continents.length/2)].countries.length >= 2);
+        assertTrue(continents[1].countries.length >= 2);
+        assertTrue(continents[2].countries.length >= 2);
+        assertTrue(continents[3].countries.length >= 2);
         assertTrue(continents[continents.length-1].countries.length >= 2);
     }, 
+    
+    "test generateMap should generate maps with continents that contain countries out of allCountries":function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var continents = map.continents; 
+        var allCountries = this.mapGenerator.getAllCountries();
+        
+        //Kontinent 1
+        assertTrue(allCountries.indexOf(continents[0].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[0].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[0].countries[continents[0].countries.length-1]) >= 0);
+        //Kontinent 2
+        assertTrue(allCountries.indexOf(continents[1].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[1].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[1].countries[continents[1].countries.length-1]) >= 0);
+        //Kontinent 3
+        assertTrue(allCountries.indexOf(continents[2].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[2].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[2].countries[continents[2].countries.length-1]) >= 0);
+        //Kontinent 4
+        assertTrue(allCountries.indexOf(continents[3].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[3].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[3].countries[continents[3].countries.length-1]) >= 0);
+        //Kontinent an Letzter Stelle
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[continents[continents.length-1].countries.length-1]) >= 0);  
+    },
+    
+    "test Should be able to generate a map with a to small grid": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(3, 3);
+        
+        assertException(function(){gen.generateMap();}, "Error");
+    },
     
     "test Generate map should deliver different maps": function()
     {
