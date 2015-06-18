@@ -34,10 +34,10 @@ function mapGenerator()
     var maximumCountrySize = 20;
     
     //Variablen für Wassergenerierung
-    var minimumWaterSize;
-    var maximumWaterSize;
-    var minimumWaterNumber;
-    var maximumWaterNumber;
+    var minimumWaterSize = 2;
+    var maximumWaterSize = 4;
+    var minimumWaterNumber = 2;
+    var maximumWaterNumber = 4;
     
     //Variablen für Kontinentgrößen
     var minimumContinentNumber = 4;
@@ -95,6 +95,9 @@ function mapGenerator()
             throw new Error("Size musst be one or higher");
         
         minimumCountrySize = size;
+        
+        if(maximumCountrySize < minimumCountrySize)
+            maximumCountrySize = minimumCountrySize;
     }
     
     //Holt maximal Größe
@@ -134,6 +137,9 @@ function mapGenerator()
             throw new Error("Size musst be two or higher");
         
         minimumContinentNumber = size;
+        
+        if(maximumContinentNumber < minimumContinentNumber)
+            maximumContinentNumber = minimumContinentNumber;
     }
     
     //Holt maximal Größe
@@ -155,6 +161,90 @@ function mapGenerator()
             throw new Error("Size cant be below minimumContinentNumber");
         
         maximumContinentNumber = size;
+    }
+    
+    //Holt Minimale Gewässeranzahl
+    function getMinimumWaterNumber()
+    {
+        return minimumWaterNumber;
+    }
+    
+    //Setzt minimale Gewässerzahl
+    function setMinimumWaterNumber(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        minimumWaterNumber = size;
+        
+        if(maximumWaterNumber < minimumWaterNumber)
+            maximumWaterNumber = minimumWaterNumber;
+    }
+    
+    //Holt maximal Gewässerzahl
+    function getMaximumWaterNumber()
+    {
+        return maximumWaterNumber;
+    }
+    
+    //Setzt maximale Gewässerzahl
+    function setMaximumWaterNumber(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        if(size < minimumWaterNumber)
+            throw new Error("Size cant be below minimumWaterNumber");
+        
+        maximumWaterNumber = size;
+    }
+    
+    //Holt minimale Gewässergröße
+    function getMinimumWaterSize()
+    {
+        return minimumWaterSize;
+    }
+    
+    //Setzt minimale Gewässergröße
+    function setMinimumWaterSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        minimumWaterSize = size;
+        
+        if(maximumWaterSize < minimumWaterSize)
+            maximumWaterSize = minimumWaterSize;
+    }
+    
+    //Holt maximal Gewässergröße
+    function getMaximumWaterSize()
+    {
+        return maximumWaterSize;
+    }
+    
+    //Setzt maximale Gewässergröße
+    function setMaximumWaterSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        if(size < minimumWaterSize)
+            throw new Error("Size cant be below minimumWaterSize");
+        
+        maximumWaterSize = size;
     }
     
     //Holt Länder in Kontinenten
@@ -773,6 +863,14 @@ function mapGenerator()
     this.setMinimumContinentNumber = setMinimumContinentNumber;
     this.getMaximumContinentNumber = getMaximumContinentNumber;
     this.setMaximumContinentNumber = setMaximumContinentNumber;
+    this.getMinimumWaterNumber = getMinimumWaterNumber;
+    this.setMinimumWaterNumber = setMinimumWaterNumber;
+    this.getMaximumWaterNumber = getMaximumWaterNumber;
+    this.setMaximumWaterNumber = setMaximumWaterNumber;
+    this.getMinimumWaterSize = getMinimumWaterSize;
+    this.setMinimumWaterSize = setMinimumWaterSize;
+    this.getMaximumWaterSize = getMaximumWaterSize;
+    this.setMaximumWaterSize = setMaximumWaterSize;   
     this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
     this.serializeAsJSON = serializeAsJSON;
