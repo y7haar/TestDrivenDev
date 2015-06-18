@@ -7,7 +7,7 @@
 
 TestCase("LobbyEventSourceControllerTest", {
     setUp: function() {
-        this.lobbyEventSourceController = new tddjs.client.controller.eventSourceController();
+        this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
 
     },
     tearDown: function(){
