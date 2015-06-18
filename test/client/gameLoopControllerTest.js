@@ -285,8 +285,10 @@ TestCase("GameLoopCommunicationTests", {
     "test gameLoop.toServerLogs should increase if message send to server": function () {
         assertEquals(0,this.gameLoop.toServerLogs.length);
         this.gameLoop.endPhase();
+        this.sandbox.update();
         assertEquals(1, this.gameLoop.toServerLogs.length);
         this.gameLoop.endPhase();
+        this.sandbox.update();
         assertEquals(2, this.gameLoop.toServerLogs.length);
     },
     "test gameLoop should implement endPhase function": function () {
@@ -402,7 +404,7 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.update();
         assertEquals(2,this.sandbox.server[this.url].requests.length);
         assertEquals(1, this.gameLoop.toServerLogs.length);
-        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
+        assertEquals(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);     
     }
     
    
