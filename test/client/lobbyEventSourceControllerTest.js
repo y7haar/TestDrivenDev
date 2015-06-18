@@ -20,6 +20,7 @@ TestCase("LobbyEventSourceControllerTest", {
 
     },
     tearDown: function(){
+        this.sandbox.restore();
     },
     
     "test LobbyEventSourceController should not be undefined after constructor call": function() {
