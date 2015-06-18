@@ -2,19 +2,19 @@
  *  Source-Code for NameListGenerator
  */
 
-if(typeof module !== "undefined")
+if (typeof module !== "undefined")
 {
     module.exports = nameListGenerator;
 }
 
 else
 {
-    tddjs.namespace("server.controller").nameListGenerator =  nameListGenerator;
+    tddjs.namespace("server.controller").nameListGenerator = nameListGenerator;
 }
 
 function nameListGenerator()
 {
-    
+
     var _nameList = [];
     var _currentIndex = 0;
     var DEFAULT_LIST = "./nameLists/games.txt";
@@ -22,16 +22,16 @@ function nameListGenerator()
     function readFileList(file, callback)
     {
         var fs = require('fs');
-        
-        fs.readFile(file, {encoding: "utf-8"}, function (err, data) {
-            
-        if (err) 
-            throw err;
-        
-        var splits = data.split("\n");
-        setNameList(splits);
-        
-        callback();
+
+        fs.readFile(file, {encoding: "utf-8"}, function(err, data) {
+
+            if (err)
+                throw err;
+
+            var splits = data.split("\n");
+            setNameList(splits);
+
+            callback();
         });
     }
 
@@ -49,7 +49,7 @@ function nameListGenerator()
     {
         var currentIndex = _nameList.length;
 
-        while(currentIndex > 0)
+        while (currentIndex > 0)
         {
             // calculate new random index
             var randomIndex = Math.floor(Math.random() * currentIndex--);
@@ -60,7 +60,7 @@ function nameListGenerator()
             _nameList[randomIndex] = swapValue;
         }
     }
-    
+
     function getNextName()
     {
         _currentIndex %= _nameList.length;
@@ -73,5 +73,5 @@ function nameListGenerator()
     this.getNextName = getNextName;
     this.readFileList = readFileList;
     this.DEFAULT_LIST = DEFAULT_LIST;
-    
+
 }
