@@ -15,7 +15,9 @@ function test(){
        ctx = canvas.getContext("2d");
        if (ctx) {
            controller = new tddjs.client.ui.gameUiController(null,ctx);
-           controller._getMap(m.generateMap());
+           var m2 = m.generateMap();
+           m2= m.serializeAsJSON(m2);
+           controller._getMap(m2);
            controller._initMap();
            
            canvas.addEventListener('mousemove', onCanvasMouseMove, false);
