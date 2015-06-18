@@ -184,7 +184,7 @@ TestCase("GameLoopControllerTests", {
 
 
 TestCase("GameLoopCommunicationTests", {
-    setUp: function () {       
+    setUp: function () {
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
@@ -301,7 +301,7 @@ TestCase("GameLoopCommunicationTests", {
     },
     "test gameLoop should implement makeMove function": function () {
         assertFunction(this.gameLoop.makeMove);
-    },
+    },    
     "test gemeLoop.makeMove should call isMoveValid from currentState": function () {
         var state = this.gameLoop.currentState;
         state.isMoveLegal = stubFn();
@@ -372,6 +372,19 @@ TestCase("GameLoopCommunicationTests", {
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
         this.sandbox.update();
         assertEquals(this.validAttackMove, JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
+    },    
+    "test gameLoop.makeMove should write to toServerLogs if POSTED to Server": function () {
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+        
+        assertTrue(this.gameLoop.makeMove(this.validAttackMove));
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        assertEquals(2,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.update();
+        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
     }
     
    
