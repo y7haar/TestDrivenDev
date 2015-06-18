@@ -66,14 +66,14 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function endPhase()
     {
         var player = JSON.parse(_player.serialize());
-        var message = JSON.stringify({player:player,type:'endPhase', 'phaseName':_currentState.toString()});           
+        var message = {player:player,type:'endPhase', 'phaseName':_currentState.toString()};           
   
         var ajax = tddjs.util.ajax;
         var options = {
             headers:{
                 "Content-Type": "application/json"
             },
-            data: message,
+            data: JSON.stringify(message),
             onSuccess: writeToLogs,
             onFailure: null
         };
@@ -106,7 +106,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
      
         function writeToLogs()
         {
-            _toServerLogs.push(JSON.stringify(move));
+            _toServerLogs.push(move);
         }
         
     }

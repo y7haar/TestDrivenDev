@@ -314,8 +314,8 @@ TestCase("GameLoopCommunicationTests", {
         
         this.sandbox.update();        
 
-        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request       
-        assertSame(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);
+        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request  
+        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
     },
     "test gameLoop should implement makeMove function": function () {
         assertFunction(this.gameLoop.makeMove);
@@ -404,7 +404,7 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.update();
         assertEquals(2,this.sandbox.server[this.url].requests.length);
         assertEquals(1, this.gameLoop.toServerLogs.length);
-        assertEquals(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);     
+        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
     }
     
    
