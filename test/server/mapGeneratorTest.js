@@ -545,6 +545,29 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertException(function(){gen.calculateUnitBonus(5);}, "TypeError");
+    },
+    
+    "test Shouldnt be able to call buildContients before Initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.buildContinents();}, "Error");
+        
+        this.mapGenerator.setGridSize(15, 15);
+        assertException(function(){gen.buildContinents();}, "Error");
+        
+        this.mapGenerator.initCountries();
+        assertException(function(){gen.buildContinents();}, "Error");
+    },
+    
+    "test Should be able to call buildContients after Initialisation": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(15, 15);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        
+        assertNoException(function(){gen.buildContinents();});
     }
 }),
         
@@ -563,7 +586,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, country.isCountry);
         assertEquals(0, country.id);
-        assertEquals("Id:0", country.name);
+        assertEquals("Id: 0", country.name);
         assertEquals(1, country.size);
         assertArray(country.borders);
     },
@@ -574,7 +597,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, continent.isContinent);
         assertEquals(0, continent.id);
-        assertEquals("Id:0", continent.name);
+        assertEquals("Id: 0", continent.name);
         assertEquals(0, continent.unitBonus);
         assertArray(continent.countries);
     },
@@ -585,6 +608,17 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
+    },
+    
+    "test Should be able to create some object like water": function()
+    {
+        var water = this.mapGenerator.createWater(-1);
+        
+        assertEquals(true, water.isWater);
+        assertEquals(-1, water.id);
+        assertEquals(1, water.size);
+        assertEquals("Id: -1", water.name);
+        assertArray(water.borders);
     }
 }),
         
@@ -645,6 +679,13 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMinimumCountrySize(-10);}, "Error");
     },
     
+    "test MaximumCountrySize shouldnt be under minCountrySize after Setting": function()
+    {
+        this.mapGenerator.setMinimumCountrySize(25);
+        
+         assertEquals(25, this.mapGenerator.getMaximumCountrySize());
+    },
+    
     "test Should be able to get a Maximum-Countrysize": function()
     {   
         assertEquals(20, this.mapGenerator.getMaximumCountrySize());
@@ -673,16 +714,23 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertObject(array);
     },
     
-    "test Shoult be able to get MinimumContinentNumber": function()
+    "test Should be able to get MinimumContinentNumber": function()
     {
         assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
     },
     
-    "test Shoult be able to set MinimumContinentNumber": function()
+    "test Should be able to set MinimumContinentNumber": function()
     {
         this.mapGenerator.setMinimumContinentNumber(4);
         
         assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
+    },
+    
+    "test MaximumContinentNumber shouldnt be under minContinentNumber after Setting": function()
+    {
+        this.mapGenerator.setMinimumContinentNumber(12);
+        
+         assertEquals(12, this.mapGenerator.getMaximumContinentNumber());
     },
     
     "test Shouldnt be able to set invalid MinimumContinentNumber": function()
@@ -694,12 +742,12 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMinimumContinentNumber(1);}, "Error");
     },
     
-    "test Shoult be able to get MaximumContinentNumber": function()
+    "test Should be able to get MaximumContinentNumber": function()
     {
         assertEquals(8, this.mapGenerator.getMaximumContinentNumber());
     },
     
-    "test Shoult be able to setMaximumContinentNumber": function()
+    "test Should be able to setMaximumContinentNumber": function()
     {
         this.mapGenerator.setMaximumContinentNumber(6);
         
@@ -713,7 +761,106 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMaximumContinentNumber("fff");}, "TypeError");
         assertException(function(){gen.setMaximumContinentNumber(-10);}, "Error");
         assertException(function(){gen.setMaximumContinentNumber(3);}, "Error");
+    },
+    
+    "test Should be able to get the minimumWaterNumber": function()
+    {
+        assertEquals(2, this.mapGenerator.getMinimumWaterNumber());
+    },
+    
+    "test Should be able to set the minimumWaterNumber": function()
+    {
+        this.mapGenerator.setMinimumWaterNumber(6);
+        
+        assertEquals(6, this.mapGenerator.getMinimumWaterNumber());
+    },
+    
+    "test MaximumWaterNumber shouldnt be under minWaterNumber after Setting": function()
+    {
+        this.mapGenerator.setMinimumWaterNumber(6);
+        
+         assertEquals(6, this.mapGenerator.getMaximumWaterNumber());
+    },
+    
+    "test Shouldnt be able to set invalid minimumWaterNumer": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumWaterNumber("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumWaterNumber(-10);}, "Error");
+        assertException(function(){gen.setMinimumWaterNumber(0);}, "Error");
+    },
+    
+    "test Should be able to get the maximumWaterNumber": function()
+    {
+        assertEquals(4, this.mapGenerator.getMaximumWaterNumber());
+    },
+    
+    "test Should be able to set the maximumWaterNumber": function()
+    {
+        this.mapGenerator.setMaximumWaterNumber(6);
+        
+        assertEquals(6, this.mapGenerator.getMaximumWaterNumber());
+    },
+    
+    "test Shouldnt be able to set invalid MaximumWaterNumber": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMaximumWaterNumber("fff");}, "TypeError");
+        assertException(function(){gen.setMaximumWaterNumber(-10);}, "Error");
+        assertException(function(){gen.setMaximumWaterNumber(1);}, "Error");
+    },
+    
+    "test Should be able to get the minimumWaterSize": function()
+    {
+        assertEquals(2, this.mapGenerator.getMinimumWaterSize());
+    },
+    
+    "test Should be able to set the minWaterSize": function()
+    {
+        this.mapGenerator.setMinimumWaterSize(3);
+        
+        assertEquals(3, this.mapGenerator.getMinimumWaterSize());
+    },
+    
+    "test maxWaterSize shouldnt be under minWaterSize after Setting": function()
+    {
+        this.mapGenerator.setMinimumWaterSize(5);
+        
+        assertEquals(5, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Shouldnt be able to set invalid MinimumWaterSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumWaterSize("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumWaterSize(-10);}, "Error");
+        assertException(function(){gen.setMinimumWaterSize(0);}, "Error");
+    },
+    
+    "test Should be able to get the maximumWaterSize": function()
+    {
+        assertEquals(4, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Should be able to set the maximumWaterSize": function()
+    {
+        this.mapGenerator.setMaximumWaterSize(6);
+        
+         assertEquals(6, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Shouldnt be able to set invalid MaximumWaterSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMaximumWaterSize("fff");}, "TypeError");
+        assertException(function(){gen.setMaximumWaterSize(-10);}, "Error");
+        assertException(function(){gen.setMaximumWaterSize(1);}, "Error");
     }
+    
 });
 
 
@@ -831,9 +978,49 @@ TestCase("MapGeneratorTest", {
         var continents = map.continents;      
         
         assertTrue(continents[0].countries.length >= 2);
-        assertTrue(continents[Math.floor(continents.length/2)].countries.length >= 2);
+        assertTrue(continents[1].countries.length >= 2);
+        assertTrue(continents[2].countries.length >= 2);
+        assertTrue(continents[3].countries.length >= 2);
         assertTrue(continents[continents.length-1].countries.length >= 2);
     }, 
+    
+    "test generateMap should generate maps with continents that contain countries out of allCountries":function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var continents = map.continents; 
+        var allCountries = this.mapGenerator.getAllCountries();
+        
+        //Kontinent 1
+        assertTrue(allCountries.indexOf(continents[0].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[0].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[0].countries[continents[0].countries.length-1]) >= 0);
+        //Kontinent 2
+        assertTrue(allCountries.indexOf(continents[1].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[1].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[1].countries[continents[1].countries.length-1]) >= 0);
+        //Kontinent 3
+        assertTrue(allCountries.indexOf(continents[2].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[2].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[2].countries[continents[2].countries.length-1]) >= 0);
+        //Kontinent 4
+        assertTrue(allCountries.indexOf(continents[3].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[3].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[3].countries[continents[3].countries.length-1]) >= 0);
+        //Kontinent an Letzter Stelle
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[0]) >= 0);
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[1]) >= 0);
+        assertTrue(allCountries.indexOf(continents[continents.length-1].countries[continents[continents.length-1].countries.length-1]) >= 0);  
+    },
+    
+    "test Should be able to generate a map with a to small grid": function()
+    {
+        var gen = this.mapGenerator;
+        this.mapGenerator.setGridSize(3, 3);
+        
+        assertException(function(){gen.generateMap();}, "Error");
+    },
     
     "test Generate map should deliver different maps": function()
     {
