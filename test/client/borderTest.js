@@ -1,7 +1,8 @@
 /* 
  * Testfall für Border
+ * Haben leider ausgedient
  */
-
+/*
 TestCase("BorderTest", {
     
     setUp: function () {
@@ -10,9 +11,7 @@ TestCase("BorderTest", {
         this.country2 = new tddjs.client.map.country();
     },
     
-    tearDown: function () {
-
-    },
+    tearDown: function () {},
     
     "test Border should be a Object": function()
     {
@@ -45,4 +44,4 @@ TestCase("BorderTest", {
         assertException(function(){border1.setRigthBorder(x);}, "TypeError");
     }
 });
-
+*/
