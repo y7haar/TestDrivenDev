@@ -767,6 +767,14 @@ TestCase("MapGeneratorTest", {
         assertException(function(){gen.generateMap();}, "Error");
     },
     
+    "test Should be able to call generateMap more than once": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        this.mapGenerator.generateMap();
+        this.mapGenerator.generateMap();
+    },
+    
     "test After generation there Should be no countrys below minCountrySize": function()
     {
         this.mapGenerator.setGridSize(this.x,this.y);
@@ -793,7 +801,7 @@ TestCase("MapGeneratorTest", {
         assertTrue(this.mapGenerator.getMinimumContinentNumber() <= map.continents.length);
     },
     
-    "test generateMap should return a map-object with may maximumContinents": function()
+    "test generateMap should return a map-object with max maximumContinents": function()
     {
         this.mapGenerator.setGridSize(this.x,this.y);
         var map = this.mapGenerator.generateMap();
@@ -825,9 +833,27 @@ TestCase("MapGeneratorTest", {
         assertTrue(continents[0].countries.length >= 2);
         assertTrue(continents[Math.floor(continents.length/2)].countries.length >= 2);
         assertTrue(continents[continents.length-1].countries.length >= 2);
+    }, 
+    
+    "test Generate map should deliver different maps": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map1 = this.mapGenerator.generateMap();
+        var country1 = this.mapGenerator.getAllCountries()[0];
+        var continent1 = map1.continents[0];
+        var map2 = this.mapGenerator.generateMap();
+        
+        assertFalse(map1 === map2);
+        assertEquals(-1, this.mapGenerator.getAllCountries().indexOf(country1));
+        assertEquals(-1, map2.continents.indexOf(continent1));
     }
 });
 
+
+//################################################################################################################################
+//Testfälle für ausgemusterte Methoden
+//################################################################################################################################
 
 /*
  * "test Shouldnt be able to call collectNeighborCountries without initialisation": function()
