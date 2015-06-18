@@ -8,8 +8,23 @@ tddjs.namespace("client.controller").lobbyEventSourceController = lobbyEventSour
 
 function lobbyEventSourceController()
 {
+    function establishConnection()
+    {
+        
+    }
+    
+    function setLobby()
+    {
+        
+    }
+    
+    function getLobby()
+    {
+        
+    }
+    
+    this.establishConnection= establishConnection;
+    this.setLobby = setLobby;
+    this.getLobby = getLobby;
+    
 }
-
-
-
-
