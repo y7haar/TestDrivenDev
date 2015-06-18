@@ -184,7 +184,7 @@ TestCase("eventSourceSandboxServer", {
          };
  
          var sendMsg = "HELLOWORLD";
-         es.addEventListner("test", testEvent);                
+         es.addEventListener("test", testEvent);                
          this.sandbox.server[this.server1URL].sendMessage(0,"test",{data:sendMsg});
          
          assertTrue(called);
@@ -206,8 +206,8 @@ TestCase("eventSourceSandboxServer", {
          };
  
          var sendMsg = "HELLOWORLD";
-         es.addEventListner("test", testEvent); 
-         es.addEventListner("Message" ,onMessage);
+         es.addEventListener("test", testEvent); 
+         es.addEventListener("Message" ,onMessage);
          
          this.sandbox.server[this.server1URL].sendMessage(0,null,{data:sendMsg});
          
@@ -227,19 +227,19 @@ TestCase("eventSourceSandboxServer", {
         var es1_event = function(e){
             es1_called = true;
         };
-        es1.addEventListner("test", es1_event);
+        es1.addEventListener("test", es1_event);
         
         var es2_called = false;
         var es2_event = function(e){
             es2_called = true;
         };
-        es2.addEventListner("test", es2_event);
+        es2.addEventListener("test", es2_event);
         
         var es3_called = false;
         var es3_event = function(e){
             es3_called = true;
         };
-        es3.addEventListner("test", es3_event);
+        es3.addEventListener("test", es3_event);
         
         
         var notConnectedES = new EventSource("/wrongUrl");
@@ -247,7 +247,7 @@ TestCase("eventSourceSandboxServer", {
         var notConnectedES_event = function(e){
             notConnectedES_called = true;
         };
-        notConnectedES.addEventListner("test", notConnectedES_event);
+        notConnectedES.addEventListener("test", notConnectedES_event);
         
         assertFalse(es1_called);
         assertFalse(es2_called);
@@ -483,39 +483,39 @@ TestCase("eventSourceSandboxFakeEventSource", {
         assertNotUndefined(this.fakeEventSource.onmessage);
         assertNotUndefined(this.fakeEventSource.onopen);
     },
-    "test fakeEventSource shoulde implement addEventListner function": function () {
-        assertFunction(this.fakeEventSource.addEventListner);
+    "test fakeEventSource shoulde implement addEventListener function": function () {
+        assertFunction(this.fakeEventSource.addEventListener);
     },
-    "test fakeEventSource.addEventListner should throw exception if parameter is wrong": function () {
+    "test fakeEventSource.addEventListener should throw exception if parameter is wrong": function () {
         var fakeES = this.fakeEventSource;
         // parameter 1: EventListner Name, parameter2 : function
         assertException(function(){
-            fakeES.addEventListner();
+            fakeES.addEventListener();
         },"TypeError");
         
         assertException(function(){
-            fakeES.addEventListner("eventName");
+            fakeES.addEventListener("eventName");
         },"TypeError");  
         
         assertException(function(){
-            fakeES.addEventListner("eventName", "doSomething");
+            fakeES.addEventListener("eventName", "doSomething");
         },"TypeError");
         
         assertException(function(){
-            fakeES.addEventListner({name:"aName"}, "doSomething");
+            fakeES.addEventListener({name:"aName"}, "doSomething");
         },"TypeError");  
         
         assertNoException(function(){
-            fakeES.addEventListner("eventName", function(){});
+            fakeES.addEventListener("eventName", function(){});
         });  
     },
-    "test fakeEventSource.addEventListner should add new EventListner": function () {
+    "test fakeEventSource.addEventListener should add new EventListner": function () {
          var eventName = "eventName";
          var aFunction = function (){
            return true;  
          };
          
-         this.fakeEventSource.addEventListner(eventName, aFunction);
+         this.fakeEventSource.addEventListener(eventName, aFunction);
          assertEquals(aFunction, this.fakeEventSource["on"+eventName.toLowerCase()]);
          assertEquals(aFunction(), this.fakeEventSource["on"+eventName.toLowerCase()]());  
      },

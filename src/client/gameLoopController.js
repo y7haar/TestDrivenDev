@@ -113,11 +113,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {        
         addAllEventListnerCalled = true;
         
-        _eventSource.addEventListner("changeToPlacing", changeToPlacingState);
-        _eventSource.addEventListner("changeToAttacking", changeToAttackingState);
-        _eventSource.addEventListner("changeToWaiting", changeToWaitingState);
-        _eventSource.addEventListner("attackResult", attackResult);
-        _eventSource.addEventListner("placeUnits", placeUnits);          
+        _eventSource.addEventListener("changeToPlacing", changeToPlacingState);
+        _eventSource.addEventListener("changeToAttacking", changeToAttackingState);
+        _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
+        _eventSource.addEventListener("attackResult", attackResult);
+        _eventSource.addEventListener("placeUnits", placeUnits);          
     }      
     
     
