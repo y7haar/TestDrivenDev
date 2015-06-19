@@ -913,7 +913,21 @@ TestCase("SingleLobbyUiEventTest", {
     },
     
     "test updateLobby should call methods to redraw a lobby": function() {
-        // TODO
+        this.lobbyUi.setCurrentLobby(this.lobby3);
+        this.lobbyUi.setCurrentPlayer(this.player5);
+        
+        var spy = this.sandbox.stub(this.lobbyUi, "showLobbyForPlayer");
+        var setCurrentLobbySpy = this.sandbox.stub(this.lobbyUi, "setCurrentLobby");
+        sinon.assert.notCalled(spy);
+        sinon.assert.notCalled(setCurrentLobbySpy);
+        
+        this.lobbyUi.updateLobby(this.lobby3.serialize());
+        
+        sinon.assert.calledOnce(setCurrentLobbySpy);
+        sinon.assert.calledOnce(spy);
+        
+        sinon.assert.calledWith(spy, this.lobby3.serialize());
+        sinon.assert.calledWith(spy, this.lobby3.serialize());
     }
  
 });
