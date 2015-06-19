@@ -560,6 +560,14 @@ function lobbyUi(aRequestController)
         if(! (aLobby instanceof tddjs.client.model.lobby))
             throw new TypeError("Lobby is not of Type Lobby");
     }
+    
+    function showLobbyForPlayer(aLobby, aPlayer)
+    {
+        this.createLobbyContent();
+        this.createWrapper();
+        this.showLobby(aLobby);
+        this.setPlayerEditable(aPlayer.getId());
+    }
 
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
@@ -575,6 +583,7 @@ function lobbyUi(aRequestController)
     this.addNewLobbyButton = addNewLobbyButton;
     this.showLobbyOverview = showLobbyOverview;
     this.getPlayerColorBoxById = getPlayerColorBoxById;
+    this.showLobbyForPlayer = showLobbyForPlayer;
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
