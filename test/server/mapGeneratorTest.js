@@ -608,6 +608,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
+        assertArray(map.water);
     },
     
     "test Should be able to create some object like water": function()
@@ -712,6 +713,27 @@ TestCase("MapGeneratorTest for Setter and Getters",
         var array = this.mapGenerator.getCountriesInContinents();
         
         assertObject(array);
+    },
+    
+    "test Should be able to get minimumCotinentSize": function()
+    {
+        assertEquals(2, this.mapGenerator.getMinumumContinentSize());
+    },
+    
+    "test Should be able to set the minimumContinentSize": function()
+    {
+        this.mapGenerator.setMinimumContinentSize(4);
+        
+        assertEquals(4, this.mapGenerator.getMinumumContinentSize());
+    },
+    
+    "test Shouldnt be able to set invalid MinimumContinentSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumContinentSize("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumContinentSize(-10);}, "Error");
+        assertException(function(){gen.setMinimumContinentSize(1);}, "Error");
     },
     
     "test Should be able to get MinimumContinentNumber": function()
