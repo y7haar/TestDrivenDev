@@ -154,6 +154,14 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {
         _fromServerLogs.push(e);
         var data = JSON.parse(e.data);
+        
+        console.log("------------------- SHOWDOWN --------------------");
+        console.log(data.attacker.player+" attacked "+ data.defender.player);
+        console.log("OUTCOME: ");
+        console.log("   "+data.attacker.player+": "+data.attacker.outcome);
+        console.log("   "+data.defender.player+": "+data.defender.outcome);
+        console.log("-------------------------------------------------\n\n");
+        
         var changes1 = data.changes[0];
         var changes2 = data.changes[1];
         var players = {};
@@ -177,6 +185,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {
         _fromServerLogs.push(e);
         var data = JSON.parse(e.data);
+        
+        console.log("-------------------------------------------------");
+        console.log( _map.getContinent(data.change.continent).getCountry(data.change.country).getOwner().getName()+
+                " placed "+ data.change.unitCount+"-Units to "+data.change.country);
+        console.log("-------------------------------------------------\n\n");
         _map.getContinent(data.change.continent).getCountry(data.change.country).setUnitCount(data.change.unitCount);
     }
     
