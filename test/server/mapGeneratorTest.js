@@ -617,7 +617,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, water.isWater);
         assertEquals(-1, water.id);
-        assertEquals(1, water.size);
+        assertEquals(0, water.size);
         assertEquals("Id: -1", water.name);
         assertArray(water.borders);
     }
