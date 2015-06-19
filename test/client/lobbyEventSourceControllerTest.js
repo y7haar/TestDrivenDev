@@ -107,10 +107,21 @@ TestCase("LobbyEventSourceControllerTest", {
     },
     
     "test establishConnection should call addEventListeners": function() {
-        var spy = sinon.spy(this.lobbyEventSourceController.addEventListeners);
+        this.lobbyEventSourceController.setLobby(this.lobby);
+        
+        var spy = sinon.stub(this.lobbyEventSourceController.addEventListeners);
         sinon.assert.notCalled(spy);
         this.lobbyEventSourceController.establishConnection();
         sinon.assert.calledOnce(spy);
+    },
+    
+    "test establishConnection should throw Error if no lobby is setted": function() {
+        var controller = this.lobbyEventSourceController;
+        var lobby = this.lobby;
         
+        assertException(function() { controller.establishConnection(); }, "Error");
+        
+        controller.setLobby(lobby);
+        assertNoException(function() { controller.establishConnection(); });
     }
     });
