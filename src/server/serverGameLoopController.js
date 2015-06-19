@@ -12,5 +12,20 @@ else
 
 function gameLoopController()
 {
+    var _clients =[];
+    
+    function addClient(aClient)
+    {
+        _clients.push(aClient);
+    }
+    
+    //test
+    Object.defineProperty(this, 'clients', {
+        get: function () {
+            return _clients;
+        }
+    });
+    
+    this.addClient = addClient;
     
 }
