@@ -701,7 +701,7 @@ TestCase("SingleLobbyUiLeaderTest", {
         var showLeaderLobbySpy = this.sandbox.spy(this.lobbyUi, "showLeaderLobby");
         var setPlayerEditableSpy = this.sandbox.spy(this.lobbyUi, "setPlayerEditable");
         
-        this.lobbyUi.setCurrentPlayer(this.player5);
+        this.lobbyUi.setCurrentPlayer(this.player3);
         this.lobbyUi.setCurrentLobby(this.lobby3);
         
         sinon.assert.notCalled(createLobbyContentSpy);
