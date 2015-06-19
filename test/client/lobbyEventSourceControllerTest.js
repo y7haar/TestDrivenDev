@@ -155,3 +155,43 @@ TestCase("LobbyEventSourceControllerTest", {
         assertNoException(function() { controller.establishConnection(); });
     }
     });
+    
+    
+    TestCase("LobbyEventSourceControllerEventTest", {
+    setUp: function() {
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sinonSandbox = sinon.sandbox.create();
+        
+        
+        
+        this.lobby = new tddjs.client.model.lobby();
+        this.lobby.setId(1);
+        this.lobby.setName("L1");
+        this.lobby.setMaxPlayers(4);
+        
+        this.ui = new tddjs.client.ui.lobbyUi();
+        
+        this.url = BASE_URL + "lobbies/" + this.lobby.getId();
+        
+        this.sandbox.addServer(this.url);
+        
+        this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
+        this.lobbyEventSourceController.setLobbyUi(this.ui);
+        this.lobbyEventSourceController.setLobby(this.lobby);
+        this.lobbyEventSourceController.establishConnection();
+    },
+    tearDown: function(){
+        this.sandbox.restore();
+        this.sinonSandbox.restore();
+    },
+    
+    "test oncolorchange event should call updateColor in lobby Ui": function() {
+        var spy = this.sinonSandbox.spy(this.ui, "updateColor");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:""});
+        
+        sinon.assert.calledOnce(spy);
+    }
+
+    });
