@@ -546,6 +546,9 @@ function lobbyUi(aRequestController)
         
         if(typeof aColor !== "string")
             throw new TypeError("Color must be string");
+        
+        var colorBox = getPlayerColorBoxById(aPlayerId);
+        colorBox.style.backgroundColor = aColor;
     }
     
     function updateLobby(aLobby)
