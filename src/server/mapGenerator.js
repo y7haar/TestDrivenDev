@@ -634,11 +634,14 @@ function mapGenerator()
     //Wassererstellung
     function generateWater()
     {
+        //Prüfen ob genügend Platz/Länder
+        if(allCountries.length <= (maximumWaterNumber*maximumWaterSize))
+            throw new Error("This Grid migth be to small for the generation");
+        
         //Die Gewässer
         var water = [];
         //Id
-        var id = -1;
-        
+        var id = -1;        
         
         //Anzahl Wasserflächen auswürfeln
         var factor = maximumWaterNumber - minimumWaterNumber;
@@ -652,12 +655,28 @@ function mapGenerator()
             //Neues Wasser erzeugen
             newWater = createWater(id);
             
-            //Würfeln?
+            //Variable ob es Funktioniert hat
+            var worked = false;
             
-            //Bis zur Größe x erzeugen
-            while(false)
+            //Größe der Wasserfläche auswürfeln
+            var range = maximumWaterSize - minimumWaterSize;
+            var size = Math.round(Math.random()*range +minimumWaterSize);
+            
+            //Oder vll mit Borders.length sicherstellen?
+            //Sehr schwierige Stelle 
+            //Was wenn in ecke wo bereits wasser rum?
+            //Wenn es nicht funktioniert, wie rückgängig machen?
+            //Was wenn land das zum land mit wasserborder würde wieder gewählt wird?
+            //Darf das überhaupt passieren?
+            //Grid zwischenspeichern?
+            
+            //Bis zur Größe erzeugen
+            while(newWater.size < size)
             {
                 //Viel Code
+                
+                //Größe erhöhen
+                newWater.size++;
             }
             
             random--;
@@ -665,6 +684,7 @@ function mapGenerator()
             water.push(newWater);
         }
         
+        //Wasser zurückgeben
         return water;
     }
    
@@ -862,8 +882,8 @@ function mapGenerator()
         water.id = id;
         water.name = "Id: " + id;
         water.borders = [[]];
-        water.size = 1;
-        water.isWater = true
+        water.size = 0;
+        water.isWater = true;
         return water;
     }
     
