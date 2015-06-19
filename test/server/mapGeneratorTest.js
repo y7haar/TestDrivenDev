@@ -608,6 +608,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
+        assertArray(map.water);
     },
     
     "test Should be able to create some object like water": function()
@@ -616,7 +617,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, water.isWater);
         assertEquals(-1, water.id);
-        assertEquals(1, water.size);
+        assertEquals(0, water.size);
         assertEquals("Id: -1", water.name);
         assertArray(water.borders);
     }
@@ -707,11 +708,53 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMaximumCountrySize(2);}, "Error");
     },
     
+    "test Should be able to get gridCellCombinesPerCountry": function ()
+    {
+        assertEquals(2.5, this.mapGenerator.getGridCellCombinesPerCountry());
+    },
+    
+    "test Should be able to set gridCellCombinesPerCountry": function ()
+    {
+        this.mapGenerator.setGridCellCombinesPerCountry(6);
+        
+        assertEquals(6, this.mapGenerator.getGridCellCombinesPerCountry());
+    },
+    
+    "test Shouldnt be able to set invalid gridCellCombinesPerCountry": function ()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setGridCellCombinesPerCountry("fff");}, "TypeError");
+        assertException(function(){gen.setGridCellCombinesPerCountry(-10);}, "Error");
+        assertException(function(){gen.setGridCellCombinesPerCountry(0);}, "Error");
+    },
+    
     "test Should be able to get Variable CountriesInContinents": function()
     {
         var array = this.mapGenerator.getCountriesInContinents();
         
         assertObject(array);
+    },
+    
+    "test Should be able to get minimumCotinentSize": function()
+    {
+        assertEquals(2, this.mapGenerator.getMinimumContinentSize());
+    },
+    
+    "test Should be able to set the minimumContinentSize": function()
+    {
+        this.mapGenerator.setMinimumContinentSize(4);
+        
+        assertEquals(4, this.mapGenerator.getMinimumContinentSize());
+    },
+    
+    "test Shouldnt be able to set invalid MinimumContinentSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumContinentSize("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumContinentSize(-10);}, "Error");
+        assertException(function(){gen.setMinimumContinentSize(1);}, "Error");
     },
     
     "test Should be able to get MinimumContinentNumber": function()
@@ -1034,6 +1077,48 @@ TestCase("MapGeneratorTest", {
         assertFalse(map1 === map2);
         assertEquals(-1, this.mapGenerator.getAllCountries().indexOf(country1));
         assertEquals(-1, map2.continents.indexOf(continent1));
+    },
+    
+    "test There Should generate atleast minWaterNumber Seas": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(map.water.length >= 2);
+    },
+    
+    "test There Shouldnt generate more than manWaterNumber Seas": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(map.water.length <= 4);
+    },
+    
+    "test Seas should have atleast minWaterSize": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size >= 2);
+        assertTrue(seas[1].size >= 2);
+        assertTrue(seas[seas.length- 1].size >= 2);
+    },
+    
+    "test Seas shouldnt been bigger than  manWaterSize": function()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size <= 4);
+        assertTrue(seas[1].size <= 4);
+        assertTrue(seas[seas.length- 1].size <= 4);
     }
 });
 

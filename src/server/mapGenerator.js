@@ -27,7 +27,7 @@ function mapGenerator()
     var calledInitBorders = false;
     
     //Variablen für die Erstellung der Karte
-    var GRID_CELL_COMBINES_PER_COUNTRY = 2.5;
+    var gridCellCombinesPerCountry = 2.5;
     
     //Variablen für Ländergrößen
     var minimumCountrySize = 3;
@@ -120,6 +120,44 @@ function mapGenerator()
         
         maximumCountrySize = size;
     }
+    
+    //Holt die Kombinationszahl
+    function getGridCellCombinesPerCountry()
+    {
+        return gridCellCombinesPerCountry;
+    }
+    
+    //Setzt die Kombinationszahl der ersten merge-Stufe
+    function setGridCellCombinesPerCountry(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Combines musst be bigger than zero");
+        
+        gridCellCombinesPerCountry = size;
+    }
+    
+    //Holt minimale Kontinent-Größe
+    function getMinimumContinentSize()
+    {
+        return minimumContinentSize;
+    }
+    
+    //Setzt minmale Kontinent-Größe
+    function setMinimumContinentSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 1)
+            throw new Error("Size musst be two or higher");
+        
+        minimumContinentSize = size;
+    }
+    
+    //Setzt minimale Kontinent-Größe
     
     //Holt Minimale Ländergröße
     function getMinimumContinentNumber()
@@ -285,9 +323,10 @@ function mapGenerator()
         combineCountryCells();
         //Zu kleine Länder beseitigen
         combineRemainingCountries();
-        //Wasser erzeugen
         //Karte erzeugen
         var map = createMap();
+        //Wasser 
+        map.water = generateWater();
         //Kontinente erzeugen
         map.continents = buildContinents();
         //return
@@ -495,7 +534,7 @@ function mapGenerator()
             throw new Error("There are no Borders to work with yet");
         
         //Kombinationswert
-        var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
+        var combineCount = (( getMapWidth() * getMapHeight()) * (gridCellCombinesPerCountry - 1))/ gridCellCombinesPerCountry;
 
         //Kombinieren
         for(var i = 0; i < combineCount; i++)
@@ -591,6 +630,63 @@ function mapGenerator()
         //Gemergetes Land entfernen
         allCountries.splice(allCountries.indexOf(loserCountry), 1);
     }
+    
+    //Wassererstellung
+    function generateWater()
+    {
+        //Prüfen ob genügend Platz/Länder
+        if(allCountries.length <= (maximumWaterNumber*maximumWaterSize))
+            throw new Error("This Grid migth be to small for the generation");
+        
+        //Die Gewässer
+        var water = [];
+        //Id
+        var id = -1;        
+        
+        //Anzahl Wasserflächen auswürfeln
+        var factor = maximumWaterNumber - minimumWaterNumber;
+        var random = Math.round(Math.random()*factor + minimumWaterNumber);
+        
+        var newWater;
+        
+        //Alle Wasserflächen erzeugen
+        while(random > 0)
+        {
+            //Neues Wasser erzeugen
+            newWater = createWater(id);
+            
+            //Variable ob es Funktioniert hat
+            var worked = false;
+            
+            //Größe der Wasserfläche auswürfeln
+            var range = maximumWaterSize - minimumWaterSize;
+            var size = Math.round(Math.random()*range +minimumWaterSize);
+            
+            //Oder vll mit Borders.length sicherstellen?
+            //Sehr schwierige Stelle 
+            //Was wenn in ecke wo bereits wasser rum?
+            //Wenn es nicht funktioniert, wie rückgängig machen?
+            //Was wenn land das zum land mit wasserborder würde wieder gewählt wird?
+            //Darf das überhaupt passieren?
+            //Grid zwischenspeichern?
+            
+            //Bis zur Größe erzeugen
+            while(newWater.size < size)
+            {
+                //Viel Code
+                
+                //Größe erhöhen
+                newWater.size++;
+            }
+            
+            random--;
+            id--;
+            water.push(newWater);
+        }
+        
+        //Wasser zurückgeben
+        return water;
+    }
    
     //Verbindet die Verbleibenden Länder
     function combineRemainingCountries()
@@ -647,7 +743,7 @@ function mapGenerator()
         if(!calledInitBorders)
             throw new Error("There are no borders to work with yet");
         
-        //Anzahl konnte würfeln
+        //Anzahl kontinente würfeln
         var factor = maximumContinentNumber - minimumContinentNumber;
         var random = Math.round(Math.random()*factor + minimumContinentNumber);
         
@@ -786,8 +882,8 @@ function mapGenerator()
         water.id = id;
         water.name = "Id: " + id;
         water.borders = [[]];
-        water.size = 1;
-        water.isWater = true
+        water.size = 0;
+        water.isWater = true;
         return water;
     }
     
@@ -808,6 +904,7 @@ function mapGenerator()
     {
         var map = {};
         map.continents = [];
+        map.water = [];
         map.isMap = true;
         return map;
     }
@@ -859,6 +956,10 @@ function mapGenerator()
     this.setMinimumCountrySize = setMinimumCountrySize;
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
+    this.getGridCellCombinesPerCountry = getGridCellCombinesPerCountry;
+    this.setGridCellCombinesPerCountry = setGridCellCombinesPerCountry;
+    this.getMinimumContinentSize = getMinimumContinentSize;
+    this.setMinimumContinentSize = setMinimumContinentSize;
     this.getMinimumContinentNumber = getMinimumContinentNumber;
     this.setMinimumContinentNumber = setMinimumContinentNumber;
     this.getMaximumContinentNumber = getMaximumContinentNumber;
