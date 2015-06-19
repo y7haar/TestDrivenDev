@@ -13,11 +13,18 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);
 
-        this.fakeClient = function (eventSource) {
-            var es = eventSource;
-            var writeCalled = false;
-            var write = function (msg) {
-                writeCalled = true;
+        this.fakeClient = function (eventSource, aServer) {
+            var server = aServer;
+            var eventSourceIndex = server.clients.indexOf(eventSource);
+            this.sendCalled = false;
+            this.data;
+            this.send = function (msg) {
+                this.sendCalled = true;
+                var array = msg.split("\n");
+                var event = array[0].split(":")[1];
+                data = {data:array[1]};
+                server.sendMessage(eventSourceIndex,event, data);
+                
             };
         };
         this.map = generateMap();
@@ -40,10 +47,10 @@ TestCase("serverGameLoopControllerTest", {
         this.glc4 = new tddjs.client.gameLoopController(this.map, this.player4, this.url);
         this.glc4.establishConnection();
 
-        this.client1 = new this.fakeClient(this.glc1.eventSource);
-        this.client2 = new this.fakeClient(this.glc2.eventSource);
-        this.client3 = new this.fakeClient(this.glc3.eventSource);
-        this.client4 = new this.fakeClient(this.glc4.eventSource);  
+        this.client1 = new this.fakeClient(this.glc1.eventSource,this.sandbox.server[this.url]);
+        this.client2 = new this.fakeClient(this.glc2.eventSource,this.sandbox.server[this.url]);
+        this.client3 = new this.fakeClient(this.glc3.eventSource,this.sandbox.server[this.url]);
+        this.client4 = new this.fakeClient(this.glc4.eventSource,this.sandbox.server[this.url]);  
     },
     tearDown: function(){
         this.serverGameLoop = null;
@@ -65,7 +72,31 @@ TestCase("serverGameLoopControllerTest", {
        this.serverGameLoop.addClient(this.client3);
        this.serverGameLoop.addClient(this.client4);
        assertEquals(4, this.serverGameLoop.clients.length);       
-       assertEquals([this.client1,this.client2,this.client3,this.client4], this.serverGameLoop.clients);
+       assertEquals([this.client1,this.client2,this.client3,this.client4], this.serverGameLoop.clients);       
+    },
+    "test if fakeClient send was called": function(){
+        this.serverGameLoop.addClient(this.client1);
+        
+        assertFalse(this.serverGameLoop.clients[0].sendCalled);
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].send(data);
+        assertTrue(this.serverGameLoop.clients[0].sendCalled);
+    },
+    "test if sgl send msg to Client": function(){
+        this.serverGameLoop.addClient(this.client1);
+        
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        assertEquals(0,this.glc1.fromServerLogs.length);
+        this.serverGameLoop.clients[0].send(data);
+        assertEquals(1,this.glc1.fromServerLogs.length);
+    },
+    "test if client changes state after sglc send changeToAttackState event": function(){
+        this.serverGameLoop.addClient(this.client1);
+        
+        assertEquals("waitingState", this.glc1.getStateName());
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].send(data);
+        assertEquals("attackingState", this.glc1.getStateName());
        
     }
 });
