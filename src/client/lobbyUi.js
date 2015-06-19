@@ -566,6 +566,10 @@ function lobbyUi(aRequestController)
     
     function updateLobby(aLobby)
     {
+        var lobby = new tddjs.client.model.lobby();
+        lobby.deserialize(aLobby);
+        this.setCurrentLobby(lobby);
+        this.showLobbyForPlayer();
     }
     
     function showLobbyForPlayer()
