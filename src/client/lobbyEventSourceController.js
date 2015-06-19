@@ -58,7 +58,7 @@ function lobbyEventSourceController()
 
     function oncolorchange()
     {
-
+        _lobbyUi.updateColor(1, "#ffffff");
     }
     
     function onlobbychange()
