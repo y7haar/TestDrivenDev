@@ -22,12 +22,15 @@ TestCase("LobbyEventSourceControllerTest", {
         
         this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sinonSandbox = sinon.sandbox.create();
+        
         this.sandbox.addServer(this.url);
         this.sandbox.addServer(this.url2);
 
     },
     tearDown: function(){
         this.sandbox.restore();
+        this.sinonSandbox.restore();
     },
     
     "test LobbyEventSourceController should not be undefined after constructor call": function() {
@@ -102,9 +105,11 @@ TestCase("LobbyEventSourceControllerTest", {
     "test establishConnection should call addEventListeners": function() {
         this.lobbyEventSourceController.setLobby(this.lobby);
         
-        var spy = sinon.stub(this.lobbyEventSourceController, "addEventListeners");
+        var spy = this.sinonSandbox.spy(this.lobbyEventSourceController, "addEventListeners");
         sinon.assert.notCalled(spy);
+        
         this.lobbyEventSourceController.establishConnection();
+        
         sinon.assert.calledOnce(spy);
     },
     
