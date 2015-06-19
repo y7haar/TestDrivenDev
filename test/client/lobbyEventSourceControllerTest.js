@@ -196,16 +196,41 @@ TestCase("LobbyEventSourceControllerTest", {
     },
     
     "test oncolorchange event should call updateColor in lobby Ui": function() {
-        var spy = this.sinonSandbox.spy(this.ui, "updateColor");
+        var spy = this.sinonSandbox.stub(this.ui, "updateColor");
+        
+        var data = { color:"#321123", id: 3};
+        data = JSON.stringify(data);
         
         sinon.assert.notCalled(spy);
-        this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:""});
+        this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:data});
         
         sinon.assert.calledOnce(spy);
     },
     
+     "test oncolorchange event should call updateColor in lobby Ui with correct parameters": function() {
+        var data = { color:"#123123", id: 1};
+        data = JSON.stringify(data);
+        
+         var spy = this.sinonSandbox.stub(this.ui, "updateColor");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:data});
+        
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1, "#123123");
+        
+        
+        var data = { color:"#321123", id: 4};
+        data = JSON.stringify(data);
+        
+        this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:data});
+        
+        sinon.assert.calledTwice(spy);
+        sinon.assert.calledWith(spy, 4, "#321123");
+    },
+    
     "test onlobbychange event should call updateLobby in lobby Ui": function() {
-        var spy = this.sinonSandbox.spy(this.ui, "updateLobby");
+        var spy = this.sinonSandbox.stub(this.ui, "updateLobby");
         
         sinon.assert.notCalled(spy);
         this.sandbox.server[this.url].sendMessage(0, "lobbychange", {data:""});
