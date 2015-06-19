@@ -63,7 +63,7 @@ function lobbyEventSourceController()
     
     function onlobbychange()
     {
-        
+        _lobbyUi.updateLobby(new tddjs.client.model.lobby());
     }
 
     this.addEventListeners = addEventListeners;
