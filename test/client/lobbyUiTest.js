@@ -769,6 +769,33 @@ TestCase("SingleLobbyUiEventTest", {
         assertNoException(function() { ui.updateColor(1, "#ffffff"); });
     },
     
+    "test updateColor should change the color correct": function() {
+        var ui = this.lobbyUi;
+        ui.createLobbyContent();
+        ui.createWrapper();
+        ui.showLobby(this.lobby3);
+        
+        var colorBox = ui.getPlayerColorBoxById(3);
+        ui.updateColor(3, "#000000");
+        
+        assertEquals("rgb(0, 0, 0)", colorBox.style.backgroundColor);
+        
+        ui.updateColor(3, "#ffffff");
+        
+        assertEquals("rgb(255, 255, 255)", colorBox.style.backgroundColor);
+        
+        colorBox = ui.getPlayerColorBoxById(5);
+        
+        ui.updateColor(5, "#000000");
+        
+        assertEquals("rgb(0, 0, 0)", colorBox.style.backgroundColor);
+        
+        ui.updateColor(5, "#ffffff");
+        
+        assertEquals("rgb(255, 255, 255)", colorBox.style.backgroundColor);
+        
+    },
+    
    "test lobbyUi should have function to update lobby on event": function() {
         assertFunction(this.lobbyUi.updateLobby);
     },
