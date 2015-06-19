@@ -926,8 +926,7 @@ TestCase("SingleLobbyUiEventTest", {
         sinon.assert.calledOnce(setCurrentLobbySpy);
         sinon.assert.calledOnce(spy);
         
-        sinon.assert.calledWith(spy, this.lobby3.serialize());
-        sinon.assert.calledWith(spy, this.lobby3.serialize());
+        sinon.assert.calledWith(setCurrentLobbySpy, this.lobby3);
     }
  
 });
