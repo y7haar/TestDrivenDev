@@ -408,23 +408,51 @@ TestCase("GameLoopCommunicationTests", {
     },
     "test gameLoop.eventSource event attackResult should be called by Server": function(){
         assertEquals(0,this.gameLoop.fromServerLogs.length);
-        var data = {
-            filler: "filler for attacResult-data that later comes from server"
+        var attackResultData = {
+            type:"attacking",
+            attacker:{
+                player:"Peter",
+                outcome:"winner"               
+            },
+            defender:{
+                player:"Hanswurst",
+                outcome:"loser"
+            },
+            changes:[
+                {
+                    continent:"PremiumIsland",
+                    country:"Country1",
+                    unitCount:1,
+                    owner:"Peter"
+                },
+                {
+                    continent:"PremiumIsland",
+                    country:"Country2",
+                    unitCount:6,
+                    owner:"Hanswurst"
+                }
+            ]                    
         };
-        data = JSON.stringify(data);
-        this.sandbox.server[this.url].sendMessage(0,"attackResult",{data:data});
+
+        this.sandbox.server[this.url].sendMessage(0,"attackResult",{data:JSON.stringify(attackResultData)});
         assertEquals(1,this.gameLoop.fromServerLogs.length);
-        assertEquals({data:data}, this.gameLoop.fromServerLogs[0]);
+        assertEquals({data:JSON.stringify(attackResultData)}, this.gameLoop.fromServerLogs[0]);
     },
     "test gameLoop.eventSource event placeUnits should be called by Server": function(){
         assertEquals(0,this.gameLoop.fromServerLogs.length);
-        var data = {
-            filler: "filler for placeUnits-data that later comes from server"
+        var placeUnitData = {
+            type: "placing",
+            player: "Peter",
+            change: {
+                continent: "Europa",
+                country: "Country1",
+                unitCount: 14
+            }
         };
-        data = JSON.stringify(data);
-        this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:data});
+
+        this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:JSON.stringify(placeUnitData)});
         assertEquals(1,this.gameLoop.fromServerLogs.length);
-        assertEquals({data:data}, this.gameLoop.fromServerLogs[0]);
+        assertEquals({data:JSON.stringify(placeUnitData)}, this.gameLoop.fromServerLogs[0]);
     }   
 });
 
@@ -482,7 +510,7 @@ TestCase("GameLoopModifyMapTests", {
                 }
             ]                    
         };
-        console.log(this.attackResultData);
+        //console.log(this.attackResultData);
         this.placeUnitData = {
             type:"placing",
             player:this.player1.getName(),
@@ -492,7 +520,7 @@ TestCase("GameLoopModifyMapTests", {
                 unitCount:14
             }
         };
-        console.log(this.placeUnitData);
+        //console.log(this.placeUnitData);
 
         this.map2 = this.map1;
         this.url = "/modifyMapTestURL";
