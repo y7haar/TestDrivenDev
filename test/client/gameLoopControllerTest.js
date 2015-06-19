@@ -407,22 +407,24 @@ TestCase("GameLoopCommunicationTests", {
         assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
     },
     "test gameLoop.eventSource event attackResult should be called by Server": function(){
-        assertFalse(this.gameLoop.attackResultCalled);
+        assertEquals(0,this.gameLoop.fromServerLogs.length);
         var data = {
-            filler: "filler for data that later comes from server"
+            filler: "filler for attacResult-data that later comes from server"
         };
         data = JSON.stringify(data);
         this.sandbox.server[this.url].sendMessage(0,"attackResult",{data:data});
-        assertTrue(this.gameLoop.attackResultCalled);
+        assertEquals(1,this.gameLoop.fromServerLogs.length);
+        assertEquals({data:data}, this.gameLoop.fromServerLogs[0]);
     },
     "test gameLoop.eventSource event placeUnits should be called by Server": function(){
-        assertFalse(this.gameLoop.placeUnitsCalled);
+        assertEquals(0,this.gameLoop.fromServerLogs.length);
         var data = {
-            filler: "filler for data that later comes from server"
+            filler: "filler for placeUnits-data that later comes from server"
         };
         data = JSON.stringify(data);
         this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:data});
-        assertTrue(this.gameLoop.placeUnitsCalled);
+        assertEquals(1,this.gameLoop.fromServerLogs.length);
+        assertEquals({data:data}, this.gameLoop.fromServerLogs[0]);
     }
     
    
