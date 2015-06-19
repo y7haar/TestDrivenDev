@@ -1077,6 +1077,24 @@ TestCase("MapGeneratorTest", {
         assertFalse(map1 === map2);
         assertEquals(-1, this.mapGenerator.getAllCountries().indexOf(country1));
         assertEquals(-1, map2.continents.indexOf(continent1));
+    },
+    
+    "test There Should generate atleast minWaterNumber Seas": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(map.water.length >= 2);
+    },
+    
+    "test There Shouldnt generate more than manWaterNumber Seas": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(map.water.length <= 4);
     }
 });
 
