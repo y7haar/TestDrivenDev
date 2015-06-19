@@ -192,6 +192,15 @@ TestCase("LobbyEventSourceControllerTest", {
         this.sandbox.server[this.url].sendMessage(0, "colorchange", {data:""});
         
         sinon.assert.calledOnce(spy);
+    },
+    
+    "test onlobbychange event should call updateLobby in lobby Ui": function() {
+        var spy = this.sinonSandbox.spy(this.ui, "updateLobby");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "lobbychange", {data:""});
+        
+        sinon.assert.calledOnce(spy);
     }
 
     });
