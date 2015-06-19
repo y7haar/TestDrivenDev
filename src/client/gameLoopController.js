@@ -153,13 +153,14 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function attackResult(e)
     {
         _fromServerLogs.push(e);
-        
+        //console.log(JSON.parse(e.data));        
     }
     
     function placeUnits(e)
     {
         _fromServerLogs.push(e);
-        
+        var data = JSON.parse(e.data);
+        _map.getContinent(data.change.continent).getCountry(data.change.country).setUnitCount(data.change.unitCount);
     }
     
     //  Testing
