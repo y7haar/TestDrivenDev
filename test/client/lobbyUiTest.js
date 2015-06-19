@@ -820,7 +820,7 @@ TestCase("SingleLobbyUiEventTest", {
     "test updateColor should throw Error if no ColorBox with given Id exists": function() {
         var ui = this.lobbyUi;
         
-        assertException(function() { ui.updateColor(3, 5); }, "TypeError");
+        assertException(function() { ui.updateColor(1, "#ffffff"); }, "Error");
         assertNoException(function() { ui.updateColor(3, "#ffffff"); });
     },
     
