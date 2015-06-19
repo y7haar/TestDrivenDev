@@ -23,6 +23,7 @@ TestCase("LobbyEventSourceControllerTest", {
         this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);
+        this.sandbox.addServer(this.url2);
 
     },
     tearDown: function(){
