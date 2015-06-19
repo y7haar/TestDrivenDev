@@ -748,8 +748,56 @@ TestCase("LobbyUiEventTest", {
 
 
 TestCase("SingleLobbyUiEventTest", {
-    setUp: lobbyUiSetup,
-    tearDown: lobbyUiTeardown,
+    setUp: function(){
+    this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+    this.lobbyUi = new tddjs.client.ui.lobbyUi(this.lobbyRequestController);
+    this.lobbyRequestController.setLobbyUi(this.lobbyUi);
+
+    this.lobby3 = new tddjs.client.model.lobby();
+
+    this.player3 = new tddjs.client.player();
+    this.player4 = new tddjs.client.player();
+    this.player5 = new tddjs.client.player();
+
+    this.player3.setId(3);
+    this.player4.setId(4);
+    this.player5.setId(5);
+
+    this.player3.setName("P3");
+    this.player4.setName("P4");
+    this.player5.setName("P5");
+
+    this.player3.setColor("#222222");
+    this.player4.setColor("#333333");
+    this.player5.setColor("#dddddd");
+
+    this.player4.setType("bot");
+
+    this.lobby3.setId(1);
+
+    this.lobby3.setName("L2");
+
+    this.lobby3.addPlayer(this.player3);
+    this.lobby3.addPlayer(this.player4);
+    this.lobby3.addPlayer(this.player5);
+
+    this.lobby3.setLeader(this.player3);
+    this.lobby3.setMaxPlayers(4);
+
+    this.lobbyUi.setCurrentLobby(this.lobby3);
+
+    this.sandbox = sinon.sandbox.create();
+
+    this.lobbyUi.createLobbyContent();
+    this.lobbyUi.createWrapper();
+    this.lobbyUi.showLobby(this.lobby3);
+    },
+    tearDown: function(){
+        delete this.lobbyUi;
+        delete this.lobby3;
+
+    this.sandbox.restore();
+    },
     
     "test lobbyUi should have function to update color on event": function() {
         assertFunction(this.lobbyUi.updateColor);
@@ -759,21 +807,25 @@ TestCase("SingleLobbyUiEventTest", {
         var ui = this.lobbyUi;
         
         assertException(function() { ui.updateColor("a", "#ffffff"); }, "TypeError");
-        assertNoException(function() { ui.updateColor(1, "#ffffff"); });
+        assertNoException(function() { ui.updateColor(3, "#ffffff"); });
     },
     
     "test updateColor should throw Error if color is no string": function() {
         var ui = this.lobbyUi;
         
-        assertException(function() { ui.updateColor(1, 5); }, "TypeError");
-        assertNoException(function() { ui.updateColor(1, "#ffffff"); });
+        assertException(function() { ui.updateColor(3, 5); }, "TypeError");
+        assertNoException(function() { ui.updateColor(3, "#ffffff"); });
+    },
+    
+    "test updateColor should throw Error if no ColorBox with given Id exists": function() {
+        var ui = this.lobbyUi;
+        
+        assertException(function() { ui.updateColor(3, 5); }, "TypeError");
+        assertNoException(function() { ui.updateColor(3, "#ffffff"); });
     },
     
     "test updateColor should change the color correct": function() {
-        var ui = this.lobbyUi;
-        ui.createLobbyContent();
-        ui.createWrapper();
-        ui.showLobby(this.lobby3);
+         var ui = this.lobbyUi;
         
         var colorBox = ui.getPlayerColorBoxById(3);
         ui.updateColor(3, "#000000");
@@ -802,7 +854,7 @@ TestCase("SingleLobbyUiEventTest", {
     
     "test updateLobby should throw Error if Lobby is no Lobby": function() {
         var ui = this.lobbyUi;
-        var lobby = this.lobby1;
+        var lobby = this.lobby3;
         
         assertException(function() { ui.updateLobby("a"); }, "TypeError");
         assertNoException(function() { ui.updateLobby(lobby); });
