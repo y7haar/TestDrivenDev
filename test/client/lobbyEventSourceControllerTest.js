@@ -169,7 +169,17 @@ TestCase("LobbyEventSourceControllerTest", {
         this.lobby.setName("L1");
         this.lobby.setMaxPlayers(4);
         
+        this.player1 = new tddjs.client.player();
+        this.player1.setId(1);
+        this.player1.setName("Peter");
+        this.player1.setColor("#ffffff");
+        
+        this.lobby.addPlayer(this.player1);
+        
         this.ui = new tddjs.client.ui.lobbyUi();
+        this.ui.createLobbyContent();
+        this.ui.createWrapper();
+        this.ui.showLobby(this.lobby);
         
         this.url = BASE_URL + "lobbies/" + this.lobby.getId();
         
