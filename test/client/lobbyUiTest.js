@@ -655,6 +655,32 @@ TestCase("SingleLobbyUiLeaderTest", {
 
         assertEquals("lobbyMaxPlayersSpan", maxPlayersSpan.className);
         assertEquals("lobbyMaxPlayersSelect", maxPlayersSelect.className);
+    },
+    
+    "test ui should have a function to show a Lobby for a specific player": function() {
+        assertFunction(this.lobbyUi.showLobbyForPlayer);
+    },
+    
+    "test showLobbyForPlayer should call methods to show a Lobby": function() {
+        var createLobbyContentSpy = this.sandbox.spy(this.lobbyUi, "createLobbyContent");
+        var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
+        var showLobbySpy = this.sandbox.spy(this.lobbyUi, "showLobby");
+        var setPlayerEditableSpy = this.sandbox.spy(this.lobbyUi, "setPlayerEditable");
+        
+        sinon.assert.notCalled(createLobbyContentSpy);
+        sinon.assert.notCalled(createWrapperSpy);
+        sinon.assert.notCalled(showLobbySpy);
+        sinon.assert.notCalled(setPlayerEditableSpy);
+        
+        this.lobbyUi.showLobbyForPlayer(this.lobby3, this.player5);
+        
+        sinon.assert.calledOnce(createLobbyContentSpy);
+        sinon.assert.calledOnce(createWrapperSpy);
+        sinon.assert.calledOnce(showLobbySpy);
+        sinon.assert.calledOnce(setPlayerEditableSpy);
+        
+        sinon.assert.calledWith(showLobbySpy, this.lobby3);
+        sinon.assert.calledWith(setPlayerEditableSpy, this.player5.getId());
     }
 });
 
@@ -858,6 +884,10 @@ TestCase("SingleLobbyUiEventTest", {
         
         assertException(function() { ui.updateLobby("a"); }, "TypeError");
         assertNoException(function() { ui.updateLobby(lobby); });
+    },
+    
+    "test updateLobby should call methods to redraw a lobby": function() {
+        // TODO
     }
  
 });
