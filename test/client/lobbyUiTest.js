@@ -767,6 +767,18 @@ TestCase("SingleLobbyUiEventTest", {
         
         assertException(function() { ui.updateColor(1, 5); }, "TypeError");
         assertNoException(function() { ui.updateColor(1, "#ffffff"); });
+    },
+    
+   "test lobbyUi should have function to update lobby on event": function() {
+        assertFunction(this.lobbyUi.updateLobby);
+    },
+    
+    "test updateLobby should throw Error if Lobby is no Lobby": function() {
+        var ui = this.lobbyUi;
+        var lobby = this.lobby;
+        
+        assertException(function() { ui.updateLobby("a"); }, "TypeError");
+        assertNoException(function() { ui.updateLobby(lobby); });
     }
  
 });
