@@ -11,6 +11,7 @@ function lobbyUi(aRequestController)
     var _colors = ["#0000ff", "#90ee90", "#ff7f50", "#6495ed", "#228b22", "#ff0000", "#ff8c00", "#ffff00", "#7cfc00", "#f0e68c", "#ee82ee"];
     var _colorIndex = 0;
     var _currentLobby;
+    var _currentPlayer;
     var _colorBoxes = [];
 
     var _startButton;
@@ -539,6 +540,14 @@ function lobbyUi(aRequestController)
         return _currentLobby;
     }
     
+    function setCurrentPLayer(aPlayer)
+    {
+        if(! (aPlayer instanceof tddjs.client.player))
+            throw new TypeError("Player must be of type player");
+        
+        _currentPlayer = aPlayer;
+    }
+    
     function updateColor(aPlayerId, aColor)
     {
         if(typeof aPlayerId !== "number")
@@ -561,18 +570,18 @@ function lobbyUi(aRequestController)
             throw new TypeError("Lobby is not of Type Lobby");
     }
     
-    function showLobbyForPlayer(aLobby, aPlayer)
+    function showLobbyForPlayer()
     {
         this.createLobbyContent();
         this.createWrapper();
         
-        if(aLobby.getLeader() === aPlayer)
-            this.showLeaderLobby(aLobby);
+        if(_currentLobby.getLeader() === _currentPlayer)
+            this.showLeaderLobby(_currentLobby);
             
         else
-            this.showLobby(aLobby);
+            this.showLobby(_currentLobby);
         
-        this.setPlayerEditable(aPlayer.getId());
+        this.setPlayerEditable(_currentPlayer.getId());
     }
 
     this.createContent = createContent;
@@ -593,6 +602,7 @@ function lobbyUi(aRequestController)
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
+    this.setCurrentPlayer = setCurrentPLayer;
 
     //Events
     this.submitPlayerName = submitPlayerName;
