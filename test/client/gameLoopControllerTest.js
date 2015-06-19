@@ -539,18 +539,28 @@ TestCase("GameLoopModifyMapTests", {
     },
     "test gameLoop should change right unitCount of Country when server Trigger placeUnit event": function()
     {
+        //before Changes
+        assertEquals(10,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));
+        
         assertEquals(0, this.gameLoop.fromServerLogs.length);
         this.sandbox.server[this.url].sendMessage(0,"placeUnits", {data:JSON.stringify(this.placeUnitData)});
         assertEquals(1, this.gameLoop.fromServerLogs.length);
-        
+        //after changes
         assertEquals(14,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));     
     },
     "test gameLoop should change map correctly when server trigger attackResult event": function()
     {
+        //before Changes
+        assertEquals(10, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner().getName());
+        
+        assertEquals(5, this.map1.getContinent("PremiumIsland").getCountry("Country2").getUnitCount());
+        assertEquals("Hanswurst", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner().getName());
+        
         assertEquals(0, this.gameLoop.fromServerLogs.length);
         this.sandbox.server[this.url].sendMessage(0,"attackResult", {data:JSON.stringify(this.attackResultData)});
         assertEquals(1, this.gameLoop.fromServerLogs.length);
-        
+        // after Changes
         assertEquals(1, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
         assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner().getName());
         
