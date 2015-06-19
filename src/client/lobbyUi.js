@@ -565,7 +565,13 @@ function lobbyUi(aRequestController)
     {
         this.createLobbyContent();
         this.createWrapper();
-        this.showLobby(aLobby);
+        
+        if(aLobby.getLeader() === aPlayer)
+            this.showLeaderLobby(aLobby);
+            
+        else
+            this.showLobby(aLobby);
+        
         this.setPlayerEditable(aPlayer.getId());
     }
 
