@@ -425,7 +425,94 @@ TestCase("GameLoopCommunicationTests", {
         this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:data});
         assertEquals(1,this.gameLoop.fromServerLogs.length);
         assertEquals({data:data}, this.gameLoop.fromServerLogs[0]);
+    }   
+});
+
+TestCase("GameLoopModifyMapTests", {
+    setUp: function()
+    {
+        this.map1 = new tddjs.client.map.map();
+       
+        this.player1 = new tddjs.client.player();
+        this.player1.setName('Peter');
+        
+        this.player2 = new tddjs.client.player();
+        this.player2.setName('Hanswurst');
+
+        //Continent1--- PREMIUMISLAND ----------------------
+        this.continent1 = new tddjs.client.map.continent();
+        this.continent1.setName("PremiumIsland");
+        this.c1 = new tddjs.client.map.country();
+        this.c1.setName("Country1");
+        this.c1.setOwner(this.player1);
+        this.c1.setUnitCount(10);
+        
+        this.c2 = new tddjs.client.map.country();
+        this.c2.setName("Country2");
+        this.c2.setOwner(this.player2);
+        this.c2.setUnitCount(5);
+        
+        this.continent1.addCountry(this.c1);
+        this.continent1.addCountry(this.c2);
+        
+        this.map1.addContinent(this.continent1);
+        
+        this.attackResultData = {
+            type:"attacking",
+            attacker:{
+                player:this.player1.getName(),
+                outcome:"winner"               
+            },
+            defender:{
+                player:this.player2.getName(),
+                outcome:"loser"
+            },
+            changes:[
+                {
+                    country:"Country1",
+                    unitCount:1,
+                    owner:this.player1.getName()
+                },
+                {
+                    country:"Country2",
+                    unitCount:6,
+                    owner:this.player1.getName()
+                }
+            ]                    
+        };
+        console.log(this.attackResultData);
+        this.placeUnitData = {
+            type:"placing",
+            player:this.player1.getName(),
+            change:{
+                country:"Country1",
+                unitCount:14
+            }
+        };
+        console.log(this.placeUnitData);
+
+        this.map2 = this.map1;
+        this.url = "/modifyMapTestURL";
+        this.gameLoop = new tddjs.client.gameLoopController(this.map1, this.player1, this.url);
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sandbox.addServer(this.url);     
+        
+        this.gameLoop.establishConnection();
+    },
+    tearDown: function()
+    {
+        this.map1 = null;
+        this.gameLoop = null;
+        this.url = null;
+        this.sandbox.restore();
+    },
+    "test if gameLoop changes Map correctly when Server trigger placeUnits event": function()
+    {
+        assertEquals(0, this.gameLoop.fromServerLogs.length);
+        this.sandbox.server[this.url].sendMessage(0,"placeUnits", {data:JSON.stringify(this.placeUnitData)});
+        assertEquals(1, this.gameLoop.fromServerLogs.length);
+        
+        assertEquals(14,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));     
     }
     
-   
 });
