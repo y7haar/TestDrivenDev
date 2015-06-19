@@ -1095,6 +1095,30 @@ TestCase("MapGeneratorTest", {
         var map = this.mapGenerator.generateMap();
         
         assertTrue(map.water.length <= 4);
+    },
+    
+    "test Seas should have atleast minWaterSize": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size >= 2);
+        assertTrue(seas[1].size >= 2);
+        assertTrue(seas[seas.length- 1].size >= 2);
+    },
+    
+    "test Seas shouldnt been bigger than  manWaterSize": function()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size <= 4);
+        assertTrue(seas[1].size <= 4);
+        assertTrue(seas[seas.length- 1].size <= 4);
     }
 });
 
