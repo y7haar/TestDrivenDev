@@ -75,6 +75,18 @@ TestCase("LobbyEventSourceControllerTest", {
         assertException(function() { controller.setLobbyUi("6"); }, "TypeError");
     },
     
+     "test LobbyEventSourceController should have function to get a lobbyUi": function() {
+        assertFunction(this.lobbyEventSourceController.getLobbyUi);
+    },
+    
+     "test setter and getter for lobbyUi should set and get lobbyUi": function() {
+        var ui = new tddjs.client.ui.lobbyUi();
+         
+        assertUndefined(this.lobbyEventSourceController.getLobbyUi());
+        this.lobbyEventSourceController.setLobbyUi(ui);
+        assertSame(ui, this.lobbyEventSourceController.getLobbyUi());
+    },
+    
     "test establishConnection should do an EventSource request": function() {
         this.lobbyEventSourceController.setLobby(this.lobby);
         
@@ -123,6 +135,15 @@ TestCase("LobbyEventSourceControllerTest", {
        assertFunction(this.lobbyEventSourceController.eventSource.oncolorchange);
     },
     
+    "test addEventListeners should add onlobbychange event": function() {
+       assertUndefined(this.lobbyEventSourceController.eventSource);
+       this.lobbyEventSourceController.setLobby(this.lobby);
+       
+       this.lobbyEventSourceController.establishConnection();
+       
+       assertNotUndefined(this.lobbyEventSourceController.eventSource.onlobbychange);
+       assertFunction(this.lobbyEventSourceController.eventSource.onlobbychange);
+    },
     
     "test establishConnection should throw Error if no lobby is setted": function() {
         var controller = this.lobbyEventSourceController;
