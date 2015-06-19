@@ -744,3 +744,29 @@ TestCase("LobbyUiEventTest", {
     }
 
 });
+
+
+
+TestCase("SingleLobbyUiEventTest", {
+    setUp: lobbyUiSetup,
+    tearDown: lobbyUiTeardown,
+    
+    "test lobbyUi should have function to update color on event": function() {
+        assertFunction(this.lobbyUi.updateColor);
+    },
+    
+    "test updateColor should throw Error if playerId is no number": function() {
+        var ui = this.lobbyUi;
+        
+        assertException(function() { ui.updateColor("a", "#ffffff"); }, "TypeError");
+        assertNoException(function() { ui.updateColor(1, "#ffffff"); });
+    },
+    
+    "test updateColor should throw Error if color is no string": function() {
+        var ui = this.lobbyUi;
+        
+        assertException(function() { ui.updateColor(1, 5); }, "TypeError");
+        assertNoException(function() { ui.updateColor(1, "#ffffff"); });
+    }
+ 
+});
