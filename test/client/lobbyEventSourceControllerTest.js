@@ -12,7 +12,13 @@ TestCase("LobbyEventSourceControllerTest", {
         this.lobby.setName("L1");
         this.lobby.setMaxPlayers(4);
         
+        this.lobby2 = new tddjs.client.model.lobby();
+        this.lobby2.setId(2);
+        this.lobby2.setName("L2");
+        this.lobby2.setMaxPlayers(4);
+        
         this.url = BASE_URL + "lobbies/" + this.lobby.getId();
+        this.url2 = BASE_URL + "lobbies/" + this.lobby2.getId();
         
         this.lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
@@ -66,8 +72,44 @@ TestCase("LobbyEventSourceControllerTest", {
     },
     
     "test establishConnection should do an EventSource request": function() {
+        this.lobbyEventSourceController.setLobby(this.lobby);
+        
         assertEquals(0, this.sandbox.server[this.url].clients.length);
+        assertUndefined(this.lobbyEventSourceController.eventSource);
         this.lobbyEventSourceController.establishConnection();
+        assertNotUndefined(this.lobbyEventSourceController.eventSource);
         assertEquals(1, this.sandbox.server[this.url].clients.length);
+    },
+    
+    "test establishConnection should do a request to the correct URI": function() {
+        this.lobbyEventSourceController.setLobby(this.lobby);
+        this.lobbyEventSourceController.establishConnection();
+        
+        assertEquals(1, this.sandbox.server[this.url].clients.length);
+        
+        
+        this.lobbyEventSourceController.setLobby(this.lobby2);
+        this.lobbyEventSourceController.establishConnection();
+        
+        assertEquals(1, this.sandbox.server[this.url2].clients.length);
+    },
+    
+    "test controller should have function to add Events to EventSource": function() {
+        assertFunction(this.lobbyEventSourceController.addEventListeners);
+    },
+    
+     "test addEventListeners should add oncolorchange event": function() {
+       assertUndefined(this.lobbyEventSourceController.eventSource.oncolorchange);
+       this.lobbyEventSourceController.addEventListeners();
+       assertNotUndefined(this.lobbyEventSourceController.eventSource.oncolorchange);
+       assertFunction(this.lobbyEventSourceController.eventSource.oncolorchange);
+    },
+    
+    "test establishConnection should call addEventListeners": function() {
+        var spy = sinon.spy(this.lobbyEventSourceController.addEventListeners);
+        sinon.assert.notCalled(spy);
+        this.lobbyEventSourceController.establishConnection();
+        sinon.assert.calledOnce(spy);
+        
     }
     });
