@@ -56,12 +56,14 @@ function lobbyEventSourceController()
 
 
 
-    function oncolorchange()
+    function oncolorchange(e)
     {
-        _lobbyUi.updateColor(1, "#ffffff");
+        var data = JSON.parse(e.data);
+        console.log(data);
+        _lobbyUi.updateColor(data.id, data.color);
     }
     
-    function onlobbychange()
+    function onlobbychange(e)
     {
         _lobbyUi.updateLobby(new tddjs.client.model.lobby());
     }
