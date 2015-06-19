@@ -537,13 +537,25 @@ TestCase("GameLoopModifyMapTests", {
         this.url = null;
         this.sandbox.restore();
     },
-    "test if gameLoop should change right unitCount of Country when server Trigger placeUnit event": function()
+    "test gameLoop should change right unitCount of Country when server Trigger placeUnit event": function()
     {
         assertEquals(0, this.gameLoop.fromServerLogs.length);
         this.sandbox.server[this.url].sendMessage(0,"placeUnits", {data:JSON.stringify(this.placeUnitData)});
         assertEquals(1, this.gameLoop.fromServerLogs.length);
         
         assertEquals(14,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));     
+    },
+    "test gameLoop should change map correctly when server trigger attackResult event": function()
+    {
+        assertEquals(0, this.gameLoop.fromServerLogs.length);
+        this.sandbox.server[this.url].sendMessage(0,"attackResult", {data:JSON.stringify(this.attackResultData)});
+        assertEquals(1, this.gameLoop.fromServerLogs.length);
+        
+        assertEquals(1, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner);
+        
+        assertEquals(6, this.map1.getContinent("PremiumIsland").getCountry("Country2").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner);
     }
     
 });
