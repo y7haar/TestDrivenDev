@@ -912,14 +912,6 @@ TestCase("SingleLobbyUiEventTest", {
         assertFunction(this.lobbyUi.updateLobby);
     },
     
-    "test updateLobby should throw Error if Lobby is no Lobby": function() {
-        var ui = this.lobbyUi;
-        var lobby = this.lobby3;
-        
-        assertException(function() { ui.updateLobby("a"); }, "TypeError");
-        assertNoException(function() { ui.updateLobby(lobby); });
-    },
-    
     "test updateLobby should call methods to redraw a lobby": function() {
         // TODO
     }

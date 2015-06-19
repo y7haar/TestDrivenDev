@@ -101,7 +101,7 @@ function lobby()
     }
 
     function serializeAsObject()
-    {
+    {   
         var id = getId();
         var name = getName();
         var maxPlayers = getMaxPlayers();

@@ -16,7 +16,7 @@ TestCase("LobbyEventSourceControllerTest", {
         this.lobby2.setId(2);
         this.lobby2.setName("L2");
         this.lobby2.setMaxPlayers(4);
-        
+
         this.url = BASE_URL + "lobbies/" + this.lobby.getId();
         this.url2 = BASE_URL + "lobbies/" + this.lobby2.getId();
         
@@ -175,6 +175,7 @@ TestCase("LobbyEventSourceControllerTest", {
         this.player1.setColor("#ffffff");
         
         this.lobby.addPlayer(this.player1);
+        this.lobby.setLeader(this.player1);
         
         this.ui = new tddjs.client.ui.lobbyUi();
         this.ui.createLobbyContent();
@@ -236,6 +237,17 @@ TestCase("LobbyEventSourceControllerTest", {
         this.sandbox.server[this.url].sendMessage(0, "lobbychange", {data:""});
         
         sinon.assert.calledOnce(spy);
+    },
+    
+    "test onlobbychange event should call updateLobby in lobby Ui with correct parameters": function() {
+        var data = this.lobby.serialize();
+        var spy = this.sinonSandbox.stub(this.ui, "updateLobby");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "lobbychange", {data:data});
+        
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, data);
     }
 
     });

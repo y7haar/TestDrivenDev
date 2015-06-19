@@ -566,8 +566,6 @@ function lobbyUi(aRequestController)
     
     function updateLobby(aLobby)
     {
-        if(! (aLobby instanceof tddjs.client.model.lobby))
-            throw new TypeError("Lobby is not of Type Lobby");
     }
     
     function showLobbyForPlayer()

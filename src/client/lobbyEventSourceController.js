@@ -59,13 +59,12 @@ function lobbyEventSourceController()
     function oncolorchange(e)
     {
         var data = JSON.parse(e.data);
-        console.log(data);
         _lobbyUi.updateColor(data.id, data.color);
     }
     
     function onlobbychange(e)
     {
-        _lobbyUi.updateLobby(new tddjs.client.model.lobby());
+        _lobbyUi.updateLobby(e.data);
     }
 
     this.addEventListeners = addEventListeners;
