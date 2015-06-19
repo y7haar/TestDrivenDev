@@ -99,21 +99,25 @@ TestCase("LobbyEventSourceControllerTest", {
         assertFunction(this.lobbyEventSourceController.addEventListeners);
     },
     
-     "test addEventListeners should add oncolorchange event": function() {
-       assertUndefined(this.lobbyEventSourceController.eventSource.oncolorchange);
-       this.lobbyEventSourceController.addEventListeners();
-       assertNotUndefined(this.lobbyEventSourceController.eventSource.oncolorchange);
-       assertFunction(this.lobbyEventSourceController.eventSource.oncolorchange);
-    },
-    
     "test establishConnection should call addEventListeners": function() {
         this.lobbyEventSourceController.setLobby(this.lobby);
         
-        var spy = sinon.stub(this.lobbyEventSourceController.addEventListeners);
+        var spy = sinon.stub(this.lobbyEventSourceController, "addEventListeners");
         sinon.assert.notCalled(spy);
         this.lobbyEventSourceController.establishConnection();
         sinon.assert.calledOnce(spy);
     },
+    
+     "test addEventListeners should add oncolorchange event": function() {
+       assertUndefined(this.lobbyEventSourceController.eventSource);
+       this.lobbyEventSourceController.setLobby(this.lobby);
+       
+       this.lobbyEventSourceController.establishConnection();
+       
+       assertNotUndefined(this.lobbyEventSourceController.eventSource.oncolorchange);
+       assertFunction(this.lobbyEventSourceController.eventSource.oncolorchange);
+    },
+    
     
     "test establishConnection should throw Error if no lobby is setted": function() {
         var controller = this.lobbyEventSourceController;
