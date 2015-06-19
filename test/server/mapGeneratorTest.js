@@ -708,6 +708,27 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMaximumCountrySize(2);}, "Error");
     },
     
+    "test Should be able to get gridCellCombinesPerCountry": function ()
+    {
+        assertEquals(2.5, this.mapGenerator.getGridCellCombinesPerCountry());
+    },
+    
+    "test Should be able to set gridCellCombinesPerCountry": function ()
+    {
+        this.mapGenerator.setGridCellCombinesPerCountry(6);
+        
+        assertEquals(6, this.mapGenerator.getGridCellCombinesPerCountry());
+    },
+    
+    "test Shouldnt be able to set invalid gridCellCombinesPerCountry": function ()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setGridCellCombinesPerCountry("fff");}, "TypeError");
+        assertException(function(){gen.setGridCellCombinesPerCountry(-10);}, "Error");
+        assertException(function(){gen.setGridCellCombinesPerCountry(0);}, "Error");
+    },
+    
     "test Should be able to get Variable CountriesInContinents": function()
     {
         var array = this.mapGenerator.getCountriesInContinents();
@@ -717,14 +738,14 @@ TestCase("MapGeneratorTest for Setter and Getters",
     
     "test Should be able to get minimumCotinentSize": function()
     {
-        assertEquals(2, this.mapGenerator.getMinumumContinentSize());
+        assertEquals(2, this.mapGenerator.getMinimumContinentSize());
     },
     
     "test Should be able to set the minimumContinentSize": function()
     {
         this.mapGenerator.setMinimumContinentSize(4);
         
-        assertEquals(4, this.mapGenerator.getMinumumContinentSize());
+        assertEquals(4, this.mapGenerator.getMinimumContinentSize());
     },
     
     "test Shouldnt be able to set invalid MinimumContinentSize": function()
