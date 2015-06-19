@@ -2,7 +2,7 @@
  Testcases for the Gameloop
  */
 
-TestCase("GameLoopConstTests", {
+TestCase("GameLoopConstructorTests", {
      setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
@@ -405,6 +405,24 @@ TestCase("GameLoopCommunicationTests", {
         assertEquals(2,this.sandbox.server[this.url].requests.length);
         assertEquals(1, this.gameLoop.toServerLogs.length);
         assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
+    },
+    "test gameLoop.eventSource event attackResult should be called by Server": function(){
+        assertFalse(this.gameLoop.attackResultCalled);
+        var data = {
+            filler: "filler for data that later comes from server"
+        };
+        data = JSON.stringify(data);
+        this.sandbox.server[this.url].sendMessage(0,"attackResult",{data:data});
+        assertTrue(this.gameLoop.attackResultCalled);
+    },
+    "test gameLoop.eventSource event placeUnits should be called by Server": function(){
+        assertFalse(this.gameLoop.placeUnitsCalled);
+        var data = {
+            filler: "filler for data that later comes from server"
+        };
+        data = JSON.stringify(data);
+        this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:data});
+        assertTrue(this.gameLoop.placeUnitsCalled);
     }
     
    
