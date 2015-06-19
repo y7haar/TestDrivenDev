@@ -420,13 +420,13 @@ TestCase("GameLoopCommunicationTests", {
             },
             changes:[
                 {
-                    continent:"PremiumIsland",
+                    continent:"Europa",
                     country:"Country1",
                     unitCount:1,
                     owner:"Peter"
                 },
                 {
-                    continent:"PremiumIsland",
+                    continent:"Europa",
                     country:"Country2",
                     unitCount:6,
                     owner:"Hanswurst"
@@ -552,10 +552,10 @@ TestCase("GameLoopModifyMapTests", {
         assertEquals(1, this.gameLoop.fromServerLogs.length);
         
         assertEquals(1, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
-        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner);
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner().getName());
         
         assertEquals(6, this.map1.getContinent("PremiumIsland").getCountry("Country2").getUnitCount());
-        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner);
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner().getName());
     }
     
 });
