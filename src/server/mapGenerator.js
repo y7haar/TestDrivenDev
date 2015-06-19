@@ -323,9 +323,10 @@ function mapGenerator()
         combineCountryCells();
         //Zu kleine Länder beseitigen
         combineRemainingCountries();
-        //Wasser erzeugen
         //Karte erzeugen
         var map = createMap();
+        //Wasser 
+        map.water = generateWater();
         //Kontinente erzeugen
         map.continents = buildContinents();
         //return
@@ -629,6 +630,43 @@ function mapGenerator()
         //Gemergetes Land entfernen
         allCountries.splice(allCountries.indexOf(loserCountry), 1);
     }
+    
+    //Wassererstellung
+    function generateWater()
+    {
+        //Die Gewässer
+        var water = [];
+        //Id
+        var id = -1;
+        
+        
+        //Anzahl Wasserflächen auswürfeln
+        var factor = maximumWaterNumber - minimumWaterNumber;
+        var random = Math.round(Math.random()*factor + minimumWaterNumber);
+        
+        var newWater;
+        
+        //Alle Wasserflächen erzeugen
+        while(random > 0)
+        {
+            //Neues Wasser erzeugen
+            newWater = createWater(id);
+            
+            //Würfeln?
+            
+            //Bis zur Größe x erzeugen
+            while(false)
+            {
+                //Viel Code
+            }
+            
+            random--;
+            id--;
+            water.push(newWater);
+        }
+        
+        return water;
+    }
    
     //Verbindet die Verbleibenden Länder
     function combineRemainingCountries()
@@ -685,7 +723,7 @@ function mapGenerator()
         if(!calledInitBorders)
             throw new Error("There are no borders to work with yet");
         
-        //Anzahl konnte würfeln
+        //Anzahl kontinente würfeln
         var factor = maximumContinentNumber - minimumContinentNumber;
         var random = Math.round(Math.random()*factor + minimumContinentNumber);
         
