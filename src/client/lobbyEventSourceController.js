@@ -25,6 +25,7 @@ function lobbyEventSourceController()
     function addEventListeners()
     {
         _eventSource.addEventListener("colorchange", oncolorchange);
+        _eventSource.addEventListener("lobbychange", onlobbychange);
     }
 
     function setLobby(aLobby)
@@ -47,6 +48,11 @@ function lobbyEventSourceController()
 
         _lobbyUi = aLobbyUi;
     }
+    
+    function getLobbyUi()
+    {
+        return _lobbyUi;
+    }
 
 
 
@@ -54,12 +60,18 @@ function lobbyEventSourceController()
     {
 
     }
+    
+    function onlobbychange()
+    {
+        
+    }
 
     this.addEventListeners = addEventListeners;
     this.establishConnection = establishConnection;
     this.setLobby = setLobby;
     this.getLobby = getLobby;
     this.setLobbyUi = setLobbyUi;
+    this.getLobbyUi = getLobbyUi;
     
     Object.defineProperty(this, 'eventSource', {
         get: function () {
