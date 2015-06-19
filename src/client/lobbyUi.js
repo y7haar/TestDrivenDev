@@ -539,6 +539,12 @@ function lobbyUi(aRequestController)
         if(typeof aColor !== "string")
             throw new TypeError("Color must be string");
     }
+    
+    function updateLobby(aLobby)
+    {
+        if(! (aLobby instanceof tddjs.client.model.lobby))
+            throw new TypeError("Lobby is not of Type Lobby");
+    }
 
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
@@ -567,4 +573,5 @@ function lobbyUi(aRequestController)
     
     // EventSource Events
     this.updateColor = updateColor;
+    this.updateLobby = updateLobby;
 }
