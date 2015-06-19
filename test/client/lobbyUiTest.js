@@ -661,26 +661,38 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertFunction(this.lobbyUi.showLobbyForPlayer);
     },
     
+    "test ui should have a setter for currentPlayer": function() {
+        assertFunction(this.lobbyUi.setCurrentPlayer);
+    },
+    
+    "test setCurrentPlayer should throw Error if parameter is no Player": function() {
+        var ui = this.lobbyUi;
+        var player = this.player3;
+        
+        assertException(function() { ui.setCurrentPlayer(5); }, "TypeError");
+        assertNoException(function() { ui.setCurrentPlayer(player); });
+    },
+    
     "test showLobbyForPlayer should call methods to show a Lobby": function() {
         var createLobbyContentSpy = this.sandbox.spy(this.lobbyUi, "createLobbyContent");
         var createWrapperSpy = this.sandbox.spy(this.lobbyUi, "createWrapper");
         var showLobbySpy = this.sandbox.spy(this.lobbyUi, "showLobby");
         var setPlayerEditableSpy = this.sandbox.spy(this.lobbyUi, "setPlayerEditable");
         
+        this.lobbyUi.setCurrentPlayer(this.player5);
+        this.lobbyUi.setCurrentLobby(this.lobby3);
+        
         sinon.assert.notCalled(createLobbyContentSpy);
         sinon.assert.notCalled(createWrapperSpy);
         sinon.assert.notCalled(showLobbySpy);
         sinon.assert.notCalled(setPlayerEditableSpy);
         
-        this.lobbyUi.showLobbyForPlayer(this.lobby3, this.player5);
+        this.lobbyUi.showLobbyForPlayer();
         
         sinon.assert.calledOnce(createLobbyContentSpy);
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(showLobbySpy);
         sinon.assert.calledOnce(setPlayerEditableSpy);
-        
-        sinon.assert.calledWith(showLobbySpy, this.lobby3);
-        sinon.assert.calledWith(setPlayerEditableSpy, this.player5.getId());
     },
     
     "test showLobbyForPlayer should call methods to show a LeaderLobby if player is lobbyLeader": function() {
@@ -689,20 +701,20 @@ TestCase("SingleLobbyUiLeaderTest", {
         var showLeaderLobbySpy = this.sandbox.spy(this.lobbyUi, "showLeaderLobby");
         var setPlayerEditableSpy = this.sandbox.spy(this.lobbyUi, "setPlayerEditable");
         
+        this.lobbyUi.setCurrentPlayer(this.player5);
+        this.lobbyUi.setCurrentLobby(this.lobby3);
+        
         sinon.assert.notCalled(createLobbyContentSpy);
         sinon.assert.notCalled(createWrapperSpy);
         sinon.assert.notCalled(showLeaderLobbySpy);
         sinon.assert.notCalled(setPlayerEditableSpy);
         
-        this.lobbyUi.showLobbyForPlayer(this.lobby3, this.player3);
+        this.lobbyUi.showLobbyForPlayer();
         
         sinon.assert.calledOnce(createLobbyContentSpy);
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(showLeaderLobbySpy);
         sinon.assert.calledOnce(setPlayerEditableSpy);
-        
-        sinon.assert.calledWith(showLeaderLobbySpy, this.lobby3);
-        sinon.assert.calledWith(setPlayerEditableSpy, this.player3.getId());
     }
 });
 
