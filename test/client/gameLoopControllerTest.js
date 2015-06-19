@@ -469,11 +469,13 @@ TestCase("GameLoopModifyMapTests", {
             },
             changes:[
                 {
+                    continent:"PremiumIsland",
                     country:"Country1",
                     unitCount:1,
                     owner:this.player1.getName()
                 },
                 {
+                    continent:"PremiumIsland",
                     country:"Country2",
                     unitCount:6,
                     owner:this.player1.getName()
@@ -485,6 +487,7 @@ TestCase("GameLoopModifyMapTests", {
             type:"placing",
             player:this.player1.getName(),
             change:{
+                continent:"PremiumIsland",
                 country:"Country1",
                 unitCount:14
             }
@@ -506,7 +509,7 @@ TestCase("GameLoopModifyMapTests", {
         this.url = null;
         this.sandbox.restore();
     },
-    "test if gameLoop changes Map correctly when Server trigger placeUnits event": function()
+    "test if gameLoop should change right unitCount of Country when server Trigger placeUnit event": function()
     {
         assertEquals(0, this.gameLoop.fromServerLogs.length);
         this.sandbox.server[this.url].sendMessage(0,"placeUnits", {data:JSON.stringify(this.placeUnitData)});
