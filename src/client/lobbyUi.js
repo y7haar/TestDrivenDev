@@ -548,6 +548,10 @@ function lobbyUi(aRequestController)
             throw new TypeError("Color must be string");
         
         var colorBox = getPlayerColorBoxById(aPlayerId);
+        
+        if(typeof colorBox === "undefined")
+            throw new Error("PlayerColorBox with given Id does not exist");
+        
         colorBox.style.backgroundColor = aColor;
     }
     
