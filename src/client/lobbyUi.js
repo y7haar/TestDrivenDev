@@ -11,6 +11,7 @@ function lobbyUi(aRequestController)
     var _colors = ["#0000ff", "#90ee90", "#ff7f50", "#6495ed", "#228b22", "#ff0000", "#ff8c00", "#ffff00", "#7cfc00", "#f0e68c", "#ee82ee"];
     var _colorIndex = 0;
     var _currentLobby;
+    var _colorBoxes = [];
 
     var _startButton;
 
@@ -135,6 +136,11 @@ function lobbyUi(aRequestController)
             aPlayer = defaultPlayer;
 
         _lobbyRequestController.requestJoin(aLobbyId, aPlayer);
+    }
+    
+    function getPlayerColorBoxById(aId)
+    {
+        return _colorBoxes[aId];
     }
 
     function getLobbyRequestController()
@@ -300,6 +306,7 @@ function lobbyUi(aRequestController)
         // Real Player
         else
         {
+            _colorBoxes[aPlayer.getId()] = playerColor;
             playerDiv.id = "playerId" + aPlayer.getId();
 
             if (aPlayer.getType() === "bot")
@@ -369,6 +376,7 @@ function lobbyUi(aRequestController)
         // Real Player
         else
         {
+            _colorBoxes[aPlayer.getId()] = playerColor;
             playerDiv.id = "playerId" + aPlayer.getId();
 
             playerTypeRoll.add(type1);
@@ -530,6 +538,24 @@ function lobbyUi(aRequestController)
     {
         return _currentLobby;
     }
+    
+    function updateColor(aPlayerId, aColor)
+    {
+        if(typeof aPlayerId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aColor !== "string")
+            throw new TypeError("Color must be string");
+        
+        var colorBox = getPlayerColorBoxById(aPlayerId);
+        colorBox.style.backgroundColor = aColor;
+    }
+    
+    function updateLobby(aLobby)
+    {
+        if(! (aLobby instanceof tddjs.client.model.lobby))
+            throw new TypeError("Lobby is not of Type Lobby");
+    }
 
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
@@ -544,6 +570,7 @@ function lobbyUi(aRequestController)
     this.setPlayerEditable = setPlayerEditable;
     this.addNewLobbyButton = addNewLobbyButton;
     this.showLobbyOverview = showLobbyOverview;
+    this.getPlayerColorBoxById = getPlayerColorBoxById;
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
@@ -555,4 +582,8 @@ function lobbyUi(aRequestController)
     this.submitMaxPlayers = submitMaxPlayers;
     this.submitPlayerType = submitPlayerType;
     this.submitLobbyStart = submitLobbyStart;
+    
+    // EventSource Events
+    this.updateColor = updateColor;
+    this.updateLobby = updateLobby;
 }
