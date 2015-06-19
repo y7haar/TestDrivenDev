@@ -27,7 +27,7 @@ function mapGenerator()
     var calledInitBorders = false;
     
     //Variablen für die Erstellung der Karte
-    var GRID_CELL_COMBINES_PER_COUNTRY = 2.5;
+    var gridCellCombinesPerCountry = 2.5;
     
     //Variablen für Ländergrößen
     var minimumCountrySize = 3;
@@ -120,6 +120,44 @@ function mapGenerator()
         
         maximumCountrySize = size;
     }
+    
+    //Holt die Kombinationszahl
+    function getGridCellCombinesPerCountry()
+    {
+        return gridCellCombinesPerCountry;
+    }
+    
+    //Setzt die Kombinationszahl der ersten merge-Stufe
+    function setGridCellCombinesPerCountry(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Combines musst be bigger than zero");
+        
+        gridCellCombinesPerCountry = size;
+    }
+    
+    //Holt minimale Kontinent-Größe
+    function getMinimumContinentSize()
+    {
+        return minimumContinentSize;
+    }
+    
+    //Setzt minmale Kontinent-Größe
+    function setMinimumContinentSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 1)
+            throw new Error("Size musst be two or higher");
+        
+        minimumContinentSize = size;
+    }
+    
+    //Setzt minimale Kontinent-Größe
     
     //Holt Minimale Ländergröße
     function getMinimumContinentNumber()
@@ -495,7 +533,7 @@ function mapGenerator()
             throw new Error("There are no Borders to work with yet");
         
         //Kombinationswert
-        var combineCount = (( getMapWidth() * getMapHeight()) * (GRID_CELL_COMBINES_PER_COUNTRY - 1))/ GRID_CELL_COMBINES_PER_COUNTRY;
+        var combineCount = (( getMapWidth() * getMapHeight()) * (gridCellCombinesPerCountry - 1))/ gridCellCombinesPerCountry;
 
         //Kombinieren
         for(var i = 0; i < combineCount; i++)
@@ -808,6 +846,7 @@ function mapGenerator()
     {
         var map = {};
         map.continents = [];
+        map.water = [];
         map.isMap = true;
         return map;
     }
@@ -859,6 +898,10 @@ function mapGenerator()
     this.setMinimumCountrySize = setMinimumCountrySize;
     this.getMaximumCountrySize = getMaximumCountrySize;
     this.setMaximumCountrySize = setMaximumCountrySize;
+    this.getGridCellCombinesPerCountry = getGridCellCombinesPerCountry;
+    this.setGridCellCombinesPerCountry = setGridCellCombinesPerCountry;
+    this.getMinimumContinentSize = getMinimumContinentSize;
+    this.setMinimumContinentSize = setMinimumContinentSize;
     this.getMinimumContinentNumber = getMinimumContinentNumber;
     this.setMinimumContinentNumber = setMinimumContinentNumber;
     this.getMaximumContinentNumber = getMaximumContinentNumber;
