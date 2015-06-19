@@ -530,6 +530,15 @@ function lobbyUi(aRequestController)
     {
         return _currentLobby;
     }
+    
+    function updateColor(aPlayerId, aColor)
+    {
+        if(typeof aPlayerId !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof aColor !== "string")
+            throw new TypeError("Color must be string");
+    }
 
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
@@ -555,4 +564,7 @@ function lobbyUi(aRequestController)
     this.submitMaxPlayers = submitMaxPlayers;
     this.submitPlayerType = submitPlayerType;
     this.submitLobbyStart = submitLobbyStart;
+    
+    // EventSource Events
+    this.updateColor = updateColor;
 }
