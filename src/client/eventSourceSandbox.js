@@ -80,7 +80,7 @@ function eventSourceSandbox()
         this.onopen = null;
         this.onmessage = null;
         
-        this.addEventListner = function(eventName, aFunction)
+        this.addEventListener = function(eventName, aFunction)
         {
             if(typeof eventName !== 'string')throw new TypeError("eventName is not a String.");
             if(typeof aFunction !== 'function')throw new TypeError("function parameter is not a Function");

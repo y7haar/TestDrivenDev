@@ -17,43 +17,43 @@ body
 .lobbyWrapper
 {
     max-width: 900px;
-    
+
     margin: 0 auto;
     background-color: #cccccc;
     padding-top: 20px;
     padding-bottom: 20px;
     padding-left: 0px;
     padding-right: 0px;
-    
+
 }
 
 .lobbiesTitle
 {
     max-width: 900px;
-    
+
     color: seagreen;
-    
+
     margin: 0 auto;
     background-color: #cccccc;
     padding-top: 10px;
     padding-bottom: 10px;
-    
+
 }
 
 .lobbyTitle
 {
     max-width: 900px;
     min-width: 630px;
-    
+
     color: seagreen;
-    
+
     text-align:left;
-    
+
     background-color: #cccccc;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-left:10px;
-    
+
 }
 
 .lobby
@@ -64,7 +64,7 @@ body
     padding-bottom: 15px;
     padding-left: 10px;
     padding-right: 10px;
-    
+
     font-size: 20px;
 }
 
@@ -72,12 +72,12 @@ body
 {
     color: seagreen;
     font-weight: bold;
-    
+
     //min-width: 50px;
     text-align: right;
     padding-right:25px;
     padding-left:15px;
-    
+
 }
 
 .lobbiesName
@@ -97,19 +97,19 @@ body
 .lobbyJoin
 {
     text-align: center;
-    
+
     padding-left:20px;
     padding-right:20px;
-    
+
     padding-bottom:5px;
     padding-top:5px;
-    
+
     color:#eee;
     background-color:steelblue; 
-    
+
     border: 3px solid #777;
     border-radius: 3px;
-    
+
     cursor: pointer;
 }
 
@@ -122,7 +122,7 @@ body
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    
+
     font-size: 20px;
 }
 
@@ -130,9 +130,9 @@ body
 {
     width:25px;
     height:25px;
-    
+
     margin-right:20px;
-    
+
     border: 2px solid #444;
     border-radius: 2px;
 }
@@ -159,7 +159,7 @@ body
     border: 2px solid seagreen;
     border-radius: 3px;
     background-color: #dddddd;
-    
+
     padding: 0px;
     margin: 0px;
     font-size: 18px;
@@ -194,9 +194,9 @@ body
     border: 2px solid seagreen;
     border-radius: 3px;
     background-color: #dddddd;
-    
+
     font-size: 18px;
-    
+
     padding: 0px;
     margin: 0px;
 }
@@ -206,17 +206,17 @@ body
     border-radius: 5px;
     padding: 10px;
     width: 100px;
-    
+
     background-color: #ddd;
     box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.75);
-    
+
     color: seagreen;
     font-weight: bold;
-    
+
     cursor: pointer;
 
     font-size: 25px;
-    
+
     margin: 0 auto;
     margin-top: 20px;
 }
@@ -233,17 +233,17 @@ body
     border-radius: 5px;
     padding: 10px;
     width: 150px;
-    
+
     background-color: #ddd;
     box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.75);
-    
+
     color: steelblue;
     font-weight: bold;
-    
+
     cursor: pointer;
 
     font-size: 20px;
-    
+
     margin: 0 auto;
     margin-top: 20px;
 }

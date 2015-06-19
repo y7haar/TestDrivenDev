@@ -2,7 +2,7 @@
  Testcases for the Gameloop
  */
 
-TestCase("GameLoopConstTests", {
+TestCase("GameLoopConstructorTests", {
      setUp: function () {             
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
@@ -184,7 +184,7 @@ TestCase("GameLoopControllerTests", {
 
 
 TestCase("GameLoopCommunicationTests", {
-    setUp: function () {       
+    setUp: function () {
         this.map = generateMap();      
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
@@ -285,23 +285,41 @@ TestCase("GameLoopCommunicationTests", {
     "test gameLoop.toServerLogs should increase if message send to server": function () {
         assertEquals(0,this.gameLoop.toServerLogs.length);
         this.gameLoop.endPhase();
+        this.sandbox.update();
         assertEquals(1, this.gameLoop.toServerLogs.length);
         this.gameLoop.endPhase();
+        this.sandbox.update();
         assertEquals(2, this.gameLoop.toServerLogs.length);
     },
     "test gameLoop should implement endPhase function": function () {
         assertNotUndefined(this.gameLoop.endPhase);
-    },
-    "test gameLoop.endPhase should send Msg to server that player want to end current Phase": function () {
+    },    
+    "test gameLoop.endPhase should save sended move in Logs if Server got msg = Status 200": function () {
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
         this.gameLoop.endPhase();
-        assertEquals(1, this.gameLoop.toServerLogs.length);
+        
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
         this.sandbox.update();
-        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request       
-        assertSame(this.gameLoop.toServerLogs[0], this.sandbox.server[this.url].requests[1].requestBody);
+        
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        assertEquals(2,this.sandbox.server[this.url].requests.length);       
+    }
+    ,"test gameLoop.endPhase should send Msg to server that player want to end current Phase": function () {
+        this.gameLoop.endPhase();         
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.update();        
+
+        assertEquals(2,this.sandbox.server[this.url].requests.length); // 2 because establshing the connection is 1 request  
+        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
     },
     "test gameLoop should implement makeMove function": function () {
         assertFunction(this.gameLoop.makeMove);
-    },
+    },    
     "test gemeLoop.makeMove should call isMoveValid from currentState": function () {
         var state = this.gameLoop.currentState;
         state.isMoveLegal = stubFn();
@@ -372,7 +390,182 @@ TestCase("GameLoopCommunicationTests", {
         assertTrue(this.gameLoop.makeMove(this.validAttackMove));
         this.sandbox.update();
         assertEquals(this.validAttackMove, JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));
+    },    
+    "test gameLoop.makeMove should save sended move in Logs if Server got msg = Status 200": function () {
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.server[this.url].sendMessage(0,"changetoattacking",{data:"change to Attacking-State"});
+   
+        assertTrue(this.gameLoop.makeMove(this.validAttackMove));
+        assertEquals(0, this.gameLoop.toServerLogs.length);
+        assertEquals(1,this.sandbox.server[this.url].requests.length);
+        
+        this.sandbox.update();
+        assertEquals(2,this.sandbox.server[this.url].requests.length);
+        assertEquals(1, this.gameLoop.toServerLogs.length);
+        assertEquals(this.gameLoop.toServerLogs[0], JSON.parse(this.sandbox.server[this.url].requests[1].requestBody));     
+    },
+    "test gameLoop.eventSource event attackResult should be called by Server": function(){
+        assertEquals(0,this.gameLoop.fromServerLogs.length);
+        var attackResultData = {
+            type:"attacking",
+            attacker:{
+                player:"Peter",
+                outcome:"winner"               
+            },
+            defender:{
+                player:"Hanswurst",
+                outcome:"loser"
+            },
+            changes:[
+                {
+                    continent:"Europa",
+                    country:"Country1",
+                    unitCount:1,
+                    owner:"Peter"
+                },
+                {
+                    continent:"Europa",
+                    country:"Country2",
+                    unitCount:6,
+                    owner:"Hanswurst"
+                }
+            ]                    
+        };
+
+        this.sandbox.server[this.url].sendMessage(0,"attackResult",{data:JSON.stringify(attackResultData)});
+        assertEquals(1,this.gameLoop.fromServerLogs.length);
+        assertEquals({data:JSON.stringify(attackResultData)}, this.gameLoop.fromServerLogs[0]);
+    },
+    "test gameLoop.eventSource event placeUnits should be called by Server": function(){
+        assertEquals(0,this.gameLoop.fromServerLogs.length);
+        var placeUnitData = {
+            type: "placing",
+            player: "Peter",
+            change: {
+                continent: "Europa",
+                country: "Country1",
+                unitCount: 14
+            }
+        };
+
+        this.sandbox.server[this.url].sendMessage(0,"placeUnits",{data:JSON.stringify(placeUnitData)});
+        assertEquals(1,this.gameLoop.fromServerLogs.length);
+        assertEquals({data:JSON.stringify(placeUnitData)}, this.gameLoop.fromServerLogs[0]);
+    }   
+});
+
+TestCase("GameLoopModifyMapTests", {
+    setUp: function()
+    {
+        this.map1 = new tddjs.client.map.map();
+       
+        this.player1 = new tddjs.client.player();
+        this.player1.setName('Peter');
+        
+        this.player2 = new tddjs.client.player();
+        this.player2.setName('Hanswurst');
+
+        //Continent1--- PREMIUMISLAND ----------------------
+        this.continent1 = new tddjs.client.map.continent();
+        this.continent1.setName("PremiumIsland");
+        this.c1 = new tddjs.client.map.country();
+        this.c1.setName("Country1");
+        this.c1.setOwner(this.player1);
+        this.c1.setUnitCount(10);
+        
+        this.c2 = new tddjs.client.map.country();
+        this.c2.setName("Country2");
+        this.c2.setOwner(this.player2);
+        this.c2.setUnitCount(5);
+        
+        this.continent1.addCountry(this.c1);
+        this.continent1.addCountry(this.c2);
+        
+        this.map1.addContinent(this.continent1);
+        
+        this.attackResultData = {
+            type:"attacking",
+            attacker:{
+                player:this.player1.getName(),
+                outcome:"winner"               
+            },
+            defender:{
+                player:this.player2.getName(),
+                outcome:"loser"
+            },
+            changes:[
+                {
+                    continent:"PremiumIsland",
+                    country:"Country1",
+                    unitCount:1,
+                    owner:this.player1.getName()
+                },
+                {
+                    continent:"PremiumIsland",
+                    country:"Country2",
+                    unitCount:6,
+                    owner:this.player1.getName()
+                }
+            ]                    
+        };
+        //console.log(this.attackResultData);
+        this.placeUnitData = {
+            type:"placing",
+            player:this.player1.getName(),
+            change:{
+                continent:"PremiumIsland",
+                country:"Country1",
+                unitCount:14
+            }
+        };
+        //console.log(this.placeUnitData);
+
+        this.map2 = this.map1;
+        this.url = "/modifyMapTestURL";
+        this.gameLoop = new tddjs.client.gameLoopController(this.map1, this.player1, this.url);
+        this.sandbox = new tddjs.stubs.eventSourceSandbox();
+        this.sandbox.addServer(this.url);     
+        
+        this.gameLoop.establishConnection();
+    },
+    tearDown: function()
+    {
+        this.map1 = null;
+        this.gameLoop = null;
+        this.url = null;
+        this.sandbox.restore();
+    },
+    "test gameLoop should change right unitCount of Country when server Trigger placeUnit event": function()
+    {
+        //before Changes
+        assertEquals(10,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));
+        
+        assertEquals(0, this.gameLoop.fromServerLogs.length);
+        this.sandbox.server[this.url].sendMessage(0,"placeUnits", {data:JSON.stringify(this.placeUnitData)});
+        assertEquals(1, this.gameLoop.fromServerLogs.length);
+        //after changes
+        assertEquals(14,(this.gameLoop.getMap().getContinent("PremiumIsland").getCountry("Country1").getUnitCount()));     
+    },
+    "test gameLoop should change map correctly when server trigger attackResult event": function()
+    {
+        //before Changes
+        assertEquals(10, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner().getName());
+        
+        assertEquals(5, this.map1.getContinent("PremiumIsland").getCountry("Country2").getUnitCount());
+        assertEquals("Hanswurst", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner().getName());
+        
+        assertEquals(0, this.gameLoop.fromServerLogs.length);
+        this.sandbox.server[this.url].sendMessage(0,"attackResult", {data:JSON.stringify(this.attackResultData)});
+        assertEquals(1, this.gameLoop.fromServerLogs.length);
+        // after Changes
+        assertEquals(1, this.map1.getContinent("PremiumIsland").getCountry("Country1").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country1").getOwner().getName());
+        
+        assertEquals(6, this.map1.getContinent("PremiumIsland").getCountry("Country2").getUnitCount());
+        assertEquals("Peter", this.map1.getContinent("PremiumIsland").getCountry("Country2").getOwner().getName());
     }
     
-   
 });
