@@ -67,7 +67,7 @@ app.all("*", function (req, res, next) {
  */
 
 app.get('/lobbies', function (req, res) {
-  res.json([
+    res.json([
       {
           id: 1,
           name: "NoobFunServer",
