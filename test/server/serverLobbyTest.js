@@ -363,6 +363,32 @@ TestCase("LobbyServerAuthentificationTest", {
         var p1 = this.lobby.getPlayerByToken("T0");
         
         assertNull(p1);
-    }
+    },
     
+    "test getPlayerByToken should throw an Error if Token is no string": function() {
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.getPlayerByToken(2); }, "TypeError");
+        assertNoException(function() { lobby.getPlayerByToken("2"); });
+    },
+    
+    "test Lobby should have function to check token to a specific player": function() {
+        assertFunction(this.lobby.isPlayerTokenValid);
+    },
+    
+    "test isPlayerTokenValid should return true if player has specified token": function() {
+        var value1 = this.lobby.isPlayerTokenValid(this.player1, "T1");
+        var value2 = this.lobby.isPlayerTokenValid(this.player2, "T2");
+        
+        assertTrue(value1);
+        assertTrue(value2);
+    },
+    
+    "test isPlayerTokenValid should return false if player has not specified token": function() {
+        var value1 = this.lobby.isPlayerTokenValid(this.player2, "T1");
+        var value2 = this.lobby.isPlayerTokenValid(this.player1, "T2");
+        
+        assertFalse(value1);
+        assertFalse(value2);
+    }
 });
