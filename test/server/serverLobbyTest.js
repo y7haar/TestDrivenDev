@@ -325,3 +325,44 @@ TestCase("LobbyServerTest", {
     }
 
 });
+
+
+TestCase("LobbyServerAuthentificationTest", {
+    setUp: function() {
+        this.lobby = new tddjs.server.model.lobby();
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        
+        this.player1.setId(1);
+        this.player2.setId(2);
+        this.player1.setToken("T1");
+        this.player2.setToken("T2");
+        
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.setLeader(this.player1);
+    },
+    tearDown: function() {
+        delete this.lobby;
+        delete this.player1;
+        delete this.player2;
+    },
+    "test Lobby should have function to get a Player by token": function() {
+        assertFunction(this.lobby.getPlayerByToken);
+    },
+    
+    "test getPlayerByToken should return correct player with given token": function() {
+        var p1 = this.lobby.getPlayerByToken("T1");
+        var p2 = this.lobby.getPlayerByToken("T2");
+        
+        assertSame(p1, this.player1);
+        assertSame(p2, this.player2);
+    },
+    
+    "test getPlayerByToken should return null if no player with given token exists": function() {
+        var p1 = this.lobby.getPlayerByToken("T0");
+        
+        assertNull(p1);
+    }
+    
+});
