@@ -630,63 +630,6 @@ function mapGenerator()
         //Gemergetes Land entfernen
         allCountries.splice(allCountries.indexOf(loserCountry), 1);
     }
-    
-    //Wassererstellung
-    function generateWater()
-    {
-        //Prüfen ob genügend Platz/Länder
-        if(allCountries.length <= (maximumWaterNumber*maximumWaterSize))
-            throw new Error("This Grid migth be to small for the generation");
-        
-        //Die Gewässer
-        var water = [];
-        //Id
-        var id = -1;        
-        
-        //Anzahl Wasserflächen auswürfeln
-        var factor = maximumWaterNumber - minimumWaterNumber;
-        var random = Math.round(Math.random()*factor + minimumWaterNumber);
-        
-        var newWater;
-        
-        //Alle Wasserflächen erzeugen
-        while(random > 0)
-        {
-            //Neues Wasser erzeugen
-            newWater = createWater(id);
-            
-            //Variable ob es Funktioniert hat
-            var worked = false;
-            
-            //Größe der Wasserfläche auswürfeln
-            var range = maximumWaterSize - minimumWaterSize;
-            var size = Math.round(Math.random()*range +minimumWaterSize);
-            
-            //Oder vll mit Borders.length sicherstellen?
-            //Sehr schwierige Stelle 
-            //Was wenn in ecke wo bereits wasser rum?
-            //Wenn es nicht funktioniert, wie rückgängig machen?
-            //Was wenn land das zum land mit wasserborder würde wieder gewählt wird?
-            //Darf das überhaupt passieren?
-            //Grid zwischenspeichern?
-            
-            //Bis zur Größe erzeugen
-            while(newWater.size < size)
-            {
-                //Viel Code
-                
-                //Größe erhöhen
-                newWater.size++;
-            }
-            
-            random--;
-            id--;
-            water.push(newWater);
-        }
-        
-        //Wasser zurückgeben
-        return water;
-    }
    
     //Verbindet die Verbleibenden Länder
     function combineRemainingCountries()
@@ -735,6 +678,68 @@ function mapGenerator()
                     remainingCountries.splice(remainingCountries.indexOf(winner),1);
             }
         }
+    }
+    
+    //Wassererstellung
+    function generateWater()
+    {
+        //Prüfen ob genügend Platz/Länder
+        if(allCountries.length <= (maximumWaterNumber*maximumWaterSize))
+            throw new Error("This Grid migth be to small for the generation");
+        
+        //Die Gewässer
+        var water = [];
+        //Id
+        var id = -1;        
+        
+        //Anzahl Wasserflächen auswürfeln
+        var factor = maximumWaterNumber - minimumWaterNumber;
+        var random = Math.round(Math.random()*factor + minimumWaterNumber);
+        
+        var newWater;
+        
+        //Alle Wasserflächen erzeugen
+        while(random > 0)
+        {
+            //Neues Wasser erzeugen
+            newWater = createWater(id);
+            
+            //Variable ob es Funktioniert hat
+            var worked = false;
+            
+            //Größe der Wasserfläche auswürfeln
+            var range = maximumWaterSize - minimumWaterSize;
+            var size = Math.round(Math.random()*range +minimumWaterSize);
+            
+            //Oder vll mit Borders.length sicherstellen?
+            //Sehr schwierige Stelle 
+            //Was wenn in ecke wo bereits wasser rum?
+            //Wenn es nicht funktioniert, wie rückgängig machen?
+            //Was wenn land das zum land mit wasserborder würde wieder gewählt wird?
+            //Darf das überhaupt passieren?
+            //Grid zwischenspeichern?
+            //Andere Eckensituation
+            
+            //Bis zur Größe erzeugen
+            while(newWater.size < size)
+            {
+                //Viel Code
+                
+                //Borders ändern
+                
+                //BonusBorder verbindung übers wasser
+                
+                //Größe erhöhen
+                newWater.size++;
+            }
+            
+            random--;
+            id--;
+            water.push(newWater);
+        }
+        
+        //Wasser zurückgeben
+        return water;
     }
     
     //Erstellt die Kontinente
