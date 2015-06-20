@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Game Lobbies</title>
+        <title>Game Lobby</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -63,9 +63,10 @@ and open the template in the editor.
 
             this.lobby2.setMaxPlayers(4);
 
-             ui.showLobbyOverview();
-            //ui.showLobbyOverview();
-            
+            ui.setCurrentLobby(this.lobby2);
+            ui.setCurrentPlayer(this.player5);
+            ui.showLobbyForPlayer();
+           
 
         </script>
     </body>

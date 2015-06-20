@@ -453,7 +453,9 @@ function lobbyUi(aRequestController)
         var div = document.createElement("div");
         div.className = "newLobbyButton";
         div.innerHTML = "New Lobby";
-
+        
+        div.onclick = onNewLobbySubmit;
+        
         wrapper.appendChild(div);
     }
 
@@ -465,7 +467,21 @@ function lobbyUi(aRequestController)
         var wrapper = document.getElementById("lobbyWrapper");
         _lobbyRequestController.requestAllLobbies();
     }
-
+    
+    function onNewLobbySubmit()
+    {
+        try
+        {
+            var defaultPlayer = new tddjs.client.player();
+            defaultPlayer.setName("Unnamed Player");
+            defaultPlayer.setColor("#ffffff");
+            _lobbyRequestController.requestNewLobby(defaultPlayer);
+        }
+        catch(e)
+        {
+            
+        }
+    }
     function submitPlayerName(aId, aName)
     {
         try
