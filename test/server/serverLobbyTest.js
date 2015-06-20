@@ -390,5 +390,27 @@ TestCase("LobbyServerAuthentificationTest", {
         
         assertFalse(value1);
         assertFalse(value2);
+    },
+    
+    "test Lobby should have function to check token to a specific player and leader status": function() {
+        assertFunction(this.lobby.isLeaderTokenValid);
+    },
+    
+     "test isLeaderTokenValid should return true if player is Leader and has specified token": function() {
+        var value1 = this.lobby.isLeaderTokenValid(this.player1, "T1");
+        
+        assertTrue(value1);
+    },
+    
+    "test isLeaderTokenValid should return false if player has not specified token": function() {
+        var value2 = this.lobby.isLeaderTokenValid(this.player1, "T2");
+
+        assertFalse(value2);
+    },
+    
+    "test isLeaderTokenValid should return false if player has specified token but is not leader": function() {
+        var value2 = this.lobby.isLeaderTokenValid(this.player2, "T2");
+
+        assertFalse(value2);
     }
 });
