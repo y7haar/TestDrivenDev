@@ -263,6 +263,40 @@ TestCase("LobbyClientTest", {
         assertString(json.players[1].color);
         assertEquals("#000000", json.players[1].color);
 
+    },
+    
+    "test Lobby should have a deserialize method that parses JSON and updates values": function() {
+        this.player1.setName("Bob");
+        this.player2.setName("Hanswurst");
+
+        this.player1.setId(1);
+        this.player2.setId(2);
+
+        this.player1.setColor("#FFFFFF");
+        this.player2.setColor("#000000");
+
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.setLeader(this.player1);
+        this.lobby.setMaxPlayers(2);
+        this.lobby.setId(42);
+        this.lobby.setName("TestLobby");
+
+        var json = this.lobby.serialize();
+        
+        var newLobby = new tddjs.client.model.lobby();
+        assertEquals("GameLobby", newLobby.getName());
+        assertEquals(0, newLobby.getPlayers().length);
+        
+        newLobby.deserialize(json);
+        
+        assertEquals("TestLobby", newLobby.getName());
+        assertEquals(42, newLobby.getId());
+        assertEquals(2, newLobby.getPlayers().length);
+        assertEquals(this.player1, newLobby.getPlayers()[0]);
+        assertEquals(this.player2, newLobby.getPlayers()[1]);
+        assertEquals(this.player1, newLobby.getLeader());
+        assertEquals(2, newLobby.getMaxPlayers());
     }
 
 
