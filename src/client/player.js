@@ -138,6 +138,42 @@ function player()
         idIsSetted = true;
     }
 
+    function deserialize(json)
+    {
+        var obj = JSON.parse(json);
+        deserializeObject(obj);
+    }
+    
+    function deserializeObject(obj)
+    {
+        if (typeof obj.id !== "number" && typeof obj.id !== "undefined")
+            throw new TypeError("Id is incorrect");
+
+        if (typeof obj.id === "number")
+        {
+            try
+            {
+                this.setId(obj.id);
+            }
+            catch (e)
+            {
+                throw new Error("Id is wrong");
+            }
+
+            try
+            {
+                this.setType(obj.type);
+            }
+            catch (e)
+            {
+                throw new Error("Type is wrong");
+            }
+        }
+
+        this.setName(obj.name);
+        this.setColor(obj.color);
+    }
+    
     //Serialisiert das Object
     function serialize()
     {
@@ -197,6 +233,8 @@ function player()
     this.setId = setId;
     this.serialize = serialize;
     this.serializeAsObject = serializeAsObject;
+    this.deserialize = deserialize;
+    this.deserializeObject = deserializeObject;
 
     this.setType = setType;
     this.getType = getType;
