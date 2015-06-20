@@ -156,6 +156,9 @@ function lobby()
     
     function getPlayerByToken(aToken)
     {
+        if(typeof aToken !== "string")
+            throw new TypeError("Token must be a string");
+        
         for(var i = 0;i < _players.length;++i)
         {
             if(_players[i].getToken() === aToken)
@@ -163,6 +166,11 @@ function lobby()
         }
         
         return null;
+    }
+    
+    function isPlayerTokenValid(aPlayer, aToken)
+    {
+        return (aPlayer.getToken() === aToken);
     }
 
     this.addPlayer = addPlayer;
@@ -174,6 +182,7 @@ function lobby()
     this.setId = setId;
     
     this.getPlayerByToken = getPlayerByToken;
+    this.isPlayerTokenValid = isPlayerTokenValid;
     
     this.setName = setName;
     this.getName = getName;
