@@ -42,6 +42,8 @@ function gameUiController(aGLC,aCtx){
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
     _hoverImg.src = "client/ui/hoverImg.png";
+    var _waterImg = new Image();
+    _waterImg.src = "client/ui/waterImg.png";
     
     var imgCacheMap;
     var imgCacheHover=[];
