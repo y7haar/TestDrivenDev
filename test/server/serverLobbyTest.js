@@ -325,3 +325,92 @@ TestCase("LobbyServerTest", {
     }
 
 });
+
+
+TestCase("LobbyServerAuthentificationTest", {
+    setUp: function() {
+        this.lobby = new tddjs.server.model.lobby();
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        
+        this.player1.setId(1);
+        this.player2.setId(2);
+        this.player1.setToken("T1");
+        this.player2.setToken("T2");
+        
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.setLeader(this.player1);
+    },
+    tearDown: function() {
+        delete this.lobby;
+        delete this.player1;
+        delete this.player2;
+    },
+    "test Lobby should have function to get a Player by token": function() {
+        assertFunction(this.lobby.getPlayerByToken);
+    },
+    
+    "test getPlayerByToken should return correct player with given token": function() {
+        var p1 = this.lobby.getPlayerByToken("T1");
+        var p2 = this.lobby.getPlayerByToken("T2");
+        
+        assertSame(p1, this.player1);
+        assertSame(p2, this.player2);
+    },
+    
+    "test getPlayerByToken should return null if no player with given token exists": function() {
+        var p1 = this.lobby.getPlayerByToken("T0");
+        
+        assertNull(p1);
+    },
+    
+    "test getPlayerByToken should throw an Error if Token is no string": function() {
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.getPlayerByToken(2); }, "TypeError");
+        assertNoException(function() { lobby.getPlayerByToken("2"); });
+    },
+    
+    "test Lobby should have function to check token to a specific player": function() {
+        assertFunction(this.lobby.isPlayerTokenValid);
+    },
+    
+    "test isPlayerTokenValid should return true if player has specified token": function() {
+        var value1 = this.lobby.isPlayerTokenValid(this.player1, "T1");
+        var value2 = this.lobby.isPlayerTokenValid(this.player2, "T2");
+        
+        assertTrue(value1);
+        assertTrue(value2);
+    },
+    
+    "test isPlayerTokenValid should return false if player has not specified token": function() {
+        var value1 = this.lobby.isPlayerTokenValid(this.player2, "T1");
+        var value2 = this.lobby.isPlayerTokenValid(this.player1, "T2");
+        
+        assertFalse(value1);
+        assertFalse(value2);
+    },
+    
+    "test Lobby should have function to check token to a specific player and leader status": function() {
+        assertFunction(this.lobby.isLeaderTokenValid);
+    },
+    
+     "test isLeaderTokenValid should return true if player is Leader and has specified token": function() {
+        var value1 = this.lobby.isLeaderTokenValid(this.player1, "T1");
+        
+        assertTrue(value1);
+    },
+    
+    "test isLeaderTokenValid should return false if player has not specified token": function() {
+        var value2 = this.lobby.isLeaderTokenValid(this.player1, "T2");
+
+        assertFalse(value2);
+    },
+    
+    "test isLeaderTokenValid should return false if player has specified token but is not leader": function() {
+        var value2 = this.lobby.isLeaderTokenValid(this.player2, "T2");
+
+        assertFalse(value2);
+    }
+});

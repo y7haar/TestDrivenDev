@@ -10,10 +10,16 @@ function lobbyRequestController()
 {
     var ajax = tddjs.util.ajax;
     var _lobbyUi = new tddjs.client.ui.lobbyUi(this);
+    var _lobbyEventSourceController = new tddjs.client.controller.lobbyEventSourceController();
 
     function setLobbyUi(aUi)
     {
         _lobbyUi = aUi;
+    }
+    
+    function getLobbyEventSourceController()
+    {
+        return _lobbyEventSourceController;
     }
 
     function requestAllLobbies()
@@ -105,6 +111,11 @@ function lobbyRequestController()
     function onJoinFailure()
     {
 
+    }
+    
+    function onNewLobbySuccess()
+    {
+        
     }
 
 
@@ -322,6 +333,7 @@ function lobbyRequestController()
     }
 
     this.setLobbyUi = setLobbyUi;
+    this.getLobbyEventSourceController = getLobbyEventSourceController;
 
     this.requestAllLobbies = requestAllLobbies;
     this.onAllLobbiesSuccess = onAllLobbiesSuccess;
@@ -330,6 +342,8 @@ function lobbyRequestController()
     this.requestJoin = requestJoin;
     this.onJoinSuccess = onJoinSuccess;
     this.onJoinFailure = onJoinFailure;
+    
+    this.onNewLobbySuccess = onNewLobbySuccess;
 
     // Update
     this.updateLobbyName = updateLobbyName;
