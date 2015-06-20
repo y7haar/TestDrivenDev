@@ -103,7 +103,7 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
 
-    function onJoinSuccessxhr()
+    function onJoinSuccess(xhr)
     {
 
     }
