@@ -82,7 +82,7 @@ TestCase("LobbyPlayerClientTest", {
 
 TestCase("LobbyLeaderClientTest", {
     setUp: function() {
-        this.lobby = new tddjs.server.model.lobby();
+        this.lobby = new tddjs.client.model.lobby();
         this.player1 = new tddjs.client.player();
         this.player2 = new tddjs.client.player();
         this.player3 = new tddjs.client.player();
@@ -108,29 +108,6 @@ TestCase("LobbyLeaderClientTest", {
         assertException(function() {
             lobby.setLeader(player);
         }, "Error");
-    },
-    "test Lobby should set player2 as new leader, after player1 is kicked": function() {
-        this.lobby.addPlayer(this.player1);
-        this.lobby.addPlayer(this.player2);
-        this.lobby.addPlayer(this.player3);
-
-        this.lobby.setLeader(this.player1);
-        assertSame(this.player1, this.lobby.getLeader());
-
-        this.lobby.kickPlayer(this.player1);
-        assertNotSame(this.player1, this.lobby.getLeader());
-        assertSame(this.player2, this.lobby.getLeader());
-    },
-    "test Lobby should set leader null if all players are kicked": function() {
-        this.lobby.addPlayer(this.player1);
-        this.lobby.addPlayer(this.player2);
-
-        this.lobby.setLeader(this.player1);
-        assertSame(this.player1, this.lobby.getLeader());
-
-        this.lobby.kickPlayer(this.player1);
-        this.lobby.kickPlayer(this.player2);
-        assertNull(this.lobby.getLeader());
     }
 
 });
@@ -138,7 +115,7 @@ TestCase("LobbyLeaderClientTest", {
 
 TestCase("LobbyClientTest", {
     setUp: function() {
-        this.lobby = new tddjs.server.model.lobby();
+        this.lobby = new tddjs.client.model.lobby();
         this.player1 = new tddjs.client.player();
         this.player2 = new tddjs.client.player();
         this.player3 = new tddjs.client.player();
@@ -293,9 +270,17 @@ TestCase("LobbyClientTest", {
         assertEquals("TestLobby", newLobby.getName());
         assertEquals(42, newLobby.getId());
         assertEquals(2, newLobby.getPlayers().length);
-        assertEquals(this.player1, newLobby.getPlayers()[0]);
-        assertEquals(this.player2, newLobby.getPlayers()[1]);
-        assertEquals(this.player1, newLobby.getLeader());
+        assertEquals(this.player1.getId(), newLobby.getPlayers()[0].getId());
+        assertEquals(this.player1.getName(), newLobby.getPlayers()[0].getName());
+        assertEquals(this.player1.getColor(), newLobby.getPlayers()[0].getColor());
+        assertEquals(this.player1.getType(), newLobby.getPlayers()[0].getType());
+        
+        assertEquals(this.player2.getId(), newLobby.getPlayers()[1].getId());
+        assertEquals(this.player2.getName(), newLobby.getPlayers()[1].getName());
+        assertEquals(this.player2.getColor(), newLobby.getPlayers()[1].getColor());
+        assertEquals(this.player2.getType(), newLobby.getPlayers()[1].getType());
+
+        assertEquals(this.player1.getId(), newLobby.getLeader().getId());
         assertEquals(2, newLobby.getMaxPlayers());
     }
 
