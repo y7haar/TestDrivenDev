@@ -12,8 +12,6 @@ function lobby()
     var _isIdSet = false;
     var _name = "GameLobby";
     var _leader;
-    var _currentPlayerId = 0;
-
 
     function setId(aId)
     {
@@ -112,11 +110,7 @@ function lobby()
 
         for (var i = 0; i < players.length; ++i)
         {
-            var player = {
-                id: players[i].getId(),
-                name: players[i].getName(),
-                color: players[i].getColor()
-            };
+            var player = players[i].serializeAsObject();
 
             playersObj[i] = player;
         }
@@ -130,6 +124,34 @@ function lobby()
         };
 
         return lobbyObj;
+    }
+    
+    function deserialize(json)
+    {
+        try
+        {
+            var data = JSON.parse(json);
+            _id = data.id;
+            this.setName(data.name);
+            this.setMaxPlayers(data.maxPlayers);
+            
+            for(var i = 0;i < data.players.length;++i)
+            {
+                var player = new tddjs.client.player();
+                player.deserializeObject(data.players[i]);
+                
+                this.addPlayer(player);
+                
+                if(player.getId() === data.leader)
+                    this.setLeader(player);
+            }
+            
+        }
+        
+        catch(e)
+        {
+            throw new Error(e);
+        }
     }
 
     this.addPlayer = addPlayer;
@@ -150,5 +172,7 @@ function lobby()
 
     this.serialize = serialize;
     this.serializeAsObject = serializeAsObject;
+    
+    this.deserialize = deserialize;
 }
 
