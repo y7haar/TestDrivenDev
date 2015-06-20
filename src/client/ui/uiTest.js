@@ -24,8 +24,9 @@ function test(){
        }
    }
 }
-
-function generateMap(){
+// gernateMap ist schon in globals definiert 
+// entwerder testfile nicht global machen oder andern namen verwenden
+function generateMapTOCHANGE(){
     ctx.strokeStyle="#000";
     ctx.fillStyle = "#552700";
     ctx.lineWidth="1";
