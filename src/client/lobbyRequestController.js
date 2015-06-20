@@ -69,7 +69,7 @@ function lobbyRequestController()
         _lobbyUi.addNewLobbyButton();
     }
 
-    function onAllLobbiesFailure()
+    function onAllLobbiesFailure(xhr)
     {
         _lobbyUi.showErrorMessage();
     }
@@ -103,17 +103,17 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
 
-    function onJoinSuccess()
+    function onJoinSuccessxhr()
     {
 
     }
 
-    function onJoinFailure()
+    function onJoinFailure(xhr)
     {
 
     }
     
-    function onNewLobbySuccess()
+    function onNewLobbySuccess(xhr)
     {
         
     }

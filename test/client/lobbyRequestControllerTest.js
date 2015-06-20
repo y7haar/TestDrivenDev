@@ -672,5 +672,13 @@ TestCase("LobbyRequestControllerEventSourceTest", {
     
     "test controller should have onSuccess for requestNewLobby": function() {
         assertFunction(this.lobbyRequestController.onNewLobbySuccess);
+    },
+    
+    "test onNewLobbySuccess should call establishConnection": function() {
+        var eventSourceController = this.lobbyRequestController.getLobbyEventSourceController();
+        
+        var spy = this.sandbox.stub(eventSourceController, "establishConnection");
+        
+        // TODO simulate request and response
     }
 });
