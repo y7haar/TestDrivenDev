@@ -8,7 +8,7 @@ var m;
 var m2;
 
 function test(){
-    m=new tddjs.server.controller.mapGenerator()
+    m=new tddjs.server.controller.mapGenerator();
     m.setGridSize(120,120);
     m.setMaximumCountrySize(200);
     m.setMinimumCountrySize(75);
@@ -56,7 +56,8 @@ function onCanvasMouseMove(oEvent){
     mainloop();
     //console.log(oEvent.offsetX);
     ctx.strokeStyle="#000";
-    ctx.fillStyle = "#552700";
+    ctx.fillStyle = "#fbfbfb";
     ctx.lineWidth="1";
-    ctx.fillRect(oEvent.offsetX,oEvent.offsetY,50,50);
+    ctx.fillText("UI-Test",oEvent.offsetX+1,oEvent.offsetY+1);
+    //ctx.fillRect(oEvent.offsetX,oEvent.offsetY,50,50);
 }
