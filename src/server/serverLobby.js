@@ -172,6 +172,11 @@ function lobby()
     {
         return (aPlayer.getToken() === aToken);
     }
+    
+    function isLeaderTokenValid(aPlayer, aToken)
+    {
+        return (this.isPlayerTokenValid(aPlayer, aToken) && aPlayer === _leader);
+    }
 
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
@@ -183,6 +188,7 @@ function lobby()
     
     this.getPlayerByToken = getPlayerByToken;
     this.isPlayerTokenValid = isPlayerTokenValid;
+    this.isLeaderTokenValid = isLeaderTokenValid;
     
     this.setName = setName;
     this.getName = getName;
