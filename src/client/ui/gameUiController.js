@@ -75,17 +75,17 @@ function gameUiController(aGLC,aCtx){
         //_ctx.drawImage(imgCacheAttack[7].img,0,0);
 
         for (var i in _countries){
-            if(_countries[i].selected){
-                var id=_countries[i].id;
-                for (var j in imgCacheSelected)
-                    if(imgCacheSelected[j].id === id)
-                        _ctx.drawImage(imgCacheSelected[j].img,0,0);
-            }
             if(_countries[i].activ){
                 var id=_countries[i].id;
                 for (var j in imgCacheActiv)
                     if(imgCacheActiv[j].id === id)
                         _ctx.drawImage(imgCacheActiv[j].img,0,0);
+            }
+            if(_countries[i].selected){
+                var id=_countries[i].id;
+                for (var j in imgCacheSelected)
+                    if(imgCacheSelected[j].id === id)
+                        _ctx.drawImage(imgCacheSelected[j].img,0,0);
             }   
         }
     }
