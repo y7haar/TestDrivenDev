@@ -58,10 +58,12 @@ function onCanvasMouseMove(oEvent){
     //mainloop();
     //console.log(oEvent.offsetX);
     controller.mouseMove(oEvent);
+    /*
     ctx.strokeStyle="#000";
     ctx.fillStyle = "#fbfbfb";
     ctx.lineWidth="1";
     ctx.fillText("UI-Test",oEvent.offsetX+1,oEvent.offsetY+1);
+    */
     //ctx.fillRect(oEvent.offsetX,oEvent.offsetY,50,50);
 }
 
