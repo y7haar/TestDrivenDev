@@ -16,10 +16,14 @@ function test(){
     if (canvas && canvas.getContext) {
        ctx = canvas.getContext("2d");
        if (ctx) {
-           controller = new tddjs.client.ui.gameUiController(null,ctx);
-           
-           
-           window.requestAnimationFrame(generateMapTOCHANGE);
+            controller = new tddjs.client.ui.gameUiController(null,ctx);
+
+            m2 = m.generateMap();
+            m2= m.serializeAsJSON(m2);
+            controller._getMap(m2);
+            controller._initMap();
+            
+            window.requestAnimationFrame(controller.drawLoading);
        }
    }
 }
@@ -46,28 +50,5 @@ function renderMap(){
     
     controller._getMap(m2);
     controller._initMap();
-    window.requestAnimationFrame(mainloop);
-}
-
-function mainloop(){
-    controller.drawGame();
-    canvas.addEventListener('mousemove', onCanvasMouseMove, false);
-    canvas.addEventListener('mousedown', onCanvasMouseDown, false);
-}
-
-function onCanvasMouseMove(oEvent){
-    //mainloop();
-    //console.log(oEvent.offsetX);
-    controller.mouseMove(oEvent);
-    /*
-    ctx.strokeStyle="#000";
-    ctx.fillStyle = "#fbfbfb";
-    ctx.lineWidth="1";
-    ctx.fillText("UI-Test",oEvent.offsetX+1,oEvent.offsetY+1);
-    */
-    //ctx.fillRect(oEvent.offsetX,oEvent.offsetY,50,50);
-}
-
-function onCanvasMouseDown(oEvent){
-    controller.mouseDown(oEvent);
+    window.requestAnimationFrame(controller.drawLoading);
 }

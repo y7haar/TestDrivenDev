@@ -78,10 +78,77 @@ function gameUiController(aGLC,aCtx){
     }
     
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
+    var step=0;
+    var maxSteps=12;
+    function drawLoading(){
+        var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
+        var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        clear();
+        switch(step){
+            case 0: _loading("Caching Map...");
+                break;
+            case 1: cacheMap(w,h);
+                    _loading("Caching Map...");
+                break;
+                    
+            case 2: _loading("Caching Hover...");
+                break;
+            case 3: cacheHover(w,h);
+                    _loading("Caching Hover...");
+                break;
+                 
+            case 4: _loading("Caching Selected...");
+                break;
+            case 5: cacheSelected(w,h);
+                    _loading("Caching Selected...");
+                break;
+                  
+            case 6: _loading("Caching Activ...");
+                break;
+            case 7: cacheAttack(w,h);
+                    _loading("Caching Activ...");
+                break;
+                    
+            case 8: _loading("Caching Player...");
+                break;
+            case 9: cachePlayer(w,h);
+                    _loading("Caching Player...");
+                break;
+              
+            case 10: _loading("Caching Units...");
+                break;
+            case 11: cacheUnits(w,h);
+                    _loading("Caching Units...");
+                break;
+                    
+            default: _loading("Loading...");
+                break;
+        }
+        step++;
+        if(step <= maxSteps)
+            window.requestAnimationFrame(drawLoading);
+        else
+            window.requestAnimationFrame(_afterLoading);
+    }
+    function _loading(str){
+        clear();
+        _ctx.fillStyle = "#555";
+        _ctx.lineWidth="1";
+        _ctx.font = "25px Arial";
+        _ctx.fillRect(5,_ctx.canvas.height/2-20,step/maxSteps*_ctx.canvas.width-5,40);
+        _ctx.fillStyle = "#000";
+        _ctx.fillText(str,_ctx.canvas.width/2-_ctx.measureText(str).width/2,_ctx.canvas.height/2+5);
+    }
+    function _afterLoading(){
+        _ctx.canvas.addEventListener('mousemove', mouseMove, false);
+        _ctx.canvas.addEventListener('mousedown', mouseDown, false);
+        window.requestAnimationFrame(drawGame);
+    }
+    
     function drawGame(){
         clear();
         if(!imgCacheMap)
-            cacheMap();
+            cacheAll();
         drawCache();
         drawUI();
     }
@@ -111,11 +178,21 @@ function gameUiController(aGLC,aCtx){
     
     var border=50; //25 an jeder seite
     var bottom=50; //insg 75 unten frei für menü etc
-    function cacheMap(){
+    function cacheAll(){
         var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
         var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
-        if(!imgCacheMap){
-            for(x=0;x<_gridMap.length;x++){
+        
+        cacheMap(w,h);
+        cacheHover(w,h);
+        cacheSelected(w,h);
+        cacheAttack(w,h);
+        cachePlayer(w,h);
+        cacheUnits(w,h);
+    }
+    // <editor-fold defaultstate="collapsed" desc="CacheMap + Overlays">
+    function cacheMap(w,h){
+        clear();
+        for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     _ctx.strokeStyle="#000";
                     _ctx.fillStyle = "#552700";
@@ -131,14 +208,7 @@ function gameUiController(aGLC,aCtx){
                 }
             }
         imgCacheMap=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
-        cacheHover(w,h);
-        cacheSelected(w,h);
-        cacheAttack(w,h);
-        }
-        cachePlayer(w,h);
-        cacheUnits(w,h);
     }
-    // <editor-fold defaultstate="collapsed" desc="Cache-overlays">
     function cachePlayer(w,h){
         clear();
         for(x=0;x<_gridMap.length;x++){
@@ -600,6 +670,8 @@ function gameUiController(aGLC,aCtx){
     //public
     this.init = init;
     this.drawGame=drawGame;
+    this.drawLoading=drawLoading;
+    
     this.addButton = addButton;
     this.getButtons = getButtons;
     this.mouseMove = mouseMove;
