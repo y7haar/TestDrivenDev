@@ -568,6 +568,78 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.initBorders();
         
         assertNoException(function(){gen.buildContinents();});
+    },
+    
+    "test Should be abe to collect Neighbour-Continents": function()
+    {
+        //Lange Vorbereitung...
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var grid = this.mapGenerator.getMapGrid();
+        var all = this.mapGenerator.getAllContinents();
+        //Jede Menge Kontinent
+        var continent1 = this.mapGenerator.createContinent(1);
+        continent1.countries.push(grid[0][0]);
+        all.push(continent1);
+        var continent2 = this.mapGenerator.createContinent(2);
+        continent2.countries.push(grid[1][0]);
+        all.push(continent2);
+        var continent3 = this.mapGenerator.createContinent(3);
+        continent3.countries.push(grid[2][0]);
+        all.push(continent3);
+        var continent4 = this.mapGenerator.createContinent(4);
+        continent4.countries.push(grid[0][1]);
+        all.push(continent4);
+        var continent5 = this.mapGenerator.createContinent(5);
+        continent5.countries.push(grid[1][1]);
+        all.push(continent5);
+        var continent6 = this.mapGenerator.createContinent(6);
+        continent6.countries.push(grid[1][2]);
+        all.push(continent6);
+        var continent7 = this.mapGenerator.createContinent(7);
+        continent7.countries.push(grid[0][2]);
+        all.push(continent7);
+        var continent8 = this.mapGenerator.createContinent(8);
+        continent8.countries.push(grid[1][2]);
+        all.push(continent8);
+        var continent9 = this.mapGenerator.createContinent(9);
+        continent9.countries.push(grid[2][2]);
+        all.push(continent9);
+        
+        var result = this.mapGenerator.collectNeighbourContinents(continent1);
+        assertEquals(2, result.length);
+        assertEquals(continent2, result[0]);
+        assertEquals(continent4, result[1]);
+        
+        result = this.mapGenerator.collectNeighbourContinents(continent2);
+        assertEquals(3, result.length);
+        assertEquals(continent1, result[0]);
+        assertEquals(continent3, result[1]);
+        assertEquals(continent5, result[2]);
+        
+        result = this.mapGenerator.collectNeighbourContinents(continent5);
+        assertEquals(4, result.length);
+        assertEquals(continent2, result[0]);
+        assertEquals(continent4, result[1]);
+        assertEquals(continent6, result[2]);
+        assertEquals(continent8, result[3]);
+        
+        result = this.mapGenerator.collectNeighbourContinents(continent9);
+        assertEquals(2, result.length);
+        assertEquals(continent6, result[0]);
+        assertEquals(continent8, result[1]);
+    },
+    
+    "test Shouldnt be abe to collect Neighbour-Continents with something thats not a Continent": function()
+    {
+        this.mapGenerator.setGridSize(3,3);
+        this.mapGenerator.initCountries();
+        this.mapGenerator.initBorders();
+        var gen = this.mapGenerator
+        var x = 5;
+        
+        assertException(function(){gen.collectNeighbourContinents(x);}, "TypeError");
     }
 }),
         
@@ -608,7 +680,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
-        assertArray(map.water);
+        assertTrue(map.water.isWater);
     },
     
     "test Should be able to create some object like water": function()
@@ -618,7 +690,8 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         assertEquals(true, water.isWater);
         assertEquals(-1, water.id);
         assertEquals(0, water.size);
-        assertEquals("Id: -1", water.name);
+        assertEquals(0, water.fields);
+        assertEquals("Wasser", water.name);
         assertArray(water.borders);
     }
 }),
@@ -759,14 +832,14 @@ TestCase("MapGeneratorTest for Setter and Getters",
     
     "test Should be able to get MinimumContinentNumber": function()
     {
-        assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
+        assertEquals(6, this.mapGenerator.getMinimumContinentNumber());
     },
     
     "test Should be able to set MinimumContinentNumber": function()
     {
-        this.mapGenerator.setMinimumContinentNumber(4);
+        this.mapGenerator.setMinimumContinentNumber(7);
         
-        assertEquals(4, this.mapGenerator.getMinimumContinentNumber());
+        assertEquals(7, this.mapGenerator.getMinimumContinentNumber());
     },
     
     "test MaximumContinentNumber shouldnt be under minContinentNumber after Setting": function()
@@ -787,14 +860,14 @@ TestCase("MapGeneratorTest for Setter and Getters",
     
     "test Should be able to get MaximumContinentNumber": function()
     {
-        assertEquals(8, this.mapGenerator.getMaximumContinentNumber());
+        assertEquals(10, this.mapGenerator.getMaximumContinentNumber());
     },
     
     "test Should be able to setMaximumContinentNumber": function()
     {
-        this.mapGenerator.setMaximumContinentNumber(6);
+        this.mapGenerator.setMaximumContinentNumber(8);
         
-        assertEquals(6, this.mapGenerator.getMaximumContinentNumber());
+        assertEquals(8, this.mapGenerator.getMaximumContinentNumber());
     },
     
     "test Shouldnt be able to set invalid MaximumContinentNumber": function()
@@ -1085,7 +1158,7 @@ TestCase("MapGeneratorTest", {
         
         var map = this.mapGenerator.generateMap();
         
-        assertTrue(map.water.length >= 2);
+        assertTrue(map.water.size >= 2);
     },
     
     "test There Shouldnt generate more than manWaterNumber Seas": function ()
@@ -1094,7 +1167,7 @@ TestCase("MapGeneratorTest", {
         
         var map = this.mapGenerator.generateMap();
         
-        assertTrue(map.water.length <= 4);
+        assertTrue(map.water.size <= 4);
     },
     
     "test Seas should have atleast minWaterSize": function ()
