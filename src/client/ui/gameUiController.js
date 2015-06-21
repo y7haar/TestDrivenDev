@@ -57,6 +57,7 @@ function gameUiController(aGLC,aCtx){
     
     var imgCacheMap;
     var imgCachePlayer;
+    var imgCacheUnits;
     var imgCacheHover=[];
     var imgCacheSelected=[];
     var imgCacheActiv=[];
@@ -79,7 +80,7 @@ function gameUiController(aGLC,aCtx){
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
-        _ctx.drawImage(imgCachePlayer,0,0);
+        //_ctx.drawImage(imgCachePlayer,0,0);
         
         for (var i in _countries){
             if(_countries[i].activ){
@@ -95,6 +96,8 @@ function gameUiController(aGLC,aCtx){
                         _ctx.drawImage(imgCacheSelected[j].img,0,0);
             }   
         }
+        
+        _ctx.drawImage(imgCacheUnits,0,0);
     }
     
     var border=50; //25 an jeder seite
@@ -124,6 +127,7 @@ function gameUiController(aGLC,aCtx){
         cacheSelected(w,h);
         cacheAttack(w,h);
         cachePlayer(w,h);
+        cacheUnits(w,h);
     }
     // <editor-fold defaultstate="collapsed" desc="Cache-overlays">
     function cachePlayer(w,h){
@@ -131,11 +135,14 @@ function gameUiController(aGLC,aCtx){
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
                 _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
-                //_ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
             }
         }
         imgCachePlayer = new Image();
         imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
+
+    }
+    function cacheUnits(w,h){
         for(var i in _countries){
             var id = _countries[i].id;
             var ok=false
@@ -159,7 +166,8 @@ function gameUiController(aGLC,aCtx){
                     break;
             }
         }
-        imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
+        imgCacheUnits = new Image();
+        imgCacheUnits.src=_ctx.canvas.toDataURL('image/png');
     }
     function cacheHover(w,h){
         clear();
