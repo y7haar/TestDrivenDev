@@ -131,7 +131,7 @@ function gameUiController(aGLC,aCtx){
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
                 _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
-                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+                //_ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
             }
         }
         imgCachePlayer = new Image();
@@ -142,13 +142,15 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
+                        var cx=_gridMap[x][y].centerX;
+                        var cy=_gridMap[x][y].centerY;
                         _ctx.fillStyle = "rgba(200,140,0,0.5)";
                         _ctx.beginPath();
-                        _ctx.arc(x+(x*w)+border/2+w/2+5,y+(y*h)+border/2+h/2-5,15,0,2*Math.PI);
+                        _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
                         _ctx.fill();
-                        _ctx.font="20px Georgia";
+                        _ctx.font="12px Georgia";
                         _ctx.fillStyle = "#fff";
-                        _ctx.fillText(_gridMap[x][y].getUnitCount(),x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2);
+                        _ctx.fillText(_gridMap[x][y].getUnitCount(),cx+(cx*w)+border/2+w/2,cy+(cy*h)+border/2+h/2);
                         ok=true;
                         break;
                     }
@@ -467,6 +469,7 @@ function gameUiController(aGLC,aCtx){
                 _gridMap[x][y] = _getCountryById(_gridMap[x][y].id);
             }
         }
+        _cacheCountryCenter();
     }
     
     function _getCountryById(id){
@@ -485,7 +488,7 @@ function gameUiController(aGLC,aCtx){
         }
     }
     
-    function _initMap(aGridMap){
+    function _initMap(){
         //_gridMap = aGridMap;
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
@@ -499,6 +502,20 @@ function gameUiController(aGLC,aCtx){
         if(_countries.length === 0)
             throw new Error("Call _initMap first!");
         return _countries;
+    }
+    
+    function _cacheCountryCenter(){
+        for(x=5;x<_gridMap.length-2;x++){
+            for(y=5;y<_gridMap[0].length-2;y++){
+                if(_gridMap[x][y].id === _gridMap[x-5][y].id)
+                    if(_gridMap[x][y].id === _gridMap[x][y-5].id)
+                        if(_gridMap[x][y].id === _gridMap[x+2][y].id)
+                            if(_gridMap[x][y].id === _gridMap[x][y+2].id){
+                                _gridMap[x][y].centerX=x;
+                                _gridMap[x][y].centerY=y;
+                            }
+            }
+        }
     }
     // </editor-fold>
     
