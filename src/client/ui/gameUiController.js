@@ -112,14 +112,10 @@ function gameUiController(aGLC,aCtx){
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-                /*if(_gridMap[x][y].hover){
-                    _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                if(_gridMap[x][y].id <=0 ){ //water
+                    _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
                 }
-
-                if(_gridMap[x][y].selected){
-                    _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-                }*/
 
                 drawMapBorder(x,y,w,h);
             }
