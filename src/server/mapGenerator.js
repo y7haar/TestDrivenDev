@@ -21,6 +21,8 @@ function mapGenerator()
     var allCountries = [];
     //Länder die nicht in Kontinenten sind
     var countriesNotInContinents = [];
+    //alle Kontinente
+    var allContinents = [];
     
     //Variablen für den bisherigen Aufruf
     var calledInitCountries = false;
@@ -40,8 +42,8 @@ function mapGenerator()
     var maximumWaterNumber = 4;
     
     //Variablen für Kontinentgrößen
-    var minimumContinentNumber = 4;
-    var maximumContinentNumber = 8;
+    var minimumContinentNumber = 6;
+    var maximumContinentNumber = 10;
     var minimumContinentSize = 2;
     
     //###############################################################################################################
@@ -291,6 +293,12 @@ function mapGenerator()
         return countriesInContinents;
     }
     
+    //Holt alle Kontinente
+    function getAllContinents()
+    {
+        return allContinents;
+    }
+    
     //Erzeugt Array
     function createArray(length) {
         var arr = new Array(length || 0),
@@ -325,10 +333,12 @@ function mapGenerator()
         combineRemainingCountries();
         //Karte erzeugen
         var map = createMap();
+        //Kontinente erzeugen
+        allContinents = buildContinents();
         //Wasser 
         map.water = generateWater();
-        //Kontinente erzeugen
-        map.continents = buildContinents();
+        //Kontinente anfügen
+        map.continents = allContinents;
         //return
         return map;
     }
@@ -680,68 +690,6 @@ function mapGenerator()
         }
     }
     
-    //Wassererstellung
-    function generateWater()
-    {
-        //Prüfen ob genügend Platz/Länder
-        if(allCountries.length <= (maximumWaterNumber*maximumWaterSize))
-            throw new Error("This Grid migth be to small for the generation");
-        
-        //Die Gewässer
-        var water = [];
-        //Id
-        var id = -1;        
-        
-        //Anzahl Wasserflächen auswürfeln
-        var factor = maximumWaterNumber - minimumWaterNumber;
-        var random = Math.round(Math.random()*factor + minimumWaterNumber);
-        
-        var newWater;
-        
-        //Alle Wasserflächen erzeugen
-        while(random > 0)
-        {
-            //Neues Wasser erzeugen
-            newWater = createWater(id);
-            
-            //Variable ob es Funktioniert hat
-            var worked = false;
-            
-            //Größe der Wasserfläche auswürfeln
-            var range = maximumWaterSize - minimumWaterSize;
-            var size = Math.round(Math.random()*range +minimumWaterSize);
-            
-            //Oder vll mit Borders.length sicherstellen?
-            //Sehr schwierige Stelle 
-            //Was wenn in ecke wo bereits wasser rum?
-            //Wenn es nicht funktioniert, wie rückgängig machen?
-            //Was wenn land das zum land mit wasserborder würde wieder gewählt wird?
-            //Darf das überhaupt passieren?
-            //Grid zwischenspeichern?
-            //Andere Eckensituation
-            
-            //Bis zur Größe erzeugen
-            while(newWater.size < size)
-            {
-                //Viel Code
-                
-                //Borders ändern
-                
-                //BonusBorder verbindung übers wasser
-                
-                //Größe erhöhen
-                newWater.size++;
-            }
-            
-            random--;
-            id--;
-            water.push(newWater);
-        }
-        
-        //Wasser zurückgeben
-        return water;
-    }
-    
     //Erstellt die Kontinente
     function buildContinents()
     {
@@ -865,6 +813,102 @@ function mapGenerator()
         return continents;
     }
     
+        //Wassererstellung
+    function generateWater()
+    {
+        //Anzahl Wasserflächen auswürfeln
+        var factor = maximumWaterNumber - minimumWaterNumber;
+        var random = Math.round(Math.random()*factor + minimumWaterNumber);
+        
+        //Check ob genügend vorhanden
+        if(allContinents.length < (random*2))
+        {
+            //Prüfen ob genügend Platz/Länder
+            if(allContinents.length < (minimumWaterNumber*2))
+                throw new Error("Not enough Continents for water Generation. Check Settings");
+            
+            random = minimumWaterNumber;
+        }
+        
+        //Das Gewässer
+        var water = createWater(-1);
+        //Verfügbare Kontinent
+        var availableContinents = allContinents.slice();     
+        
+        //Alle Wasserflächen erzeugen
+        while(random > 0)
+        {         
+            //Zuälliges Ziel
+            var seed = getRandom(availableContinents);
+            //Nachbar-Kontinente
+            var neighborContinents = collectNeighbourContinents(seed);
+            console.log(neighborContinents);
+            console.log(seed);
+            //Bis zur Größe erzeugen
+                
+                //Land aus den grenzen entfernen
+                
+                //BonusBorder verbindung übers wasser
+                
+                //Größe erhöhen
+            
+            random--;
+            water.size++;
+        }
+        
+        //Wasser zurückgeben
+        return water;
+    }
+    
+    //Hilfsmethode die Nachbar-Kontinente sammelt
+    function collectNeighbourContinents(continent)
+    {
+        if(!continent.isContinent)
+            throw new TypeError("Can only work with continents");
+        
+        //Ergebnis-Liste
+        var continents = [];
+        //Länder des Kontinents
+        var countries = continent.countries;
+        //Nachbarländer des Kontinents
+        var neighbourCountries = [];
+        
+        //Alle Länder durchgehen
+        for(var i = 0; i < countries.length; i++)
+        {
+            //Nachbarländer
+            var borders = countries[i].borders;
+            
+            //Alle Borders durchen
+            for(var j = 0; j < borders.length; j++)
+            {
+                //Nur hinzufügen wenn nicht im Kontinent
+                if(continent.countries.indexOf(borders[j]) === -1)
+                    neighbourCountries.push(borders[j]);
+            }
+        }
+        
+        //Alle Kontinente durchgehen
+        for(var i = 0 ; i < allContinents.length; i++)
+        {
+            var current = allContinents[i];
+            
+            //Alle Nachbar-Länder durchgehen
+            for(var j = 0; j < neighbourCountries.length; j++)
+            {
+                //Im Kontinent enthalten?
+                if(current.countries.indexOf(neighbourCountries[j]) >= 0)
+                {
+                    //Kontinent hinzufügen
+                    continents.push(allContinents[i]);
+                    break;
+                }
+            }
+        }
+        
+        return continents;
+    }
+    
     //###############################################################################################################
     //Pseudo-Kartenobjekt-Erzeugung
     //###############################################################################################################
@@ -885,9 +929,10 @@ function mapGenerator()
     {
         var water = {};
         water.id = id;
-        water.name = "Id: " + id;
+        water.name = "Wasser";
         water.borders = [[]];
         water.size = 0;
+        water.fields = 0;
         water.isWater = true;
         return water;
     }
@@ -909,7 +954,7 @@ function mapGenerator()
     {
         var map = {};
         map.continents = [];
-        map.water = [];
+        map.water = createWater();
         map.isMap = true;
         return map;
     }
@@ -984,7 +1029,9 @@ function mapGenerator()
     //Eig private
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
     this.getAllCountries = getAllCountries;  
+    this.getAllContinents = getAllContinents;
     this.collectUnusedNeighborCountriesOfContinent = collectUnusedNeighborCountriesOfContinent;
+    this.collectNeighbourContinents = collectNeighbourContinents;
     this.calculateUnitBonus = calculateUnitBonus;
     this.initCountries = initCountries;
     this.initBorders = initBorders;
