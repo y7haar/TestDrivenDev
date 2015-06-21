@@ -15,13 +15,21 @@ function gameUiController(aGLC,aCtx){
     }
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
-        "#FF8F3D",
+    /*    "#FF8F3D",
         "#0ff",
         "#733ECA",
         "#FFEF3D",
         "#7AEA38",
         "#F13964",
-        "#7B3DCA"
+        "#7B3DCA"*/
+        "#8F5F64",
+        "#958463",
+        "#464F64",
+        "#5C7D53",
+        "#5F3B3F",
+        "#63573D",
+        "#2C3342",
+        "#3A5434"
     ];
     var _usedColor=0;
     function getRandomColor(){
