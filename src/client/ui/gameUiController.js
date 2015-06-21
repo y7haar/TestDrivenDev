@@ -74,7 +74,7 @@ function gameUiController(aGLC,aCtx){
     function drawGame(){
         clear();
         if(!imgCacheMap)
-            drawMap();
+            cacheMap();
         drawCache();
         drawUI();
     }
@@ -102,30 +102,31 @@ function gameUiController(aGLC,aCtx){
     
     var border=50; //25 an jeder seite
     var bottom=50; //insg 75 unten frei für menü etc
-    function drawMap(){
+    function cacheMap(){
         var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
         var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        if(!imgCacheMap){
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    _ctx.strokeStyle="#000";
+                    _ctx.fillStyle = "#552700";
+                    _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
+                    _ctx.lineWidth="1";
+                    _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-        for(x=0;x<_gridMap.length;x++){
-            for(y=0;y<_gridMap[0].length;y++){
-                _ctx.strokeStyle="#000";
-                _ctx.fillStyle = "#552700";
-                _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
-                _ctx.lineWidth="1";
-                _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                    if(_gridMap[x][y].id <=0 ){ //water
+                        _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-                if(_gridMap[x][y].id <=0 ){ //water
-                    _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                    }
 
+                    drawMapBorder(x,y,w,h);
                 }
-
-                drawMapBorder(x,y,w,h);
             }
-        }
         imgCacheMap=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
         cacheHover(w,h);
         cacheSelected(w,h);
         cacheAttack(w,h);
+        }
         cachePlayer(w,h);
         cacheUnits(w,h);
     }
@@ -143,6 +144,7 @@ function gameUiController(aGLC,aCtx){
 
     }
     function cacheUnits(w,h){
+        clear();
         for(var i in _countries){
             var id = _countries[i].id;
             var ok=false
@@ -477,7 +479,6 @@ function gameUiController(aGLC,aCtx){
                 _gridMap[x][y] = _getCountryById(_gridMap[x][y].id);
             }
         }
-        _cacheCountryCenter();
     }
     
     function _getCountryById(id){
@@ -504,6 +505,7 @@ function gameUiController(aGLC,aCtx){
                     _countries.push(_gridMap[x][y]);
             }
         }
+        _cacheCountryCenter();
     }
     
     function _getCountries(){
@@ -513,15 +515,48 @@ function gameUiController(aGLC,aCtx){
     }
     
     function _cacheCountryCenter(){
-        for(x=5;x<_gridMap.length-2;x++){
-            for(y=5;y<_gridMap[0].length-2;y++){
+        /*
+        for(x=5;x<_gridMap.length-5;x++){
+            for(y=5;y<_gridMap[0].length-5;y++){
                 if(_gridMap[x][y].id === _gridMap[x-5][y].id)
                     if(_gridMap[x][y].id === _gridMap[x][y-5].id)
-                        if(_gridMap[x][y].id === _gridMap[x+2][y].id)
-                            if(_gridMap[x][y].id === _gridMap[x][y+2].id){
+                        if(_gridMap[x][y].id === _gridMap[x+5][y].id)
+                            if(_gridMap[x][y].id === _gridMap[x][y+5].id){
                                 _gridMap[x][y].centerX=x;
                                 _gridMap[x][y].centerY=y;
                             }
+            }
+        }
+        */
+        for(var i in _countries){
+            var id = _countries[i].id;
+            var cur_max_x=0;
+            var cur_max_y=0;
+            var last_max_x=0;
+            var last_max_y=0;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id===id){
+                        cur_max_x=0;
+                        cur_max_y=0;
+                        var pos_x=x;
+                        var pos_y=y;
+                        while(pos_x<_gridMap.length && _gridMap[pos_x][y].id===id){
+                            pos_x++;
+                            cur_max_x++;
+                        }
+                        while(pos_y<_gridMap[x].length && _gridMap[x][pos_y].id===id){
+                            pos_y++;
+                            cur_max_y++;
+                        }
+                        if(cur_max_x>last_max_x && cur_max_y>last_max_y){
+                            last_max_x=cur_max_x;
+                            last_max_y=cur_max_y;
+                            _gridMap[x][y].centerX=x;
+                            _gridMap[x][y].centerY=y;
+                        }
+                    }
+                }
             }
         }
     }
