@@ -15,13 +15,21 @@ function gameUiController(aGLC,aCtx){
     }
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
-        "#FF8F3D",
+    /*    "#FF8F3D",
         "#0ff",
         "#733ECA",
         "#FFEF3D",
         "#7AEA38",
         "#F13964",
-        "#7B3DCA"
+        "#7B3DCA"*/
+        "#8F5F64",
+        "#958463",
+        "#464F64",
+        "#5C7D53",
+        "#5F3B3F",
+        "#63573D",
+        "#2C3342",
+        "#3A5434"
     ];
     var _usedColor=0;
     function getRandomColor(){
@@ -42,10 +50,17 @@ function gameUiController(aGLC,aCtx){
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
     _hoverImg.src = "client/ui/hoverImg.png";
+    var _activImg = new Image();
+    _activImg.src = "client/ui/attackImg.png";
+    var _waterImg = new Image();
+    _waterImg.src = "client/ui/waterImg.png";
     
     var imgCacheMap;
+    var imgCachePlayer;
+    var imgCacheUnits;
     var imgCacheHover=[];
     var imgCacheSelected=[];
+    var imgCacheActiv=[];
     
     
     
@@ -59,45 +74,102 @@ function gameUiController(aGLC,aCtx){
     function drawGame(){
         clear();
         if(!imgCacheMap)
-            drawMap();
+            cacheMap();
         drawCache();
-        //drawUI();
+        drawUI();
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
-        _ctx.drawImage(imgCacheHover[0],0,0);
-        _ctx.drawImage(imgCacheSelected[5],0,0);
+        //_ctx.drawImage(imgCachePlayer,0,0);
+        
+        for (var i in _countries){
+            if(_countries[i].activ){
+                var id=_countries[i].id;
+                for (var j in imgCacheActiv)
+                    if(imgCacheActiv[j].id === id)
+                        _ctx.drawImage(imgCacheActiv[j].img,0,0);
+            }
+            if(_countries[i].selected){
+                var id=_countries[i].id;
+                for (var j in imgCacheSelected)
+                    if(imgCacheSelected[j].id === id)
+                        _ctx.drawImage(imgCacheSelected[j].img,0,0);
+            }   
+        }
+        
+        _ctx.drawImage(imgCacheUnits,0,0);
     }
     
     var border=50; //25 an jeder seite
     var bottom=50; //insg 75 unten frei für menü etc
-    function drawMap(){
+    function cacheMap(){
         var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
         var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        if(!imgCacheMap){
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    _ctx.strokeStyle="#000";
+                    _ctx.fillStyle = "#552700";
+                    _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
+                    _ctx.lineWidth="1";
+                    _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-        for(x=0;x<_gridMap.length;x++){
-            for(y=0;y<_gridMap[0].length;y++){
-                _ctx.strokeStyle="#000";
-                _ctx.fillStyle = "#552700";
-                _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
-                _ctx.lineWidth="1";
-                _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                    if(_gridMap[x][y].id <=0 ){ //water
+                        _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
 
-                /*if(_gridMap[x][y].hover){
-                    _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                    }
 
+                    drawMapBorder(x,y,w,h);
                 }
-
-                if(_gridMap[x][y].selected){
-                    _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-                }*/
-
-                drawMapBorder(x,y,w,h);
             }
-        }
         imgCacheMap=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
         cacheHover(w,h);
         cacheSelected(w,h);
+        cacheAttack(w,h);
+        }
+        cachePlayer(w,h);
+        cacheUnits(w,h);
+    }
+    // <editor-fold defaultstate="collapsed" desc="Cache-overlays">
+    function cachePlayer(w,h){
+        clear();
+        for(x=0;x<_gridMap.length;x++){
+            for(y=0;y<_gridMap[0].length;y++){
+                _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
+                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+            }
+        }
+        imgCachePlayer = new Image();
+        imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
+
+    }
+    function cacheUnits(w,h){
+        clear();
+        for(var i in _countries){
+            var id = _countries[i].id;
+            var ok=false
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id){
+                        var cx=_gridMap[x][y].centerX;
+                        var cy=_gridMap[x][y].centerY;
+                        _ctx.fillStyle = "rgba(200,140,0,0.5)";
+                        _ctx.beginPath();
+                        _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
+                        _ctx.fill();
+                        _ctx.font="12px Georgia";
+                        _ctx.fillStyle = "#fff";
+                        _ctx.fillText(_gridMap[x][y].getUnitCount(),cx+(cx*w)+border/2+w/2,cy+(cy*h)+border/2+h/2);
+                        ok=true;
+                        break;
+                    }
+                }
+                if(ok)
+                    break;
+            }
+        }
+        imgCacheUnits = new Image();
+        imgCacheUnits.src=_ctx.canvas.toDataURL('image/png');
     }
     function cacheHover(w,h){
         clear();
@@ -111,7 +183,7 @@ function gameUiController(aGLC,aCtx){
             }
             var img = new Image();
             img.src=_ctx.canvas.toDataURL('image/png');
-            imgCacheHover.push(img);
+            imgCacheHover.push({id:id,img:img});
             clear();
         }
     }
@@ -127,10 +199,27 @@ function gameUiController(aGLC,aCtx){
             }
             var img = new Image();
             img.src=_ctx.canvas.toDataURL('image/png');
-            imgCacheSelected.push(img);
+            imgCacheSelected.push({id:id,img:img});
             clear();
         }
     }
+    function cacheAttack(w,h){
+        clear();
+        for(var i in _countries){
+            var id = _countries[i].id;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id)
+                        _ctx.drawImage(_activImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                }
+            }
+            var img = new Image();
+            img.src=_ctx.canvas.toDataURL('image/png');
+            imgCacheActiv.push({id:id,img:img});
+            clear();
+        }
+    }
+     // </editor-fold>
     function drawMapBorder(x,y,w,h){
         var offset=1;
         _ctx.lineWidth="2";
@@ -184,13 +273,13 @@ function gameUiController(aGLC,aCtx){
     
     function drawUI(){
         //draw borders etc
-        _ctx.fillStyle = "#D49B6A";
+        _ctx.fillStyle = "#B89F89";//"#D49B6A";
         _ctx.fillRect(0,_ctx.canvas.height-border/2,_ctx.canvas.width,border/2);
         _ctx.fillRect(0,0,_ctx.canvas.width,border/2);
         _ctx.fillRect(0,0,border/2,_ctx.canvas.height);
         _ctx.fillRect(_ctx.canvas.width-border/2,0,border/2,_ctx.canvas.height);
 
-        _ctx.fillStyle = "#FFD1AA";
+        _ctx.fillStyle = "#E3CFBE";//#FFD1AA";
         _ctx.fillRect(border/2,_ctx.canvas.height-border/2-bottom,_ctx.canvas.width-border,bottom);
 
         //draw buttons
@@ -198,6 +287,7 @@ function gameUiController(aGLC,aCtx){
            _btn[i].draw();
 
        //Text
+       /*
        _ctx.font="20px Georgia";
        _ctx.fillStyle = "#000000";
        _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);
@@ -205,6 +295,7 @@ function gameUiController(aGLC,aCtx){
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
+        */
     }
     
     function clear(){
@@ -224,6 +315,43 @@ function gameUiController(aGLC,aCtx){
     }
     function getButtons(){
         return _btn;
+    }
+    function mouseMove(oEvent){
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+
+        clear();
+        drawGame();
+        var id = _gridMap[x][y].id;
+        for (var i in imgCacheHover){
+            if(imgCacheHover[i].id === id){
+                _ctx.drawImage(imgCacheHover[i].img,0,0);
+                _ctx.font="20px Georgia";
+                _ctx.fillStyle = "#fff";
+                _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
+                _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);
+            }
+        }
+    }
+    function mouseDown(oEvent){
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+
+        clear();
+        //drawGame();
+        _gridMap[x][y].selected=!_gridMap[x][y].selected;
+        if(_gridMap[x][y].selected){
+            for(var i in _gridMap[x][y].getBorders()){
+                _gridMap[x][y].getBorders()[i].activ=true;
+            }
+        }
+        else
+        {
+            for(var i in _gridMap[x][y].getBorders()){
+                _gridMap[x][y].getBorders()[i].activ=false;
+            }
+        }
+        drawGame();
     }
     // </editor-fold>
     
@@ -369,7 +497,7 @@ function gameUiController(aGLC,aCtx){
         }
     }
     
-    function _initMap(aGridMap){
+    function _initMap(){
         //_gridMap = aGridMap;
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
@@ -377,12 +505,60 @@ function gameUiController(aGLC,aCtx){
                     _countries.push(_gridMap[x][y]);
             }
         }
+        _cacheCountryCenter();
     }
     
     function _getCountries(){
         if(_countries.length === 0)
             throw new Error("Call _initMap first!");
         return _countries;
+    }
+    
+    function _cacheCountryCenter(){
+        /*
+        for(x=5;x<_gridMap.length-5;x++){
+            for(y=5;y<_gridMap[0].length-5;y++){
+                if(_gridMap[x][y].id === _gridMap[x-5][y].id)
+                    if(_gridMap[x][y].id === _gridMap[x][y-5].id)
+                        if(_gridMap[x][y].id === _gridMap[x+5][y].id)
+                            if(_gridMap[x][y].id === _gridMap[x][y+5].id){
+                                _gridMap[x][y].centerX=x;
+                                _gridMap[x][y].centerY=y;
+                            }
+            }
+        }
+        */
+        for(var i in _countries){
+            var id = _countries[i].id;
+            var cur_max_x=0;
+            var cur_max_y=0;
+            var last_max_x=0;
+            var last_max_y=0;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id===id){
+                        cur_max_x=0;
+                        cur_max_y=0;
+                        var pos_x=x;
+                        var pos_y=y;
+                        while(pos_x<_gridMap.length && _gridMap[pos_x][y].id===id){
+                            pos_x++;
+                            cur_max_x++;
+                        }
+                        while(pos_y<_gridMap[x].length && _gridMap[x][pos_y].id===id){
+                            pos_y++;
+                            cur_max_y++;
+                        }
+                        if(cur_max_x>last_max_x && cur_max_y>last_max_y){
+                            last_max_x=cur_max_x;
+                            last_max_y=cur_max_y;
+                            _gridMap[x][y].centerX=x;
+                            _gridMap[x][y].centerY=y;
+                        }
+                    }
+                }
+            }
+        }
     }
     // </editor-fold>
     
@@ -393,6 +569,8 @@ function gameUiController(aGLC,aCtx){
     this.drawGame=drawGame;
     this.addButton = addButton;
     this.getButtons = getButtons;
+    this.mouseMove = mouseMove;
+    this.mouseDown = mouseDown;
     
     //private
     this._initMap = _initMap;

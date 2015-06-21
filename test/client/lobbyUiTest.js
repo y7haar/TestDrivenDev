@@ -926,7 +926,7 @@ TestCase("SingleLobbyUiEventTest", {
         sinon.assert.calledOnce(setCurrentLobbySpy);
         sinon.assert.calledOnce(spy);
         
-        sinon.assert.calledWith(setCurrentLobbySpy, this.lobby3);
+        assertInstanceOf(setCurrentLobbySpy.args[0], tddjs.client.model.lobby);
     }
  
 });

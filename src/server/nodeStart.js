@@ -5,13 +5,12 @@ var logger = require('connect-logger');
 var express = require('express');
 var sessions = require("client-sessions");
 var bodyParser = require("body-parser");
-
+var lobbyApp = require("./lobbyApp");
 
 /*
  *  Internal Requires
  */
-var namespace = require('../lib/tdd');
-
+var namespace = require('./tdd');
 
 var app = express();
 
@@ -45,10 +44,9 @@ app.use(sessions({
 
 app.use(bodyParser.json({}));
 app.use(logger({}));
-
+app.use("/lobbies", lobbyApp);
 
 app.listen(8080);
-
 
 /*
  *  Routing information
@@ -60,51 +58,6 @@ app.all("*", function (req, res, next) {
     req.accepts("application/json");
     
     next();
-});
-
-/*
- *  This is hard coded for testing purposes
- */
-
-app.get('/lobbies', function (req, res) {
-  res.json([
-      {
-          id: 1,
-          name: "NoobFunServer",
-          maxPlayers:4,
-          players: [
-              {
-                  name: "Hans",
-                  color:"#ffffff"
-              }]
-  },
-  
-  {
-          id: 2,
-          name: "OnlyPros",
-          maxPlayers:4,
-          players: [
-              {
-                  name: "Hans",
-                  color:"#ffffff"
-              },
-          {
-                  name: "Hans",
-                  color:"#ffffff"
-              }]
-  },
-  
-  {
-          id: 3,
-          name: "I_Will D3stroY Al1 !!!",
-          maxPlayers:4,
-          players: [
-              {
-                  name: "Hans",
-                  color:"#ffffff"
-              }]
-  }
-  ]);
 });
 
 app.get('/lobbies/:id', function (req, res) {

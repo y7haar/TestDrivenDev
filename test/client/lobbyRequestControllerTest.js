@@ -651,3 +651,34 @@ TestCase("LobbyRequestControllerUpdateTest", {
     }
 
 });
+
+
+TestCase("LobbyRequestControllerEventSourceTest", {
+    setUp: lobbyRequestSetup,
+    tearDown: lobbyRequestTeardown,
+
+    "test controller should have getter for lobbyEventSourceController": function() {
+        assertFunction(this.lobbyRequestController.getLobbyEventSourceController);
+    },
+    
+    "test getLobbyEventSourceController should return instance of lobbyEventSourceController": function() {
+        var c = this.lobbyRequestController.getLobbyEventSourceController();
+        assertInstanceOf(c, tddjs.client.controller.lobbyEventSourceController);
+    },
+    
+    "test controller should have onSuccess for requestJoin": function() {
+        assertFunction(this.lobbyRequestController.onJoinSuccess);
+    },
+    
+    "test controller should have onSuccess for requestNewLobby": function() {
+        assertFunction(this.lobbyRequestController.onNewLobbySuccess);
+    },
+    
+    "test onNewLobbySuccess should call establishConnection": function() {
+        var eventSourceController = this.lobbyRequestController.getLobbyEventSourceController();
+        
+        var spy = this.sandbox.stub(eventSourceController, "establishConnection");
+        
+        // TODO simulate request and response
+    }
+});

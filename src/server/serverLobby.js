@@ -153,6 +153,30 @@ function lobby()
 
         return lobbyObj;
     }
+    
+    function getPlayerByToken(aToken)
+    {
+        if(typeof aToken !== "string")
+            throw new TypeError("Token must be a string");
+        
+        for(var i = 0;i < _players.length;++i)
+        {
+            if(_players[i].getToken() === aToken)
+                return _players[i];
+        }
+        
+        return null;
+    }
+    
+    function isPlayerTokenValid(aPlayer, aToken)
+    {
+        return (aPlayer.getToken() === aToken);
+    }
+    
+    function isLeaderTokenValid(aPlayer, aToken)
+    {
+        return (this.isPlayerTokenValid(aPlayer, aToken) && aPlayer === _leader);
+    }
 
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
@@ -161,7 +185,11 @@ function lobby()
 
     this.getId = getId;
     this.setId = setId;
-
+    
+    this.getPlayerByToken = getPlayerByToken;
+    this.isPlayerTokenValid = isPlayerTokenValid;
+    this.isLeaderTokenValid = isLeaderTokenValid;
+    
     this.setName = setName;
     this.getName = getName;
 
