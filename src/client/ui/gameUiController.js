@@ -29,7 +29,11 @@ function gameUiController(aGLC,aCtx){
         "#5F3B3F",
         "#63573D",
         "#2C3342",
-        "#3A5434"
+        "#3A5434",
+        "#592228",
+        "#5D4A24",
+        "#1C263E",
+        "#284E1E"
     ];
     var _usedColor=0;
     function getRandomColor(){
@@ -62,6 +66,9 @@ function gameUiController(aGLC,aCtx){
     var imgCacheSelected=[];
     var imgCacheActiv=[];
     
+    var countryStrHover;
+    var countryStrSelected;
+    
     
     
     function init(){
@@ -82,6 +89,7 @@ function gameUiController(aGLC,aCtx){
         _ctx.putImageData(imgCacheMap,0,0);
         //_ctx.drawImage(imgCachePlayer,0,0);
         
+        countryStrSelected="|";
         for (var i in _countries){
             if(_countries[i].activ){
                 var id=_countries[i].id;
@@ -94,6 +102,7 @@ function gameUiController(aGLC,aCtx){
                 for (var j in imgCacheSelected)
                     if(imgCacheSelected[j].id === id)
                         _ctx.drawImage(imgCacheSelected[j].img,0,0);
+                countryStrSelected = countryStrSelected+_countries[i].getName()+"|";
             }   
         }
         
@@ -116,7 +125,6 @@ function gameUiController(aGLC,aCtx){
 
                     if(_gridMap[x][y].id <=0 ){ //water
                         _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-
                     }
 
                     drawMapBorder(x,y,w,h);
@@ -151,8 +159,8 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
-                        var cx=_gridMap[x][y].centerX;
-                        var cy=_gridMap[x][y].centerY;
+                        var cx=_gridMap[x][y].centerX;//+h/2+6;
+                        var cy=_gridMap[x][y].centerY;//+w/2;
                         _ctx.fillStyle = "rgba(200,140,0,0.5)";
                         _ctx.beginPath();
                         _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
@@ -287,15 +295,13 @@ function gameUiController(aGLC,aCtx){
            _btn[i].draw();
 
        //Text
-       /*
        _ctx.font="20px Georgia";
-       _ctx.fillStyle = "#000000";
-       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);
+       _ctx.fillStyle = "#000000";/*
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);*/
        _ctx.fillStyle = "#000000";
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
-        */
     }
     
     function clear(){
@@ -326,10 +332,12 @@ function gameUiController(aGLC,aCtx){
         for (var i in imgCacheHover){
             if(imgCacheHover[i].id === id){
                 _ctx.drawImage(imgCacheHover[i].img,0,0);
+                countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
+                /*
                 _ctx.font="20px Georgia";
                 _ctx.fillStyle = "#fff";
                 _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
-                _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);
+                _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);*/
             }
         }
     }
@@ -534,6 +542,8 @@ function gameUiController(aGLC,aCtx){
             var cur_max_y=0;
             var last_max_x=0;
             var last_max_y=0;
+            var best_pos=[];
+            
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id===id){
@@ -549,15 +559,38 @@ function gameUiController(aGLC,aCtx){
                             pos_y++;
                             cur_max_y++;
                         }
+                        best_pos.push({x:x,y:y,max_x:cur_max_x,max_y:cur_max_y});
+                        /*
                         if(cur_max_x>last_max_x && cur_max_y>last_max_y){
                             last_max_x=cur_max_x;
                             last_max_y=cur_max_y;
                             _gridMap[x][y].centerX=x;
                             _gridMap[x][y].centerY=y;
-                        }
+                        }*/
                     }
                 }
             }
+            var ratio=0;
+            var last_ratio=100;
+            var area=0;
+            var last_area=area;
+            var pos={x:0,y:0};
+            for(var j in best_pos){
+                ratio=best_pos[j].max_y/best_pos[j].max_x;
+                area=best_pos[j].max_y*best_pos[j].max_x;
+                if(ratio <= 1)
+                    ratio=best_pos[j].max_x/best_pos[j].max_y;
+                if(ratio <= last_ratio && area>=last_area){
+                    last_ratio=ratio;
+                    last_area=area;
+                    pos.x=best_pos[j].x;//+Math.round(best_pos[j].max_x/2);
+                    pos.y=best_pos[j].y;//+Math.round(best_pos[j].max_y/2);
+                    if(ratio === 1)
+                        break;
+                }
+            }
+            _countries[i].centerX=pos.x;
+            _countries[i].centerY=pos.y;
         }
     }
     // </editor-fold>

@@ -42,6 +42,7 @@ function renderMap(){
     ctx.lineWidth="1";
     ctx.font = "30px Arial";
     ctx.fillText("render map...",10,80);
+    ctx.fillText("...this can take a while!",80,110);
     
     controller._getMap(m2);
     controller._initMap();
