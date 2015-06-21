@@ -56,6 +56,7 @@ function gameUiController(aGLC,aCtx){
     _waterImg.src = "client/ui/waterImg.png";
     
     var imgCacheMap;
+    var imgCachePlayer;
     var imgCacheHover=[];
     var imgCacheSelected=[];
     var imgCacheActiv=[];
@@ -78,10 +79,8 @@ function gameUiController(aGLC,aCtx){
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
-        //_ctx.drawImage(imgCacheHover[0].img,0,0);
-        //_ctx.drawImage(imgCacheSelected[5].img,0,0);
-        //_ctx.drawImage(imgCacheAttack[7].img,0,0);
-
+        _ctx.drawImage(imgCachePlayer,0,0);
+        
         for (var i in _countries){
             if(_countries[i].activ){
                 var id=_countries[i].id;
@@ -111,10 +110,6 @@ function gameUiController(aGLC,aCtx){
                 _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-                
-                //noch in ein eigenes img-object cachen!
-                _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
-                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
 
                 if(_gridMap[x][y].id <=0 ){ //water
                     _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
@@ -128,6 +123,19 @@ function gameUiController(aGLC,aCtx){
         cacheHover(w,h);
         cacheSelected(w,h);
         cacheAttack(w,h);
+        cachePlayer(w,h);
+    }
+    // <editor-fold defaultstate="collapsed" desc="Cache-overlays">
+    function cachePlayer(w,h){
+        clear();
+        for(x=0;x<_gridMap.length;x++){
+            for(y=0;y<_gridMap[0].length;y++){
+                _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
+                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+            }
+        }
+        imgCachePlayer = new Image();
+        imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
     }
     function cacheHover(w,h){
         clear();
@@ -177,6 +185,7 @@ function gameUiController(aGLC,aCtx){
             clear();
         }
     }
+     // </editor-fold>
     function drawMapBorder(x,y,w,h){
         var offset=1;
         _ctx.lineWidth="2";
@@ -284,6 +293,7 @@ function gameUiController(aGLC,aCtx){
             if(imgCacheHover[i].id === id){
                 _ctx.drawImage(imgCacheHover[i].img,0,0);
                 _ctx.font="20px Georgia";
+                _ctx.fillStyle = "#fff";
                 _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
                 _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);
             }
