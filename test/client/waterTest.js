@@ -49,3 +49,40 @@ TestCase("WaterBorderTest", {
 
     }
 });
+
+TestCase("WaterNameTest", {
+    setUp: function () {
+        this.water = new tddjs.client.map.water();
+    },
+    tearDown: function ()
+    {
+        this.water = null;
+    },
+    "test country shoulde store name as a String": function () {
+
+        assertFunction(this.water.setName);
+        assertFunction(this.water.getName);
+
+        var name = "Usee";
+        var fakeName = {name: "Schwarzes Meer"};
+        var water = this.water;
+        
+        assertException(function(){
+            water.getName();
+        },"initError");
+        
+        assertNoException(function () {
+            water.setName(name);
+        });
+        
+        assertException(function () {
+            water.setName(fakeName);
+        }, "TypeError");
+
+        assertEquals(name, this.water.getName());
+        name = "Rotes Meer";
+        this.water.setName(name);
+        assertEquals(name, this.water.getName());
+
+    }
+});
