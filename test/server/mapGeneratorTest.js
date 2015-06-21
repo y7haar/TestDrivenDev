@@ -607,25 +607,25 @@ TestCase("MapGeneratorTest for private Functions", {
         continent9.countries.push(grid[2][2]);
         all.push(continent9);
         
-        var result = this.mapGenerator.collectNeighbourContinents(continent1);
+        var result = this.mapGenerator.collectNeighbourContinents(continent1).continents;
         assertEquals(2, result.length);
         assertEquals(continent2, result[0]);
         assertEquals(continent4, result[1]);
         
-        result = this.mapGenerator.collectNeighbourContinents(continent2);
+        result = this.mapGenerator.collectNeighbourContinents(continent2).continents;
         assertEquals(3, result.length);
         assertEquals(continent1, result[0]);
         assertEquals(continent3, result[1]);
         assertEquals(continent5, result[2]);
         
-        result = this.mapGenerator.collectNeighbourContinents(continent5);
+        result = this.mapGenerator.collectNeighbourContinents(continent5).continents;
         assertEquals(4, result.length);
         assertEquals(continent2, result[0]);
         assertEquals(continent4, result[1]);
         assertEquals(continent6, result[2]);
         assertEquals(continent8, result[3]);
         
-        result = this.mapGenerator.collectNeighbourContinents(continent9);
+        result = this.mapGenerator.collectNeighbourContinents(continent9).continents;
         assertEquals(2, result.length);
         assertEquals(continent6, result[0]);
         assertEquals(continent8, result[1]);
@@ -636,7 +636,7 @@ TestCase("MapGeneratorTest for private Functions", {
         this.mapGenerator.setGridSize(3,3);
         this.mapGenerator.initCountries();
         this.mapGenerator.initBorders();
-        var gen = this.mapGenerator
+        var gen = this.mapGenerator;
         var x = 5;
         
         assertException(function(){gen.collectNeighbourContinents(x);}, "TypeError");

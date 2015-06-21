@@ -625,6 +625,18 @@ function mapGenerator()
         }
         
         //Länderfelder umlegen
+        replaceFields(loserCountry, targetCountry);
+        
+        //Größe umsetzen
+        targetCountry.size = targetCountry.size + loserCountry.size;
+        
+        //Gemergetes Land entfernen
+        allCountries.splice(allCountries.indexOf(loserCountry), 1);
+    }
+    
+    //Legt Felder um
+    function replaceFields(loserCountry, targetCountry)
+    {
         for(var width = 0; width < getMapWidth(); width++)
         {
             for(var height = 0; height < getMapHeight(); height++)
@@ -633,12 +645,6 @@ function mapGenerator()
                     cellGrid[width][height] = targetCountry;
             }
         }
-        
-        //Größe umsetzen
-        targetCountry.size = targetCountry.size + loserCountry.size;
-        
-        //Gemergetes Land entfernen
-        allCountries.splice(allCountries.indexOf(loserCountry), 1);
     }
    
     //Verbindet die Verbleibenden Länder
@@ -838,15 +844,56 @@ function mapGenerator()
         //Alle Wasserflächen erzeugen
         while(random > 0)
         {         
-            //Zuälliges Ziel
+            //Zufälliges Ziel das Wasser wird
             var seed = getRandom(availableContinents);
+            //Ergebnisse sammeln
+            var result = collectNeighbourContinents(seed);
             //Nachbar-Kontinente
-            var neighborContinents = collectNeighbourContinents(seed);
+            var neighborContinents = result.continents;
+            //Nachbar-Länder
+            var neighborCountries = result.neighbourCountries;
+            
             console.log(neighborContinents);
             console.log(seed);
-            //Bis zur Größe erzeugen
+            
+            //Darf nicht sein
+            if(neighborContinents.length === 0)
+                throw new Error("This cant be");
+            
+            
+            //Grenzländer des gewählten Kontinents bearbeiten
+            for(var i = 0; i < neighborCountries.length; i++)
+            {
+                var borders = neighborCountries[i];
                 
-                //Land aus den grenzen entfernen
+                //Alle Borders durchgehen 
+                for(var j = 0; j < borders.length; j++)
+                {
+                    //Alle Kontinent-Länder durchgehen
+                    for(var k = 0; k < seed.countries.length; k++)
+                    {
+                        var slot = borders[j].indexOf(seed.countries[k]);
+                        
+                        if(slot >= 0)
+                            borders[j].splice(slot, 1);
+                    }
+                }
+            }
+            
+            //Länder löschen
+            while(seed.countries.length > 0)
+            {
+                var loser = seed.countries.pop();
+                //water.size = water.size+loser.size;
+                //Felder umsetzen
+                replaceFields(loser, water);
+                //Löschen
+                allCountries.splice(allCountries.indexOf(loser), 1);
+            }
+                
+            if(neighborContinents.length === 1)
+            {
+            }
                 
                 //BonusBorder verbindung übers wasser
                 
@@ -854,6 +901,9 @@ function mapGenerator()
             
             random--;
             water.size++;
+            //Seed-Kontinent entfernen
+            allContinents.splice(allContinents.indexOf(seed), 1);
+            availableContinents.splice(availableContinents.indexOf(seed), 1);
         }
         
         //Wasser zurückgeben
@@ -906,7 +956,12 @@ function mapGenerator()
             }
         }
         
-        return continents;
+        //Ergebnisse
+        var result = {};
+        result.continents = continents;
+        result.neighbourCountries = neighbourCountries;
+        
+        return result;
     }
     
     //###############################################################################################################
