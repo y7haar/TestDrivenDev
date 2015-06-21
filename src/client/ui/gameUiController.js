@@ -151,8 +151,8 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
-                        var cx=_gridMap[x][y].centerX;
-                        var cy=_gridMap[x][y].centerY;
+                        var cx=_gridMap[x][y].centerX;//+h/2+6;
+                        var cy=_gridMap[x][y].centerY;//+w/2;
                         _ctx.fillStyle = "rgba(200,140,0,0.5)";
                         _ctx.beginPath();
                         _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
@@ -534,6 +534,8 @@ function gameUiController(aGLC,aCtx){
             var cur_max_y=0;
             var last_max_x=0;
             var last_max_y=0;
+            var best_pos=[];
+            
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id===id){
@@ -549,15 +551,38 @@ function gameUiController(aGLC,aCtx){
                             pos_y++;
                             cur_max_y++;
                         }
+                        best_pos.push({x:x,y:y,max_x:cur_max_x,max_y:cur_max_y});
+                        /*
                         if(cur_max_x>last_max_x && cur_max_y>last_max_y){
                             last_max_x=cur_max_x;
                             last_max_y=cur_max_y;
                             _gridMap[x][y].centerX=x;
                             _gridMap[x][y].centerY=y;
-                        }
+                        }*/
                     }
                 }
             }
+            var ratio=0;
+            var last_ratio=100;
+            var area=0;
+            var last_area=area;
+            var pos={x:0,y:0};
+            for(var j in best_pos){
+                ratio=best_pos[j].max_y/best_pos[j].max_x;
+                area=best_pos[j].max_y*best_pos[j].max_x;
+                if(ratio <= 1)
+                    ratio=best_pos[j].max_x/best_pos[j].max_y;
+                if(ratio <= last_ratio && area>=last_area){
+                    last_ratio=ratio;
+                    last_area=area;
+                    pos.x=best_pos[j].x;//+Math.round(best_pos[j].max_x/2);
+                    pos.y=best_pos[j].y;//+Math.round(best_pos[j].max_y/2);
+                    if(ratio === 1)
+                        break;
+                }
+            }
+            _countries[i].centerX=pos.x;
+            _countries[i].centerY=pos.y;
         }
     }
     // </editor-fold>
