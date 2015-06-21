@@ -3,11 +3,11 @@
  */
 
 
-var controller;
-var m;
-var m2;
+function startGame(){
+    var controller;
+    var m;
+    var m2;
 
-function test(){
     m=new tddjs.server.controller.mapGenerator();
     m.setGridSize(120,120);
     m.setMaximumCountrySize(200);
@@ -17,18 +17,20 @@ function test(){
        ctx = canvas.getContext("2d");
        if (ctx) {
             controller = new tddjs.client.ui.gameUiController(null,ctx);
-
+            
             m2 = m.generateMap();
-            m2= m.serializeAsJSON(m2);
-            controller._getMap(m2);
-            controller._initMap();
+            m2 = m.serializeAsJSON(m2);
+            //controller._getMap(m2);
+            //controller._initMap();
             controller.addButton( new tddjs.client.ui.button(30,canvas.height-60,"TEST",ctx));
-            window.requestAnimationFrame(controller.drawLoading);
+            //window.requestAnimationFrame(controller.drawLoading);
+            controller.init(m2);
        }
    }
 }
 // gernateMap ist schon in globals definiert 
 // entwerder testfile nicht global machen oder andern namen verwenden
+/*
 function generateMapTOCHANGE(){
     ctx.strokeStyle="#000";
     ctx.fillStyle = "#552700";
@@ -52,3 +54,4 @@ function renderMap(){
     controller._initMap();
     window.requestAnimationFrame(controller.drawLoading);
 }
+*/

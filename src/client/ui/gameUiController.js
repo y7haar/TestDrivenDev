@@ -13,6 +13,8 @@ function gameUiController(aGLC,aCtx){
         gameLoopController = aGLC;
         _ctx = aCtx;
     }
+    else
+        throw new Error("Wrong parametercount!");
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
     /*    "#FF8F3D",
@@ -71,61 +73,97 @@ function gameUiController(aGLC,aCtx){
     var countryStrSelected;
     
     
-    
-    function init(){
-        _getMap();
+    var serializedMap;
+    function init(map){
+        serializedMap=map;/*
+        _getMap(serializedMap);
+        _initGridMap();
         _initMap();
-        drawGame();
+        _cacheCountryCenter();
+        drawGame();*/
+        window.requestAnimationFrame(drawLoading);
     }
     
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
     // <editor-fold defaultstate="collapsed" desc="loading...">
     var step=0;
-    var maxSteps=12;
+    var maxSteps=25;
     function drawLoading(){
-        var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
-        var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        var w = 0;//(_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
+        var h = 0;//(_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        if(step>10){
+            w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
+            h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        }
         clear();
+        // <editor-fold defaultstate="collapsed" desc="loading-order">
         switch(step){
-            case 0: _loading("Caching Map...");
+            //init map
+            case 0: _loading("get Map...");
                 break;
-            case 1: cacheMap(w,h);
+            case 1: _getMap(serializedMap);
+                    _loading("get Map...");
+                break;
+                
+            case 2: _loading("init GridMap...");
+                break;
+            case 3: _initGridMap();
+                    _loading("init GridMap...");
+                break;
+                
+            case 4: _loading("init Map...");
+                break;
+            case 5: _initMap();
+                    _loading("init Map...");
+                break;
+                
+            case 6: _loading("cache Country Center...");
+                break;
+            case 7: _cacheCountryCenter();
+                    _loading("cache Country Center...");
+                break;  
+                
+            //cache drawing
+            case 10: _loading("Caching Map...");
+                break;
+            case 11: cacheMap(w,h);
                     _loading("Caching Map...");
                 break;
                     
-            case 2: _loading("Caching Hover...");
+            case 12: _loading("Caching Hover...");
                 break;
-            case 3: cacheHover(w,h);
+            case 13: cacheHover(w,h);
                     _loading("Caching Hover...");
                 break;
                  
-            case 4: _loading("Caching Selected...");
+            case 14: _loading("Caching Selected...");
                 break;
-            case 5: cacheSelected(w,h);
+            case 15: cacheSelected(w,h);
                     _loading("Caching Selected...");
                 break;
                   
-            case 6: _loading("Caching Activ...");
+            case 16: _loading("Caching Activ...");
                 break;
-            case 7: cacheAttack(w,h);
+            case 17: cacheAttack(w,h);
                     _loading("Caching Activ...");
                 break;
                     
-            case 8: _loading("Caching Player...");
+            case 18: _loading("Caching Player...");
                 break;
-            case 9: cachePlayer(w,h);
+            case 19: cachePlayer(w,h);
                     _loading("Caching Player...");
                 break;
               
-            case 10: _loading("Caching Units...");
+            case 20: _loading("Caching Units...");
                 break;
-            case 11: cacheUnits(w,h);
+            case 21: cacheUnits(w,h);
                     _loading("Caching Units...");
                 break;
                     
             default: _loading("Loading...");
                 break;
         }
+        // </editor-fold>
         step++;
         if(step <= maxSteps)
             window.requestAnimationFrame(drawLoading);
@@ -499,7 +537,7 @@ function gameUiController(aGLC,aCtx){
                     break;
                 }
             }
-            if(cBorder)
+            if(cBorder) //<<<<<<<<<<--------------------------------HACK!!!!!!!!!!!!!
                 countrys[c].addBorder(countrys[cBorder]);
         }
        
@@ -568,7 +606,7 @@ function gameUiController(aGLC,aCtx){
         //daten vom server
         _deserialize(map);
         
-        _initGridMap();
+        //_initGridMap();
     }
     
     function _initGridMap(){
@@ -607,7 +645,7 @@ function gameUiController(aGLC,aCtx){
                     _countries.push(_gridMap[x][y]);
             }
         }
-        _cacheCountryCenter();
+        //_cacheCountryCenter();
     }
     
     function _getCountries(){
