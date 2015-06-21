@@ -42,12 +42,15 @@ function gameUiController(aGLC,aCtx){
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
     _hoverImg.src = "client/ui/hoverImg.png";
+    var _activImg = new Image();
+    _activImg.src = "client/ui/attackImg.png";
     var _waterImg = new Image();
     _waterImg.src = "client/ui/waterImg.png";
     
     var imgCacheMap;
     var imgCacheHover=[];
     var imgCacheSelected=[];
+    var imgCacheActiv=[];
     
     
     
@@ -67,8 +70,24 @@ function gameUiController(aGLC,aCtx){
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
-        _ctx.drawImage(imgCacheHover[0],0,0);
-        _ctx.drawImage(imgCacheSelected[5],0,0);
+        //_ctx.drawImage(imgCacheHover[0].img,0,0);
+        //_ctx.drawImage(imgCacheSelected[5].img,0,0);
+        //_ctx.drawImage(imgCacheAttack[7].img,0,0);
+
+        for (var i in _countries){
+            if(_countries[i].selected){
+                var id=_countries[i].id;
+                for (var j in imgCacheSelected)
+                    if(imgCacheSelected[j].id === id)
+                        _ctx.drawImage(imgCacheSelected[j].img,0,0);
+            }
+            if(_countries[i].activ){
+                var id=_countries[i].id;
+                for (var j in imgCacheActiv)
+                    if(imgCacheActiv[j].id === id)
+                        _ctx.drawImage(imgCacheActiv[j].img,0,0);
+            }   
+        }
     }
     
     var border=50; //25 an jeder seite
@@ -100,6 +119,7 @@ function gameUiController(aGLC,aCtx){
         imgCacheMap=_ctx.getImageData(0,0,_ctx.canvas.width,_ctx.canvas.height);
         cacheHover(w,h);
         cacheSelected(w,h);
+        cacheAttack(w,h);
     }
     function cacheHover(w,h){
         clear();
@@ -113,7 +133,7 @@ function gameUiController(aGLC,aCtx){
             }
             var img = new Image();
             img.src=_ctx.canvas.toDataURL('image/png');
-            imgCacheHover.push(img);
+            imgCacheHover.push({id:id,img:img});
             clear();
         }
     }
@@ -129,7 +149,23 @@ function gameUiController(aGLC,aCtx){
             }
             var img = new Image();
             img.src=_ctx.canvas.toDataURL('image/png');
-            imgCacheSelected.push(img);
+            imgCacheSelected.push({id:id,img:img});
+            clear();
+        }
+    }
+    function cacheAttack(w,h){
+        clear();
+        for(var i in _countries){
+            var id = _countries[i].id;
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id)
+                        _ctx.drawImage(_activImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                }
+            }
+            var img = new Image();
+            img.src=_ctx.canvas.toDataURL('image/png');
+            imgCacheActiv.push({id:id,img:img});
             clear();
         }
     }
@@ -226,6 +262,38 @@ function gameUiController(aGLC,aCtx){
     }
     function getButtons(){
         return _btn;
+    }
+    function mouseMove(oEvent){
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+
+        clear();
+        drawGame();
+        var id = _gridMap[x][y].id;
+        for (var i in imgCacheHover){
+            if(imgCacheHover[i].id === id)
+                _ctx.drawImage(imgCacheHover[i].img,0,0);
+        }
+    }
+    function mouseDown(oEvent){
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+
+        clear();
+        //drawGame();
+        _gridMap[x][y].selected=!_gridMap[x][y].selected;
+        if(_gridMap[x][y].selected){
+            for(var i in _gridMap[x][y].getBorders()){
+                _gridMap[x][y].getBorders()[i].activ=true;
+            }
+        }
+        else
+        {
+            for(var i in _gridMap[x][y].getBorders()){
+                _gridMap[x][y].getBorders()[i].activ=false;
+            }
+        }
+        drawGame();
     }
     // </editor-fold>
     
@@ -395,6 +463,8 @@ function gameUiController(aGLC,aCtx){
     this.drawGame=drawGame;
     this.addButton = addButton;
     this.getButtons = getButtons;
+    this.mouseMove = mouseMove;
+    this.mouseDown = mouseDown;
     
     //private
     this._initMap = _initMap;
