@@ -49,6 +49,7 @@ function gameUiController(aGLC,aCtx){
     var _gridMapW;
     var _gridMapH;
     var _map;
+    var _water;
     
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
@@ -197,13 +198,16 @@ function gameUiController(aGLC,aCtx){
                 for(y=0;y<_gridMap[0].length;y++){
                     _ctx.strokeStyle="#000";
                     _ctx.fillStyle = "#552700";
-                    _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
-                    _ctx.lineWidth="1";
-                    _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
-
-                    if(_gridMap[x][y].id <=0 ){ //water
+                    
+                    if(_gridMap[x][y].id < 0){ //water
                         _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                     }
+                    else{
+                        _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
+                        _ctx.lineWidth="1";
+                        _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                    }
+                    
 
                     drawMapBorder(x,y,w,h);
                 }
@@ -214,8 +218,10 @@ function gameUiController(aGLC,aCtx){
         clear();
         for(x=0;x<_gridMap.length;x++){
             for(y=0;y<_gridMap[0].length;y++){
-                _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
-                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+                if(_gridMap[x][y].id > 0){
+                    _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
+                    _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
+                }
             }
         }
         imgCachePlayer = new Image();
@@ -230,17 +236,19 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
-                        var cx=_gridMap[x][y].centerX;//+h/2+6;
-                        var cy=_gridMap[x][y].centerY;//+w/2;
-                        _ctx.fillStyle = "rgba(200,140,0,0.5)";
-                        _ctx.beginPath();
-                        _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
-                        _ctx.fill();
-                        _ctx.font="12px Georgia";
-                        _ctx.fillStyle = "#fff";
-                        _ctx.fillText(_gridMap[x][y].getUnitCount(),cx+(cx*w)+border/2+w/2,cy+(cy*h)+border/2+h/2);
-                        ok=true;
-                        break;
+                        if(_gridMap[x][y].id > 0){
+                            var cx=_gridMap[x][y].centerX;//+h/2+6;
+                            var cy=_gridMap[x][y].centerY;//+w/2;
+                            _ctx.fillStyle = "rgba(200,140,0,0.5)";
+                            _ctx.beginPath();
+                            _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
+                            _ctx.fill();
+                            _ctx.font="12px Georgia";
+                            _ctx.fillStyle = "#fff";
+                            _ctx.fillText(_gridMap[x][y].getUnitCount(),cx+(cx*w)+border/2+w/2,cy+(cy*h)+border/2+h/2);
+                            ok=true;
+                            break;
+                        }
                     }
                 }
                 if(ok)
@@ -257,7 +265,8 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
-                        _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                        if(_gridMap[x][y].id > 0)
+                            _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                 }
             }
             var img = new Image();
@@ -273,7 +282,8 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
-                        _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                        if(_gridMap[x][y].id > 0)
+                            _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                 }
             }
             var img = new Image();
@@ -289,7 +299,8 @@ function gameUiController(aGLC,aCtx){
             for(x=0;x<_gridMap.length;x++){
                 for(y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
-                        _ctx.drawImage(_activImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                        if(_gridMap[x][y].id > 0)
+                            _ctx.drawImage(_activImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
                 }
             }
             var img = new Image();
@@ -449,11 +460,14 @@ function gameUiController(aGLC,aCtx){
         
         var cache_countrys=[];
         var countrys=[];
+        var cache_water;
         //get all Countrys
         for(var x=0; x<map.gridMap.length; x++){
             for(var y=0; y<map.gridMap[0].length; y++){
-                if(cache_countrys.indexOf(map.gridMap[x][y].id) === -1)
+                if(cache_countrys.indexOf(map.gridMap[x][y].id) === -1 && map.gridMap[x][y].id >= 0)
                     cache_countrys.push(map.gridMap[x][y].id);
+                else if(map.gridMap[x][y].id < 0)
+                    cache_water=map.gridMap[x][y];
             }
         }
         for(var i=0; i<cache_countrys.length; i++){
@@ -485,7 +499,8 @@ function gameUiController(aGLC,aCtx){
                     break;
                 }
             }
-            countrys[c].addBorder(countrys[cBorder]);
+            if(cBorder)
+                countrys[c].addBorder(countrys[cBorder]);
         }
        
         var cache_continents=[];
@@ -531,6 +546,8 @@ function gameUiController(aGLC,aCtx){
         for(var i=0; i<continents.length; i++)
             _map.addContinent(continents[i]);
         
+        _water = new tddjs.client.map.water();
+        _water.id = -1;
         /* 
         _map.continents = [];
         for(var c=0;c<map.continents.length;c++){
@@ -565,6 +582,8 @@ function gameUiController(aGLC,aCtx){
     }
     
     function _getCountryById(id){
+        if(id < 0)
+            return _water;
         for(var c in _map.getContinents()){
             for(var countr in _map.getContinents()[c].getCountrys())
                 if(_map.getContinents()[c].getCountrys()[countr].id === id)
