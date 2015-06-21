@@ -78,6 +78,7 @@ function gameUiController(aGLC,aCtx){
     }
     
     // <editor-fold defaultstate="collapsed" desc="draw-functions">
+    // <editor-fold defaultstate="collapsed" desc="loading...">
     var step=0;
     var maxSteps=12;
     function drawLoading(){
@@ -144,7 +145,7 @@ function gameUiController(aGLC,aCtx){
         _ctx.canvas.addEventListener('mousedown', mouseDown, false);
         window.requestAnimationFrame(drawGame);
     }
-    
+    // </editor-fold>
     function drawGame(){
         clear();
         if(!imgCacheMap)
@@ -297,7 +298,7 @@ function gameUiController(aGLC,aCtx){
             clear();
         }
     }
-     // </editor-fold>
+    // </editor-fold>
     function drawMapBorder(x,y,w,h){
         var offset=1;
         _ctx.lineWidth="2";
@@ -398,6 +399,10 @@ function gameUiController(aGLC,aCtx){
 
         clear();
         drawGame();
+
+        for (var i in _btn)
+            _btn[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
+        
         var id = _gridMap[x][y].id;
         for (var i in imgCacheHover){
             if(imgCacheHover[i].id === id){

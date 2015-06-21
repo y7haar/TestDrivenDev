@@ -22,7 +22,7 @@ function test(){
             m2= m.serializeAsJSON(m2);
             controller._getMap(m2);
             controller._initMap();
-            
+            controller.addButton( new tddjs.client.ui.button(30,canvas.height-60,"TEST",ctx));
             window.requestAnimationFrame(controller.drawLoading);
        }
    }
