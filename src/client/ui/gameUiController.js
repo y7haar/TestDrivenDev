@@ -74,7 +74,7 @@ function gameUiController(aGLC,aCtx){
         if(!imgCacheMap)
             drawMap();
         drawCache();
-        //drawUI();
+        drawUI();
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
@@ -230,13 +230,13 @@ function gameUiController(aGLC,aCtx){
     
     function drawUI(){
         //draw borders etc
-        _ctx.fillStyle = "#D49B6A";
+        _ctx.fillStyle = "#B89F89";//"#D49B6A";
         _ctx.fillRect(0,_ctx.canvas.height-border/2,_ctx.canvas.width,border/2);
         _ctx.fillRect(0,0,_ctx.canvas.width,border/2);
         _ctx.fillRect(0,0,border/2,_ctx.canvas.height);
         _ctx.fillRect(_ctx.canvas.width-border/2,0,border/2,_ctx.canvas.height);
 
-        _ctx.fillStyle = "#FFD1AA";
+        _ctx.fillStyle = "#E3CFBE";//#FFD1AA";
         _ctx.fillRect(border/2,_ctx.canvas.height-border/2-bottom,_ctx.canvas.width-border,bottom);
 
         //draw buttons
@@ -244,6 +244,7 @@ function gameUiController(aGLC,aCtx){
            _btn[i].draw();
 
        //Text
+       /*
        _ctx.font="20px Georgia";
        _ctx.fillStyle = "#000000";
        _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);
@@ -251,6 +252,7 @@ function gameUiController(aGLC,aCtx){
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
+        */
     }
     
     function clear(){
