@@ -111,6 +111,10 @@ function gameUiController(aGLC,aCtx){
                 _ctx.fillStyle=_getContinentFromCountryById(_gridMap[x][y].id).color;
                 _ctx.lineWidth="1";
                 _ctx.fillRect(x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
+                
+                //noch in ein eigenes img-object cachen!
+                _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
+                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
 
                 if(_gridMap[x][y].id <=0 ){ //water
                     _ctx.drawImage(_waterImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
@@ -277,8 +281,12 @@ function gameUiController(aGLC,aCtx){
         drawGame();
         var id = _gridMap[x][y].id;
         for (var i in imgCacheHover){
-            if(imgCacheHover[i].id === id)
+            if(imgCacheHover[i].id === id){
                 _ctx.drawImage(imgCacheHover[i].img,0,0);
+                _ctx.font="20px Georgia";
+                _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
+                _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);
+            }
         }
     }
     function mouseDown(oEvent){
