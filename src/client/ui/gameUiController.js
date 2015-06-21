@@ -136,6 +136,28 @@ function gameUiController(aGLC,aCtx){
         }
         imgCachePlayer = new Image();
         imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
+        for(var i in _countries){
+            var id = _countries[i].id;
+            var ok=false
+            for(x=0;x<_gridMap.length;x++){
+                for(y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id === id){
+                        _ctx.fillStyle = "rgba(200,140,0,0.5)";
+                        _ctx.beginPath();
+                        _ctx.arc(x+(x*w)+border/2+w/2+5,y+(y*h)+border/2+h/2-5,15,0,2*Math.PI);
+                        _ctx.fill();
+                        _ctx.font="20px Georgia";
+                        _ctx.fillStyle = "#fff";
+                        _ctx.fillText(_gridMap[x][y].getUnitCount(),x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2);
+                        ok=true;
+                        break;
+                    }
+                }
+                if(ok)
+                    break;
+            }
+        }
+        imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
     }
     function cacheHover(w,h){
         clear();
