@@ -9,9 +9,14 @@ function startGame(){
     var m2;
 
     m=new tddjs.server.controller.mapGenerator();
-    m.setGridSize(120,120);
-    m.setMaximumCountrySize(200);
-    m.setMinimumCountrySize(75);
+    m.setGridSize(150,150);
+    m.setMaximumCountrySize(300);
+    m.setMinimumCountrySize(200);
+    m.setMinimumContinentNumber(10);
+    m.setMaximumContinentNumber(15);
+    m.setMinimumContinentSize(4);
+    m.setMinimumWaterNumber(4);
+    m.setMinimumWaterNumber(6);
     canvas = document.getElementById('game');
     if (canvas && canvas.getContext) {
        ctx = canvas.getContext("2d");
