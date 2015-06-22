@@ -52,7 +52,7 @@ function gameUiController(aGLC,aCtx){
     var _gridMapH;
     var _map;
     var _water;
-    var _seaRoute=[[]];
+    var _seaRoute=[];
     
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
@@ -249,8 +249,8 @@ function gameUiController(aGLC,aCtx){
     // <editor-fold defaultstate="collapsed" desc="CacheMap + Overlays">
     function cacheMap(w,h){
         clear();
-        for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+        for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     _ctx.strokeStyle="#000";
                     _ctx.fillStyle = "#552700";
                     
@@ -271,8 +271,8 @@ function gameUiController(aGLC,aCtx){
     }
     function cachePlayer(w,h){
         clear();
-        for(x=0;x<_gridMap.length;x++){
-            for(y=0;y<_gridMap[0].length;y++){
+        for(var x=0;x<_gridMap.length;x++){
+            for(var y=0;y<_gridMap[0].length;y++){
                 if(_gridMap[x][y].id > 0){
                     _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
                     _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
@@ -287,8 +287,8 @@ function gameUiController(aGLC,aCtx){
         for(var i in _countries){
             var id = _countries[i].id;
             var ok=false
-            for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
                         if(_gridMap[x][y].id > 0){
                             var cx=_gridMap[x][y].centerX;//+h/2+6;
@@ -316,8 +316,8 @@ function gameUiController(aGLC,aCtx){
         clear();
         for(var i in _countries){
             var id = _countries[i].id;
-            for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
                         if(_gridMap[x][y].id > 0)
                             _ctx.drawImage(_hoverImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
@@ -333,8 +333,8 @@ function gameUiController(aGLC,aCtx){
         clear();
         for(var i in _countries){
             var id = _countries[i].id;
-            for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
                         if(_gridMap[x][y].id > 0)
                             _ctx.drawImage(_selectedImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
@@ -350,8 +350,8 @@ function gameUiController(aGLC,aCtx){
         clear();
         for(var i in _countries){
             var id = _countries[i].id;
-            for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id)
                         if(_gridMap[x][y].id > 0)
                             _ctx.drawImage(_activImg, x+(x*w)+border/2,y+(y*h)+border/2,w+2,h+2);
@@ -669,8 +669,8 @@ function gameUiController(aGLC,aCtx){
     
     function _initMap(){
         //_gridMap = aGridMap;
-        for(x=0;x<_gridMap.length;x++){
-            for(y=0;y<_gridMap[0].length;y++){
+        for(var x=0;x<_gridMap.length;x++){
+            for(var y=0;y<_gridMap[0].length;y++){
                 if(_countries.indexOf(_gridMap[x][y]) === -1)
                     _countries.push(_gridMap[x][y]);
             }
@@ -706,8 +706,8 @@ function gameUiController(aGLC,aCtx){
             var last_max_y=0;
             var best_pos=[];
             
-            for(x=0;x<_gridMap.length;x++){
-                for(y=0;y<_gridMap[0].length;y++){
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id===id){
                         cur_max_x=0;
                         cur_max_y=0;
@@ -758,6 +758,16 @@ function gameUiController(aGLC,aCtx){
     
     function _calcSeaRoutes(){
         var borders = _water.getBorders();
+        
+        var idMap=[];
+        for(var x=1;x<_gridMap.length-1;x++){
+            idMap[x]=[];
+            for(var y=1;y<_gridMap[0].length-1;y++){
+                idMap[x][y]={};
+                idMap[x][y].id=_gridMap[x][y].id;
+            }
+        }
+        
         for(var i in borders){
             if(borders[i].length>0){
                 var from = borders[i][0].id;
@@ -765,29 +775,61 @@ function gameUiController(aGLC,aCtx){
                 var from_pos=[];
                 var to_pos=[];
                 
-                for(x=1;x<_gridMap.length-1;x++){
-                    for(y=1;y<_gridMap[0].length-1;y++){
+                for(var x=1;x<_gridMap.length-1;x++){
+                    for(var y=1;y<_gridMap[0].length-1;y++){
                         if(_gridMap[x][y].id === from){
-                            if(_gridMap[x-1][y].id < 0)
-                                _seaRoute.push([x-1,y]);
-                            if(_gridMap[x][y-1].id < 0)
-                                _seaRoute.push([x,y-1]);
-                            if(_gridMap[x+1][y].id < 0)
-                                _seaRoute.push([x+1,y]);
-                            if(_gridMap[x][y+1].id < 0)
-                                _seaRoute.push([x,y-+-1]);
+                            if(_gridMap[x-1][y].id < 0) //water
+                                from_pos.push([x-1,y]);
+                            if(_gridMap[x][y-1].id < 0) //water
+                                from_pos.push([x,y-1]);
+                            if(_gridMap[x+1][y].id < 0) //water
+                                from_pos.push([x+1,y]);
+                            if(_gridMap[x][y+1].id < 0) //water
+                                from_pos.push([x,y+1]);
                         }
                         if(_gridMap[x][y].id === to){
-                            if(_gridMap[x-1][y].id < 0    //water
-                                    || _gridMap[x][y-1].id < 0
-                                    || _gridMap[x+1][y].id < 0
-                                    || _gridMap[x][y+1].id < 0){
-                                to_pos.push({x:x,y:y});
-                            }
+                            if(_gridMap[x-1][y].id < 0) //water
+                                to_pos.push([x-1,y]);
+                            if(_gridMap[x][y-1].id < 0) //water
+                                to_pos.push([x,y-1]);
+                            if(_gridMap[x+1][y].id < 0) //water
+                                to_pos.push([x+1,y]);
+                            if(_gridMap[x][y+1].id < 0) //water
+                                to_pos.push([x,y+1]);
                         }
                     }
                 }
                 
+                var success=false;
+                for(var i in from_pos){
+                    var f_x = from_pos[i][0];
+                    var f_y = from_pos[i][1];
+                    for(var i in to_pos){
+                        var t_x = to_pos[i][0];
+                        var t_y = to_pos[i][1];
+                        
+                        var x=f_x;
+                        var y=f_y;
+                        while(true){
+                            _seaRoute.push([x,y]);
+                            if(x>t_x)
+                                x--;
+                            if(x<t_x)
+                                x++;
+                            if(y>t_y)
+                                y--;
+                            if(y<t_y)
+                                y++;
+                            if(y === t_y && x === t_x){
+                                success=true;
+                                break;
+                                console.log("got it");
+                            }
+                        }
+                    }
+                    if(success)
+                        break;
+                }
             }
         }
     }
