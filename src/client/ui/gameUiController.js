@@ -537,7 +537,7 @@ function gameUiController(aGLC,aCtx){
                     break;
                 }
             }
-            if(cBorder) //<<<<<<<<<<--------------------------------HACK!!!!!!!!!!!!!
+            //if(cBorder) //<<<<<<<<<<--------------------------------HACK!!!!!!!!!!!!!
                 countrys[c].addBorder(countrys[cBorder]);
         }
        
