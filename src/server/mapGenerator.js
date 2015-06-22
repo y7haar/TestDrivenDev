@@ -853,9 +853,6 @@ function mapGenerator()
             //Nachbar-Länder
             var neighborCountries = result.neighbourCountries;
             
-            console.log(neighborContinents);
-            console.log(seed);
-            
             //Darf nicht sein
             if(neighborContinents.length === 0)
                 throw new Error("This cant be");
@@ -864,19 +861,15 @@ function mapGenerator()
             //Grenzländer des gewählten Kontinents bearbeiten
             for(var i = 0; i < neighborCountries.length; i++)
             {
-                var borders = neighborCountries[i];
-                
-                //Alle Borders durchgehen 
-                for(var j = 0; j < borders.length; j++)
+                var borders = neighborCountries[i].borders;
+                    
+                //Alle Kontinent-Länder durchgehen
+                for(var k = 0; k < seed.countries.length; k++)
                 {
-                    //Alle Kontinent-Länder durchgehen
-                    for(var k = 0; k < seed.countries.length; k++)
-                    {
-                        var slot = borders[j].indexOf(seed.countries[k]);
+                    var slot = borders.indexOf(seed.countries[k]);
                         
-                        if(slot >= 0)
-                            borders[j].splice(slot, 1);
-                    }
+                    if(slot >= 0)
+                        borders.splice(slot, 1);
                 }
             }
             
@@ -890,9 +883,14 @@ function mapGenerator()
                 //Löschen
                 allCountries.splice(allCountries.indexOf(loser), 1);
             }
-                
-            if(neighborContinents.length === 1)
+              
+            //Wenn der Kontinent nur einen Nachbarn hat muss man nix machen
+            if(neighborContinents.length > 1)
             {
+                for(var i = 0; i < neighborContinents.length; i++)
+                {
+                    
+                }
             }
                 
                 //BonusBorder verbindung übers wasser
@@ -934,7 +932,8 @@ function mapGenerator()
             {
                 //Nur hinzufügen wenn nicht im Kontinent
                 if(continent.countries.indexOf(borders[j]) === -1)
-                    neighbourCountries.push(borders[j]);
+                    if(neighbourCountries.indexOf(borders[j]) === -1)
+                        neighbourCountries.push(borders[j]);
             }
         }
         
