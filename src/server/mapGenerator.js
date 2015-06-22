@@ -41,6 +41,8 @@ function mapGenerator()
     var minimumWaterNumber = 2;
     var maximumWaterNumber = 4;
     
+    var randomWaterNumber = 0;
+    
     //Variablen für Kontinentgrößen
     var minimumContinentNumber = 6;
     var maximumContinentNumber = 10;
@@ -333,6 +335,11 @@ function mapGenerator()
         combineRemainingCountries();
         //Karte erzeugen
         var map = createMap();
+        
+        //Anzahl Wasserflächen auswürfeln
+        var factor = maximumWaterNumber - minimumWaterNumber;
+        randomWaterNumber = Math.round(Math.random()*factor + minimumWaterNumber);
+        
         //Kontinente erzeugen
         allContinents = buildContinents();
         //Wasser 
@@ -705,14 +712,14 @@ function mapGenerator()
         //Anzahl kontinente würfeln
         var factor = maximumContinentNumber - minimumContinentNumber;
         var random = Math.round(Math.random()*factor + minimumContinentNumber);
+        random = random + randomWaterNumber;
         
         //Wenn es zu wenige Länder gibt gehts halt nicht
         if(random*minimumContinentSize > allCountries.length)
         {
-            random = minimumContinentNumber;
-            if(minimumContinentNumber*minimumContinentSize > allCountries.length)
-                throw new Error("This grid might be to small for map-generation");
-                
+            random = minimumContinentNumber + randomWaterNumber;
+            if(random*minimumContinentSize > allCountries.length)
+                throw new Error("This grid might be to small for map-generation");              
         }
         
         //Array anlegen
@@ -821,28 +828,14 @@ function mapGenerator()
     
         //Wassererstellung
     function generateWater()
-    {
-        //Anzahl Wasserflächen auswürfeln
-        var factor = maximumWaterNumber - minimumWaterNumber;
-        var random = Math.round(Math.random()*factor + minimumWaterNumber);
-        
-        //Check ob genügend vorhanden
-        if(allContinents.length < (random*2))
-        {
-            //Prüfen ob genügend Platz/Länder
-            if(allContinents.length < (minimumWaterNumber*2))
-                throw new Error("Not enough Continents for water Generation. Check Settings");
-            
-            random = minimumWaterNumber;
-        }
-        
+    {             
         //Das Gewässer
         var water = createWater(-1);
         //Verfügbare Kontinent
         var availableContinents = allContinents.slice();     
         
         //Alle Wasserflächen erzeugen
-        while(random > 0)
+        while(randomWaterNumber > 0)
         {         
             //Zufälliges Ziel das Wasser wird
             var seed = getRandom(availableContinents);
@@ -955,7 +948,7 @@ function mapGenerator()
                 }
             }
                
-            random--;
+            randomWaterNumber--;
             water.size++;
             //Seed-Kontinent entfernen
             allContinents.splice(allContinents.indexOf(seed), 1);
