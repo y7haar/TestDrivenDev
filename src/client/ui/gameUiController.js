@@ -443,8 +443,8 @@ function gameUiController(aGLC,aCtx){
         return _btn;
     }
     function mouseMove(oEvent){
-        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
-        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border/2));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border/2-bottom));
 
         clear();
         drawGame();
@@ -453,34 +453,39 @@ function gameUiController(aGLC,aCtx){
             _btn[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
         
         var id = _gridMap[x][y].id;
-        for (var i in imgCacheHover){
-            if(imgCacheHover[i].id === id){
-                _ctx.drawImage(imgCacheHover[i].img,0,0);
-                countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
-                /*
-                _ctx.font="20px Georgia";
-                _ctx.fillStyle = "#fff";
-                _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
-                _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);*/
+        if(id>=0){ //kein wasser
+            for (var i in imgCacheHover){
+                if(imgCacheHover[i].id === id){
+                    _ctx.drawImage(imgCacheHover[i].img,0,0);
+                    countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
+                    /*
+                    _ctx.font="20px Georgia";
+                    _ctx.fillStyle = "#fff";
+                    _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
+                    _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);*/
+                }
             }
         }
     }
     function mouseDown(oEvent){
-        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border));
-        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border));
+        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border/2));
+        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border/2-bottom));
 
         clear();
         //drawGame();
-        _gridMap[x][y].selected=!_gridMap[x][y].selected;
-        if(_gridMap[x][y].selected){
-            for(var i in _gridMap[x][y].getBorders()){
-                _gridMap[x][y].getBorders()[i].activ=true;
+        var id = _gridMap[x][y].id
+        if(id>=0){ //kein wasser
+            _gridMap[x][y].selected=!_gridMap[x][y].selected;
+            if(_gridMap[x][y].selected){
+                for(var i in _gridMap[x][y].getBorders()){
+                    _gridMap[x][y].getBorders()[i].activ=true;
+                }
             }
-        }
-        else
-        {
-            for(var i in _gridMap[x][y].getBorders()){
-                _gridMap[x][y].getBorders()[i].activ=false;
+            else
+            {
+                for(var i in _gridMap[x][y].getBorders()){
+                    _gridMap[x][y].getBorders()[i].activ=false;
+                }
             }
         }
         drawGame();
