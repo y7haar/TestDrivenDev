@@ -887,16 +887,75 @@ function mapGenerator()
             //Wenn der Kontinent nur einen Nachbarn hat muss man nix machen
             if(neighborContinents.length > 1)
             {
+                //Nachbarkontinente durchgehen
                 for(var i = 0; i < neighborContinents.length; i++)
                 {
+                    //Nachbarkontinente des Nachbarkontinents
+                    var res = collectNeighbourContinents(neighborContinents[i]);
+                    var doubleNeighbours = res.continents;
                     
+                    //Kopie 
+                    var copie = neighborContinents.slice();
+                    //Sich selber rausstreichen
+                    copie.splice(copie.indexOf(neighborContinents[i]), 1);
+                    
+                    //Nachbarn des Nachbarn durchgehen
+                    for(var j; j < doubleNeighbours.length; j++)
+                    {
+                        //Enthalten -> Nachbar -> entfernen
+                        var slot = copie.indexOf(doubleNeighbours);
+                        
+                        if(slot >= 0)
+                            copie.splice(slot, 1);
+                    }
+                    
+                    //Grenzländer des aktuellen Kontinents
+                    var currentCountries = [];
+                    
+                    //Nachbarländer des entfernten Continents durchgehen um Grenzländer zu ermitteln
+                    for(var j = 0; j < neighborCountries.length; j++)
+                    {
+                        //Wenn vorhanden hinzufügen
+                        var slot = neighborContinents[i].countries.indexOf(neighborCountries[j]);
+                        
+                        if(slot >= 0)
+                            currentCountries.push(neighborCountries[j]);
+                    }
+                    
+                    //Ziel-Kontinent
+                    var randomContinent = getRandom(copie);
+                    
+                    //Grenzländer des anderen Kontinents
+                    var borderlands = [];
+                        
+                    //Grenzländer ermitteln
+                    for(var k = 0; k < neighborCountries.length; k++)
+                    {
+                        //Wenn vorhanden hinzufügen
+                        var slot = randomContinent.countries.indexOf(neighborCountries[k]);
+                            
+                        if(slot >= 0)
+                            borderlands.push(neighborCountries[k]);
+                    }
+                        
+                    //Zufällig auswählen
+                    var border1 = getRandom(currentCountries);
+                    var border2 = getRandom(borderlands);
+                        
+                    //Gegenseitig reinschreiben
+                    if(border1.borders.indexOf(border2) === -1)
+                        border1.borders.push(border2);
+                    if(border2.borders.indexOf(border1) === -1)
+                        border2.borders.push(border1);
+                        
+                    //Wasser-Objekt bearbeiten
+                    if(water.borders.indexOf([border1, border2]) === -1 
+                       && water.borders.indexOf([border2, border1]) === -1)
+                        water.borders.push([border1, border2]);
                 }
             }
                 
-                //BonusBorder verbindung übers wasser
-                
-                //Größe erhöhen
-            
+            console.log(random);
             random--;
             water.size++;
             //Seed-Kontinent entfernen
