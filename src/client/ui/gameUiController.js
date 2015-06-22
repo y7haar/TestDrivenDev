@@ -52,6 +52,7 @@ function gameUiController(aGLC,aCtx){
     var _gridMapH;
     var _map;
     var _water;
+    var _seaRoute=[[]];
     
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
@@ -65,6 +66,7 @@ function gameUiController(aGLC,aCtx){
     var imgCacheMap;
     var imgCachePlayer;
     var imgCacheUnits;
+    var imgCacheSeaRoutes;
     var imgCacheHover=[];
     var imgCacheSelected=[];
     var imgCacheActiv=[];
@@ -80,6 +82,7 @@ function gameUiController(aGLC,aCtx){
         _initGridMap();
         _initMap();
         _cacheCountryCenter();
+        _calcSeaRoutes();
         drawGame();*/
         window.requestAnimationFrame(drawLoading);
     }
@@ -123,6 +126,12 @@ function gameUiController(aGLC,aCtx){
                     _loading("cache Country Center...");
                 break;  
                 
+            case 8: _loading("calc sea routes...");
+                break;
+            case 9: _calcSeaRoutes();
+                    _loading("calc sea routes...");
+                break;
+                
             //cache drawing
             case 10: _loading("Caching Map...");
                 break;
@@ -159,6 +168,12 @@ function gameUiController(aGLC,aCtx){
             case 21: cacheUnits(w,h);
                     _loading("Caching Units...");
                 break;
+                
+            case 22: _loading("Caching Searoutes...");
+                break;
+            case 23: cacheSeaRoutes(w,h);
+                    _loading("Caching Searoutes...");
+                break;
                     
             default: _loading("Loading...");
                 break;
@@ -194,6 +209,7 @@ function gameUiController(aGLC,aCtx){
     }
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
+        _ctx.drawImage(imgCacheSeaRoutes,0,0);
         //_ctx.drawImage(imgCachePlayer,0,0);
         
         countryStrSelected="|";
@@ -228,6 +244,7 @@ function gameUiController(aGLC,aCtx){
         cacheAttack(w,h);
         cachePlayer(w,h);
         cacheUnits(w,h);
+        cacheSeaRoutes(w,h);
     }
     // <editor-fold defaultstate="collapsed" desc="CacheMap + Overlays">
     function cacheMap(w,h){
@@ -264,7 +281,6 @@ function gameUiController(aGLC,aCtx){
         }
         imgCachePlayer = new Image();
         imgCachePlayer.src=_ctx.canvas.toDataURL('image/png');
-
     }
     function cacheUnits(w,h){
         clear();
@@ -346,6 +362,19 @@ function gameUiController(aGLC,aCtx){
             imgCacheActiv.push({id:id,img:img});
             clear();
         }
+    }
+    function cacheSeaRoutes(w,h){
+        clear();
+        for(var i in _seaRoute){
+            if(_seaRoute[i].length>0){
+                var x=_seaRoute[i][0];
+                var y=_seaRoute[i][1];
+                _ctx.fillStyle = "#f00";
+                _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,w-w/2,h-h/2);
+            }
+        }
+        imgCacheSeaRoutes = new Image();
+        imgCacheSeaRoutes.src=_ctx.canvas.toDataURL('image/png');
     }
     // </editor-fold>
     function drawMapBorder(x,y,w,h){
@@ -590,20 +619,16 @@ function gameUiController(aGLC,aCtx){
             _map.addContinent(continents[i]);
         
         _water = new tddjs.client.map.water();
-        _water.id = -1;
-        /* 
-        _map.continents = [];
-        for(var c=0;c<map.continents.length;c++){
-            _map.continents[c] = new tddjs.client.map.continent();
-            _map.continents[c].setUnitBonus(map.continents[c].unitBonus);
-            
-            _map.continents[c].countries = [];
-            for(var countr=0;countr<map.continents.length;countr++){
-                var country = new tddjs.client.map.country();
-                _map.continents[c].addCountry(country);
+        _water.id = map.water.id;
+        _water.setName(map.water.name);
+        for(var i in map.water.border){
+            if(map.water.border[i].length>0){
+                var aCountry1 = _getCountryById(map.water.border[i][0]);
+                var aCountry2 = _getCountryById(map.water.border[i][1]);
+                if(aCountry1 && aCountry2)
+                    _water.addBorder(aCountry1,aCountry2);
             }
         }
-        */
         return _map;
     }
     
@@ -728,6 +753,42 @@ function gameUiController(aGLC,aCtx){
             }
             _countries[i].centerX=pos.x;
             _countries[i].centerY=pos.y;
+        }
+    }
+    
+    function _calcSeaRoutes(){
+        var borders = _water.getBorders();
+        for(var i in borders){
+            if(borders[i].length>0){
+                var from = borders[i][0].id;
+                var to = borders[i][1].id;
+                var from_pos=[];
+                var to_pos=[];
+                
+                for(x=1;x<_gridMap.length-1;x++){
+                    for(y=1;y<_gridMap[0].length-1;y++){
+                        if(_gridMap[x][y].id === from){
+                            if(_gridMap[x-1][y].id < 0)
+                                _seaRoute.push([x-1,y]);
+                            if(_gridMap[x][y-1].id < 0)
+                                _seaRoute.push([x,y-1]);
+                            if(_gridMap[x+1][y].id < 0)
+                                _seaRoute.push([x+1,y]);
+                            if(_gridMap[x][y+1].id < 0)
+                                _seaRoute.push([x,y-+-1]);
+                        }
+                        if(_gridMap[x][y].id === to){
+                            if(_gridMap[x-1][y].id < 0    //water
+                                    || _gridMap[x][y-1].id < 0
+                                    || _gridMap[x+1][y].id < 0
+                                    || _gridMap[x][y+1].id < 0){
+                                to_pos.push({x:x,y:y});
+                            }
+                        }
+                    }
+                }
+                
+            }
         }
     }
     // </editor-fold>
