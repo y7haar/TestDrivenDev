@@ -823,9 +823,10 @@ function gameUiController(aGLC,aCtx){
                             if(y === t_y && x === t_x){
                                 success=true;
                                 break;
-                                console.log("got it");
                             }
                         }
+                        if(success)
+                        break;
                     }
                     if(success)
                         break;
