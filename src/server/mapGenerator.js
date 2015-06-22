@@ -954,8 +954,7 @@ function mapGenerator()
                         water.borders.push([border1, border2]);
                 }
             }
-                
-            console.log(random);
+               
             random--;
             water.size++;
             //Seed-Kontinent entfernen
