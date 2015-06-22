@@ -12,11 +12,11 @@ function startGame(){
     m.setGridSize(150,150);
     m.setMaximumCountrySize(300);
     m.setMinimumCountrySize(200);
-    m.setMinimumContinentNumber(10);
-    m.setMaximumContinentNumber(15);
+    m.setMinimumContinentNumber(6);
+    m.setMaximumContinentNumber(10);
     m.setMinimumContinentSize(4);
-    m.setMinimumWaterNumber(4);
     m.setMinimumWaterNumber(6);
+    m.setMinimumWaterNumber(4);
     canvas = document.getElementById('game');
     if (canvas && canvas.getContext) {
        ctx = canvas.getContext("2d");
