@@ -1089,6 +1089,17 @@ function mapGenerator()
             }
         }
         
+        json.water={};
+        json.water.id = map.water.id;
+        json.water.name = map.water.name;
+        json.water.size = map.water.size;
+        json.water.fields = map.water.fields;
+        json.water.border = [[]];
+        for(var i in map.water.borders){
+            if(i>0)
+            json.water.border.push([map.water.borders[i][0].id,map.water.borders[i][1].id]);
+        }
+        
         json.gridMap = createArray(getMapWidth(),getMapHeight());
         for(var x=0; x<getMapWidth(); x++){
             for(var y=0; y<getMapHeight(); y++){
