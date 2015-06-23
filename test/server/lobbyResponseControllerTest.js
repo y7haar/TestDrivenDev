@@ -169,6 +169,20 @@ TestCase("LobbyResponseControllerTest", {
             controller.respondPlayerUpdate("a", {});
         }, "TypeError");
     },
+    
+     "test lobbyResponseController should have function to set a token": function() {
+        assertFunction(this.lobbyResponseController.setToken);
+    },
+    
+    "test lobbyResponseController should have function to get a token": function() {
+        assertFunction(this.lobbyResponseController.getToken);
+    },
+    
+    "test setToken should set a token": function() {
+        assertUndefined(this.lobbyResponseController.getToken());
+        this.lobbyResponseController.setToken("123456");
+        assertEquals("123456", this.lobbyResponseController.getToken());
+    }
 });
 
 TestCase("LobbyResponseControllerCallTest", {
