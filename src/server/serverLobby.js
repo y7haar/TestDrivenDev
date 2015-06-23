@@ -195,6 +195,7 @@ function lobby()
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
     this.setMaxPlayers = setMaxPlayers;
+    this.getMaxPlayers = _getMaxPlayers;
     this.kickPlayer = kickPlayer;
 
     this.getId = getId;
