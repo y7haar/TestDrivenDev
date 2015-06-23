@@ -13,7 +13,8 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);
 
-        this.fakeClient = function (eventSource, aServer) {
+        this.fakeClient = function (eventSource, aServer, aName) {
+            var name = aName;
             var server = aServer;
             var eventSourceIndex = server.clients.indexOf(eventSource);
            
@@ -37,6 +38,10 @@ TestCase("serverGameLoopControllerTest", {
             Object.defineProperty(this, 'data', {
             get: function () {
                 return data;
+            }});
+            Object.defineProperty(this, 'name', {
+            get: function () {
+                return name;
             }});
    
         };
