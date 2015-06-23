@@ -29,8 +29,7 @@ function lobbyResponseController()
             
             var lobby = _lobbyFactory.getNewLobby();
             var leader = new tddjs.server.player();
-            leader.setName(player.name);
-            leader.setColor(player.color);
+            leader.deserialize(obj.player);
             //leader.setToken(req.session.token);
 
             lobby.addPlayer(leader);
@@ -65,23 +64,30 @@ function lobbyResponseController()
             
             if(typeof player.color !== "string")
                 throw new Error("Color must be a string");
-            
-//            var lobby = _lobbyFactory.getNewLobby();
-//            var leader = new tddjs.server.player();
-//            leader.setName(player.name);
-//            leader.setColor(player.color);
-//            //leader.setToken(req.session.token);
-//
-//            lobby.addPlayer(leader);
-//            lobby.setLeader(leader);
-//            _lobbyController.addLobby(lobby);
-            
         }
         catch(e)
         {
             throw new Error("JSON is not valid");
         }
         
+        try
+        {
+            var lobby = _lobbyController.getLobbyById(id);
+            var newPlayer = new tddjs.server.player();
+            newPlayer.deserialize(obj.player);
+            //newPlayer.setToken(req.session.token);
+
+            lobby.addPlayer(newPlayer);
+        }
+        
+        catch(e)
+        {
+            throw { 
+            name:        "LobbyIdError", 
+            message:     "Lobby with given Id does not exist",
+            toString:    function(){return this.name + ": " + this.message;} 
+}; 
+        }
     }
     
     this.respondNewLobby = respondNewLobby;
