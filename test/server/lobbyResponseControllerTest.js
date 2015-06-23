@@ -8,6 +8,7 @@
 TestCase("LobbyResponseControllerTest", {
     setUp: function() {
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
 
     },
     tearDown: function()
@@ -179,7 +180,7 @@ TestCase("LobbyResponseControllerTest", {
     },
     
     "test setToken should set a token": function() {
-        assertUndefined(this.lobbyResponseController.getToken());
+        assertNotEquals("123456", this.lobbyResponseController.getToken());
         this.lobbyResponseController.setToken("123456");
         assertEquals("123456", this.lobbyResponseController.getToken());
     },
@@ -200,6 +201,7 @@ TestCase("LobbyResponseControllerCallTest", {
         this.lobbyController.getLobbies().length = 0;
         
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
         
         // Must be client player
         this.player = new tddjs.client.player();
@@ -342,10 +344,12 @@ TestCase("LobbyResponseControllerTypeTest", {
     setUp: function() {
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
         
+        
         // Needed because of Singleton
         this.lobbyController.getLobbies().length = 0;
         
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
         this.sandbox = sinon.sandbox.create();
         this.id = 0;
         
