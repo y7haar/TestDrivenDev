@@ -77,7 +77,15 @@ TestCase("LobbyResponseControllerTest", {
         var controller = this.lobbyResponseController;
 
         assertException(function() {
-            controller.respondJoin(3);
+            controller.respondJoin(3, 0);
+        }, "TypeError");
+    },
+    
+    "test respondJoin should have parameter of type number, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondJoin({}, "string");
         }, "TypeError");
     },
     
