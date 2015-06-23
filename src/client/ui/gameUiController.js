@@ -661,7 +661,7 @@ function gameUiController(aGLC,aCtx){
     
     function getMap(map){
         if(!_map)
-            if(arguments.length > 1)
+            if(arguments.length > 0)
                 _deserialize(map);
             else
                 throw new Error("Map isn't initialized!");
