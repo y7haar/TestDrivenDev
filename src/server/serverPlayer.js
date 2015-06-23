@@ -143,7 +143,7 @@ function player()
                 throw new Error("Type is wrong");
             }
         }
-
+         
         this.setName(obj.name);
         this.setColor(obj.color);
     }

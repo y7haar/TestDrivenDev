@@ -22,7 +22,7 @@ TestCase("LobbyResponseControllerTest", {
         assertFunction(this.lobbyResponseController.respondNewLobby);
     },
     
-    "test respondNewLobby should have parameter of type string, else throw Error": function() {
+    "test respondNewLobby should have parameter of type object, else throw Error": function() {
         var controller = this.lobbyResponseController;
 
         assertException(function() {
@@ -33,56 +33,39 @@ TestCase("LobbyResponseControllerTest", {
     "test respondNewLobby should throw Error if given data is not valid": function() {
         var controller = this.lobbyResponseController;
 
-        var req = "";
-        assertException(function() {
-            controller.respondNewLobby(req);
-        }, "Error");
-
-        req = "{}";
-        assertException(function() {
-            controller.respondNewLobby(req);
-        }, "Error");
-
         var obj = {type: "create"};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: 6};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: {}};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: {name: 4}};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: {name: "Peter"}};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: {name: "Peter", color: 3}};
-        req = JSON.stringify(obj);
         assertException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         }, "Error");
 
         var obj = {type: "create", player: {name: "Peter", color: "#ffffff"}};
-        req = JSON.stringify(obj);
         assertNoException(function() {
-            controller.respondNewLobby(req);
+            controller.respondNewLobby(obj);
         });
     }
 });
@@ -101,13 +84,11 @@ TestCase("LobbyResponseControllerCallTest", {
         this.player.setName("Unnamed Player");
         this.player.setColor("#ffffff");
         
-        this.data = {
+        this.request = {
             type: "create",
             lobby: null,
             player: this.player.serializeAsObject()
         };
-        
-        this.request = JSON.stringify(this.data);
     },
     tearDown: function()
     {

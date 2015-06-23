@@ -9,14 +9,13 @@ function lobbyResponseController()
     var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
     var _lobbyFactory = new tddjs.server.controller.lobbyFactory();
     
-    function respondNewLobby(req)
+    function respondNewLobby(obj)
     {    
-        if(typeof req !== "string")
-            throw new TypeError("Request must be string");
+        if(typeof obj !== "object")
+            throw new TypeError("Request must be object");
         
         try
         {
-            var obj = JSON.parse(req);
             
             var player = obj.player;
             if(typeof player !== "object")
