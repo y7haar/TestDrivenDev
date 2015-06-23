@@ -367,6 +367,10 @@ TestCase("LobbyResponseControllerCallTest", {
         assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
         
         assertException(function() { controller.broadcastMessage("0", {}, "event"); }, "TypeError");
+    },
+    
+    "tes controller should have function to set response": function() {
+        assertFunction(this.lobbyResponseController.setResponse);
     }
 });
 
