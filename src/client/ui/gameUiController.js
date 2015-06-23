@@ -197,6 +197,7 @@ function gameUiController(aGLC,aCtx){
     function _afterLoading(){
         _ctx.canvas.addEventListener('mousemove', mouseMove, false);
         _ctx.canvas.addEventListener('mousedown', mouseDown, false);
+        step=0;
         window.requestAnimationFrame(drawGame);
     }
     // </editor-fold>
@@ -274,7 +275,7 @@ function gameUiController(aGLC,aCtx){
         for(var x=0;x<_gridMap.length;x++){
             for(var y=0;y<_gridMap[0].length;y++){
                 if(_gridMap[x][y].id > 0){
-                    _ctx.fillStyle = "#fff";//_gridMap[x][y].getOwner().getColor();
+                    _ctx.fillStyle = "#C88C00";//_gridMap[x][y].getOwner().getColor();
                     _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
                 }
             }
@@ -293,7 +294,7 @@ function gameUiController(aGLC,aCtx){
                         if(_gridMap[x][y].id > 0){
                             var cx=_gridMap[x][y].centerX;//+h/2+6;
                             var cy=_gridMap[x][y].centerY;//+w/2;
-                            _ctx.fillStyle = "rgba(200,140,0,0.5)";
+                            _ctx.fillStyle = getRgbaColor("#C88C00",0.5);//_gridMap[x][y].getOwner().getColor();
                             _ctx.beginPath();
                             _ctx.arc(cx+(cx*w)+border/2+w/2+4,cy+(cy*h)+border/2+h/2-4,10,0,2*Math.PI);
                             _ctx.fill();

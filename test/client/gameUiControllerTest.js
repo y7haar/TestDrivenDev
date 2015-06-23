@@ -25,7 +25,7 @@ function gameUiTeardown()
     delete this.button;
 }
 
-TestCase("GameUiTest", {
+TestCase("GameUiControllerTest", {
     setUp: gameUiSetup,
     tearDown: gameUiTeardown,
     
