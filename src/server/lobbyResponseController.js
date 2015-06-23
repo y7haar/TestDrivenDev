@@ -141,6 +141,48 @@ function lobbyResponseController()
         }
     }
     
+    function respondPlayerUpdate(id, obj)
+    {
+        if(typeof obj !== "object")
+            throw new TypeError("Request must be object");
+        
+        if(typeof id !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof obj.data !== "object")
+        {
+            throw new Error("Object must contain data");
+        }
+        
+        try
+        {
+            var lobby = _lobbyController.getLobbyById(id);
+            
+            if(typeof obj.data.id !== "number")
+                throw new TypeError("Id must be setted");
+            
+            var playerId = obj.data.id;
+            
+            if(typeof obj.data.color === "string")
+            {
+                lobby.getPlayerById(playerId).setColor(obj.data.color);
+            }
+            
+            if(typeof obj.data.name === "string")
+            {
+                lobby.getPlayerById(playerId).setName(obj.data.name);
+            }
+        }
+        catch(e)
+        {
+            throw { 
+            name:        "LobbyIdError", 
+            message:     "Lobby with given Id does not exist",
+            toString:    function(){return this.name + ": " + this.message;} 
+}; 
+        }
+    }
+    
     function switchLobbyPostTypes(id, data)
     {
         var type = data.type;
@@ -156,6 +198,7 @@ function lobbyResponseController()
     this.respondNewLobby = respondNewLobby;
     this.respondJoin = respondJoin;
     this.respondLobbyUpdate = respondLobbyUpdate;
+    this.respondPlayerUpdate = respondPlayerUpdate;
     
     _methodTypes["lobbyUpdate"] = this.respondLobbyUpdate;
     _methodTypes["join"] = this.respondJoin;
