@@ -556,7 +556,7 @@ function lobbyUi(aRequestController)
         return _currentLobby;
     }
     
-    function setCurrentPLayer(aPlayer)
+    function setCurrentPlayer(aPlayer)
     {
         if(! (aPlayer instanceof tddjs.client.player))
             throw new TypeError("Player must be of type player");
@@ -590,6 +590,7 @@ function lobbyUi(aRequestController)
     
     function showLobbyForPlayer()
     {
+        _resetBody();
         this.createLobbyContent();
         this.createWrapper();
         
@@ -600,6 +601,12 @@ function lobbyUi(aRequestController)
             this.showLobby(_currentLobby);
         
         this.setPlayerEditable(_currentPlayer.getId());
+    }
+    
+    function _resetBody()
+    {
+        var body = document.getElementsByTagName("body")[0];
+        body.innerHTML = "";
     }
 
     this.createContent = createContent;
@@ -620,7 +627,7 @@ function lobbyUi(aRequestController)
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
-    this.setCurrentPlayer = setCurrentPLayer;
+    this.setCurrentPlayer = setCurrentPlayer;
 
     //Events
     this.submitPlayerName = submitPlayerName;
