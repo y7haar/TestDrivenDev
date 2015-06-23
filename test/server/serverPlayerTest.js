@@ -152,8 +152,6 @@ TestCase("PlayerServerTest",
                     type: "bot"
                 };
 
-                json = JSON.stringify(json);
-
                 this.player1.deserialize(json);
 
                 assertEquals(2, this.player1.getId());
@@ -169,7 +167,6 @@ TestCase("PlayerServerTest",
                     name: "Peter",
                     color: "#FFFFFF"
                 };
-                json = JSON.stringify(json);
 
                 assertException(function() {
                     player1.deserialize(json);
@@ -184,9 +181,9 @@ TestCase("PlayerServerTest",
 
                 var json = {
                     name: "Peter",
-                    color: "#FFFFFF"
+                    color: "#FFFFFF",
+                    type: "human"
                 };
-                json = JSON.stringify(json);
 
                 assertNoException(function() {
                     player1.deserialize(json);
@@ -206,7 +203,6 @@ TestCase("PlayerServerTest",
                     type: "bot"
                 };
 
-                json = JSON.stringify(json);
 
                 assertException(function() {
                     player1.deserialize(json);
@@ -223,8 +219,6 @@ TestCase("PlayerServerTest",
                     type: "bot"
                 };
 
-                json = JSON.stringify(json);
-
                 assertException(function() {
                     player1.deserialize(json);
                 }, "Error");
@@ -239,8 +233,6 @@ TestCase("PlayerServerTest",
                     color: "#hjk",
                     type: "UltraBasher"
                 };
-
-                json = JSON.stringify(json);
 
                 assertException(function() {
                     player1.deserialize(json);

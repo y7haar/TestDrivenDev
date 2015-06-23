@@ -116,9 +116,8 @@ function player()
         return playerObject;
     }
 
-    function deserialize(json)
+    function deserialize(obj)
     {
-        var obj = JSON.parse(json);
 
         if (typeof obj.id !== "number" && typeof obj.id !== "undefined")
             throw new TypeError("Id is incorrect");
@@ -133,8 +132,9 @@ function player()
             {
                 throw new Error("Id is wrong");
             }
-
-            try
+        }
+        
+        try
             {
                 this.setType(obj.type);
             }
@@ -142,7 +142,6 @@ function player()
             {
                 throw new Error("Type is wrong");
             }
-        }
          
         this.setName(obj.name);
         this.setColor(obj.color);
