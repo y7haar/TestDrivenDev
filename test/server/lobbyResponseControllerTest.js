@@ -95,8 +95,19 @@ TestCase("LobbyResponseControllerCallTest", {
         this.lobbyController.getLobbies().length = 0;
         
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
-        this.request = {type: "create", player: {name: "Unnamed Player", color: "#ffffff"}};
-        this.request = JSON.stringify(this.request);
+        
+        // Must be client player
+        this.player = new tddjs.client.player();
+        this.player.setName("Unnamed Player");
+        this.player.setColor("#ffffff");
+        
+        this.data = {
+            type: "create",
+            lobby: null,
+            player: this.player.serializeAsObject()
+        };
+        
+        this.request = JSON.stringify(this.data);
     },
     tearDown: function()
     {
@@ -106,11 +117,12 @@ TestCase("LobbyResponseControllerCallTest", {
     },
     
     "test respondNewLobby should create a new Lobby with player on Success": function() {
-        assertEquals(0, this.lobbyController.getLobbies().length);
-        
+        var currentCount = this.lobbyController.getLobbyCount();  
         this.lobbyResponseController.respondNewLobby(this.request);
-        assertEquals(1, this.lobbyController.getLobbies().length);
-        var lobby = this.lobbyController.getLobbyById(0);
+        
+        assertEquals(currentCount + 1, this.lobbyController.getLobbyCount());
+        var id = this.lobbyController.getNextId() - 1;
+        var lobby = this.lobbyController.getLobbyById(id);
         
         assertEquals("Unnamed Player", lobby.getPlayers()[0].getName());
         assertEquals("#ffffff", lobby.getPlayers()[0].getColor());
