@@ -24,6 +24,8 @@ function startGame(){
             controller = new tddjs.client.ui.gameUiController(null,ctx);
             
             m2 = m.generateMap();
+            // nur zur hilfe  mfg Alex
+            console.log("MAP: \n"+m2);
             m2 = m.serializeAsJSON(m2);
             //controller._getMap(m2);
             //controller._initMap();
