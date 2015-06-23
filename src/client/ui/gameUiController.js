@@ -718,12 +718,40 @@ function gameUiController(aGLC,aCtx){
         */
         for(var i in _countries){
             var id = _countries[i].id;
+            if(id === -1)
+                continue;
             var cur_max_x=0;
             var cur_max_y=0;
             var last_max_x=0;
             var last_max_y=0;
             var best_pos=[];
             
+            /*
+            for(var x=0;x<_gridMap.length;x++){
+                for(var y=0;y<_gridMap[0].length;y++){
+                    if(_gridMap[x][y].id===id){
+                        var x_length=0;
+                        var y_length=0;
+                        var pos_x=0;
+                        var pos_y=0;
+                        var area=0;
+                        while(_gridMap[x+x_length+1][y+y_length+1].id===id){
+                            if(_gridMap[x+x_length+1][y].id===id)
+                                x_length++;
+                            while(pos_x<x_length){
+                                if(_gridMap[x+pos_x][y+pos_y+1].id===id)
+                                    y_length++;
+                                pos_x++;
+                                pos_y++;
+                            }
+                            pos_x=0;
+                        }
+                        console.log(id+"|"+x_length+"|"+y_length);
+                    }
+                }
+            }
+            */
+
             for(var x=0;x<_gridMap.length;x++){
                 for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id===id){
