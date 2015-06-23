@@ -337,6 +337,17 @@ TestCase("LobbyResponseControllerCallTest", {
         var controller = this.lobbyResponseController;
         
         assertException(function() { controller.respondPlayerUpdate(id, data); }, "LobbyIdError");
+    },
+    
+    "test controller should have function to braodcast a message to all players": function() {
+        assertFunction(this.lobbyResponseController.broadcastMessage);
+    },
+    
+    "test broadcastMessage should throw Exception if message is no object": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(0, {}); });
+        
+        assertException(function() { controller.broadcastMessage(0, "asd"); }, "TypeError");
     }
 });
 
