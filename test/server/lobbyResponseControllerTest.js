@@ -148,6 +148,7 @@ TestCase("LobbyResponseControllerCallTest", {
             lobby: null,
             player: this.player.serializeAsObject()
         };
+        
     },
     tearDown: function()
     {
@@ -166,5 +167,29 @@ TestCase("LobbyResponseControllerCallTest", {
         
         assertEquals("Unnamed Player", lobby.getPlayers()[0].getName());
         assertEquals("#ffffff", lobby.getPlayers()[0].getColor());
+    },
+    
+    "test respondJoin should join a Lobby with given Player": function() {
+        // Must be client
+        var player = new tddjs.client.player();
+        player.setName("New Player");
+        player.setColor("#eeeeee");
+
+        var data = {
+            type: "join",
+            player: player.serializeAsObject()
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        this.lobbyResponseController.respondJoin(id, data);
+        
+        var lobby = this.lobbyController.getLobbyById(id);
+        assertEquals(2, lobby.getPlayers().length);
+        assertEquals("New Player", lobby.getPlayers()[1].getName());
+        assertEquals("#eeeeee", lobby.getPlayers()[1].getColor());
     }
 });
