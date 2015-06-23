@@ -90,7 +90,45 @@ function lobbyResponseController()
         }
     }
     
+    function respondLobbyUpdate(id, obj)
+    {
+        if(typeof obj !== "object")
+            throw new TypeError("Request must be object");
+        
+        if(typeof id !== "number")
+            throw new TypeError("Id must be number");
+        
+        if(typeof obj.data !== "object")
+        {
+            throw new Error("Object must contain data");
+        }
+        
+        try
+        {
+            var lobby = _lobbyController.getLobbyById(id);
+            
+            if(typeof obj.data.maxPlayers === "number")
+            {
+                lobby.setMaxPlayers(obj.data.maxPlayers);
+            }
+            
+            if(typeof obj.data.name === "string")
+            {
+                lobby.setName(obj.data.name);
+            }
+        }
+        catch(e)
+        {
+            throw { 
+            name:        "LobbyIdError", 
+            message:     "Lobby with given Id does not exist",
+            toString:    function(){return this.name + ": " + this.message;} 
+}; 
+        }
+    }
+    
     this.respondNewLobby = respondNewLobby;
     this.respondJoin = respondJoin;
+    this.respondLobbyUpdate = respondLobbyUpdate;
 }
 
