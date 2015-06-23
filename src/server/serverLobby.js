@@ -46,7 +46,16 @@ function lobby()
     {
         return _players;
     }
-
+    
+    function getPlayerById(id)
+    {
+        for(var i = 0;i < _players.length;++i)
+        {
+            if(_players[i].getId() === id)
+                return _players[i];
+        }
+        return null;
+    }
     /*
      *  Sets max player count and kicks players, if current player count > maximum
      */
@@ -202,6 +211,8 @@ function lobby()
     this.isPlayerTokenValid = isPlayerTokenValid;
     this.isLeaderTokenValid = isLeaderTokenValid;
     this.getUniqueToken = getUniqueToken;
+    
+    this.getPlayerById = getPlayerById;
     
     this.setName = setName;
     this.getName = getName;
