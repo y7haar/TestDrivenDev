@@ -15,6 +15,7 @@ function gameUiController(aGLC,aCtx){
     }
     else
         throw new Error("Wrong parametercount!");
+    
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
     /*    "#FF8F3D",
@@ -104,7 +105,7 @@ function gameUiController(aGLC,aCtx){
             //init map
             case 0: _loading("get Map...");
                 break;
-            case 1: _getMap(serializedMap);
+            case 1: getMap(serializedMap);
                     _loading("get Map...");
                 break;
                 
@@ -482,6 +483,8 @@ function gameUiController(aGLC,aCtx){
     function getButtons(){
         return _btn;
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="Event-Listener">
     function mouseMove(oEvent){
         var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
         var y = Math.round((oEvent.offsetY-border/2) * _gridMap[0].length / (_ctx.canvas.height-border-bottom));
@@ -494,20 +497,7 @@ function gameUiController(aGLC,aCtx){
         if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
             return; //nicht auf dem grid
         
-        var id = _gridMap[x][y].id;
-        if(id>=0){ //kein wasser
-            for (var i in imgCacheHover){
-                if(imgCacheHover[i].id === id){
-                    _ctx.drawImage(imgCacheHover[i].img,0,0);
-                    countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
-                    /*
-                    _ctx.font="20px Georgia";
-                    _ctx.fillStyle = "#fff";
-                    _ctx.fillText(_gridMap[x][y].getName(),oEvent.offsetX+15,oEvent.offsetY+20);
-                    _ctx.fillText("UNITS: "+_gridMap[x][y].getUnitCount(),oEvent.offsetX+15,oEvent.offsetY+40);*/
-                }
-            }
-        }
+        mapMove(x,y);
     }
     function mouseDown(oEvent){
         var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
@@ -520,6 +510,24 @@ function gameUiController(aGLC,aCtx){
         if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
             return; //nicht auf dem grid
         
+        mapDown(x,y);
+        drawGame();
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Map-States">
+    function mapMove(x,y){
+        var id = _gridMap[x][y].id;
+        if(id>=0){ //kein wasser
+            for (var i in imgCacheHover){
+                if(imgCacheHover[i].id === id){
+                    _ctx.drawImage(imgCacheHover[i].img,0,0);
+                    countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
+                }
+            }
+        }
+    }
+    function mapDown(x,y){
         var id = _gridMap[x][y].id;
         if(id>=0){ //kein wasser
             _gridMap[x][y].selected=!_gridMap[x][y].selected;
@@ -535,8 +543,9 @@ function gameUiController(aGLC,aCtx){
                 }
             }
         }
-        drawGame();
     }
+    // </editor-fold>
+    
     // </editor-fold>
     
     
@@ -650,11 +659,13 @@ function gameUiController(aGLC,aCtx){
         return _map;
     }
     
-    function _getMap(map){
-        //daten vom server
-        _deserialize(map);
-        
-        //_initGridMap();
+    function getMap(map){
+        if(!_map)
+            if(arguments.length > 1)
+                _deserialize(map);
+            else
+                throw new Error("Map isn't initialized!");
+        return map;
     }
     
     function _initGridMap(){
@@ -887,16 +898,16 @@ function gameUiController(aGLC,aCtx){
     //public
     this.init = init;
     this.drawGame=drawGame;
-    this.drawLoading=drawLoading;
     
     this.addButton = addButton;
     this.getButtons = getButtons;
     this.mouseMove = mouseMove;
     this.mouseDown = mouseDown;
     
-    //private
+    //map-functions
+    this.getMap = getMap;
+    
     this._initMap = _initMap;
-    this._getMap = _getMap;
     this._getCountries = _getCountries;
     this._deserialize = _deserialize;
     
