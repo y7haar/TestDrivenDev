@@ -39,4 +39,16 @@ lobbyApp.post("", function (req, res) {
     }
 });
 
+lobbyApp.post("/:id", function (req, res) {
+    try
+    {
+        lobbyResponseController.respondJoin(0, req.body);
+        res.status(200).end();
+    }
+    
+    catch(e)
+    {
+        res.status(400).send("Wrong JSON Format");
+    }
+});
 module.exports = lobbyApp;
