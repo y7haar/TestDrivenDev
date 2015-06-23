@@ -13,6 +13,7 @@ function lobby()
     var _name = "GameLobby";
     var _leader;
     var _currentPlayerId = 0;
+    var _usedTokens = {};
 
 
     function setId(aId)
@@ -177,6 +178,19 @@ function lobby()
     {
         return (this.isPlayerTokenValid(aPlayer, aToken) && aPlayer === _leader);
     }
+    
+    function getUniqueToken()
+    {
+        var token = parseInt(Math.random() * 1000000000);
+        
+        if(_usedTokens[token] === true)
+        {
+            this.getUniqueToken();
+        }
+        
+        _usedTokens[token] = true;
+        return token;
+    }
 
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
@@ -189,6 +203,7 @@ function lobby()
     this.getPlayerByToken = getPlayerByToken;
     this.isPlayerTokenValid = isPlayerTokenValid;
     this.isLeaderTokenValid = isLeaderTokenValid;
+    this.getUniqueToken = getUniqueToken;
     
     this.setName = setName;
     this.getName = getName;
