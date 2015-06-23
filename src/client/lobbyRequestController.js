@@ -124,6 +124,8 @@ function lobbyRequestController()
             if(lobby.getPlayers()[i].getId() === playerId)
             {
                 _lobbyUi.setCurrentPlayer(lobby.getPlayers()[i]);
+                _lobbyEventSourceController.setLobby(lobby);
+                _lobbyEventSourceController.establishConnection();
                 break;
             }
         }

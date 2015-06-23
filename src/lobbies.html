@@ -28,6 +28,8 @@ and open the template in the editor.
         <script>
             var lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
             var ui = new tddjs.client.ui.lobbyUi(lobbyRequestController);
+            var eventSourceController = lobbyRequestController.getLobbyEventSourceController();
+            eventSourceController.setLobbyUi(ui);
             lobbyRequestController.setLobbyUi(ui);
             ui.showLobbyOverview();
             

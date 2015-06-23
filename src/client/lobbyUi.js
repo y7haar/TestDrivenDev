@@ -567,7 +567,7 @@ function lobbyUi(aRequestController)
     }
     
     function updateColor(aPlayerId, aColor)
-    {
+    {   
         if(typeof aPlayerId !== "number")
             throw new TypeError("Id must be number");
         
