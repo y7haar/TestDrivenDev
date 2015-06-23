@@ -127,6 +127,26 @@ TestCase("LobbyResponseControllerTest", {
         assertException(function() {
             controller.respondJoin(0, obj);
         }, "LobbyIdError");
+    },
+    
+    "test lobbyResponseController should have function to respond to a new lobby update": function() {
+        assertFunction(this.lobbyResponseController.respondLobbyUpdate);
+    },
+    
+    "test respondLobbyUpdate should have parameter of type object, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondLobbyUpdate(3, "a");
+        }, "TypeError");
+    },
+    
+    "test respondLobbyUpdate should have parameter of type number, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondLobbyUpdate("a", {});
+        }, "TypeError");
     }
 });
 
@@ -192,5 +212,46 @@ TestCase("LobbyResponseControllerCallTest", {
         assertEquals(2, lobby.getPlayers().length);
         assertEquals("New Player", lobby.getPlayers()[1].getName());
         assertEquals("#eeeeee", lobby.getPlayers()[1].getColor());
+    },
+    
+        
+    "test respondLobbyUpdate should update lobby name": function() {
+        var data = {
+            type: "lobbyUpdate",
+            data: {
+                name: "NewName"
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        assertNotEquals("NewName", this.lobbyController.getLobbyById(id).getName());
+        
+        this.lobbyResponseController.respondLobbyUpdate(id, data);
+        
+        assertEquals("NewName", this.lobbyController.getLobbyById(id).getName());
+    },
+    
+    "test respondLobbyUpdate should update MaxPlayers": function() {
+        var data = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        assertNotEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
+        
+        this.lobbyResponseController.respondLobbyUpdate(id, data);
+        
+        assertEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
     }
 });
