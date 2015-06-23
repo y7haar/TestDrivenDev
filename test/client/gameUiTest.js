@@ -90,5 +90,10 @@ TestCase("GameUiTest", {
         assertInstanceOf("map should be instance of map",tddjs.client.ui.map,map);
         assertInstanceOf(tddjs.client.ui.continent,continent);
         assertInstanceOf(tddjs.client.ui.country,country);
+    },
+    
+    "test if getRgbaColor return a valid color":function(){
+        var color = this.gameUi.getRgbaColor("#C88C00",0.5);
+        assertEaqals(color,"rgba(200,140,0,0.5)");
     }
 });
