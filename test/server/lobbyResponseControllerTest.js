@@ -63,7 +63,7 @@ TestCase("LobbyResponseControllerTest", {
             controller.respondNewLobby(obj);
         }, "Error");
 
-        var obj = {type: "create", player: {name: "Peter", color: "#ffffff"}};
+        var obj = {type: "create", player: {name: "Peter", color: "#ffffff", type: "human"}};
         assertNoException(function() {
             controller.respondNewLobby(obj);
         });
@@ -121,11 +121,12 @@ TestCase("LobbyResponseControllerTest", {
         assertException(function() {
             controller.respondJoin(0, obj);
         }, "Error");
-
-        var obj = {type: "join", player: {name: "Peter", color: "#ffffff"}};
-        assertNoException(function() {
+        
+        // Error because no Lobby exists with Id
+        var obj = {type: "join", player: {name: "Peter", color: "#ffffff", type: "human"}};
+        assertException(function() {
             controller.respondJoin(0, obj);
-        });
+        }, "LobbyIdError");
     }
 });
 
