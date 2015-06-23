@@ -64,21 +64,21 @@ app.get('/lobbies/:id', function (req, res) {
   res.send('Lobby ' + req.params.id);
 });
 
-app.post('/lobbies/:id', function (req, res) {
-
-   console.log(req.body);
-   
-    if(typeof req.session.token === "undefined")
-    {
-        console.log();
-        console.log("SESSION UNDEFINED");
-        req.session.token = parseInt((Math.random() * 100000000));
-        console.log("NEW TOKEN: " + req.session.token);
-        console.log();
-    }
-    
-  res.send('Lobby ' + req.params.id);
-});
+//app.post('/lobbies/:id', function (req, res) {
+//
+//   console.log(req.body);
+//   
+//    if(typeof req.session.token === "undefined")
+//    {
+//        console.log();
+//        console.log("SESSION UNDEFINED");
+//        req.session.token = parseInt((Math.random() * 100000000));
+//        console.log("NEW TOKEN: " + req.session.token);
+//        console.log();
+//    }
+//    
+//  res.send('Lobby ' + req.params.id);
+//});
 
 
 

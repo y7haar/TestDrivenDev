@@ -412,5 +412,21 @@ TestCase("LobbyServerAuthentificationTest", {
         var value2 = this.lobby.isLeaderTokenValid(this.player2, "T2");
 
         assertFalse(value2);
+    },
+    
+    "test Lobby should have function to get a new unique Token": function() {
+        assertFunction(this.lobby.getUniqueToken);
+    },
+    
+    "test getUniqueToken should always return a different Token": function() {
+        var tokens = [];
+        tokens[0] = this.lobby.getUniqueToken();
+        tokens[1] = this.lobby.getUniqueToken();
+        tokens[2] = this.lobby.getUniqueToken();
+        
+        assertNotEquals(tokens[0], tokens[1]);
+        assertNotEquals(tokens[0], tokens[2]);
+        
+        assertNotEquals(tokens[1], tokens[2]);
     }
 });
