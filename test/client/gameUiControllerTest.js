@@ -35,12 +35,9 @@ TestCase("GameUiControllerTest", {
     
     "test Object of gameUiController should have the needed functions": function (){
         assertFunction(this.gameUi.init);
-        assertFunction(this.gameUi.draw);
+        assertFunction(this.gameUi.drawGame);
         assertFunction(this.gameUi.addButton);
         assertFunction(this.gameUi.getButtons);
-        
-        assertFunction(this.gameUi._initMap);
-        assertFunction(this.gameUi._extendCountries);
     },
     
     "test if gameUiController can store Buttons": function (){
@@ -55,8 +52,8 @@ TestCase("GameUiControllerTest", {
     "test if _initMap can store Countrys":function(){
         var mapGen = new tddjs.server.controller.mapGenerator();
         mapGen.setGridSize(50,50);
-        
-        var map = JSON.parse(mapGen.generateMap()).gridMap;
+        var m = mapGen.generateMap();
+        var map = m.serializeAsJSON(m);;
         
         assertException(this.gameUi._getCountries(),"Error");
         this.gameUi._initMap(map);
@@ -74,7 +71,9 @@ TestCase("GameUiControllerTest", {
         
         var mapGen = new tddjs.server.controller.mapGenerator();
         mapGen.setGridSize(50,50);
-        var map = this.gameUi._deserialize(mapGen.generateMap());
+        var m = mapGen.generateMap();
+        m = m.serializeAsJSON(m);
+        var map = this.gameUi._deserialize(m);
         
         var continent;
         var country;

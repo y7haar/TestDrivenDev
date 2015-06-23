@@ -540,7 +540,7 @@ function gameUiController(aGLC,aCtx){
     // </editor-fold>
     
     
-    // <editor-fold defaultstate="collapsed" desc="Map-functions">
+    // <editor-fold defaultstate="collapsed" desc="Map-functions for init">
     function _deserialize(map){
         map=JSON.parse(map);
         

@@ -1,5 +1,5 @@
 /* 
- *
+ * Testcases for Button
  */
 
 tddjs.namespace("client.ui").button = button;
