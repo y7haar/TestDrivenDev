@@ -25,7 +25,7 @@ function gameUiTeardown()
     delete this.button;
 }
 
-TestCase("GameUiControllerTest", {
+TestCase("GameUiControllerTests", {
     setUp: gameUiSetup,
     tearDown: gameUiTeardown,
     
@@ -68,7 +68,6 @@ TestCase("GameUiControllerTest", {
     },
     
     "test if _deserialze generates a valid map":function(){
-        
         var mapGen = new tddjs.server.controller.mapGenerator();
         mapGen.setGridSize(50,50);
         var m = mapGen.generateMap();
@@ -89,6 +88,17 @@ TestCase("GameUiControllerTest", {
         assertInstanceOf("map should be instance of map",tddjs.client.ui.map,map);
         assertInstanceOf(tddjs.client.ui.continent,continent);
         assertInstanceOf(tddjs.client.ui.country,country);
+    },
+    
+    "test getMap behavior":function(){
+        var mapGen = new tddjs.server.controller.mapGenerator();
+        mapGen.setGridSize(50,50);
+        var m = mapGen.generateMap();
+        m = m.serializeAsJSON(m);
+        
+        assertException(this.gameUi.getMap(),"Error");
+        var map = this.gameUi.getMap(m);
+        assertTypeOf(map, tddjs.client.map.map);
     },
     
     "test if getRgbaColor return a valid color":function(){
