@@ -255,3 +255,44 @@ TestCase("LobbyResponseControllerCallTest", {
         assertEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
     }
 });
+
+TestCase("LobbyResponseControllerTypeTest", {
+    setUp: function() {
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
+        this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.sandbox = sinon.sandbox.create();
+        this.id = 0;
+        
+    },
+    tearDown: function()
+    {
+        this.sandbox.restore();
+        
+        // Hack for removing all lobbies
+        this.lobbyController.getLobbies().length = 0;
+        delete this.lobbyController;
+    },
+    
+    "test controller should have function to call other functions reliant on type": function() {
+        assertFunction(this.lobbyResponseController.switchLobbyPostTypes);
+    },
+    
+    "test switchLobbyPostTypes should call respondLobbyUpdate if type = lobbyUpdate": function() {
+      var spy = this.sandbox.stub(this.lobbyResponseController, "respondLobbyUpdate");
+      
+      var data = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+      
+      sinon.assert.notCalled(spy);
+      this.lobbyResponseController.switchLobbyPostTypes(this.id, data);
+      sinon.assert.calledOnce(spy);
+    }
+});
