@@ -150,23 +150,23 @@ TestCase("LobbyResponseControllerTest", {
     },
     
     
-    "test lobbyResponseController should have function to update player name": function() {
-        assertFunction(this.lobbyResponseController.respondPlayerNameUpdate);
+    "test lobbyResponseController should have function to update player": function() {
+        assertFunction(this.lobbyResponseController.respondPlayerUpdate);
     },
     
-    "test respondPlayerNameUpdate should have parameter of type object, else throw Error": function() {
+    "test respondPlayerUpdate should have parameter of type object, else throw Error": function() {
         var controller = this.lobbyResponseController;
 
         assertException(function() {
-            controller.respondPlayerNameUpdate(3, "a");
+            controller.respondPlayerUpdate(3, "a");
         }, "TypeError");
     },
     
-    "test respondPlayerNameUpdate should have parameter of type number, else throw Error": function() {
+    "test respondPlayerUpdate should have parameter of type number, else throw Error": function() {
         var controller = this.lobbyResponseController;
 
         assertException(function() {
-            controller.respondPlayerNameUpdate("a", {});
+            controller.respondPlayerUpdate("a", {});
         }, "TypeError");
     },
 });
@@ -276,7 +276,7 @@ TestCase("LobbyResponseControllerCallTest", {
         assertEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
     },
     
-    "test respondPlayerNameUpdate should update player name": function() {
+    "test respondPlayerUpdate should update player name": function() {
          var data = {
             type: "playerUpdate",
             data: {
@@ -292,12 +292,12 @@ TestCase("LobbyResponseControllerCallTest", {
         
         assertNotEquals("NewName", this.lobbyController.getLobbyById(id).getPlayers()[0].getName());
         
-        this.lobbyResponseController.respondPlayerNameUpdate(id, data);
+        this.lobbyResponseController.respondPlayerUpdate(id, data);
         
         assertEquals("NewName", this.lobbyController.getLobbyById(id).getPlayers()[0].getName());
     },
     
-    "test respondPlayerNameUpdate should throw Exception if player with Id does not exist": function() {
+    "test respondPlayerUpdate should throw Exception if player with Id does not exist": function() {
          var data = {
             type: "playerUpdate",
             data: {
@@ -313,7 +313,7 @@ TestCase("LobbyResponseControllerCallTest", {
         
         var controller = this.lobbyResponseController;
         
-        assertException(function() { controller.respondPlayerNameUpdate(id, data); }, "Error");
+        assertException(function() { controller.respondPlayerUpdate(id, data); }, "LobbyIdError");
     }
 });
 
