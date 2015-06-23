@@ -453,6 +453,16 @@ function gameUiController(aGLC,aCtx){
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
     }
     
+    function getRgbaColor(color,alpha){        
+        var color = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+        var result = {};
+        result.r = parseInt(color[1], 16);
+        result.g = parseInt(color[2], 16);
+        result.b = parseInt(color[3], 16);
+
+        return "rgba("+result.r+","+result.g+","+result.b+","+alpha+")";
+    }
+    
     function clear(){
         _ctx.fillStyle = "#ebebeb";
         _ctx.fillRect(0,0,_ctx.canvas.width, _ctx.canvas.height);
@@ -862,4 +872,5 @@ function gameUiController(aGLC,aCtx){
     this._deserialize = _deserialize;
     
     //helper
+    this.getRgbaColor=getRgbaColor;
 }
