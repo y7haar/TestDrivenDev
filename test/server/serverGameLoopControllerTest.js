@@ -65,10 +65,10 @@ TestCase("serverGameLoopControllerTest", {
         this.glc4 = new tddjs.client.gameLoopController(this.map, this.player4, this.url);
         this.glc4.establishConnection();
 
-        this.client1 = new this.fakeClient(this.glc1.eventSource,this.sandbox.server[this.url]);
-        this.client2 = new this.fakeClient(this.glc2.eventSource,this.sandbox.server[this.url]);
-        this.client3 = new this.fakeClient(this.glc3.eventSource,this.sandbox.server[this.url]);
-        this.client4 = new this.fakeClient(this.glc4.eventSource,this.sandbox.server[this.url]);  
+        this.client1 = new this.fakeClient(this.glc1.eventSource,this.sandbox.server[this.url],this.player1.getName());
+        this.client2 = new this.fakeClient(this.glc2.eventSource,this.sandbox.server[this.url],this.player1.getName());
+        this.client3 = new this.fakeClient(this.glc3.eventSource,this.sandbox.server[this.url],this.player1.getName());
+        this.client4 = new this.fakeClient(this.glc4.eventSource,this.sandbox.server[this.url],this.player1.getName());  
     },
     tearDown: function(){
         this.serverGameLoop = null;
