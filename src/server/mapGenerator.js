@@ -854,6 +854,7 @@ function mapGenerator()
             //Grenzländer des gewählten Kontinents bearbeiten
             for(var i = 0; i < neighborCountries.length; i++)
             {
+                //Grenzen des Nachbarlandes
                 var borders = neighborCountries[i].borders;
                     
                 //Alle Kontinent-Länder durchgehen
@@ -887,16 +888,16 @@ function mapGenerator()
                     var res = collectNeighbourContinents(neighborContinents[i]);
                     var doubleNeighbours = res.continents;
                     
-                    //Kopie 
+                    //Kopie der Nachbarkontinentevon seed
                     var copie = neighborContinents.slice();
                     //Sich selber rausstreichen
                     copie.splice(copie.indexOf(neighborContinents[i]), 1);
                     
                     //Nachbarn des Nachbarn durchgehen
-                    for(var j; j < doubleNeighbours.length; j++)
+                    for(var j = 0; j < doubleNeighbours.length; j++)
                     {
                         //Enthalten -> Nachbar -> entfernen
-                        var slot = copie.indexOf(doubleNeighbours);
+                        var slot = copie.indexOf(doubleNeighbours[j]);
                         
                         if(slot >= 0)
                             copie.splice(slot, 1);
@@ -914,6 +915,10 @@ function mapGenerator()
                         if(slot >= 0)
                             currentCountries.push(neighborCountries[j]);
                     }
+                                  
+                    //Abbruch wenn nix da
+                    if(copie.length <= 0)
+                        break;
                     
                     //Ziel-Kontinent
                     var randomContinent = getRandom(copie);
@@ -999,8 +1004,9 @@ function mapGenerator()
                 //Im Kontinent enthalten?
                 if(current.countries.indexOf(neighbourCountries[j]) >= 0)
                 {
-                    //Kontinent hinzufügen
-                    continents.push(allContinents[i]);
+                    //Kontinent hinzufügen wenn nicht drinnen
+                    if(continents.indexOf(allContinents[i]) === -1)
+                        continents.push(allContinents[i]);
                     break;
                 }
             }
