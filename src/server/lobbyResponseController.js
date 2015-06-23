@@ -6,8 +6,11 @@ tddjs.namespace("server.controller").lobbyResponseController= lobbyResponseContr
        
 function lobbyResponseController()
 {   
+    var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
+    var _lobbyFactory = new tddjs.server.controller.lobbyFactory();
+    
     function respondNewLobby(req)
-    {
+    {    
         if(typeof req !== "string")
             throw new TypeError("Request must be string");
         
@@ -25,11 +28,22 @@ function lobbyResponseController()
             if(typeof player.color !== "string")
                 throw new Error("Color must be a string");
             
+            var lobby = _lobbyFactory.getNewLobby();
+            var leader = new tddjs.server.player();
+            leader.setName(player.name);
+            leader.setColor(player.color);
+            //leader.setToken(req.session.token);
+
+            lobby.addPlayer(leader);
+            lobby.setLeader(leader);
+            _lobbyController.addLobby(lobby);
+            
         }
         catch(e)
         {
             throw new Error("JSON is not valid");
         }
+        
     }
     
     this.respondNewLobby = respondNewLobby;
