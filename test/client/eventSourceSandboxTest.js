@@ -113,6 +113,7 @@ TestCase("eventSourceSandboxServer", {
        assertException(function(){
            server.setHandleResponse("true");
        },"TypeError");
+       
        assertNoException(function(){
            server.setHandleResponse(true);
        });           
@@ -293,6 +294,25 @@ TestCase("eventSourceSandboxServer", {
     },
     "test sandbox.server requets should hold all requests at start 0": function(){
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+    },
+    "test sandbox.server update should handle responses if handleRespons is true": function(){
+        assertTrue(this.sandbox.server[this.server1URL].handleResponse);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
+        var es = new EventSource(this.server1URL);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(1,es.readyState);        
+    },
+    "test sandbox.server update should not handle responses if handleResponse is false": function(){
+        this.sandbox.server[this.server1URL].setHandleResponse(false);
+        assertFalse(this.sandbox.server[this.server1URL].handleResponse);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
+        var es = new EventSource(this.server1URL);
+        assertEquals(0, es.readyState);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        this.sandbox.server[this.server1URL].requests[0].respond(200,"","");
+        assertEquals(1, es.readyState);   
     },
     "test sandbox.server requets should have 1 entry after a ajax request to server, sandbox.upgrade should upgrade all servers": function(){
         var es = new EventSource(this.server1URL);
