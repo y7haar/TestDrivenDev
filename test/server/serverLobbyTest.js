@@ -134,6 +134,21 @@ TestCase("LobbyPlayerServerTest", {
 
         assertNotEquals(this.player1.getId(), this.player2.getId());
 
+    },
+    
+    "test Lobby should have method to get player by id": function() {
+        assertFunction(this.lobby.getPlayerById);
+    },
+    
+    "test getPlayerById should return correct player": function() {
+        this.player1.setId(1);
+        this.player2.setId(2);
+        
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        
+        assertSame(this.player1, this.lobby.getPlayerById(1));
+        assertSame(this.player2, this.lobby.getPlayerById(2));
     }
 
 });
