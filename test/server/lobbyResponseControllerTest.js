@@ -85,7 +85,7 @@ TestCase("LobbyResponseControllerTest", {
         var controller = this.lobbyResponseController;
 
         assertException(function() {
-            controller.respondJoin({}, "string");
+            controller.respondJoin({}, {});
         }, "TypeError");
     },
     
@@ -94,37 +94,37 @@ TestCase("LobbyResponseControllerTest", {
 
         var obj = {type: "join"};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: 6};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: {}};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: {name: 4}};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: {name: "Peter"}};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: {name: "Peter", color: 3}};
         assertException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         }, "Error");
 
         var obj = {type: "join", player: {name: "Peter", color: "#ffffff"}};
         assertNoException(function() {
-            controller.respondJoin(obj);
+            controller.respondJoin(0, obj);
         });
     }
 });
