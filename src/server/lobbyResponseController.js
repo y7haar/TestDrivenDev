@@ -9,7 +9,20 @@ function lobbyResponseController()
     var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
     var _lobbyFactory = new tddjs.server.controller.lobbyFactory();
     var _methodTypes = {};
+    var _currentToken;
     
+    function setToken(aToken)
+    {
+        if(typeof aToken !== "string")
+            throw new TypeError("Token must be string");
+        
+        _currentToken = aToken;
+    }
+    
+    function getToken()
+    {
+        return _currentToken;
+    }
     
     function respondNewLobby(obj)
     {    
@@ -199,8 +212,12 @@ function lobbyResponseController()
     this.respondJoin = respondJoin;
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
+    this.setToken = setToken;
+    this.getToken = getToken;
+    
     
     _methodTypes["lobbyUpdate"] = this.respondLobbyUpdate;
+    _methodTypes["playerUpdate"] = this.respondPlayerUpdate;
     _methodTypes["join"] = this.respondJoin;
 }
 
