@@ -94,6 +94,7 @@ TestCase("GameUiTest", {
     
     "test if getRgbaColor return a valid color":function(){
         var color = this.gameUi.getRgbaColor("#C88C00",0.5);
-        assertEaqals(color,"rgba(200,140,0,0.5)");
+        
+        assertEquals(color,"rgba(200,140,0,0.5)");
     }
 });
