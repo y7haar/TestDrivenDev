@@ -45,33 +45,7 @@ TestCase("eventSourceSandbox", {
     },
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
-    },
-    "test sandbox should hold bool handleResponse":function(){
-       assertNotUndefined(this.sandbox.handleResponse);
-    },
-    "test sandbox.setHandleResponse should be a function":function(){
-       assertFunction(this.sandbox.setHandleResponse);
-    },
-    "test sandbox.setHandleResponse should expect Bool as paramter":function(){
-       var sandbox = this.sandbox;
-       assertException(function(){
-           sandbox.setHandleResponse(null);
-       },"TypeError");
-       
-       assertException(function(){
-           sandbox.setHandleResponse("true");
-       },"TypeError");
-       assertNoException(function(){
-           sandbox.setHandleResponse(true);
-       });           
-    },
-    "test sandbox.handleResponse should be true at init":function(){
-        assertTrue(this.sandbox.handleResponse);
-    },
-    "test sandbox.setHandleResponse set handleResponse to false":function(){
-        this.sandbox.setHandleResponse(false);
-        assertFalse(this.sandbox.handleResponse);
-    },
+    },   
     "test sandbox shoulde have a object that hold all servers": function () {
         assertNotUndefined(this.sandbox.server);
     },
@@ -122,6 +96,33 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox server.clients should be empty ": function () {
         assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
         assertEquals([], this.sandbox.server[this.server1URL].clients);
+    },
+    "test sandbox should hold bool handleResponse":function(){
+       assertNotUndefined(this.sandbox.server[this.server1URL].handleResponse);
+       assertEquals("boolean", typeof this.sandbox.server[this.server1URL].handleResponse);
+    },
+    "test sandbox.server setHandleResponse should be a function":function(){
+       assertFunction(this.sandbox.server[this.server1URL].setHandleResponse);
+    },
+    "test sandbox.server.setHandleResponse should expect Bool as paramter":function(){
+       var server = this.sandbox.server[this.server1URL];
+       assertException(function(){
+           server.setHandleResponse(null);
+       },"TypeError");
+       
+       assertException(function(){
+           server.setHandleResponse("true");
+       },"TypeError");
+       assertNoException(function(){
+           server.setHandleResponse(true);
+       });           
+    },
+    "test sandbox.server handleResponse should be true at init":function(){
+        assertTrue(this.sandbox.server[this.server1URL].handleResponse);
+    },
+    "test sandbox.server setHandleResponse set handleResponse to false":function(){
+        this.sandbox.server[this.server1URL].setHandleResponse(false);
+        assertFalse(this.sandbox.server[this.server1URL].handleResponse);
     },
     "test sandbox server should have a client if EventSource object is created with this serverUrl as source": function () {
         var es = new EventSource(this.server1URL);
