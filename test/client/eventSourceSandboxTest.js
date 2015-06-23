@@ -45,7 +45,33 @@ TestCase("eventSourceSandbox", {
     },
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
-    },    
+    },
+    "test sandbox should hold bool handleResponse":function(){
+       assertNotUndefined(this.sandbox.handleResponse);
+    },
+    "test sandbox.setHandleResponse should be a function":function(){
+       assertFunction(this.sandbox.setHandleResponse);
+    },
+    "test sandbox.setHandleResponse should expect Bool as paramter":function(){
+       var sandbox = this.sandbox;
+       assertException(function(){
+           sandbox.setHandleResponse(null);
+       },"TypeError");
+       
+       assertException(function(){
+           sandbox.setHandleResponse("true");
+       },"TypeError");
+       assertNoException(function(){
+           sandbox.setHandleResponse(true);
+       });           
+    },
+    "test sandbox.handleResponse should be true at init":function(){
+        assertTrue(this.sandbox.handleResponse);
+    },
+    "test sandbox.setHandleResponse set handleResponse to false":function(){
+        this.sandbox.setHandleResponse(false);
+        assertFalse(this.sandbox.handleResponse);
+    },
     "test sandbox shoulde have a object that hold all servers": function () {
         assertNotUndefined(this.sandbox.server);
     },
@@ -333,7 +359,7 @@ TestCase("eventSourceSandboxServer", {
         assertTrue(failureCalled);
         assertFalse(succesCalled);
     },
-    "test sandbox.update should not add same requests at second call": function(){
+    "test sandbox.update should add requests but not add same requests at second call": function(){
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
     
