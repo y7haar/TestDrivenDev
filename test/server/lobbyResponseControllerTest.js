@@ -281,6 +281,8 @@ TestCase("LobbyResponseControllerTypeTest", {
         assertFunction(this.lobbyResponseController.switchLobbyPostTypes);
     },
     
+    // Bug in Sinon because Scope is incorrect
+    
     "test switchLobbyPostTypes should call respondLobbyUpdate if type = lobbyUpdate": function() {
       var spy = this.sandbox.stub(this.lobbyResponseController, "respondLobbyUpdate");
       

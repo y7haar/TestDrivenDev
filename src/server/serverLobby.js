@@ -117,6 +117,7 @@ function lobby()
         return _leader;
     }
 
+    
     function serialize()
     {
         var json = JSON.stringify(serializeAsObject());
@@ -124,7 +125,7 @@ function lobby()
     }
 
     function serializeAsObject()
-    {
+    {   
         var id = getId();
         var name = getName();
         var maxPlayers = _getMaxPlayers();
@@ -135,11 +136,7 @@ function lobby()
 
         for (var i = 0; i < players.length; ++i)
         {
-            var player = {
-                id: players[i].getId(),
-                name: players[i].getName(),
-                color: players[i].getColor()
-            };
+            var player = players[i].serializeAsObject();
 
             playersObj[i] = player;
         }

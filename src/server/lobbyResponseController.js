@@ -8,6 +8,8 @@ function lobbyResponseController()
 {   
     var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
     var _lobbyFactory = new tddjs.server.controller.lobbyFactory();
+    var _methodTypes = {};
+    
     
     function respondNewLobby(obj)
     {    
@@ -35,6 +37,12 @@ function lobbyResponseController()
             lobby.addPlayer(leader);
             lobby.setLeader(leader);
             _lobbyController.addLobby(lobby);
+            
+            var obj = {};
+            obj.lobby = lobby.serializeAsObject();
+            obj.currentPlayerId = leader.getId();
+            
+            return obj;
             
         }
         catch(e)
@@ -78,6 +86,12 @@ function lobbyResponseController()
             //newPlayer.setToken(req.session.token);
 
             lobby.addPlayer(newPlayer);
+            
+            var obj = {};
+            obj.lobby = lobby.serializeAsObject();
+            obj.currentPlayerId = newPlayer.getId();
+            
+            return obj;
         }
         
         catch(e)
@@ -127,8 +141,23 @@ function lobbyResponseController()
         }
     }
     
+    function switchLobbyPostTypes(id, data)
+    {
+        var type = data.type;
+        
+        if(typeof _methodTypes[type] === "function")
+        {
+           return  _methodTypes[type](id, data);
+        }
+            
+    }
+    
+    this.switchLobbyPostTypes = switchLobbyPostTypes;
     this.respondNewLobby = respondNewLobby;
     this.respondJoin = respondJoin;
     this.respondLobbyUpdate = respondLobbyUpdate;
+    
+    _methodTypes["lobbyUpdate"] = this.respondLobbyUpdate;
+    _methodTypes["join"] = this.respondJoin;
 }
 

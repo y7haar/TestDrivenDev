@@ -17,7 +17,6 @@ require("./lobbyResponseController");
 var lobbyApp = express();
 
 lobbyApp.use(bodyParser.json({}));
-lobbyApp.use(logger({}));
 
 var lobbyController = tddjs.server.controller.lobbyController.getInstance();
 var lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
@@ -29,8 +28,8 @@ lobbyApp.get("", function (req, res) {
 lobbyApp.post("", function (req, res) {
     try
     {
-        lobbyResponseController.respondNewLobby(req.body);
-        res.status(200).end();
+        var response = lobbyResponseController.respondNewLobby(req.body);
+        res.json(response);
     }
     
     catch(e)
@@ -42,8 +41,10 @@ lobbyApp.post("", function (req, res) {
 lobbyApp.post("/:id", function (req, res) {
     try
     {
-        lobbyResponseController.respondJoin(0, req.body);
-        res.status(200).end();
+
+        var response = lobbyResponseController.switchLobbyPostTypes(parseInt(req.params.id), req.body);
+        
+        res.json(response);
     }
     
     catch(e)
@@ -51,4 +52,7 @@ lobbyApp.post("/:id", function (req, res) {
         res.status(400).send("Wrong JSON Format");
     }
 });
+
+
+
 module.exports = lobbyApp;
