@@ -182,6 +182,13 @@ TestCase("LobbyResponseControllerTest", {
         assertUndefined(this.lobbyResponseController.getToken());
         this.lobbyResponseController.setToken("123456");
         assertEquals("123456", this.lobbyResponseController.getToken());
+    },
+    
+    "test setToken should throw Error if token is not a string": function() {
+        var controller = this.lobbyResponseController;
+        
+        assertNoException(function() { controller.setToken("1234"); });
+        assertException(function() { controller.setToken(1); }, "TypeError");
     }
 });
 
