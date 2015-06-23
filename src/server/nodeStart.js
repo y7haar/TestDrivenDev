@@ -44,7 +44,7 @@ app.use(sessions({
 
 app.use(bodyParser.json({}));
 app.use(logger({}));
-app.use("/lobbies", lobbyApp);
+
 
 app.listen(8080);
 
@@ -83,7 +83,7 @@ app.post('/lobbies/:id', function (req, res) {
 
 
 
-
+app.use("/lobbies", lobbyApp);
 
 
 
