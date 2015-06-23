@@ -195,7 +195,7 @@ function lobby()
         }
         
         _usedTokens[token] = true;
-        return token;
+        return token.toString();
     }
 
     this.addPlayer = addPlayer;

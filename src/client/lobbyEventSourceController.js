@@ -17,7 +17,7 @@ function lobbyEventSourceController()
         if(! (_lobby instanceof tddjs.client.model.lobby))
             throw new Error("Lobby must be setted before doing a request");
         
-        _eventSource = new EventSource(BASE_URL + "lobbies/" + _lobby.getId());
+        _eventSource = new EventSource(BASE_URL + "lobbies/" + _lobby.getId(), { withCredentials: true });
        
         this.addEventListeners();
     }
