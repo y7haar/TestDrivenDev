@@ -13,12 +13,15 @@ TestCase("LobbyResponseControllerTest", {
     tearDown: function()
     {
     },
+    
     "test lobbyResponseController should not be undefined after constructor call": function() {
         assertObject(this.lobbyResponseController);
     },
+    
     "test lobbyResponseController should have function to respond to a new lobby request": function() {
         assertFunction(this.lobbyResponseController.respondNewLobby);
     },
+    
     "test respondNewLobby should have parameter of type string, else throw Error": function() {
         var controller = this.lobbyResponseController;
 
@@ -26,6 +29,7 @@ TestCase("LobbyResponseControllerTest", {
             controller.respondNewLobby(3);
         }, "TypeError");
     },
+    
     "test respondNewLobby should throw Error if given data is not valid": function() {
         var controller = this.lobbyResponseController;
 
@@ -83,4 +87,32 @@ TestCase("LobbyResponseControllerTest", {
     }
 });
 
-
+TestCase("LobbyResponseControllerCallTest", {
+    setUp: function() {
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
+        this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.request = {type: "create", player: {name: "Unnamed Player", color: "#ffffff"}};
+        this.request = JSON.stringify(this.request);
+    },
+    tearDown: function()
+    {
+        // Hack for removing all lobbies
+        this.lobbyController.getLobbies().length = 0;
+        delete this.lobbyController;
+    },
+    
+    "test respondNewLobby should create a new Lobby with player on Success": function() {
+        assertEquals(0, this.lobbyController.getLobbies().length);
+        
+        this.lobbyResponseController.respondNewLobby(this.request);
+        assertEquals(1, this.lobbyController.getLobbies().length);
+        var lobby = this.lobbyController.getLobbyById(0);
+        
+        assertEquals("Unnamed Player", lobby.getPlayers()[0].getName());
+        assertEquals("#ffffff", lobby.getPlayers()[0].getColor());
+    }
+});
