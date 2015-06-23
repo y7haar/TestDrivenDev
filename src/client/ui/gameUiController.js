@@ -472,14 +472,16 @@ function gameUiController(aGLC,aCtx){
         return _btn;
     }
     function mouseMove(oEvent){
-        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border/2));
-        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border/2-bottom));
+        var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY-border/2) * _gridMap[0].length / (_ctx.canvas.height-border-bottom));
 
-        clear();
         drawGame();
-
+        
         for (var i in _btn)
             _btn[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
+        
+        if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
+            return; //nicht auf dem grid
         
         var id = _gridMap[x][y].id;
         if(id>=0){ //kein wasser
@@ -497,12 +499,17 @@ function gameUiController(aGLC,aCtx){
         }
     }
     function mouseDown(oEvent){
-        var x = Math.round((oEvent.offsetX) * _gridMap.length / (_ctx.canvas.width-border/2));
-        var y = Math.round((oEvent.offsetY) * _gridMap[0].length / (_ctx.canvas.height-border/2-bottom));
+        var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
+        var y = Math.round((oEvent.offsetY-border/2) * _gridMap[0].length / (_ctx.canvas.height-border-bottom));
 
-        clear();
-        //drawGame();
-        var id = _gridMap[x][y].id
+        for (var i in _btn)
+            if(_btn[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY))
+                    _btn[i].click();
+        
+        if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
+            return; //nicht auf dem grid
+        
+        var id = _gridMap[x][y].id;
         if(id>=0){ //kein wasser
             _gridMap[x][y].selected=!_gridMap[x][y].selected;
             if(_gridMap[x][y].selected){
