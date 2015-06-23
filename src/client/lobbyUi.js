@@ -221,6 +221,8 @@ function lobbyUi(aRequestController)
         maxPlayersSelect.add(playersOptions[0]);
         maxPlayersSelect.add(playersOptions[1]);
         maxPlayersSelect.add(playersOptions[2]);
+        maxPlayersSelect.value = aLobby.getMaxPlayers();
+        
         maxPlayersSelect.className = "lobbyMaxPlayersSelect";
         maxPlayersSelect.onchange = function() {
             var maxPlayersNumber = parseInt(maxPlayersSelect.value);
