@@ -1096,7 +1096,7 @@ function mapGenerator()
         json.water.fields = map.water.fields;
         json.water.border = [[]];
         for(var i in map.water.borders){
-            if(i>0)
+            if(map.water.borders[i].length>0)
             json.water.border.push([map.water.borders[i][0].id,map.water.borders[i][1].id]);
         }
         
