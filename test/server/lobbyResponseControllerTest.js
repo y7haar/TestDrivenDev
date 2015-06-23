@@ -214,6 +214,11 @@ TestCase("LobbyResponseControllerCallTest", {
             player: this.player.serializeAsObject()
         };
         
+        
+        this.lobby50 = new tddjs.server.model.lobby();
+        this.lobby50.setId(50);
+        this.lobbyController.addLobby(this.lobby50);
+        
     },
     tearDown: function()
     {
@@ -345,9 +350,23 @@ TestCase("LobbyResponseControllerCallTest", {
     
     "test broadcastMessage should throw Exception if message is no object": function() {
         var controller = this.lobbyResponseController;
-        assertNoException(function() { controller.broadcastMessage(0, {}); });
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
         
-        assertException(function() { controller.broadcastMessage(0, "asd"); }, "TypeError");
+        assertException(function() { controller.broadcastMessage(50, "asd", "event"); }, "TypeError");
+    },
+    
+    "test broadcastMessage should throw Exception if event is no string": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
+        
+        assertException(function() { controller.broadcastMessage(50, {}, 3); }, "TypeError");
+    },
+    
+    "test broadcastMessage should throw Exception if id is no number": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
+        
+        assertException(function() { controller.broadcastMessage("0", {}, "event"); }, "TypeError");
     }
 });
 
