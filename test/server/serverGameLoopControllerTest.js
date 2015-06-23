@@ -16,16 +16,29 @@ TestCase("serverGameLoopControllerTest", {
         this.fakeClient = function (eventSource, aServer) {
             var server = aServer;
             var eventSourceIndex = server.clients.indexOf(eventSource);
-            this.sendCalled = false;
-            this.data;
-            this.send = function (msg) {
-                this.sendCalled = true;
+           
+            this.req = {};
+            this.res = {};   
+            var sendCalledBool = false;
+            var data = "test";
+            this.res.write = function (msg) {        
+                sendCalledBool = true;
+                
                 var array = msg.split("\n");
                 var event = array[0].split(":")[1];
-                data = {data:array[1]};
+                data = {data:array[1]};        
                 server.sendMessage(eventSourceIndex,event, data);
                 
             };
+            Object.defineProperty(this, 'sendCalled', {
+            get: function () {
+                return sendCalledBool;
+            }});
+            Object.defineProperty(this, 'data', {
+            get: function () {
+                return data;
+            }});
+   
         };
         this.map = generateMap();
 
@@ -74,12 +87,12 @@ TestCase("serverGameLoopControllerTest", {
        assertEquals(4, this.serverGameLoop.clients.length);       
        assertEquals([this.client1,this.client2,this.client3,this.client4], this.serverGameLoop.clients);       
     },
-    "test if fakeClient send was called": function(){
+    "test if fakeClient res.write was called": function(){
         this.serverGameLoop.addClient(this.client1);
         
         assertFalse(this.serverGameLoop.clients[0].sendCalled);
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].send(data);
+        this.serverGameLoop.clients[0].res.write(data);
         assertTrue(this.serverGameLoop.clients[0].sendCalled);
     },
     "test if sgl send msg to Client": function(){
@@ -87,7 +100,7 @@ TestCase("serverGameLoopControllerTest", {
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
         assertEquals(0,this.glc1.fromServerLogs.length);
-        this.serverGameLoop.clients[0].send(data);
+        this.serverGameLoop.clients[0].res.write(data);
         assertEquals(1,this.glc1.fromServerLogs.length);
     },
     "test if client changes state after sglc send changeToAttackState event": function(){
@@ -95,9 +108,8 @@ TestCase("serverGameLoopControllerTest", {
         
         assertEquals("waitingState", this.glc1.getStateName());
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].send(data);
-        assertEquals("attackingState", this.glc1.getStateName());
-       
+        this.serverGameLoop.clients[0].res.write(data);
+        assertEquals("attackingState", this.glc1.getStateName());       
     }
 });
     
