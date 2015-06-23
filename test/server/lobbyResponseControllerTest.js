@@ -67,6 +67,57 @@ TestCase("LobbyResponseControllerTest", {
         assertNoException(function() {
             controller.respondNewLobby(obj);
         });
+    },
+    
+    "test lobbyResponseController should have function to respond to join": function() {
+        assertFunction(this.lobbyResponseController.respondJoin);
+    },
+    
+    "test respondJoin should have parameter of type object, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondJoin(3);
+        }, "TypeError");
+    },
+    
+    "test respondJoin should throw Error if given data is not valid": function() {
+        var controller = this.lobbyResponseController;
+
+        var obj = {type: "join"};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: 6};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: {}};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: {name: 4}};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: {name: "Peter"}};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: {name: "Peter", color: 3}};
+        assertException(function() {
+            controller.respondJoin(obj);
+        }, "Error");
+
+        var obj = {type: "join", player: {name: "Peter", color: "#ffffff"}};
+        assertNoException(function() {
+            controller.respondJoin(obj);
+        });
     }
 });
 
