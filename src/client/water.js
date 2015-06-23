@@ -7,7 +7,7 @@ tddjs.namespace("client.map").water=water;
          
 function water()
 {
-    var _border=[[]];
+    var _border=[];
     var _name;
     
     function addBorder(aCountry1,aCountry2)
