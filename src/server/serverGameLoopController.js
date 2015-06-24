@@ -45,17 +45,28 @@ function gameLoopController()
     
     function playerMove(req, res)
     {
-        type = JSON.parse(req.body).type;
-        switch(type)
+        var type = JSON.parse(req.body).type;
+        var body = JSON.parse(req.body);
+        switch (type)
         {
             case 'endPhase':
-                console.log(res);
+                console.log(req.body);
                 res.status(200).send("OK");
+                if (body.phaseName === "placingState")
+                {
+                    var data = "event:changeToAttacking\ndata:ChangeToAttacking\n\n";
+                    _clients[0].res.write(data);
+                }
+                else if (body.phaseName === "attackingState")
+                {
+                    var data = "event:changeToWaiting\ndata:ChangeToWaiting\n\n";
+                    _clients[0].res.write(data);
+                }
                 break;
             default:
                 res.status(404).send("404");
-            break;    
-                
+                break;
+
         }
         
     }
