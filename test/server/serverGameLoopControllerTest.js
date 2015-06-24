@@ -580,6 +580,10 @@ TestCase("serverGameLoopControllerTest", {
    
         assertEquals(3,this.glc1.fromServerLogs.length);
         assertEquals(this.attackResultData, JSON.parse(this.glc1.fromServerLogs[2].data));      
+    },
+    "test sglc should implement messageAllClients function":function()
+    {
+        assertFunction(this.serverGameLoop.messageAllClients);
     }
     
     
