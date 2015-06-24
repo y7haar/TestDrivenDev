@@ -184,8 +184,15 @@ function eventSourceSandbox()
             var requestURL = sinonSandbox.server.requests[i].url;
             if(typeof server[requestURL] !== 'undefined')
             {
-                server[requestURL].requests.push(sinonSandbox.server.requests[i]);
-                sinonSandbox.server.requests[i].respond(200, "", "");         
+                if(server[requestURL].handleResponse)
+                {
+                    server[requestURL].requests.push(sinonSandbox.server.requests[i]);
+                    sinonSandbox.server.requests[i].respond(200, "", "");
+                }
+                else if(! server[requestURL].handleResponse)
+                {
+                    server[requestURL].requests.push(sinonSandbox.server.requests[i]);
+                }
             }
             else
             {              
