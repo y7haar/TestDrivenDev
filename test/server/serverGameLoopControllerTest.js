@@ -197,19 +197,15 @@ TestCase("serverGameLoopControllerTest", {
         var url = this.url;
         
         var fakeReq = {
-            body: this.sandbox.server[this.url].requests[4].requestBody
+            body: sandbox.server[url].requests[4].requestBody
         };
         var fakeRes = {
             status: function(aCode)
             {
                 var code = aCode;       
                 send = function(msg)
-                {
-                    if(code === 200)
-                    {                  
-                        sandbox.server[url].requests[4].respond(200,msg,"");
-                    }
-               
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
                 };
                 return {send:send};
         }};   
@@ -218,6 +214,74 @@ TestCase("serverGameLoopControllerTest", {
    
         assertEquals(1,this.glc1.toServerLogs.length);
         assertEquals(200, this.sandbox.server[this.url].requests[4].status);        
+    },
+    "test sglc.playerMove(endPhase:placing) should be attacking after call": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        assertEquals("placingState" ,this.glc1.getStateName());
+        
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        var sandbox = this.sandbox;
+        var url = this.url;
+        var fakeReq = {
+           
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};   
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertEquals("attackingState", this.glc1.getStateName());        
+    },
+    "test sglc.playerMove(endPhase:attacking) should be waiting after call": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        assertEquals("placingState" ,this.glc1.getStateName());
+        
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        var sandbox = this.sandbox;
+        var url = this.url;
+        var fakeReq = {
+           
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};   
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        this.glc1.endPhase();   
+        this.sandbox.update();      
+       
+        
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertEquals("waitingState", this.glc1.getStateName());        
     }
     
     
