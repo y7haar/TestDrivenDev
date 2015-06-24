@@ -217,7 +217,8 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(endPhase:placing) should be attacking after call": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.client1);       
+     
         assertEquals("placingState" ,this.glc1.getStateName());
         
         this.glc1.endPhase();
@@ -249,16 +250,20 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc.playerMove(endPhase:attacking) should be waiting after call": function(){
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.addClient(this.client1);
-        assertEquals("placingState" ,this.glc1.getStateName());
         
-        this.glc1.endPhase();
-        // tell the server to not Response automaticly 
-        this.sandbox.server[this.url].setHandleResponse(false);
-        this.sandbox.update();
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].res.write(data);
+        
+        assertEquals("attackingState" ,this.glc1.getStateName());     
         
         var sandbox = this.sandbox;
         var url = this.url;        
   
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+         
         var fakeReq = {
            
             body: sandbox.server[url].requests[4].requestBody
@@ -270,26 +275,6 @@ TestCase("serverGameLoopControllerTest", {
                 send = function(msg)
                 {                  
                    sandbox.server[url].requests[4].respond(code,msg,"");                    
-                };
-                return {send:send};
-        }};   
- 
-        this.serverGameLoop.playerMove(fakeReq, fakeRes);
-        
-        // now in attacking calling endPhase to get to waiting
-        this.glc1.endPhase();   
-        this.sandbox.update(); 
-        var fakeReq = {
-           
-            body: sandbox.server[url].requests[5].requestBody
-        };
-        var fakeRes = {
-            status: function(aCode)
-            {
-                var code = aCode;       
-                send = function(msg)
-                {                  
-                   sandbox.server[url].requests[5].respond(code,msg,"");                    
                 };
                 return {send:send};
         }};         
