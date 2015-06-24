@@ -27,10 +27,10 @@ TestCase("serverGameLoopControllerTest", {
                 
                 var array = msg.split("\n");
                 var event = array[0].split(":")[1];
-                var message = array[1].split(":")[1];           
-                data = JSON.stringify({data:message});
+                var message = array[1].split(":")[1];     
+                data = JSON.stringify(message);
                 console.log(data);
-                server.sendMessage(eventSourceIndex,event, data);
+                server.sendMessage(eventSourceIndex,event, {data:data});
                 
             };
             Object.defineProperty(this, 'sendCalled', {
@@ -44,9 +44,9 @@ TestCase("serverGameLoopControllerTest", {
             Object.defineProperty(this, 'name', {
             get: function () {
                 return name;
-            }});
-   
+            }});   
         };
+        
         this.map = generateMap();
 
         this.player1 = new tddjs.client.player();
@@ -157,7 +157,7 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.addClient(this.client2);
         assertTrue(this.serverGameLoop.allConnected);
         
-        assertEquals("watingState", this.glc2.getStateName());
+        assertEquals("waitingState", this.glc2.getStateName());
         assertEquals("placingState", this.glc1.getStateName());
     },
     "test sglc should implement playerMove function": function(){
