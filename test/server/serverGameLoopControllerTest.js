@@ -12,6 +12,15 @@ TestCase("serverGameLoopControllerTest", {
 
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);
+        
+        this.validPlacingMove = {
+            type: 'placing',
+            unitCount: 1,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country1'
+        };
+        
 
         this.fakeClient = function (eventSource, aServer, aName) {
             var name = aName;
@@ -341,7 +350,7 @@ TestCase("serverGameLoopControllerTest", {
         // if currentClient changes state to waiting next client should be in placing
         assertEquals("placingState", this.glc2.getStateName());        
     },
-     "test sglc.currentState should start at Client1 if last client changed to waitingState":function(){
+    "test sglc.currentState should start at Client1 if last client changed to waitingState":function(){
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.addClient(this.client1);
         
@@ -372,9 +381,46 @@ TestCase("serverGameLoopControllerTest", {
         }};         
     
         this.serverGameLoop.playerMove(fakeReq, fakeRes);        
-        assertEquals(0, this.serverGameLoop.currentClient); 
+        assertEquals(0, this.serverGameLoop.currentClient);          
+    },
+    "test sglc.playerMove should react to makeMove(placingType) move with Status 200 ": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+
+        
+        assertEquals(0,this.glc1.toServerLogs.length);
+        this.glc1.makeMove(this.validPlacingMove);
+        
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        assertEquals(0,this.glc1.toServerLogs.length);
+        assertEquals(0, this.sandbox.server[this.url].requests[4].status);
+        
+        var sandbox = this.sandbox;
+        var url = this.url;
+        
+        var fakeReq = {
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};   
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+   
+        assertEquals(1,this.glc1.toServerLogs.length);
+        assertEquals(200, this.sandbox.server[this.url].requests[4].status);    
          
-     }
+    }
     
     
   
