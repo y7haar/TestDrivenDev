@@ -50,11 +50,10 @@ function gameLoopController()
     function playerMove(req, res)
     {
         var type = JSON.parse(req.body).type;
-        var body = JSON.parse(req.body);
+        var body = JSON.parse(req.body);       
         switch (type)
         {
-            case 'endPhase':
-                console.log(req.body);
+            case 'endPhase':             
                 res.status(200).send("OK");
                 if (body.phaseName === "placingState")
                 {
@@ -78,6 +77,27 @@ function gameLoopController()
                     var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
                     _clients[_currentClient].res.write(data);
                 }
+                break;
+            case 'placing':
+                res.status(200).send("OK");
+                console.log("SERVER-Controller: playerMove placing body:\n");
+                console.dir(body);
+                
+                var msg = {
+                  type:body.type,
+                  player:body.player,
+                  change:{
+                      continent:body.continent,
+                      country:body.country,
+                      unitCount:body.unitCount                      
+                    }
+                };               
+                msg = JSON.stringify(msg);
+                var data = "event:placeUnits\ndata:"+msg+"\n\n";            
+                _clients[_currentClient].res.write(data);
+                break;
+            case 'attack':              
+                res.status(200).send("OK");
                 break;
             default:
                 res.status(404).send("404");
