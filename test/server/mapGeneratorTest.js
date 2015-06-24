@@ -926,8 +926,21 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMaximumWaterNumber("fff");}, "TypeError");
         assertException(function(){gen.setMaximumWaterNumber(-10);}, "Error");
         assertException(function(){gen.setMaximumWaterNumber(1);}, "Error");
-    }
+    },
     
+    "test Should be able to access the NameListGenerator for Continents": function()
+    {
+        var x = this.mapGenerator.getContinentNameGenerator();
+        
+        assertTrue(x instanceof tddjs.server.controller.nameListGenerator);
+    },
+    
+    "test Should be able to access the NameListGenerator for Countries": function()
+    {
+        var x = this.mapGenerator.getCountryNameGenerator();
+        
+        assertTrue(x instanceof tddjs.server.controller.nameListGenerator);
+    }
 });
 
 
@@ -1016,7 +1029,11 @@ TestCase("MapGeneratorTest", {
         var water = map.water;
         
         assertArray(water.borders);
-        assertTrue(water.borders.length > 1);
+        assertTrue(water.borders.length >= 1);
+        var x = water.borders.pop();
+        assertEquals(2, x.length);
+        assertTrue(x[0].isCountry);
+        assertTrue(x[1].isCountry);
     },
     
     "test generateMap should return a map-object with atleast minimumContinents": function()
