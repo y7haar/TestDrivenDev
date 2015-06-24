@@ -1148,6 +1148,61 @@ TestCase("MapGeneratorTest", {
         var map = this.mapGenerator.generateMap();
         
         assertTrue(map.water.size <= 4);
+    },
+    
+    "test Contients should have Names out of the setted List": function()
+    {
+        var list = ["Aranonda", "Lorna", "Lors", "Faridon", "Elona", "Cantha", "Tyria",
+                    "Nod", "Rod", "Kryta", "Ascalon", "Elysium", "Braktarien", "Karatie"];
+        this.mapGenerator.setGridSize(this.x, this.y);
+        this.mapGenerator.getContinentNameGenerator().setNameList(list);
+        
+        var map = this.mapGenerator.generateMap();    
+        var continents = map.continents;
+        
+        assertTrue(list.indexOf(continents[0].name) >= 0);
+        assertTrue(list.indexOf(continents[1].name) >= 0);
+        assertTrue(list.indexOf(continents[2].name) >= 0);
+        assertTrue(list.indexOf(continents[3].name) >= 0);
+        assertTrue(list.indexOf(continents[continents.length -1].name) >= 0);
+    },
+    
+    "test Countries should have Names out of the setted List": function()
+    { 
+        var list = ["Bakaresh", "Rodkaresh", "Bastion Akundur", "Ankh Morpork", "Serandur", "Sturmgipfel",
+                    "Kristallnarbe", "Kristallwüste", "Gewundener Wald", "Piltover", "Zaun", "Demacia", 
+                    "Schicksalsschlucht", "Cavalon", "Haus zu Heltzer", "Zentrum von Kaineng", "Kloster von Shingjea",
+                    "Borlispass", "Gunnars Feste", "Ratasum", "Droknars Schmiede", "Oase Amnoon", 
+                    "Steinkreis von Denravi", "Löwenstein", "Wachturmküste", "Frosttor", "Nolani-Akademie",
+                    "Der große Nordwall", "Fort Ranik", "Erntetempel", "Skyrim", "Kamadan", "Halle der Sonnenspeere",
+                    "Faring", "Valorian", "Sardelek-Sanatorium", "Drascir", "Die schwarze Zitadelle", "Ebonhawk",
+                    "Kluft der Beschwörer", "Abbadons Maul", "Tor des Wahnsinns", "Tor der Angst", "Tor der Schmerzen",
+                    "Tor der Pein", "Vaabi", "Schwarzwasserküste", "Eisminen von Moladune", "Ödland", "Rin",
+                    "Markt von Faible", "Seufzer-Graftschaft", "Dünen der Verzweiflung", "Fels der Weissagung",
+                    "Maguuma-Dschungel", "Zittergipfelgebirge", "Ruinen von Surmia", "Drachenschlund ",
+                    "Pockennarbenebene", "Grooble-Schlucht", "Signalfeuerposten", "Lornarpass", "Arah", 
+                    "Das Trockene Meer", "Auroralichtung", "Ostgrenze", "Tempel der Zeitalter", "Halle der Helden",
+                    "Idylissches Tal", "Noxus", "Ionia", "Shurima", "Platonien", "Gefrorenes Herz",
+                    "Tal des Erzengels", "Trauerschlucht", "Kimberleys Tränen", "Tal des Schreckens", "Minental",
+                    "Khorinis", "Jharkendar", "Irdorath", "Myrtana", "Nordmar", "Varant", "Velen", "Novigrad",
+                    "Skellige", "Weißgarten", "Oxenfurt", "Kaer Morhen", "Wyzima", "Weißlauf", "Flusswald", "Riften",
+                    "Winterfeste", "Morthal", "Windhelm", "Markarth", "Helgen"];
+        this.mapGenerator.setGridSize(this.x, this.y);
+         this.mapGenerator.getCountryNameGenerator().setNameList(list);
+        
+        var map = this.mapGenerator.generateMap();
+        var continents = map.continents;
+        
+        assertTrue(list.indexOf(continents[0].countries[0].name) >= 0);
+        assertTrue(list.indexOf(continents[0].countries[1].name) >= 0);
+        assertTrue(list.indexOf(continents[1].countries[0].name) >= 0);
+        assertTrue(list.indexOf(continents[1].countries[1].name) >= 0);
+        assertTrue(list.indexOf(continents[2].countries[0].name) >= 0);
+        assertTrue(list.indexOf(continents[2].countries[1].name) >= 0);
+        assertTrue(list.indexOf(continents[3].countries[0].name) >= 0);
+        assertTrue(list.indexOf(continents[3].countries[1].name) >= 0);
+        assertTrue(list.indexOf(continents[continents.length -1].countries[0].name) >= 0);
+        assertTrue(list.indexOf(continents[continents.length -1].countries[1].name) >= 0);
     }
 });
 
