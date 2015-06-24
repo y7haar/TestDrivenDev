@@ -84,11 +84,11 @@ TestCase("serverGameLoopControllerTest", {
     "test sgl should implement setMap function" : function(){
         assertFunction(this.serverGameLoop.setMap);
     },
-    "test sgl.map should be undefined at init" : function(){
-        assertUndefined(this.serverGameLoop.map);
+    "test sgl.map should be null at init" : function(){
+        assertEquals(null,this.serverGameLoop.map);
     },
     "test sgl.setMap should set map" : function(){
-        assertUndefined(this.serverGameLoop.map);
+        assertEquals(null,this.serverGameLoop.map);
         this.serverGameLoop.setMap(this.map);
         assertEquals(this.map, this.serverGameLoop.map);
     },
