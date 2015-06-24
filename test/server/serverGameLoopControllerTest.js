@@ -294,6 +294,51 @@ TestCase("serverGameLoopControllerTest", {
     
         this.serverGameLoop.playerMove(fakeReq, fakeRes);        
         assertEquals("waitingState", this.glc1.getStateName());        
+    },
+    "test sglc should change currentState to the next Client if prev.Client changed to waitingState":function()
+    {
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.client2);        
+        
+        // changeing client to attacking 
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].res.write(data);
+        
+        assertEquals(0,this.serverGameLoop.currentClient);
+        assertEquals("attackingState", this.glc1.getStateName());
+        assertEquals("waitingState", this.glc2.getStateName());
+        
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        var sandbox = this.sandbox;
+        var url = this.url;  
+        
+        var fakeReq = {
+           
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};        
+    
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        // client1 should now be in waiting state --> currentClient should change to 1 because its client2 turn
+        assertEquals(1,this.serverGameLoop.currentClient);
+        // cleint should now be in waiting statte because endPhase in attacking ==> waiting 
+        assertEquals("waitingState", this.glc1.getStateName());
+        // if currentClient changes state to waiting next client should be in placing
+        assertEquals("placingState", this.glc2.getStateName());        
     }
     
     
