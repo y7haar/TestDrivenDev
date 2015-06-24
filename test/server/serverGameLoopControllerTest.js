@@ -257,7 +257,8 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.update();
         
         var sandbox = this.sandbox;
-        var url = this.url;
+        var url = this.url;        
+  
         var fakeReq = {
            
             body: sandbox.server[url].requests[4].requestBody
@@ -275,12 +276,25 @@ TestCase("serverGameLoopControllerTest", {
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         
+        // now in attacking calling endPhase to get to waiting
         this.glc1.endPhase();   
-        this.sandbox.update();      
-       
-        
-        this.serverGameLoop.playerMove(fakeReq, fakeRes);
-        
+        this.sandbox.update(); 
+        var fakeReq = {
+           
+            body: sandbox.server[url].requests[5].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[5].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};         
+    
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);        
         assertEquals("waitingState", this.glc1.getStateName());        
     }
     
