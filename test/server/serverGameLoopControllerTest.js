@@ -436,13 +436,18 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.addClient(this.client1);
         
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].res.write(data);
+        
+        assertEquals("attackingState", this.glc1.getStateName());
+        
         assertEquals(0,this.glc1.toServerLogs.length);
         this.glc1.makeMove(this.validAttackMove);
         
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
-        this.sandbox.update();
-        
+        this.sandbox.update();        
+  
         assertEquals(0,this.glc1.toServerLogs.length);
         assertEquals(0, this.sandbox.server[this.url].requests[4].status);
         
