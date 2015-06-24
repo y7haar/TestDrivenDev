@@ -339,7 +339,41 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals("waitingState", this.glc1.getStateName());
         // if currentClient changes state to waiting next client should be in placing
         assertEquals("placingState", this.glc2.getStateName());        
-    }
+    },
+     "test sglc.currentState should start at Client1 if last client changed to waitingState":function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].res.write(data);
+
+        var sandbox = this.sandbox;
+        var url = this.url;        
+  
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+         
+        var fakeReq = {
+           
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};         
+    
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);        
+        assertEquals(0, this.serverGameLoop.currentClient); 
+         
+     }
     
     
   
