@@ -78,6 +78,20 @@ TestCase("serverGameLoopControllerTest", {
     "test if this.serverGameLoop is instance of serverGameLoop" : function(){
         assertTrue(this.serverGameLoop instanceof tddjs.server.controller.gameLoopController);
     },    
+    "test sgl should hold map" : function(){
+        assertNotUndefined(this.serverGameLoop.map);
+    },
+    "test sgl should implement setMap function" : function(){
+        assertFunction(this.serverGameLoop.setMap);
+    },
+    "test sgl.map should be undefined at init" : function(){
+        assertUndefined(this.serverGameLoop.map);
+    },
+    "test sgl.setMap should set map" : function(){
+        assertUndefined(this.serverGameLoop.map);
+        this.serverGameLoop.setMap(this.map);
+        assertEquals(this.map, this.serverGameLoop.map);
+    },
     "test sgl should hold clients" : function(){
         assertNotUndefined(this.serverGameLoop.clients);
     },
