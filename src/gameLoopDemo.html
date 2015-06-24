@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>DEMO</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script language="javascript" type="text/javascript" src="lib/tdd.js"></script>
+        <script language="javascript" type="text/javascript" src="lib/sinon-1.14.1.js"></script>
+       
+        <script language="javascript" type="text/javascript" src="client/country.js"></script>
+        <script language="javascript" type="text/javascript" src="client/continent.js"></script>
+        <script language="javascript" type="text/javascript" src="client/map.js"></script>
+        <script language="javascript" type="text/javascript" src="client/clientPlayer.js"></script>
+        <script language="javascript" type="text/javascript" src="lib/globals.js"></script>
+    
+        <script language="javascript" type="text/javascript" src="client/ajax.js"></script>
+        <script language="javascript" type="text/javascript" src="client/eventSourceSandbox.js"></script>
+        <script language="javascript" type="text/javascript" src="client/gameLoopController.js"></script>
+        <script language="javascript" type="text/javascript" src="client/gameStates.js"></script>
+        <script language="javascript" type="text/javascript" src="server/serverGameLoopController.js"></script>
+        
+        <script language="javascript" type="text/javascript" >
+            this.counter = 1; 
+            this.fakeClient = function (eventSource, aServer, aName) {
+            var name = aName;
+            var server = aServer;
+            var eventSourceIndex = server.clients.indexOf(eventSource);
+        
+            this.req = {};
+            this.res = {};   
+            var sendCalledBool = false;
+            var data = "test";
+            this.res.write = function (msg) {        
+                sendCalledBool = true;
+                
+                var array = msg.split("\n");
+                var event = array[0].split(":")[1];                
+                var message = array[1].substring(5,array[1].length);                
+                data = (message);           
+                server.sendMessage(eventSourceIndex,event, {data:data});                
+            };
+            Object.defineProperty(this, 'sendCalled', {
+            get: function () {
+                return sendCalledBool;
+            }});
+            Object.defineProperty(this, 'data', {
+            get: function () {
+                return data;
+            }});
+            Object.defineProperty(this, 'name', {
+            get: function () {
+                return name;
+            }});   
+        };
+
+                this.validPlacingMove = {
+                    type: 'placing',
+                    unitCount: 12,
+                    player: 'Peter',
+                    continent: 'Europa',
+                    country: 'Country1'
+                };
+                this.validAttackMove = {
+                    type: 'attack',
+                    from: {
+                        player: 'Peter',
+                        continent: 'Europa',
+                        country: 'Country1'
+                    },
+                    to: {
+                        player: 'Hanswurst',
+                        continent: 'Europa',
+                        country: 'Country2'
+                    }
+                };
+    
+            
+            this.url = "/serverGameLoopURL";
+            this.sandbox = new tddjs.stubs.eventSourceSandbox();
+            this.sandbox.addServer(this.url);
+            this.sandbox.server[this.url].setHandleResponse(false);
+            
+            this.map = generateMap();
+            
+            this.player1 = new tddjs.client.player();
+            this.player1.setName('Peter');
+
+            this.glc1 = new tddjs.client.gameLoopController(this.map, this.player1, this.url);       
+            
+            
+            this.serverGameLoop = new tddjs.server.controller.gameLoopController(); 
+            this.serverGameLoop.setMaxPlayers(1);
+   
+            
+            function establishConnection()
+            {
+                 this.glc1.establishConnection();
+                 console.log(this.glc1.eventSource);
+            }
+            function showGameState()
+            {
+                console.log(this.glc1.getStateName());
+            }
+            function serverAcceptEventSource()
+            {
+                //this.sandbox.update();
+             
+                this.sandbox.server[this.url].requests[0].respond(200,"","");          
+                this.client1 = new this.fakeClient(this.glc1.eventSource,this.sandbox.server[this.url],this.player1.getName());           
+                this.serverGameLoop.addClient(this.client1);
+           
+            }
+            
+            function callEndPhase()
+            {
+                this.glc1.endPhase();
+                this.sandbox.update();
+                var sandbox = this.sandbox;
+                var url = this.url;
+                var counter = this.counter;           
+                var fakeReq = {
+                    body: sandbox.server[url].requests[counter].requestBody
+                };
+                var fakeRes = {
+                    status: function(aCode)
+                    {
+                        var code = aCode;       
+                        send = function(msg)
+                        {                  
+                           sandbox.server[url].requests[counter].respond(code,msg,"");                    
+                        };
+                        return {send:send};
+                }};   
+
+                this.serverGameLoop.playerMove(fakeReq, fakeRes);
+                this.counter++;
+            }
+            function showToServerLogs()
+            {
+                console.dir(this.glc1.toServerLogs);
+            }
+            function showFromServerLogs()
+            {
+                console.dir(this.glc1.fromServerLogs);
+            }
+            
+            
+            // SERVER
+          
+            
+   
+        </script>
+
+    </head>
+    <body>
+        <h1 style="text-align: center" >gameLoop-Demo</h1>
+        <input type="button" onclick="establishConnection();" value="EventSource Connect" /> 
+        <input type="button" onclick="serverAcceptEventSource()" value="AcceptEventSource" />
+        <input type="button" onclick="showGameState()" value="showGameState" /> 
+        <input type="button" onclick="callEndPhase()" value="endPhase" />
+        <input type="button" onclick="showToServerLogs()" value="toServerLogs" /> 
+        <input type="button" onclick="showFromServerLogs()" value="fromServerLogs" />   
+    </body>
+</html>
