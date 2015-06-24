@@ -33,8 +33,7 @@ function gameLoopController()
                 info:"changeToPlacing"
             };
             msg = JSON.stringify(msg);            
-            var data = "event:changeToPlacing\ndata:"+msg+"\n\n";
-            
+            var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
             _clients[_currentClient].res.write(data);
         }
     }
@@ -60,12 +59,24 @@ function gameLoopController()
                 if (body.phaseName === "placingState")
                 {
                     var data = "event:changeToAttacking\ndata:ChangeToAttacking\n\n";
-                    _clients[0].res.write(data);
+                    _clients[_currentClient].res.write(data);
                 }
                 else if (body.phaseName === "attackingState")
                 {
                     var data = "event:changeToWaiting\ndata:ChangeToWaiting\n\n";
-                    _clients[0].res.write(data);
+                    _clients[_currentClient].res.write(data);
+                    // next Client
+                    _currentClient++;                    
+                    // start at first Client if lastClient ended his turn
+                    if(_currentClient === _clients.length)_currentClient = 0;
+                    
+                    var msg = {
+                        unitCount: 12,
+                        info: "changeToPlacing"
+                    };
+                    msg = JSON.stringify(msg);   
+                    var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
+                    _clients[_currentClient].res.write(data);
                 }
                 break;
             default:
