@@ -27,7 +27,9 @@ TestCase("serverGameLoopControllerTest", {
                 
                 var array = msg.split("\n");
                 var event = array[0].split(":")[1];
-                data = {data:array[1]};        
+                var message = array[1].split(":")[1];           
+                data = JSON.stringify({data:message});
+                console.log(data);
                 server.sendMessage(eventSourceIndex,event, data);
                 
             };
@@ -144,6 +146,19 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.allConnected);
         this.serverGameLoop.addClient(this.client1);
         assertTrue(this.serverGameLoop.allConnected);
+    },
+    "test sglc should change client1 to placingState if allConnected is true": function(){
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.addClient(this.client1);
+        
+        assertFalse(this.serverGameLoop.allConnected);
+        assertEquals("waitingState", this.glc1.getStateName());
+        
+        this.serverGameLoop.addClient(this.client2);
+        assertTrue(this.serverGameLoop.allConnected);
+        
+        assertEquals("watingState", this.glc2.getStateName());
+        assertEquals("placingState", this.glc1.getStateName());
     },
     "test sglc should implement playerMove function": function(){
         assertFunction(this.serverGameLoop.playerMove);               
