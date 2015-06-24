@@ -100,7 +100,7 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.clients[0].res.write(data);
         assertTrue(this.serverGameLoop.clients[0].sendCalled);
     },
-    "test if sgl send msg to Client": function(){
+    "test if sgl.fakeClient send msg to Client": function(){
         this.serverGameLoop.addClient(this.client1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
@@ -108,13 +108,47 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.clients[0].res.write(data);
         assertEquals(1,this.glc1.fromServerLogs.length);
     },
-    "test if client changes state after sglc send changeToAttackState event": function(){
+    "test if client changes state after sglcfakeClient send changeToAttackState event": function(){
         this.serverGameLoop.addClient(this.client1);
         
         assertEquals("waitingState", this.glc1.getStateName());
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
         this.serverGameLoop.clients[0].res.write(data);
         assertEquals("attackingState", this.glc1.getStateName());       
+    },    
+    "test sglc should hold maxPlayers": function(){
+        assertNotUndefined(this.serverGameLoop.maxPlayers);               
+    },
+    "test sglc.maxPlayers should be -1 at init": function(){
+        assertEquals(-1,this.serverGameLoop.maxPlayers);               
+    },
+    "test sglc should implement setMaxPlayers function": function(){
+        assertFunction(this.serverGameLoop.setMaxPlayers);               
+    },
+   
+    "test sglc.setMaxPlayers should set maxPlayer": function(){
+        assertEquals(-1,this.serverGameLoop.maxPlayers);
+        this.serverGameLoop.setMaxPlayers(2);
+        assertEquals(2,this.serverGameLoop.maxPlayers);
+    },
+    "test sglc should hold boolean allConnected": function(){
+        assertNotUndefined(this.serverGameLoop.allConnected);       
+    },
+    "test sglc.allConnected should be false at init": function(){
+        assertFalse(this.serverGameLoop.allConnected);       
+    },
+    "test sglc.allConnected should be true if all Clients Connected": function(){
+        assertFalse(this.serverGameLoop.allConnected);
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.addClient(this.client1);
+        assertFalse(this.serverGameLoop.allConnected);
+        this.serverGameLoop.addClient(this.client1);
+        assertTrue(this.serverGameLoop.allConnected);
+    },
+    "test sglc should implement playerMove function": function(){
+        assertFunction(this.serverGameLoop.playerMove);               
     }
+  
+    
 });
     
