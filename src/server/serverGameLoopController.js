@@ -16,6 +16,7 @@ function gameLoopController()
     var _clients =[];
     var _maxPlayers = -1;
     var _allConnected = false;
+    var _currentClient = null;
     
     function addClient(aClient)
     {
@@ -24,13 +25,17 @@ function gameLoopController()
         {
             _allConnected = true;
             
+            // starting game, changeing currentPlayer to first player in array
+            
+            _currentClient = 0;
             var msg = {
                 unitCount:12,
                 info:"changeToPlacing"
             };
             msg = JSON.stringify(msg);            
             var data = "event:changeToPlacing\ndata:"+msg+"\n\n";
-            _clients[0].res.write(data);
+            
+            _clients[_currentClient].res.write(data);
         }
     }
     function setMaxPlayers(intValue)
@@ -100,6 +105,11 @@ function gameLoopController()
     Object.defineProperty(this, 'map', {
         get: function () {
             return _map;
+        }
+    });
+    Object.defineProperty(this, 'currentClient', {
+        get: function () {
+            return _currentClient;
         }
     });
     
