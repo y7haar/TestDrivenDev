@@ -310,6 +310,12 @@ function mapGenerator()
         map.water = generateWater();
         //Kontinente anfügen
         map.continents = allContinents;
+
+        //UnitBonus berechnen
+        calculateBonuses(map.continents);
+        
+        //Namensvergabe
+        
         //return
         return map;
     }
@@ -780,14 +786,7 @@ function mapGenerator()
             continent.countries.push(country);
             countriesInContinents.push(country);
             countriesNotInContinents.splice(countriesNotInContinents.indexOf(country),1);
-        }
-        
-        //Bonus berechnen
-        for(var i = 0; i < continents.length; i++)
-        {
-            continents[i].unitBonus = calculateUnitBonus(continents[i]);
-        }
-        
+        }    
         return continents;
     }
     
@@ -983,6 +982,16 @@ function mapGenerator()
         result.neighbourCountries = neighbourCountries;
         
         return result;
+    }
+    
+    //Berechnet für alle verbleibenden Kontinente den Bonus
+    function calculateBonuses(continents)
+    {
+        //Bonus berechnen
+        for(var i = 0; i < continents.length; i++)
+        {
+            continents[i].unitBonus = calculateUnitBonus(continents[i]);
+        }
     }
     
     //###############################################################################################################
