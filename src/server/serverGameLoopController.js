@@ -43,6 +43,23 @@ function gameLoopController()
         _map = aMap;
     }
     
+    function playerMove(req, res)
+    {
+        type = JSON.parse(req.body).type;
+        switch(type)
+        {
+            case 'endPhase':
+                console.log(res);
+                res.status(200).send("OK");
+                break;
+            default:
+                res.status(404).send("404");
+            break;    
+                
+        }
+        
+    }
+    
     function messageAll()
     {
         
@@ -75,6 +92,7 @@ function gameLoopController()
         }
     });
     
+    this.playerMove = playerMove;
     this.setMap = setMap;
     this.setMaxPlayers = setMaxPlayers;
     this.addClient = addClient;
