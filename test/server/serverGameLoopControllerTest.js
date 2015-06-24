@@ -178,7 +178,39 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc should implement playerMove function": function(){
         assertFunction(this.serverGameLoop.playerMove);               
+    },
+    "test sglc.playerMove should react to endPhase move with Status 200 ": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        assertEquals("placingState" ,this.glc1.getStateName());
+        
+        assertEquals(0,this.glc1.toServerLogs.length);
+        this.glc1.endPhase();
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        assertEquals(0,this.glc1.toServerLogs.length);
+        assertEquals(0, this.sandbox.server[this.url].requests[4].status);
+        
+        var fakeReq = {
+            body: this.sandbox.server[this.url].requests[4].requestBody
+        };
+        var fakeRes = {
+            send: function(msg)
+            {
+                if(msg === "OK")
+                this.sandbox.server[this.url].requests[4].respond(200,msg,"");
+            }
+        };
+        
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        assertEquals(1,this.glc1.toServerLogs.length);
+        assertEquals(200, this.sandbox.server[this.url].requests[4].status);
+        
     }
+    
+    
   
     
 });
