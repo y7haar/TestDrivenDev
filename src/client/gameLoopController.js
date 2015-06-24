@@ -80,15 +80,17 @@ function gameLoopController(aMap, aPlayer, aUrl)
         
         function writeToLogs()
         {
-            console.log("GameLoopController: endPhase success");
             _toServerLogs.push(message);
         }
     }
     
     function makeMove(move)
     {
+        //console.log("makeMove-------------");
         if (_currentState.isMoveLegal(move))
-        {
+        {   
+            //console.log("MOVE:\n");
+            //console.dir(move);
             var ajax = tddjs.util.ajax; 
             var options = {
               headers:{
@@ -133,12 +135,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     // EventSource events
     function changeToPlacingState(e)
-    {   
-        console.log("GAMELOOP:");
-        console.log(e);
-        var data = JSON.parse(e.data);        
-        console.log(data);
-        console.log("GAMELOOP  END---");
+    {     
+        var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.placingState(_map, unitCount);
