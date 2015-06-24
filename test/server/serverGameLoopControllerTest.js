@@ -26,12 +26,10 @@ TestCase("serverGameLoopControllerTest", {
                 sendCalledBool = true;
                 
                 var array = msg.split("\n");
-                var event = array[0].split(":")[1];
-                var message = array[1].split(":")[1];     
-                data = JSON.stringify(message);
-                console.log(data);
-                server.sendMessage(eventSourceIndex,event, {data:data});
-                
+                var event = array[0].split(":")[1];                
+                var message = array[1].substring(5,array[1].length);                
+                data = (message);           
+                server.sendMessage(eventSourceIndex,event, {data:data});                
             };
             Object.defineProperty(this, 'sendCalled', {
             get: function () {
@@ -159,6 +157,10 @@ TestCase("serverGameLoopControllerTest", {
         
         assertEquals("waitingState", this.glc2.getStateName());
         assertEquals("placingState", this.glc1.getStateName());
+    },
+    "test sglc should implement messageAll function":function()
+    {
+        assertFunction(this.serverGameLoop.messageAll);
     },
     "test sglc should implement playerMove function": function(){
         assertFunction(this.serverGameLoop.playerMove);               
