@@ -579,7 +579,7 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
    
         assertEquals(3,this.glc1.fromServerLogs.length);
-        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[2].data));      
+        assertEquals(this.attackResultData, JSON.parse(this.glc1.fromServerLogs[2].data));      
     }
     
     
