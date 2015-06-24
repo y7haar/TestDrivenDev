@@ -261,8 +261,9 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals("attackingState", this.glc1.getStateName());        
     },
     "test sglc.playerMove(endPhase:attacking) should be waiting after call": function(){
-        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMaxPlayers(2);
         this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.client2);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
         this.serverGameLoop.clients[0].res.write(data);
