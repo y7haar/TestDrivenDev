@@ -193,21 +193,31 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(0,this.glc1.toServerLogs.length);
         assertEquals(0, this.sandbox.server[this.url].requests[4].status);
         
+        var sandbox = this.sandbox;
+        var url = this.url;
+        
         var fakeReq = {
             body: this.sandbox.server[this.url].requests[4].requestBody
         };
         var fakeRes = {
-            send: function(msg)
+            status: function(aCode)
             {
-                if(msg === "OK")
-                this.sandbox.server[this.url].requests[4].respond(200,msg,"");
-            }
-        };
-        
+                var code = aCode;       
+                send = function(msg)
+                {
+                    if(code === 200)
+                    {                  
+                        sandbox.server[url].requests[4].respond(200,msg,"");
+                    }
+               
+                };
+                return {send:send};
+        }};   
+ 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
+   
         assertEquals(1,this.glc1.toServerLogs.length);
-        assertEquals(200, this.sandbox.server[this.url].requests[4].status);
-        
+        assertEquals(200, this.sandbox.server[this.url].requests[4].status);        
     }
     
     
