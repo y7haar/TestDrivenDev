@@ -66,8 +66,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function endPhase()
     {
         var player = JSON.parse(_player.serialize());
-        var message = {player:player,type:'endPhase', 'phaseName':_currentState.toString()};           
-  
+        var message = {player:player,type:'endPhase', phaseName:_currentState.toString()};           
         var ajax = tddjs.util.ajax;
         var options = {
             headers:{
@@ -81,6 +80,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
         
         function writeToLogs()
         {
+            console.log("GameLoopController: endPhase success");
             _toServerLogs.push(message);
         }
     }
@@ -133,8 +133,12 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     // EventSource events
     function changeToPlacingState(e)
-    {
-        var data = JSON.parse(e.data);
+    {   
+        console.log("GAMELOOP:");
+        console.log(e);
+        var data = JSON.parse(e.data);        
+        console.log(data);
+        console.log("GAMELOOP  END---");
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.placingState(_map, unitCount);
@@ -177,8 +181,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _map.getContinent(changes1.continent).getCountry(changes1.country).setOwner(players[changes1.owner]);        
         //changes 2
         _map.getContinent(changes2.continent).getCountry(changes2.country).setUnitCount(changes2.unitCount);
-        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);
-                
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);                
     }
     
     function placeUnits(e)
