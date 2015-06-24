@@ -34,6 +34,41 @@ TestCase("serverGameLoopControllerTest", {
             }
         };
         
+        this.attackResultData = {
+            type:"attacking",
+            attacker:{
+                player:"Player1",
+                outcome:"winner"               
+            },
+            defender:{
+                player:"Player2",
+                outcome:"loser"
+            },
+            changes:[
+                {
+                    continent:"Europa",
+                    country:"Country1",
+                    unitCount:1,
+                    owner:"Player1"
+                },
+                {
+                    continent:"Europa",
+                    country:"Country2",
+                    unitCount:6,
+                    owner:"Player2"
+                }
+            ]                    
+        };      
+        this.placeUnitData = {
+            type:"placing",
+            player:"Player1",
+            change:{
+                continent:"Europa",
+                country:"Country1",
+                unitCount:14
+            }
+        };
+        
 
         this.fakeClient = function (eventSource, aServer, aName) {
             var name = aName;
@@ -472,6 +507,43 @@ TestCase("serverGameLoopControllerTest", {
    
         assertEquals(1,this.glc1.toServerLogs.length);
         assertEquals(200, this.sandbox.server[this.url].requests[4].status);      
+    },
+    "test sglc.playerMove(placing) should send move back without validate": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        
+
+        assertEquals(1,this.glc1.fromServerLogs.length);
+        this.glc1.makeMove(this.validPlacingMove);
+        
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        assertEquals(1,this.glc1.fromServerLogs.length);
+        
+        var sandbox = this.sandbox;
+        var url = this.url;
+        
+        var fakeReq = {
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};   
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+   
+        assertEquals(2,this.glc1.fromServerLogs.length);
+        assertEquals(this.placeUnitData, this.glc1.fromServerLogs[0]);
+      
     }
     
     
