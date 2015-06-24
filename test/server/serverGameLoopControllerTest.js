@@ -17,7 +17,7 @@ TestCase("serverGameLoopControllerTest", {
             var name = aName;
             var server = aServer;
             var eventSourceIndex = server.clients.indexOf(eventSource);
-           
+        
             this.req = {};
             this.res = {};   
             var sendCalledBool = false;
@@ -129,7 +129,20 @@ TestCase("serverGameLoopControllerTest", {
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
         this.serverGameLoop.clients[0].res.write(data);
         assertEquals("attackingState", this.glc1.getStateName());       
-    },    
+    },
+    "test sgl should hold currentClient Name" : function(){
+        assertNotUndefined(this.serverGameLoop.currentClient);
+    },
+    "test sgl.currentClient should be null at init" : function(){
+        assertEquals(null,this.serverGameLoop.currentClient);
+    },
+    "test sgl.currentClient should be Player1 after allConnected is true" : function(){
+        assertEquals(null,this.serverGameLoop.currentClient);
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        assertEquals("Player1", this.serverGameLoop.currentClient);
+    },
+    
     "test sglc should hold maxPlayers": function(){
         assertNotUndefined(this.serverGameLoop.maxPlayers);               
     },
