@@ -926,55 +926,6 @@ TestCase("MapGeneratorTest for Setter and Getters",
         assertException(function(){gen.setMaximumWaterNumber("fff");}, "TypeError");
         assertException(function(){gen.setMaximumWaterNumber(-10);}, "Error");
         assertException(function(){gen.setMaximumWaterNumber(1);}, "Error");
-    },
-    
-    "test Should be able to get the minimumWaterSize": function()
-    {
-        assertEquals(2, this.mapGenerator.getMinimumWaterSize());
-    },
-    
-    "test Should be able to set the minWaterSize": function()
-    {
-        this.mapGenerator.setMinimumWaterSize(3);
-        
-        assertEquals(3, this.mapGenerator.getMinimumWaterSize());
-    },
-    
-    "test maxWaterSize shouldnt be under minWaterSize after Setting": function()
-    {
-        this.mapGenerator.setMinimumWaterSize(5);
-        
-        assertEquals(5, this.mapGenerator.getMaximumWaterSize());
-    },
-    
-    "test Shouldnt be able to set invalid MinimumWaterSize": function()
-    {
-        var gen = this.mapGenerator;
-        
-        assertException(function(){gen.setMinimumWaterSize("fff");}, "TypeError");
-        assertException(function(){gen.setMinimumWaterSize(-10);}, "Error");
-        assertException(function(){gen.setMinimumWaterSize(0);}, "Error");
-    },
-    
-    "test Should be able to get the maximumWaterSize": function()
-    {
-        assertEquals(4, this.mapGenerator.getMaximumWaterSize());
-    },
-    
-    "test Should be able to set the maximumWaterSize": function()
-    {
-        this.mapGenerator.setMaximumWaterSize(6);
-        
-         assertEquals(6, this.mapGenerator.getMaximumWaterSize());
-    },
-    
-    "test Shouldnt be able to set invalid MaximumWaterSize": function()
-    {
-        var gen = this.mapGenerator;
-        
-        assertException(function(){gen.setMaximumWaterSize("fff");}, "TypeError");
-        assertException(function(){gen.setMaximumWaterSize(-10);}, "Error");
-        assertException(function(){gen.setMaximumWaterSize(1);}, "Error");
     }
     
 });
@@ -995,15 +946,8 @@ TestCase("MapGeneratorTest", {
        assertObject(this.mapGenerator);
     },
     
-    "test Object of MapGenerator should have the needed functions": function (){
-        assertFunction(this.mapGenerator.setGridSize);
-        assertFunction(this.mapGenerator.getMapHeight);
-        assertFunction(this.mapGenerator.getMapWidth);
+    "test Object of MapGenerator should have the needed function": function (){
         assertFunction(this.mapGenerator.generateMap);
-        assertFunction(this.mapGenerator.getMaximumCountrySize);
-        assertFunction(this.mapGenerator.setMaximumCountrySize);
-        assertFunction(this.mapGenerator.getMinimumCountrySize);
-        assertFunction(this.mapGenerator.setMinimumCountrySize);
     },
     
      "test grid should be a Array": function()
@@ -1022,7 +966,6 @@ TestCase("MapGeneratorTest", {
         assertTrue(map.isMap);
     },
     
-    //??
     "test Shouldnt be able to generate a Map without doing the neccessary steps first": function()
     {
         var gen = this.mapGenerator;
@@ -1054,6 +997,26 @@ TestCase("MapGeneratorTest", {
         var map = this.mapGenerator.generateMap();
         
         assertArray(map.continents);
+    },
+    
+    "test generateMap should return a Map-Object with a water-Object": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        
+        assertTrue(map.water.isWater);
+    },
+    
+    "test There schould be waterborders after generation": function()
+    {
+        this.mapGenerator.setGridSize(this.x,this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var water = map.water;
+        
+        assertArray(water.borders);
+        assertTrue(water.borders.length > 1);
     },
     
     "test generateMap should return a map-object with atleast minimumContinents": function()
@@ -1130,7 +1093,7 @@ TestCase("MapGeneratorTest", {
         assertTrue(allCountries.indexOf(continents[continents.length-1].countries[continents[continents.length-1].countries.length-1]) >= 0);  
     },
     
-    "test Should be able to generate a map with a to small grid": function()
+    "test Shouldnt be able to generate a map with a to small grid": function()
     {
         var gen = this.mapGenerator;
         this.mapGenerator.setGridSize(3, 3);
@@ -1168,30 +1131,6 @@ TestCase("MapGeneratorTest", {
         var map = this.mapGenerator.generateMap();
         
         assertTrue(map.water.size <= 4);
-    },
-    
-    "test Seas should have atleast minWaterSize": function ()
-    {
-        this.mapGenerator.setGridSize(this.x, this.y);
-        
-        var map = this.mapGenerator.generateMap();
-        var seas = map.water;
-        
-        assertTrue(seas[0].size >= 2);
-        assertTrue(seas[1].size >= 2);
-        assertTrue(seas[seas.length- 1].size >= 2);
-    },
-    
-    "test Seas shouldnt been bigger than  manWaterSize": function()
-    {
-        this.mapGenerator.setGridSize(this.x, this.y);
-        
-        var map = this.mapGenerator.generateMap();
-        var seas = map.water;
-        
-        assertTrue(seas[0].size <= 4);
-        assertTrue(seas[1].size <= 4);
-        assertTrue(seas[seas.length- 1].size <= 4);
     }
 });
 
@@ -1200,6 +1139,8 @@ TestCase("MapGeneratorTest", {
 //Testfälle für ausgemusterte Methoden
 //################################################################################################################################
 
+
+//Alte Testfälle für das inzwischen entfernte getNeighborCountries(country)
 /*
  * "test Shouldnt be able to call collectNeighborCountries without initialisation": function()
     {
@@ -1261,6 +1202,8 @@ TestCase("MapGeneratorTest", {
         assertNoException(function(){gen.collectNeighborCountries(country);});
     },
 
+    //Testfälle zur alten Borderbearbeitung
+
     "test Cant remove useless borders if there arent one created yet": function()
     {
         var gen = this.mapGenerator;
@@ -1285,3 +1228,81 @@ TestCase("MapGeneratorTest", {
         assertNoException(function(){gen.removeCircularAndDuplicateBorders();});
     },
  */
+
+//Testfälle for die Setter und Getter der nicht mehr benötigeten Variablen waterMinSize und waterMaxSize
+
+/*"test Should be able to get the minimumWaterSize": function()
+    {
+        assertEquals(2, this.mapGenerator.getMinimumWaterSize());
+    },
+    
+    "test Should be able to set the minWaterSize": function()
+    {
+        this.mapGenerator.setMinimumWaterSize(3);
+        
+        assertEquals(3, this.mapGenerator.getMinimumWaterSize());
+    },
+    
+    "test maxWaterSize shouldnt be under minWaterSize after Setting": function()
+    {
+        this.mapGenerator.setMinimumWaterSize(5);
+        
+        assertEquals(5, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Shouldnt be able to set invalid MinimumWaterSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMinimumWaterSize("fff");}, "TypeError");
+        assertException(function(){gen.setMinimumWaterSize(-10);}, "Error");
+        assertException(function(){gen.setMinimumWaterSize(0);}, "Error");
+    },
+    
+    "test Should be able to get the maximumWaterSize": function()
+    {
+        assertEquals(4, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Should be able to set the maximumWaterSize": function()
+    {
+        this.mapGenerator.setMaximumWaterSize(6);
+        
+         assertEquals(6, this.mapGenerator.getMaximumWaterSize());
+    },
+    
+    "test Shouldnt be able to set invalid MaximumWaterSize": function()
+    {
+        var gen = this.mapGenerator;
+        
+        assertException(function(){gen.setMaximumWaterSize("fff");}, "TypeError");
+        assertException(function(){gen.setMaximumWaterSize(-10);}, "Error");
+        assertException(function(){gen.setMaximumWaterSize(1);}, "Error");
+    }*/
+
+   //Alte Testfälle zur Größe des Generierten Wassers
+   //Wassergröße kann nicht eingestellt werden
+   
+   /*"test Seas should have atleast minWaterSize": function ()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size >= 2);
+        assertTrue(seas[1].size >= 2);
+        assertTrue(seas[seas.length- 1].size >= 2);
+    },
+    
+    "test Seas shouldnt been bigger than  manWaterSize": function()
+    {
+        this.mapGenerator.setGridSize(this.x, this.y);
+        
+        var map = this.mapGenerator.generateMap();
+        var seas = map.water;
+        
+        assertTrue(seas[0].size <= 4);
+        assertTrue(seas[1].size <= 4);
+        assertTrue(seas[seas.length- 1].size <= 4);
+    }*/
