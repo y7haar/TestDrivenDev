@@ -20,7 +20,17 @@ function gameLoopController()
     {
         _clients.push(aClient);
         if(_clients.length === _maxPlayers)
+        {
             _allConnected = true;
+            
+            var msg = {
+                unitCount:12,
+                info:"changeToPlacing"
+            };
+            msg = JSON.stringify(msg);            
+            var data = "event:changeToPlacing\ndata:"+msg+"\n\n";
+            _clients[0].res.write(data);
+        }
     }
     function setMaxPlayers(intValue)
     {
