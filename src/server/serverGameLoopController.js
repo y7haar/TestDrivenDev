@@ -79,9 +79,7 @@ function gameLoopController()
                 }
                 break;
             case 'placing':
-                res.status(200).send("OK");
-                console.log("SERVER-Controller: playerMove placing body:\n");
-                console.dir(body);
+                res.status(200).send("OK");               
                 
                 var msg = {
                   type:body.type,
@@ -96,8 +94,37 @@ function gameLoopController()
                 var data = "event:placeUnits\ndata:"+msg+"\n\n";            
                 _clients[_currentClient].res.write(data);
                 break;
-            case 'attack':              
+            case 'attack':                 
                 res.status(200).send("OK");
+                var msg = {
+                    type: "attacking",
+                    attacker: {
+                        player: "Peter",
+                        outcome: "winner"
+                    },
+                    defender: {
+                        player: "Hanswurst",
+                        outcome: "loser"
+                    },
+                    changes: [
+                        {
+                            continent: "Europa",
+                            country: "Country1",
+                            unitCount: 1,
+                            owner: "Peter"
+                        },
+                        {
+                            continent: "Europa",
+                            country: "Country2",
+                            unitCount: 6,
+                            owner: "Hanswurst"
+                        }
+                    ]
+                    };
+                msg = JSON.stringify(msg);
+                var data = "event:attackResult\ndata:"+msg+"\n\n";            
+                _clients[_currentClient].res.write(data);   
+            
                 break;
             default:
                 res.status(404).send("404");
