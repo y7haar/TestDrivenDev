@@ -53,6 +53,16 @@ function mapGenerator()
     var countryNameGenerator;
     var continentNameGenerator;
     
+    //Entscheidung ob auf Node js oder nicht
+    if(typeof module !== "undefined")
+    {
+        //Noch keine Ahnung
+    }
+    else
+    {
+        countryNameGenerator = new tddjs.server.controller.nameListGenerator();
+        continentNameGenerator = new tddjs.server.controller.nameListGenerator();
+    }
     
     //###############################################################################################################
     //Setter und Getter
@@ -277,6 +287,22 @@ function mapGenerator()
 
         return arr;
     }
+    
+    //Holt den Kontinents-Namensgenerator
+    function getContinentNameGenerator()
+    {
+        return continentNameGenerator;
+    }
+    
+     //Holt den Kontinents-Namensgenerator
+    function getCountryNameGenerator()
+    {
+        return countryNameGenerator;
+    }
+    
+    //################################################################################################################
+    //Hauptfunktion
+    //################################################################################################################
     
     //Kompletter Aufruf aller Schritte
     function generateMap()
@@ -1125,6 +1151,8 @@ function mapGenerator()
     this.setMinimumWaterNumber = setMinimumWaterNumber;
     this.getMaximumWaterNumber = getMaximumWaterNumber;
     this.setMaximumWaterNumber = setMaximumWaterNumber;  
+    this.getContinentNameGenerator = getContinentNameGenerator;
+    this.getCountryNameGenerator = getCountryNameGenerator;
     this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
     this.serializeAsJSON = serializeAsJSON;
