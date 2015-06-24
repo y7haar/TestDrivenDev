@@ -340,7 +340,8 @@ function mapGenerator()
         //UnitBonus berechnen
         calculateBonuses(map.continents);
         
-        //Namensvergabe
+        //Namensvergabe für Länder und Kontinente
+        handOutNames(map.continents);
         
         //return
         return map;
@@ -1019,6 +1020,30 @@ function mapGenerator()
             continents[i].unitBonus = calculateUnitBonus(continents[i]);
         }
     }
+    
+    //Verteilt Namen an Länder und Kontinente
+    function handOutNames(continents)
+    {
+        //Generatoren vorbereiten/mischen
+        continentNameGenerator.shuffleNameList();
+        countryNameGenerator.shuffleNameList();
+        
+        //Alle Kontinenten durchgehen
+        for(var i = 0; i < continents.length; i++)
+        {
+            //Aktueller Kontinent
+            var currentContinent = continents[i];
+            //Kontinent Namen geben
+            currentContinent.name = continentNameGenerator.getNextName();
+            
+            //Alle Länder des Kontinents durchgehen
+            for(var j = 0; j < currentContinent.countries.length; j++)
+            {
+                //Aktuellen Land Namen vergeben
+                currentContinent.countries[j].name = countryNameGenerator.getNextName();
+            }
+        }
+    } 
     
     //###############################################################################################################
     //Pseudo-Kartenobjekt-Erzeugung
