@@ -140,6 +140,54 @@ and open the template in the editor.
                 this.serverGameLoop.playerMove(fakeReq, fakeRes);
                 this.counter++;
             }
+            function sendAttack()
+            {
+                this.glc1.makeMove(this.validAttackMove);
+                this.sandbox.update();
+                var sandbox = this.sandbox;
+                var url = this.url;
+                var counter = this.counter;           
+                var fakeReq = {
+                    body: sandbox.server[url].requests[counter].requestBody
+                };
+                var fakeRes = {
+                    status: function(aCode)
+                    {
+                        var code = aCode;       
+                        send = function(msg)
+                        {                  
+                           sandbox.server[url].requests[counter].respond(code,msg,"");                    
+                        };
+                        return {send:send};
+                }};   
+
+                this.serverGameLoop.playerMove(fakeReq, fakeRes);
+                this.counter++;                
+            }
+            function sendPlacing()
+            {
+                this.glc1.makeMove(this.validPlacingMove);
+                this.sandbox.update();
+                var sandbox = this.sandbox;
+                var url = this.url;
+                var counter = this.counter;           
+                var fakeReq = {
+                    body: sandbox.server[url].requests[counter].requestBody
+                };
+                var fakeRes = {
+                    status: function(aCode)
+                    {
+                        var code = aCode;       
+                        send = function(msg)
+                        {                  
+                           sandbox.server[url].requests[counter].respond(code,msg,"");                    
+                        };
+                        return {send:send};
+                }};   
+
+                this.serverGameLoop.playerMove(fakeReq, fakeRes);
+                this.counter++;                
+            }
             function showToServerLogs()
             {
                 console.dir(this.glc1.toServerLogs);
@@ -161,9 +209,12 @@ and open the template in the editor.
         <h1 style="text-align: center" >gameLoop-Demo</h1>
         <input type="button" onclick="establishConnection();" value="EventSource Connect" /> 
         <input type="button" onclick="serverAcceptEventSource()" value="AcceptEventSource" />
+        <br>
         <input type="button" onclick="showGameState()" value="showGameState" /> 
         <input type="button" onclick="callEndPhase()" value="endPhase" />
         <input type="button" onclick="showToServerLogs()" value="toServerLogs" /> 
-        <input type="button" onclick="showFromServerLogs()" value="fromServerLogs" />   
+        <input type="button" onclick="showFromServerLogs()" value="fromServerLogs" />
+        <input type="button" onclick="sendPlacing()" value="place units" /> 
+        <input type="button" onclick="sendAttack()" value="attack" /> 
     </body>
 </html>
