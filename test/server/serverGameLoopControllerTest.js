@@ -136,11 +136,11 @@ TestCase("serverGameLoopControllerTest", {
     "test sgl.currentClient should be null at init" : function(){
         assertEquals(null,this.serverGameLoop.currentClient);
     },
-    "test sgl.currentClient should be Player1 after allConnected is true" : function(){
+    "test sgl.currentClient should be 0 after allConnected is true" : function(){
         assertEquals(null,this.serverGameLoop.currentClient);
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.addClient(this.client1);
-        assertEquals("Player1", this.serverGameLoop.currentClient);
+        assertEquals(0, this.serverGameLoop.currentClient);
     },
     
     "test sglc should hold maxPlayers": function(){
