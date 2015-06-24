@@ -15,7 +15,7 @@ TestCase("serverGameLoopControllerTest", {
         
         this.validPlacingMove = {
             type: 'placing',
-            unitCount: 1,
+            unitCount: 12,
             player: 'Peter',
             continent: 'Europa',
             country: 'Country1'
@@ -37,11 +37,11 @@ TestCase("serverGameLoopControllerTest", {
         this.attackResultData = {
             type:"attacking",
             attacker:{
-                player:"Player1",
+                player:"Peter",
                 outcome:"winner"               
             },
             defender:{
-                player:"Player2",
+                player:"Hanswurst",
                 outcome:"loser"
             },
             changes:[
@@ -49,23 +49,23 @@ TestCase("serverGameLoopControllerTest", {
                     continent:"Europa",
                     country:"Country1",
                     unitCount:1,
-                    owner:"Player1"
+                    owner:"Peter"
                 },
                 {
                     continent:"Europa",
                     country:"Country2",
                     unitCount:6,
-                    owner:"Player2"
+                    owner:"Hanswurst"
                 }
             ]                    
         };      
         this.placeUnitData = {
             type:"placing",
-            player:"Player1",
+            player:"Peter",
             change:{
                 continent:"Europa",
                 country:"Country1",
-                unitCount:14
+                unitCount:12
             }
         };
         
@@ -105,9 +105,9 @@ TestCase("serverGameLoopControllerTest", {
         this.map = generateMap();
 
         this.player1 = new tddjs.client.player();
-        this.player1.setName('Player1');
+        this.player1.setName('Peter');
         this.player2 = new tddjs.client.player();
-        this.player2.setName('Player2');
+        this.player2.setName('Hanswurst');
         this.player3 = new tddjs.client.player();
         this.player3.setName('Player3');
         this.player4 = new tddjs.client.player();
@@ -510,8 +510,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(placing) should send move back without validate": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
-        
+        this.serverGameLoop.addClient(this.client1);       
 
         assertEquals(1,this.glc1.fromServerLogs.length);
         this.glc1.makeMove(this.validPlacingMove);
@@ -542,8 +541,45 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
    
         assertEquals(2,this.glc1.fromServerLogs.length);
-        assertEquals(this.placeUnitData, this.glc1.fromServerLogs[0]);
-      
+        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[1].data));      
+    },
+    "test sglc.playerMove(attacking) should send move back without validate": function(){
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.client1);
+        
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].res.write(data);
+        
+        assertEquals(2,this.glc1.fromServerLogs.length);
+        this.glc1.makeMove(this.validAttackMove);
+        
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        assertEquals(2,this.glc1.fromServerLogs.length);
+        
+        var sandbox = this.sandbox;
+        var url = this.url;
+        
+        var fakeReq = {
+            body: sandbox.server[url].requests[4].requestBody
+        };
+        var fakeRes = {
+            status: function(aCode)
+            {
+                var code = aCode;       
+                send = function(msg)
+                {                  
+                   sandbox.server[url].requests[4].respond(code,msg,"");                    
+                };
+                return {send:send};
+        }};   
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+   
+        assertEquals(3,this.glc1.fromServerLogs.length);
+        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[2].data));      
     }
     
     
