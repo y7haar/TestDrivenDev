@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-module.exports = gameApp;
 
 
 var express = require("express");
@@ -22,15 +21,26 @@ gameApp.use(sessions({
 }));
 
 
-gameApp.get("/", function(req,res){
+gameApp.get("/", function (req, res) {
+    res.status(200).send("<body> \n\
+    <h1>Welcome</h1><br><br>\n\
+    <img style='width:45%;' src='http://vignette2.wikia.nocookie.net/animaljam/images/e/e6/Tumblr_static_nyan_cat_animation_new.gif/revision/latest?cb=20140409232417'>  \n\
+    </body>");
 
-	console.dir(req);
-        console.log("---------------------------------------");
-        console.dir(res);
 });
 
-gameApp.get("/:id", function(req,res){
+gameApp.get("/secret", function (req, res) {
+    res.status(200).send("<body> \n\
+    <h1>Welcome</h1><br><br>\n\
+    <iframe width='420' height='315' src='https://www.youtube.com/embed/QH2-TGUlwu4' frameborder='0' allowfullscreen></iframe> \n\
+    </body>");
 
-	console.log(req.session);
-	res.send("Your are in gameApp id:"+req.params.id);
 });
+
+
+gameApp.get("/:id", function (req, res) {
+    console.log(req.session);
+    res.send("Your are in gameApp id:" + req.params.id);
+});
+
+module.exports = gameApp;
