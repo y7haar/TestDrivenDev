@@ -134,10 +134,7 @@ function gameLoopController()
         
     }
     
-    function messageAll()
-    {
-        
-    }
+
     
     //test
     Object.defineProperty(this, 'clients', {
@@ -153,11 +150,6 @@ function gameLoopController()
     Object.defineProperty(this, 'allConnected', {
         get: function () {
             return _allConnected;
-        }
-    });
-    Object.defineProperty(this, 'messageAll', {
-        get: function () {
-            return messageAll;
         }
     });
     Object.defineProperty(this, 'map', {

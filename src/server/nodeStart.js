@@ -6,7 +6,7 @@ var express = require('express');
 var sessions = require("client-sessions");
 var bodyParser = require("body-parser");
 var lobbyApp = require("./lobbyApp");
-
+var gameApp = require("./gameApp");
 /*
  *  Internal Requires
  */
@@ -77,7 +77,7 @@ app.all("*", function (req, res, next) {
 //});
 
 app.use("/lobbies", lobbyApp);
-
+app.use("/game", gameApp);
 
 
 /*
