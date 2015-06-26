@@ -242,10 +242,6 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals("waitingState", this.glc2.getStateName());
         assertEquals("placingState", this.glc1.getStateName());
     },
-    "test sglc should implement messageAll function":function()
-    {
-        assertFunction(this.serverGameLoop.messageAll);
-    },
     "test sglc should implement playerMove function": function(){
         assertFunction(this.serverGameLoop.playerMove);               
     },
