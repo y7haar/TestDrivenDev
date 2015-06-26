@@ -481,10 +481,14 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertNotUndefined(this.serverGameLoop.messageAllClientsCalled);
         assertFalse(this.serverGameLoop.messageAllClientsCalled);
+    },
+    "test sglc messageAllClientsCalled should be true after messageAllClients was called":function()
+    {
+       assertFalse(this.serverGameLoop.messageAllClientsCalled);
+       this.serverGameLoop.messageAllClients();
+       assertTrue(this.serverGameLoop.messageAllClientsCalled);    
     }
     
-    
   
-    
 });
     
