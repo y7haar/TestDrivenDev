@@ -21,6 +21,7 @@ function gameLoopController()
     function addClient(aClient)
     {
         _clients.push(aClient);
+        console.log("add Client. connected Clients: "+_clients.length);
         if(_clients.length === _maxPlayers)
         {
             _allConnected = true;
@@ -134,6 +135,11 @@ function gameLoopController()
         
     }
     
+    var messageAllClientsCalled = false;
+    function messageAllClients()
+    {
+        
+    }
 
     
     //test
@@ -161,7 +167,17 @@ function gameLoopController()
         get: function () {
             return _currentClient;
         }
+    });    
+    Object.defineProperty(this, 'messageAllClients', {
+        get: function () {
+            return messageAllClients;
+        }
     });
+    Object.defineProperty(this, 'messageAllClientsCalled', {
+        get: function () {
+            return messageAllClientsCalled;
+        }
+    });    
     
     this.playerMove = playerMove;
     this.setMap = setMap;
