@@ -476,6 +476,11 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc should implement messageAllClients function":function()
     {
         assertFunction(this.serverGameLoop.messageAllClients);
+    },
+    "test sglc should hold bool messageAllClientsCalled":function()
+    {
+        assertNotUndefined(this.serverGameLoop.messageAllClientsCalled);
+        assertFalse(this.serverGameLoop.messageAllClientsCalled);
     }
     
     
