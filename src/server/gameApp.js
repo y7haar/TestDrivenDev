@@ -43,6 +43,10 @@ gameApp.get("/:id", function (req, res) {
     if(req.headers.accept === 'text/event-stream')
     {
         
+        res.header('Content-Type', 'text/event-stream');
+        res.header('Cache-Control', 'no-cache');
+        res.header('Connection', 'keep-alive');  
+        
         if(controllers[req.params.id] === undefined)
         {
             controllers[req.params.id]= new controller();
@@ -51,18 +55,12 @@ gameApp.get("/:id", function (req, res) {
             controllers[req.params.id].addClient({
                res:res,
                req:req
-            });
-            
+            });        
             
         }
         //console.log(req.session.seenyou);
-        console.log("Incomming connection id:"+ req.params.id);
-        res.writeHead(200, {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive'
-        });        
-      
+        console.log("Incomming connection id:"+ req.params.id); 
+           
     }
     else
     {
@@ -76,14 +74,13 @@ gameApp.post("/:id", function (req, res) {
     
     if(controllers[req.params.id] === undefined)
     {
-        console.log("was undefined");
-        res.status(404);
+        console.log("no game found with id:"+req.params.id+ " requests denied");
+        res.sendStatus(404);
     }
     else
     {
-        console.log("found game!");
-        controllers[req.params.id].playerMove(req,res);
-        res.status(200);
+        console.log("found game!");     
+        controllers[req.params.id].playerMove(req,res);        
     }
    
 });
