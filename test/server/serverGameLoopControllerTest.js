@@ -131,7 +131,7 @@ TestCase("serverGameLoopControllerTest", {
         this.getFakeReq = function (index)
         {
             var fakeReq = {
-                body: sandbox.server[url].requests[index].requestBody
+                body: JSON.parse(sandbox.server[url].requests[index].requestBody)
             };
 
             return fakeReq;
