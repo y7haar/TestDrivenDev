@@ -10,8 +10,12 @@ var bodyParser = require("body-parser");
 var logger = require('connect-logger');
 var sessions = require("client-sessions");
 var test = require("./testModule.js");
+var controller = require("./serverGameLoopController.js");
 
 var gameApp = express();
+
+
+var controllers = {};
 
 gameApp.use(sessions({
   cookieName: 'session',
@@ -36,10 +40,53 @@ gameApp.get("/secret", function (req, res) {
 
 
 gameApp.get("/:id", function (req, res) {
-    console.log(req.session);
-    res.send("Your are in gameApp id:" + req.params.id);
+    if(req.headers.accept === 'text/event-stream')
+    {
+        
+        if(controllers[req.params.id] === undefined)
+        {
+            controllers[req.params.id]= new controller();
+            controllers[req.params.id].setMaxPlayers(1);
+            
+            controllers[req.params.id].addClient({
+               res:res,
+               req:req
+            });
+            
+            
+        }
+        //console.log(req.session.seenyou);
+        console.log("Incomming connection id:"+ req.params.id);
+        res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive'
+        });        
+      
+    }
+    else
+    {
+        console.log("GET-Request but not event-stream");
+        res.sendStatus(404);
+    }
 });
 
+gameApp.post("/:id", function (req, res) {
+    console.log("POST-Request:"); 
+    
+    if(controllers[req.params.id] === undefined)
+    {
+        console.log("was undefined");
+        res.status(404);
+    }
+    else
+    {
+        console.log("found game!");
+        controllers[req.params.id].playerMove(req,res);
+        res.status(200);
+    }
+   
+});
 
 
 module.exports = gameApp;
