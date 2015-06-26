@@ -5,11 +5,11 @@
  */
 
 
-
 var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require('connect-logger');
 var sessions = require("client-sessions");
+var test = require("./testModule.js");
 
 var gameApp = express();
 
@@ -22,19 +22,16 @@ gameApp.use(sessions({
 
 
 gameApp.get("/", function (req, res) {
-    res.status(200).send("<body> \n\
+    res.send("<body> \n\
     <h1>Welcome</h1><br><br>\n\
-    <img style='width:45%;' src='http://vignette2.wikia.nocookie.net/animaljam/images/e/e6/Tumblr_static_nyan_cat_animation_new.gif/revision/latest?cb=20140409232417'>  \n\
     </body>");
 
 });
 
 gameApp.get("/secret", function (req, res) {
-    res.status(200).send("<body> \n\
-    <h1>Welcome</h1><br><br>\n\
-    <iframe width='420' height='315' src='https://www.youtube.com/embed/QH2-TGUlwu4' frameborder='0' allowfullscreen></iframe> \n\
-    </body>");
-
+ 
+    var x = Math.floor((Math.random() * (test.length - 0)) + 0);
+    res.send(test[x]);
 });
 
 
@@ -42,5 +39,7 @@ gameApp.get("/:id", function (req, res) {
     console.log(req.session);
     res.send("Your are in gameApp id:" + req.params.id);
 });
+
+
 
 module.exports = gameApp;
