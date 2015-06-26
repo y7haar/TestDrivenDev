@@ -48,9 +48,9 @@ function gameLoopController()
     }
     
     function playerMove(req, res)
-    {
-        var type = JSON.parse(req.body).type;
-        var body = JSON.parse(req.body);       
+    {      
+        var type = req.body.type;
+        var body = req.body;       
         switch (type)
         {
             case 'endPhase':             
