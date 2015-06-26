@@ -124,12 +124,13 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function addAllEventListner()
     {        
         addAllEventListnerCalled = true;
-        
+       
         _eventSource.addEventListener("changeToPlacing", changeToPlacingState);
         _eventSource.addEventListener("changeToAttacking", changeToAttackingState);
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
-        _eventSource.addEventListener("placeUnits", placeUnits);          
+        _eventSource.addEventListener("placeUnits", placeUnits);
+        console.log("added Events");
     }      
     
     

@@ -76,6 +76,15 @@ and open the template in the editor.
                 this.gameLoopController.makeMove(this.validPlacingMove);
             }
             
+            function showToServerLogs()
+            {
+                console.dir(this.gameLoopController.toServerLogs);
+            }
+            function showFromServerLogs()
+            {
+                console.dir(this.gameLoopController.fromServerLogs);
+            }
+            
             
         </script>
     </head>
@@ -86,6 +95,9 @@ and open the template in the editor.
         <input type="button" onclick="callEndPhase();" value="endPhase" /> 
         <input type="button" onclick="sendAttack();" value="attack" /> 
         <input type="button" onclick="sendPlacing();" value="Place" /> 
-        <input type="button" onclick="showGameState();" value="show State" /> 
+        <input type="button" onclick="showGameState();" value="show State" /> <br>
+        <input type="button" onclick="showToServerLogs();" value="toServerLogs" /> 
+        <input type="button" onclick="showFromServerLogs();" value="fromServerLogs" /> 
+        
     </body>
 </html>

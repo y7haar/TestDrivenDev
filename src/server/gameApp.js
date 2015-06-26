@@ -14,16 +14,26 @@ var controller = require("./serverGameLoopController.js");
 
 var gameApp = express();
 
-
 var controllers = {};
 
 gameApp.use(sessions({
   cookieName: 'session',
   secret: 'usdnzfu303un04fu43fnpp09suwendwe', 
   duration: 1000 * 60, // 1 Day valid 24 * 60 * 60 * 1000
-  activeDuration: 1000 * 3 //1000 * 60 * 5 
+  activeDuration: 1000 * 60 //1000 * 60 * 5 
 }));
 
+// setting sessions for testing later  lobbie will make this
+gameApp.use(function(req, res, next) {
+  if (req.session.seenyou) {
+    res.header('X-Seen-You', 'true');
+  } 
+  else {
+    req.session.seenyou = true;
+    res.header('X-Seen-You', 'false');
+  }  
+  next();
+});
 
 gameApp.get("/", function (req, res) {
     res.send("<body> \n\
@@ -42,22 +52,23 @@ gameApp.get("/secret", function (req, res) {
 gameApp.get("/:id", function (req, res) {
     if(req.headers.accept === 'text/event-stream')
     {
-        
+        console.log(req.session.seenyou);
         res.header('Content-Type', 'text/event-stream');
         res.header('Cache-Control', 'no-cache');
         res.header('Connection', 'keep-alive');  
+        res.connection.setTimeout(0);
         
         if(controllers[req.params.id] === undefined)
         {
             controllers[req.params.id]= new controller();
-            controllers[req.params.id].setMaxPlayers(1);
+            controllers[req.params.id].setMaxPlayers(2);
             
-            controllers[req.params.id].addClient({
-               res:res,
-               req:req
-            });        
-            
-        }
+        }      
+
+        controllers[req.params.id].addClient({
+            res: res,
+            req: req
+        });   
         //console.log(req.session.seenyou);
         console.log("Incomming connection id:"+ req.params.id); 
            
