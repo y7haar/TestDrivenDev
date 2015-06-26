@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script language="javascript" type="text/javascript" src="lib/tdd.js"></script>
+    
+       
+        <script language="javascript" type="text/javascript" src="client/country.js"></script>
+        <script language="javascript" type="text/javascript" src="client/continent.js"></script>
+        <script language="javascript" type="text/javascript" src="client/map.js"></script>
+        <script language="javascript" type="text/javascript" src="client/clientPlayer.js"></script>
+        <script language="javascript" type="text/javascript" src="lib/globals.js"></script>
+    
+        <script language="javascript" type="text/javascript" src="client/ajax.js"></script>
+        <script language="javascript" type="text/javascript" src="client/gameLoopController.js"></script>
+        <script language="javascript" type="text/javascript" src="client/gameStates.js"></script>
+        
+        <script language="javascript" type="text/javascript" >
+            this.validPlacingMove = {
+                type: 'placing',
+                unitCount: 12,
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            };
+            this.validAttackMove = {
+                type: 'attack',
+                from: {
+                    player: 'Peter',
+                    continent: 'Europa',
+                    country: 'Country1'
+                    },
+                to: {
+                    player: 'Hanswurst',
+                    continent: 'Europa',
+                    country: 'Country2'
+                    }
+            };
+    
+            this. url = "http://localhost:8080/game/1";
+            this. map = generateMap();
+            this.player1 = new tddjs.client.player();
+            this.player1.setName('Peter');
+            
+            this.gameLoopController = new tddjs.client.gameLoopController(this.map, this.player1, this.url);
+            
+            function establishConnection()
+            {
+                 this.gameLoopController.establishConnection();                 
+            }
+            function showEventSource()
+            {
+                console.log(this.gameLoopController.eventSource);
+            }
+            function showGameState()
+            {
+                console.log(this.gameLoopController.getStateName());
+            }
+            function callEndPhase()
+            {
+                this.gameLoopController.endPhase();
+            }
+            function sendAttack()
+            {
+                this.gameLoopController.makeMove(this.validAttackMove);
+            }
+            function sendPlacing()
+            {
+                this.gameLoopController.makeMove(this.validPlacingMove);
+            }
+            
+            
+        </script>
+    </head>
+    <body>
+        <div>Client - Server communication test (need NodeJs-Server)</div>
+        <input type="button" onclick="establishConnection();" value="Connectt" /> 
+        <input type="button" onclick="showEventSource();" value="get EventSource" /> <br>
+        <input type="button" onclick="callEndPhase();" value="endPhase" /> 
+        <input type="button" onclick="sendAttack();" value="attack" /> 
+        <input type="button" onclick="sendPlacing();" value="Place" /> 
+        <input type="button" onclick="showGameState();" value="show State" /> 
+    </body>
+</html>
