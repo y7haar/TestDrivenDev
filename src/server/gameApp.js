@@ -15,6 +15,10 @@ var controller = require("./serverGameLoopController.js");
 var gameApp = express();
 
 var controllers = {};
+var lobbyController = tddjs.server.controller.lobbyController.getInstance();
+
+
+
 
 gameApp.use(sessions({
   cookieName: 'session',
@@ -36,9 +40,8 @@ gameApp.use(function(req, res, next) {
 });
 
 gameApp.get("/", function (req, res) {
-    res.send("<body> \n\
-    <h1>Welcome</h1><br><br>\n\
-    </body>");
+    res.send("Welcome");    
+    
 
 });
 
@@ -52,26 +55,33 @@ gameApp.get("/secret", function (req, res) {
 gameApp.get("/:id", function (req, res) {
     if(req.headers.accept === 'text/event-stream')
     {
-        console.log(req.session.seenyou);
-        res.header('Content-Type', 'text/event-stream');
-        res.header('Cache-Control', 'no-cache');
-        res.header('Connection', 'keep-alive');  
-        res.connection.setTimeout(0);
-        
-        if(controllers[req.params.id] === undefined)
+        try
         {
-            controllers[req.params.id]= new controller();
-            controllers[req.params.id].setMaxPlayers(2);
-            
-        }      
+            //console.log(lobbyController.getLobbyById(req.params.id));
+            console.log(req.session.seenyou);
+            res.header('Content-Type', 'text/event-stream');
+            res.header('Cache-Control', 'no-cache');
+            res.header('Connection', 'keep-alive');  
+            res.connection.setTimeout(0);
 
-        controllers[req.params.id].addClient({
-            res: res,
-            req: req
-        });   
-        //console.log(req.session.seenyou);
-        console.log("Incomming connection id:"+ req.params.id); 
-           
+            if(controllers[req.params.id] === undefined)
+            {
+                controllers[req.params.id]= new controller();
+                controllers[req.params.id].setMaxPlayers(2);
+
+            }      
+
+            controllers[req.params.id].addClient({
+                res: res,
+                req: req
+            });   
+            //console.log(req.session.seenyou);
+            console.log("Incomming connection id:"+ req.params.id); 
+        }
+        catch(e)
+        {
+            console.log(e);
+        }               
     }
     else
     {
