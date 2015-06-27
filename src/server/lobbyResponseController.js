@@ -181,7 +181,7 @@ function lobbyResponseController()
                 lobby.setName(obj.data.name);
             }
             
-            //broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
+            broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
         }
         catch(e)
         {
@@ -223,12 +223,14 @@ function lobbyResponseController()
                     color: obj.data.color
                 };
                 
-                //broadcastMessage(id, wrapper, "colorchange");
+                broadcastMessage(id, wrapper, "colorchange");
             }
             
             if(typeof obj.data.name === "string")
             {
                 lobby.getPlayerById(playerId).setName(obj.data.name);
+                
+                broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
             }
         }
         catch(e)

@@ -58,5 +58,16 @@ module.exports = {
             
         test.done();
         });
+    },
+    
+     "test server should respond with correct headers on eventSource connect": function (test) {
+        this.client.get(test, "/0", 
+        { headers: { Accept: "text/eventstream" }, data:{} },
+        function(res) {
+        
+        test.equal(res.headers, "");
+            
+        test.done();
+        });
     }
 };

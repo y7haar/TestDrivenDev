@@ -414,7 +414,7 @@ function lobbyUi(aRequestController)
 
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
         playerName.contentEditable = true;
-        playerName.innerHTML = "";
+        //playerName.innerHTML = "";
         playerName.onblur = function() {
             _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.textContent);
         };
@@ -434,7 +434,7 @@ function lobbyUi(aRequestController)
         };
 
 
-        playerName.focus();
+        //playerName.focus();
     }
 
     function addStartButton(aLobbyWrapper)
@@ -596,7 +596,7 @@ function lobbyUi(aRequestController)
         this.createLobbyContent();
         this.createWrapper();
         
-        if(_currentLobby.getLeader() === _currentPlayer)
+        if(_currentLobby.getLeader().getId() === _currentPlayer.getId())
             this.showLeaderLobby(_currentLobby);
             
         else

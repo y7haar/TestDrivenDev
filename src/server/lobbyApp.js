@@ -59,12 +59,17 @@ lobbyApp.post("/:id", function (req, res) {
         
         if(typeof req.session.token ==="undefined")
             req.session.token = lobbyResponseController.getToken();
-            
-        res.json(response);
+        
+        if(typeof response !== "undefined")
+            res.json(response);
+        
+        else
+            res.sendStatus(200);
     }
     
     catch(e)
     {
+        console.dir(e);
         res.status(400).send("Wrong JSON Format");
     }
 });
@@ -73,6 +78,7 @@ lobbyApp.get("/:id", function (req, res) {
     if(req.accepts("text/event-stream"))
     {
         res.type("text/event-stream");
+        res.connection.setTimeout(0);
         
         var lobby = lobbyController.getLobbyById(req.params.id);
         var player = lobby.getPlayerByToken(req.session.token.toString());
