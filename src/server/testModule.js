@@ -27,7 +27,7 @@ test.push("<body style='text-align: center;'> \n\
 
 test.push("<body style='text-align: center;'> \n\
     <h1>u found it, now deal with it! </h1>\n\
-    <iframe width='100%' height='90%' src='https://www.youtube.com/embed/fbGkxcY7YFU?autoplay=1&start=98' frameborder='0' allowfullscreen></iframe> <br>\n\
+    <iframe width='100%' height='90%' src='https://www.youtube.com/embed/XKE3dIrRIbg?autoplay=1&start=90' frameborder='0' allowfullscreen></iframe> <br>\n\
 </body>");
 
 test.push("<body style='text-align: center;'> \n\
@@ -63,6 +63,11 @@ test.push("<body style='text-align: center;'> \n\
 test.push("<body style='text-align: center;'> \n\
     <h1>u found it, now deal with it! </h1>\n\
     <iframe width='100%' height='90%' src='https://www.youtube.com/embed/rJqDPaf31Gw?autoplay=1&start=3' frameborder='0' allowfullscreen></iframe> <br>\n\
+</body>");
+
+test.push("<body style='text-align: center;'> \n\
+    <h1>u found it, now deal with it! </h1>\n\
+    <iframe width='100%' height='90%' src='https://www.youtube.com/embed/Ada6gL3uZH8?autoplay=1&start=3' frameborder='0' allowfullscreen></iframe> <br>\n\
 </body>");
 
 module.exports = test;
