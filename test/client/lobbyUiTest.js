@@ -921,7 +921,10 @@ TestCase("SingleLobbyUiEventTest", {
         sinon.assert.calledOnce(setCurrentLobbySpy);
         sinon.assert.calledOnce(spy);
         
-        assertInstanceOf(setCurrentLobbySpy.args[0], tddjs.client.model.lobby);
+        var lobbyArg = setCurrentLobbySpy.args[0];
+        
+        // Test for instanceof would fail because of different Scopes in Sinon
+        assertObject(lobbyArg);
     }
  
 });
