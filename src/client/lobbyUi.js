@@ -414,7 +414,7 @@ function lobbyUi(aRequestController)
 
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
         playerName.contentEditable = true;
-        //playerName.innerHTML = "";
+
         playerName.onblur = function() {
             _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.textContent);
         };
@@ -432,9 +432,6 @@ function lobbyUi(aRequestController)
             _lobbyRequestController.updatePlayerColor(_currentLobby.getId(), aId, _colors[_colorIndex % _colors.length]);
             _colorIndex++;
         };
-
-
-        //playerName.focus();
     }
 
     function addStartButton(aLobbyWrapper)
