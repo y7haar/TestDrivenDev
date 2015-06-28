@@ -66,7 +66,8 @@ function lobbyController()
         var lobby = _lobbies[aId];
 
         if (typeof (lobby) === "undefined" || lobby === null)
-            throw new Error("Lobby with id " + aId + " doesnt exist");
+            return null;
+            //throw new Error("Lobby with id " + aId + " doesnt exist");
 
         return lobby;
     }
