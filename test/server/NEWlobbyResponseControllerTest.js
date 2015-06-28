@@ -270,3 +270,59 @@ TestCase("LobbyResponseControllerBroadcastTest", {
     }
     
 });
+
+
+TestCase("LobbyResponseControllerJoinTest", {
+    setUp: function() {
+        // Must be changed 
+        this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
+        
+        this.lobby = this.lobbyFactory.getNewLobby();
+        this.player1 = new tddjs.server.player();
+        this.player1.setToken("1234");
+        
+        this.player2 = new tddjs.server.player();
+        this.player2.setToken("2345");
+        
+        this.player3 = new tddjs.server.player();
+        this.player3.setType("bot");
+        
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.addPlayer(this.player3);
+        
+        this.res1 = new fakeRes();
+        this.res2 = new fakeRes();
+        
+        this.player1.setResponseObject(this.res1);
+        this.player2.setResponseObject(this.res2);
+        
+        this.lobbyController.addLobby(this.lobby);
+        this.lrc.setLobbyById(this.lobby.getId());
+        
+        // Mocking req and res
+        
+        this.req = new fakeReq();
+        this.res = new fakeRes();
+        
+        this.sandbox = sinon.sandbox.create();
+        
+        this.pl1GetResSpy = this.sandbox.spy(this.player1, "getResponseObject");
+        this.pl2GetResSpy = this.sandbox.spy(this.player2, "getResponseObject");
+        this.pl3GetResSpy = this.sandbox.spy(this.player3, "getResponseObject");
+        
+        this.res1SendSpy = this.sandbox.spy(this.res1, "write");
+        this.res2SendSpy = this.sandbox.spy(this.res2, "write");
+        
+    },
+    tearDown: function()
+    {
+        this.sandbox.restore();
+    },
+    
+     "test lobbyResponseController should have function to respond on player join": function() {
+        assertFunction(this.lrc.respondJoin);
+    }
+});
