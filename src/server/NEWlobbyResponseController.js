@@ -22,6 +22,14 @@ function lobbyResponseController()
            res.append("content-type", "text/event-stream");
            res.append("cache-control", "no-cache");
            res.append("connection", "keep-alive");
+           
+           var player = _lobby.getPlayerByToken(req.session.token);
+           
+           if(player === null)
+               res.sendStatus(400);
+               
+            else
+                player.setResponseObject(res);
        }
    }
    
