@@ -27,7 +27,7 @@ function lobbyController()
 
         var index = aLobby.getId();
 
-        if (typeof _lobbies[index] != "undefined")
+        if (typeof _lobbies[index] !== "undefined")
             throw new Error("Index already in use");
 
         _lobbies[index] = aLobby;
