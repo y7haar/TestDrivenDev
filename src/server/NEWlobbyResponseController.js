@@ -40,6 +40,26 @@ function lobbyResponseController()
        }
    }
    
+   function broadcastMessage(aMessage, aEvent)
+    {
+        if(typeof aMessage !== "object")
+            throw new TypeError("Message must be object");
+        
+        if(typeof aEvent !== "string")
+            throw new TypeError("Event must be string");
+        
+        for(var i = 0;i < _lobby.getPlayers().length;++i)
+        {
+            var player = _lobby.getPlayers()[i];
+            
+            if(player.getType() === "human")
+            {
+                var res = player.getResponseObject();
+                res.write("");
+            }
+
+        }
+    }
    
    
     //test
@@ -52,4 +72,5 @@ function lobbyResponseController()
     
     this.setLobbyById = setLobbyById;
     this.acceptEventSource = acceptEventSource;
+    this.broadcastMessage = broadcastMessage;
 }
