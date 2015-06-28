@@ -663,7 +663,8 @@ TestCase("LobbyRequestControllerEventSourceTest", {
     
     "test getLobbyEventSourceController should return instance of lobbyEventSourceController": function() {
         var c = this.lobbyRequestController.getLobbyEventSourceController();
-        assertInstanceOf(c, tddjs.client.controller.lobbyEventSourceController);
+        
+        assertTrue((c instanceof tddjs.client.controller.lobbyEventSourceController));
     },
     
     "test controller should have onSuccess for requestJoin": function() {
@@ -672,13 +673,5 @@ TestCase("LobbyRequestControllerEventSourceTest", {
     
     "test controller should have onSuccess for requestNewLobby": function() {
         assertFunction(this.lobbyRequestController.onNewLobbySuccess);
-    },
-    
-    "test onNewLobbySuccess should call establishConnection": function() {
-        var eventSourceController = this.lobbyRequestController.getLobbyEventSourceController();
-        
-        var spy = this.sandbox.stub(eventSourceController, "establishConnection");
-        
-        // TODO simulate request and response
     }
 });
