@@ -19,6 +19,12 @@ function fakeReq()
 function fakeRes()
 {
     this.headers = [];
+    this.connection = {};
+    
+    this.connection.setTimeout = function(timeout)
+    {
+        
+    };
     
     this.append = function(header, value)
     {
@@ -86,6 +92,7 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         
         this.player1ResSpy = this.sandbox.spy(this.player1, "setResponseObject");
         this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
+        this.resSetTimeoutSpy = this.sandbox.spy(this.res.connection, "setTimeout");
     },
     tearDown: function()
     {
@@ -112,12 +119,33 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         sinon.assert.calledWith(this.player1ResSpy, this.res);
     },
     
+    "test acceptEventSource should call res.connection.setTimeout with 0": function() {
+        sinon.assert.notCalled(this.resSetTimeoutSpy);
+        
+        this.lrc.acceptEventSource(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSetTimeoutSpy);
+        sinon.assert.calledWith(this.resSetTimeoutSpy, 0);
+    },
+    
     "test acceptEventSource should call sendStatus with status 400 if player with token does not exists": function() {
-        this.req.session.token = 1;
+        this.req.session.token = "1";
         sinon.assert.notCalled(this.resSendStatusSpy);
         
         this.lrc.acceptEventSource(this.req, this.res);
         
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test acceptEventSource should call sendStatus with status 400 if token is undefined": function() {
+        this.req.session.token = undefined;
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.notCalled(this.player1ResSpy);
+        
+        this.lrc.acceptEventSource(this.req, this.res);
+        
+        sinon.assert.notCalled(this.player1ResSpy);
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
     }
