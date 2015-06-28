@@ -269,4 +269,3 @@ function lobbyResponseController()
     _methodTypes["playerUpdate"] = this.respondPlayerUpdate;
     _methodTypes["join"] = this.respondJoin;
 }
-
