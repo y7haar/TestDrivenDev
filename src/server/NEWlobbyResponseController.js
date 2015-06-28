@@ -55,7 +55,7 @@ function lobbyResponseController()
             if(player.getType() === "human")
             {
                 var res = player.getResponseObject();
-                res.write("");
+                res.write("event: " + aEvent + "\n" + "data: " + JSON.stringify(aMessage) + "\n\n");
             }
 
         }
