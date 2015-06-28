@@ -17,11 +17,13 @@ function lobbyResponseController()
    
    function acceptEventSource(req, res)
    {
-       if(req.get("accept") === "text/event-stream")
+       if(req.get("accept") === "text/event-stream" && (typeof req.session.token !== "undefined"))
        {
            res.append("content-type", "text/event-stream");
            res.append("cache-control", "no-cache");
            res.append("connection", "keep-alive");
+           res.connection.setTimeout(0);
+           
            
            var player = _lobby.getPlayerByToken(req.session.token);
            
@@ -30,6 +32,11 @@ function lobbyResponseController()
                
             else
                 player.setResponseObject(res);
+       }
+       
+       else
+       {
+           res.sendStatus(400);
        }
    }
    
