@@ -24,6 +24,11 @@ function fakeRes()
     {
         this.headers[header.toLowerCase()] = value;
     };
+    
+    this.sendStatus = function(status)
+    {
+        
+    };
 }
 
 TestCase("LobbyResponseControllerTest", {
@@ -65,6 +70,8 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         this.player1 = new tddjs.server.player();
         this.player1.setToken("1234");
         
+        this.lobby.addPlayer(this.player1);
+        
         this.lobbyController.addLobby(this.lobby);
         this.lrc.setLobbyById(this.lobby.getId());
         
@@ -78,6 +85,7 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         this.sandbox = sinon.sandbox.create();
         
         this.player1ResSpy = this.sandbox.spy(this.player1, "setResponseObject");
+        this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
     },
     tearDown: function()
     {
@@ -102,5 +110,15 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         
         sinon.assert.calledOnce(this.player1ResSpy);
         sinon.assert.calledWith(this.player1ResSpy, this.res);
+    },
+    
+    "test acceptEventSource should call sendStatus with status 400 if player with token does not exists": function() {
+        this.req.session.token = 1;
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.acceptEventSource(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
     }
 });
