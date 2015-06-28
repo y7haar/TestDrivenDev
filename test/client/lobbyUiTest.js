@@ -434,7 +434,7 @@ TestCase("SingleLobbyUiTest", {
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
 
         assertEquals("true", playerName.contentEditable);
-        assertEquals("", playerName.innerHTML);
+        assertEquals("P3", playerName.innerHTML);
     },
     "test setPlayerEditable should set onClick Event on colorBox": function() {
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
@@ -578,42 +578,37 @@ TestCase("SingleLobbyUiLeaderTest", {
         assertEquals("rgb(255, 255, 255)", players[3].childNodes[0].childNodes[0].childNodes[0].style.backgroundColor);
 
 
-        assertTagName("option", players[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0]);
-        assertTagName("option", players[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1]);
+        assertTagName("option", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0]);
+        assertTagName("option", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1]);
 
-        assertTagName("option", players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0]);
-        assertTagName("option", players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1]);
+        assertTagName("option", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0]);
+        assertTagName("option", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1]);
+        assertTagName("option", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[2]);
 
-        assertTagName("option", players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0]);
-        assertTagName("option", players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1]);
-        assertTagName("option", players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[2]);
 
-        assertEquals("Open Slot", players[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].innerHTML);
-        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].innerHTML);
+        assertTagName("option", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0]);
+        assertTagName("option", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1]);
+        
+        assertEquals("Open Slot", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1].innerHTML);
 
-        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].innerHTML);
-        assertEquals("Bot", players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].innerHTML);
-        assertEquals("Human", players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[2].innerHTML);
+        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("Bot", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("Human", players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[2].innerHTML);
 
-        assertEquals("Open Slot", players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].innerHTML);
-        assertEquals("Bot", players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].innerHTML);
+        assertEquals("Open Slot", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[0].innerHTML);
+        assertEquals("Bot", players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0].childNodes[1].innerHTML);
 
-        var value1 = players[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
-        var value2 = players[2].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
-        var value3 = players[3].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
+        var value1 = players[1].childNodes[0].childNodes[0].childNodes[2].childNodes[0].value;
+        var value2 = players[2].childNodes[0].childNodes[0].childNodes[2].childNodes[0].value;
+        var value3 = players[3].childNodes[0].childNodes[0].childNodes[2].childNodes[0].value;
 
         assertEquals("Bot", value1);
         assertEquals("Human", value2);
         assertEquals("Open Slot", value3);
 
-
         assertEquals("P4", players[1].childNodes[0].childNodes[0].childNodes[1].innerHTML);
-        assertEquals("", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
-
-        assertEquals("Human", players[0].childNodes[0].childNodes[0].childNodes[2].innerHTML);
-        assertEquals("Bot", players[1].childNodes[0].childNodes[0].childNodes[2].innerHTML);
-        assertEquals("Open Slot", players[2].childNodes[0].childNodes[0].childNodes[2].innerHTML);
-
+        assertEquals("P5", players[2].childNodes[0].childNodes[0].childNodes[1].innerHTML);
     },
     "test ui should have a button to start the game": function() {
         /*:DOC += <div class = "content" id = "content"><div class = "lobbyWrapper" id = "lobbyWrapper"></div></div> */
