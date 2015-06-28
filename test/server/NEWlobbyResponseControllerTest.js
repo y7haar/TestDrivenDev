@@ -242,6 +242,31 @@ TestCase("LobbyResponseControllerBroadcastTest", {
         
         sinon.assert.calledOnce(this.res1SendSpy);
         sinon.assert.calledOnce(this.res2SendSpy);
+    },
+    
+    "test broadcastMessage should call res.write with correct message": function() {
+        var msg = {
+            data1: "data1",
+            data2: "data2"
+        };
+        
+        var msgJson = JSON.stringify(msg);
+        this.lrc.broadcastMessage(msg, "myEvent");
+
+        sinon.assert.calledWith(this.res1SendSpy, "event: " + "myEvent" + "\n" + "data: " + msgJson + "\n\n");
+        sinon.assert.calledWith(this.res2SendSpy, "event: " + "myEvent" + "\n" + "data: " + msgJson + "\n\n");
+        
+        
+        msg = {
+            data1: "data10",
+            data2: "data20"
+        };
+        
+        var msgJson = JSON.stringify(msg);
+        this.lrc.broadcastMessage(msg, "myEvent2");
+
+        sinon.assert.calledWith(this.res1SendSpy, "event: " + "myEvent2" + "\n" + "data: " + msgJson + "\n\n");
+        sinon.assert.calledWith(this.res2SendSpy, "event: " + "myEvent2" + "\n" + "data: " + msgJson + "\n\n");
     }
     
 });
