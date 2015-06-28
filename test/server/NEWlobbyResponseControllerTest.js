@@ -8,6 +8,7 @@
 function fakeReq()
 {
     this.headers = [];
+    this.session = {};
     
     this.get = function(header)
     {
@@ -57,15 +58,30 @@ TestCase("LobbyResponseControllerEventSourceTest", {
     setUp: function() {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
+        
+        this.lobby = this.lobbyFactory.getNewLobby();
+        this.player1 = new tddjs.server.player();
+        this.player1.setToken("1234");
+        
+        this.lobbyController.addLobby(this.lobby);
+        this.lrc.setLobbyById(this.lobby.getId());
         
         // Mocking req and res
         
         this.req = new fakeReq();
+        this.req.session.token = "1234";
         this.req.headers["accept"] = "text/event-stream";
         this.res = new fakeRes();
+        
+        this.sandbox = sinon.sandbox.create();
+        
+        this.player1ResSpy = this.sandbox.spy(this.player1, "setResponseObject");
     },
     tearDown: function()
     {
+        this.sandbox.restore();
     },
     
      "test lobbyResponseController should have function to accept EventSource": function() {
@@ -77,5 +93,14 @@ TestCase("LobbyResponseControllerEventSourceTest", {
          assertEquals(this.res.headers["content-type"], "text/event-stream");
          assertEquals(this.res.headers["cache-control"], "no-cache");
          assertEquals(this.res.headers["connection"], "keep-alive");
+    },
+    
+    "test acceptEventSource should store res object in player with requesting token": function() {
+        sinon.assert.notCalled(this.player1ResSpy);
+        
+        this.lrc.acceptEventSource(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.player1ResSpy);
+        sinon.assert.calledWith(this.player1ResSpy, this.res);
     }
 });
