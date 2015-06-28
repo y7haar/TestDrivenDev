@@ -5,14 +5,34 @@
  *  
  */
 
+function fakeReq()
+{
+    this.headers = [];
+    
+    this.get = function(header)
+    {
+        return this.headers[header.toLowerCase()];
+    };
+}
+
+function fakeRes()
+{
+    this.headers = [];
+    
+    this.append = function(header, value)
+    {
+        this.headers[header.toLowerCase()] = value;
+    };
+}
+
 TestCase("LobbyResponseControllerTest", {
     setUp: function() {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         
-        this.lobby = new tddjs.server.model.lobby();
-        this.lobby.setName("L1");
+        this.lobby = this.lobbyFactory.getNewLobby();
         this.lobbyController.addLobby(this.lobby);
     },
     tearDown: function()
@@ -40,21 +60,9 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         
         // Mocking req and res
         
-        this.req = {};
+        this.req = new fakeReq();
         this.req.headers["accept"] = "text/event-stream";
-        
-        this.req.get = function(header)
-        {
-            return this.req.headers[header.toLowerCase()];
-        };
-        
-        this.res = {};
-        this.res.append = function(field, value)
-        {
-            this.headers[field.toLowerCase()] = value;
-        };
-        
-
+        this.res = new fakeRes();
     },
     tearDown: function()
     {
