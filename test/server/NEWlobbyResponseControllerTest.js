@@ -294,6 +294,10 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.player3 = new tddjs.server.player();
         this.player3.setType("bot");
         
+        this.newPlayer = new tddjs.server.player();
+        this.newPlayer.setName("Unnamed Player");
+        this.newPlayer.setColor("#ffffff");
+        
         this.lobby.addPlayer(this.player1);
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
@@ -309,6 +313,8 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.sandbox = sinon.sandbox.create();
         
         this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
+        this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
+        this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
         
     },
     tearDown: function()
@@ -359,5 +365,27 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lrc.respondJoin(this.req, this.res);
         
         sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+    
+    "test lrc should have private helper to join a specific Player": function() {
+        assertFunction(this.lrc.joinPlayer);
+    },
+    
+    "test joinPlayer should call setToken on player with specified Token": function() {
+        sinon.assert.notCalled(this.newPlayerTokenSpy);
+        
+        this.lrc.joinPlayer(this.newPlayer, "88");
+        
+        sinon.assert.calledOnce(this.newPlayerTokenSpy);
+        sinon.assert.calledWith(this.newPlayerTokenSpy, "88");
+    },
+    
+    "test joinPlayer should call lobby.addPlayer with new player": function() {
+        sinon.assert.notCalled(this.addPlayerSpy);
+        
+        this.lrc.joinPlayer(this.newPlayer, "88");
+        
+        sinon.assert.calledOnce(this.addPlayerSpy);
+        sinon.assert.calledWith(this.addPlayerSpy, this.newPlayer);
     }
 });
