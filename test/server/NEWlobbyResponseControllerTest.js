@@ -316,6 +316,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
         this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
         this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
+        this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
         
     },
     tearDown: function()
@@ -401,6 +402,25 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lrc.respondJoin(this.req, this.res);
         
         sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
+    },
+    
+    "test respondJoin should call joinPlayer with getted token": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.joinPlayerSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.joinPlayerSpy);
+        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.joinPlayerSpy.args[1]);
     },
     
     "test respondJoin should set req.session.token with lobby.getUniqueToken": function() {
