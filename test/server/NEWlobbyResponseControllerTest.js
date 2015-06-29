@@ -67,6 +67,11 @@ TestCase("LobbyResponseControllerTest", {
     "test setLobbyById should set lobby if lobby with id exists": function() {
         this.lrc.setLobbyById(this.lobby.getId());
         assertSame(this.lobby, this.lrc.lobby);
+    },
+    
+    "test setLobbyById should throw Error if lobby with id does not exist": function() {
+        var lrc = this.lrc;
+        assertException(function() { lrc.setLobbyById(-1); }, "LobbyIdError");
     }
 });
 
@@ -289,16 +294,14 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.player3 = new tddjs.server.player();
         this.player3.setType("bot");
         
+        this.newPlayer = new tddjs.server.player();
+        this.newPlayer.setName("Unnamed Player");
+        this.newPlayer.setColor("#ffffff");
+        
         this.lobby.addPlayer(this.player1);
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
-        
-        this.res1 = new fakeRes();
-        this.res2 = new fakeRes();
-        
-        this.player1.setResponseObject(this.res1);
-        this.player2.setResponseObject(this.res2);
-        
+           
         this.lobbyController.addLobby(this.lobby);
         this.lrc.setLobbyById(this.lobby.getId());
         
@@ -309,12 +312,11 @@ TestCase("LobbyResponseControllerJoinTest", {
         
         this.sandbox = sinon.sandbox.create();
         
-        this.pl1GetResSpy = this.sandbox.spy(this.player1, "getResponseObject");
-        this.pl2GetResSpy = this.sandbox.spy(this.player2, "getResponseObject");
-        this.pl3GetResSpy = this.sandbox.spy(this.player3, "getResponseObject");
-        
-        this.res1SendSpy = this.sandbox.spy(this.res1, "write");
-        this.res2SendSpy = this.sandbox.spy(this.res2, "write");
+        this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
+        this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
+        this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+        this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
+        this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
         
     },
     tearDown: function()
@@ -324,5 +326,143 @@ TestCase("LobbyResponseControllerJoinTest", {
     
      "test lobbyResponseController should have function to respond on player join": function() {
         assertFunction(this.lrc.respondJoin);
+    },
+    
+    
+    "test respondJoin should call sendStatus with 400 if req.body is no object": function() {
+        this.req.body = undefined;
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondJoin should call sendStatus with 400 if req.body.player is no object": function() {
+        this.req.body = {};
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondJoin should NOT call sendStatus with 400 if player object in body is valid": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+    
+    "test respondJoin should set req.session.token": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        assertUndefined(this.req.session.token);
+        this.lrc.respondJoin(this.req, this.res);
+        
+        assertString(this.req.session.token);
+    },
+    
+    "test respondJoin should call lobby.getUniqueToken": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.lobbyUniqueTokenSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
+    },
+    
+    "test respondJoin should call joinPlayer with getted token": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.joinPlayerSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.joinPlayerSpy);
+        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.joinPlayerSpy.args[0][1]);
+    },
+    
+    "test respondJoin should set req.session.token with lobby.getUniqueToken": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        assertUndefined(this.req.session.token);
+        sinon.assert.notCalled(this.lobbyUniqueTokenSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
+        
+        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.req.session.token);
+    },
+    
+    "test lrc should have private helper to join a specific Player": function() {
+        assertFunction(this.lrc.joinPlayer);
+    },
+    
+    "test joinPlayer should call setToken on player with specified Token": function() {
+        sinon.assert.notCalled(this.newPlayerTokenSpy);
+        
+        this.lrc.joinPlayer(this.newPlayer, "88");
+        
+        sinon.assert.calledOnce(this.newPlayerTokenSpy);
+        sinon.assert.calledWith(this.newPlayerTokenSpy, "88");
+    },
+    
+    "test joinPlayer should call lobby.addPlayer with new player": function() {
+        sinon.assert.notCalled(this.addPlayerSpy);
+        
+        this.lrc.joinPlayer(this.newPlayer, "88");
+        
+        sinon.assert.calledOnce(this.addPlayerSpy);
+        sinon.assert.calledWith(this.addPlayerSpy, this.newPlayer);
     }
 });
