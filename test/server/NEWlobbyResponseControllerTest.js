@@ -315,6 +315,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
         this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
         this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+        this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
         
     },
     tearDown: function()
@@ -368,10 +369,59 @@ TestCase("LobbyResponseControllerJoinTest", {
     },
     
     "test respondJoin should set req.session.token": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
         assertUndefined(this.req.session.token);
         this.lrc.respondJoin(this.req, this.res);
         
         assertString(this.req.session.token);
+    },
+    
+    "test respondJoin should call lobby.getUniqueToken": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.lobbyUniqueTokenSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
+    },
+    
+    "test respondJoin should set req.session.token with lobby.getUniqueToken": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        assertUndefined(this.req.session.token);
+        sinon.assert.notCalled(this.lobbyUniqueTokenSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
+        
+        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.req.session.token);
     },
     
     "test lrc should have private helper to join a specific Player": function() {
