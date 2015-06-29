@@ -418,9 +418,9 @@ TestCase("LobbyResponseControllerJoinTest", {
         sinon.assert.notCalled(this.joinPlayerSpy);
         
         this.lrc.respondJoin(this.req, this.res);
-        
+
         sinon.assert.calledOnce(this.joinPlayerSpy);
-        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.joinPlayerSpy.args[1]);
+        assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.joinPlayerSpy.args[0][1]);
     },
     
     "test respondJoin should set req.session.token with lobby.getUniqueToken": function() {
