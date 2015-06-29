@@ -83,7 +83,16 @@ function lobbyResponseController()
             var token = _lobby.getUniqueToken().toString();
             req.session.token = token;
             
-            this.joinPlayer(new tddjs.server.player(), token);
+            var newPlayer = new tddjs.server.player();
+            newPlayer.deserialize(req.body.player);
+            
+            this.joinPlayer(newPlayer, token);
+            
+            var obj = {};
+            obj.lobby = _lobby.serializeAsObject();
+            obj.currentPlayerId = newPlayer.getId();
+            
+            res.json(obj);
         }
         
         catch(e)
