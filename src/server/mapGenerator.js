@@ -56,7 +56,10 @@ function mapGenerator()
     //Entscheidung ob auf Node js oder nicht
     if(typeof module !== "undefined")
     {
-        //Noch keine Ahnung
+        //NodeJs
+        var nrg = require("./nameListGenerator.js");
+        countryNameGenerator = new nrg();
+        continentNameGenerator = new nrg();
     }
     else
     {
