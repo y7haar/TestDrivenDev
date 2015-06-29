@@ -78,6 +78,9 @@ function lobbyResponseController()
             
             if(typeof req.body.player !== "object")
                 throw new Error("Player must not be empty");
+            
+            
+            req.session.token = _lobby.getUniqueToken();;
         }
         
         catch(e)
