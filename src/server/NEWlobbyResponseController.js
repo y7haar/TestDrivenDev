@@ -80,7 +80,10 @@ function lobbyResponseController()
                 throw new Error("Player must not be empty");
             
             
-            req.session.token = _lobby.getUniqueToken();;
+            var token = _lobby.getUniqueToken().toString();
+            req.session.token = token;
+            
+            this.joinPlayer(new tddjs.server.player(), token);
         }
         
         catch(e)
