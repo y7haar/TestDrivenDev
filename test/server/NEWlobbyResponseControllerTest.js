@@ -297,13 +297,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lobby.addPlayer(this.player1);
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
-        
-        this.res1 = new fakeRes();
-        this.res2 = new fakeRes();
-        
-        this.player1.setResponseObject(this.res1);
-        this.player2.setResponseObject(this.res2);
-        
+           
         this.lobbyController.addLobby(this.lobby);
         this.lrc.setLobbyById(this.lobby.getId());
         
@@ -314,12 +308,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         
         this.sandbox = sinon.sandbox.create();
         
-        this.pl1GetResSpy = this.sandbox.spy(this.player1, "getResponseObject");
-        this.pl2GetResSpy = this.sandbox.spy(this.player2, "getResponseObject");
-        this.pl3GetResSpy = this.sandbox.spy(this.player3, "getResponseObject");
-        
-        this.res1SendSpy = this.sandbox.spy(this.res1, "write");
-        this.res2SendSpy = this.sandbox.spy(this.res2, "write");
+        this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
         
     },
     tearDown: function()
@@ -329,5 +318,16 @@ TestCase("LobbyResponseControllerJoinTest", {
     
      "test lobbyResponseController should have function to respond on player join": function() {
         assertFunction(this.lrc.respondJoin);
+    },
+    
+    "test respondJoin should call sendStatus with 400 if req.body is no object": function() {
+        this.req.body = undefined;
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
     }
 });
