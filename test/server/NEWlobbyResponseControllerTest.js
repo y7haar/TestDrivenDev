@@ -40,6 +40,11 @@ function fakeRes()
     {
         
     };
+    
+    this.json = function(msg)
+    {
+        
+    };
 }
 
 TestCase("LobbyResponseControllerTest", {
@@ -47,6 +52,10 @@ TestCase("LobbyResponseControllerTest", {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
         this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         
         this.lobby = this.lobbyFactory.getNewLobby();
@@ -54,6 +63,8 @@ TestCase("LobbyResponseControllerTest", {
     },
     tearDown: function()
     {
+        this.lobbyController.getLobbies().length = 0;
+        delete this.lrc;
     },
     
     "test constructor should create new instance of controller": function() {
@@ -80,6 +91,10 @@ TestCase("LobbyResponseControllerEventSourceTest", {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
         this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         
         this.lobby = this.lobbyFactory.getNewLobby();
@@ -107,6 +122,7 @@ TestCase("LobbyResponseControllerEventSourceTest", {
     tearDown: function()
     {
         this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
     },
     
      "test lobbyResponseController should have function to accept EventSource": function() {
@@ -166,6 +182,10 @@ TestCase("LobbyResponseControllerBroadcastTest", {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
         this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         
         this.lobby = this.lobbyFactory.getNewLobby();
@@ -209,6 +229,7 @@ TestCase("LobbyResponseControllerBroadcastTest", {
     tearDown: function()
     {
         this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
     },
     
      "test lobbyResponseController should have function to broadcast a message to all players in lobby": function() {
@@ -282,6 +303,10 @@ TestCase("LobbyResponseControllerJoinTest", {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
         this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         
         this.lobby = this.lobbyFactory.getNewLobby();
@@ -301,7 +326,9 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lobby.addPlayer(this.player1);
         this.lobby.addPlayer(this.player2);
         this.lobby.addPlayer(this.player3);
-           
+          
+        this.lobby.setLeader(this.player1);
+        
         this.lobbyController.addLobby(this.lobby);
         this.lrc.setLobbyById(this.lobby.getId());
         
@@ -317,11 +344,13 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
         this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
         this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
+        this.resJsonSpy = this.sandbox.spy(this.res, "json");
         
     },
     tearDown: function()
     {
         this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
     },
     
      "test lobbyResponseController should have function to respond on player join": function() {
@@ -442,6 +471,31 @@ TestCase("LobbyResponseControllerJoinTest", {
         sinon.assert.calledOnce(this.lobbyUniqueTokenSpy);
         
         assertEquals(this.lobbyUniqueTokenSpy.returnValues[0].toString(), this.req.session.token);
+    },
+    
+    "test respondJoin should call res.json with correct object": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+  
+        sinon.assert.notCalled(this.resJsonSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        var out = {};
+        out.lobby = this.lobby.serializeAsObject();
+        out.currentPlayerId = 3;
+        
+        sinon.assert.calledOnce(this.resJsonSpy);
+        
+        assertEquals(out, this.resJsonSpy.args[0][0]);
     },
     
     "test lrc should have private helper to join a specific Player": function() {
