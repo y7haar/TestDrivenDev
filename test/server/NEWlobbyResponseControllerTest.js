@@ -67,6 +67,11 @@ TestCase("LobbyResponseControllerTest", {
     "test setLobbyById should set lobby if lobby with id exists": function() {
         this.lrc.setLobbyById(this.lobby.getId());
         assertSame(this.lobby, this.lrc.lobby);
+    },
+    
+    "test setLobbyById should throw Error if lobby with id does not exist": function() {
+        var lrc = this.lrc;
+        assertException(function() { lrc.setLobbyById(-1); }, "LobbyIdError");
     }
 });
 
