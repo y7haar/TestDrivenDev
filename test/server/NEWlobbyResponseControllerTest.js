@@ -367,6 +367,13 @@ TestCase("LobbyResponseControllerJoinTest", {
         sinon.assert.notCalled(this.resSendStatusSpy);
     },
     
+    "test respondJoin should set req.session.token": function() {
+        assertUndefined(this.req.session.token);
+        this.lrc.respondJoin(this.req, this.res);
+        
+        assertString(this.req.session.token);
+    },
+    
     "test lrc should have private helper to join a specific Player": function() {
         assertFunction(this.lrc.joinPlayer);
     },
