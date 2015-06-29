@@ -48,7 +48,9 @@ function lobbyRequestController()
             headers: {
                 "Content-Type": "application/json"
             },
-            data: data
+            data: data,
+            
+            onSuccess: this.onNewLobbySuccess
         };
 
         ajax.post(BASE_URL + "lobbies", options);
@@ -105,7 +107,31 @@ function lobbyRequestController()
 
     function onJoinSuccess(xhr)
     {
-
+        _showLobby(xhr);
+    }
+    
+    function _showLobby(xhr)
+    {
+        var data = JSON.parse(xhr.responseText);
+        
+        var lobby = new tddjs.client.model.lobby();
+        lobby.deserializeObject(data.lobby);
+        
+        var playerId = data.currentPlayerId;
+        
+        for(var i = 0;i < lobby.getPlayers().length;++i)
+        {     
+            if(lobby.getPlayers()[i].getId() === playerId)
+            {
+                _lobbyUi.setCurrentPlayer(lobby.getPlayers()[i]);
+                _lobbyEventSourceController.setLobby(lobby);
+                _lobbyEventSourceController.establishConnection();
+                break;
+            }
+        }
+        
+        _lobbyUi.setCurrentLobby(lobby);
+        _lobbyUi.showLobbyForPlayer();
     }
 
     function onJoinFailure(xhr)
@@ -115,7 +141,7 @@ function lobbyRequestController()
     
     function onNewLobbySuccess(xhr)
     {
-        
+        _showLobby(xhr);
     }
 
 

@@ -4,6 +4,7 @@
 if(typeof module !== "undefined")
 {
     module.exports = mapGenerator;
+    //module.require("./nameListGenerator");
 }
 else
     tddjs.namespace("server.controller").mapGenerator =  mapGenerator;
@@ -36,8 +37,8 @@ function mapGenerator()
     var maximumCountrySize = 20;
     
     //Variablen für Wassergenerierung
-    var minimumWaterSize = 2;
-    var maximumWaterSize = 4;
+    //var minimumWaterSize = 2;
+    //var maximumWaterSize = 4;
     var minimumWaterNumber = 2;
     var maximumWaterNumber = 4;
     
@@ -47,6 +48,21 @@ function mapGenerator()
     var minimumContinentNumber = 6;
     var maximumContinentNumber = 10;
     var minimumContinentSize = 2;
+    
+    //Namensgeneratoren
+    var countryNameGenerator;
+    var continentNameGenerator;
+    
+    //Entscheidung ob auf Node js oder nicht
+    if(typeof module !== "undefined")
+    {
+        //Noch keine Ahnung
+    }
+    else
+    {
+        countryNameGenerator = new tddjs.server.controller.nameListGenerator();
+        continentNameGenerator = new tddjs.server.controller.nameListGenerator();
+    }
     
     //###############################################################################################################
     //Setter und Getter
@@ -247,48 +263,6 @@ function mapGenerator()
         maximumWaterNumber = size;
     }
     
-    //Holt minimale Gewässergröße
-    function getMinimumWaterSize()
-    {
-        return minimumWaterSize;
-    }
-    
-    //Setzt minimale Gewässergröße
-    function setMinimumWaterSize(size)
-    {
-        if(isNaN(size))
-            throw new TypeError;
-        
-        if(size <= 0)
-            throw new Error("Size musst be one or higher");
-        
-        minimumWaterSize = size;
-        
-        if(maximumWaterSize < minimumWaterSize)
-            maximumWaterSize = minimumWaterSize;
-    }
-    
-    //Holt maximal Gewässergröße
-    function getMaximumWaterSize()
-    {
-        return maximumWaterSize;
-    }
-    
-    //Setzt maximale Gewässergröße
-    function setMaximumWaterSize(size)
-    {
-        if(isNaN(size))
-            throw new TypeError;
-        
-        if(size <= 0)
-            throw new Error("Size musst be one or higher");
-        
-        if(size < minimumWaterSize)
-            throw new Error("Size cant be below minimumWaterSize");
-        
-        maximumWaterSize = size;
-    }
-    
     //Holt Länder in Kontinenten
     function getCountriesInContinents()
     {
@@ -313,6 +287,22 @@ function mapGenerator()
 
         return arr;
     }
+    
+    //Holt den Kontinents-Namensgenerator
+    function getContinentNameGenerator()
+    {
+        return continentNameGenerator;
+    }
+    
+     //Holt den Kontinents-Namensgenerator
+    function getCountryNameGenerator()
+    {
+        return countryNameGenerator;
+    }
+    
+    //################################################################################################################
+    //Hauptfunktion
+    //################################################################################################################
     
     //Kompletter Aufruf aller Schritte
     function generateMap()
@@ -346,6 +336,13 @@ function mapGenerator()
         map.water = generateWater();
         //Kontinente anfügen
         map.continents = allContinents;
+
+        //UnitBonus berechnen
+        calculateBonuses(map.continents);
+        
+        //Namensvergabe für Länder und Kontinente
+        handOutNames(map.continents);
+        
         //return
         return map;
     }
@@ -535,6 +532,7 @@ function mapGenerator()
         
         //Berechne Endwert
         return Math.round((numberOfCountries * borderlands)/dividor);
+        //(numberOfCountries * borderlands)/((numberOfCountries+borderlands)/2)
     }
     
     //Wählt ein zufälliges Element
@@ -815,14 +813,7 @@ function mapGenerator()
             continent.countries.push(country);
             countriesInContinents.push(country);
             countriesNotInContinents.splice(countriesNotInContinents.indexOf(country),1);
-        }
-        
-        //Bonus berechnen
-        for(var i = 0; i < continents.length; i++)
-        {
-            continents[i].unitBonus = calculateUnitBonus(continents[i]);
-        }
-        
+        }    
         return continents;
     }
     
@@ -1020,6 +1011,40 @@ function mapGenerator()
         return result;
     }
     
+    //Berechnet für alle verbleibenden Kontinente den Bonus
+    function calculateBonuses(continents)
+    {
+        //Bonus berechnen
+        for(var i = 0; i < continents.length; i++)
+        {
+            continents[i].unitBonus = calculateUnitBonus(continents[i]);
+        }
+    }
+    
+    //Verteilt Namen an Länder und Kontinente
+    function handOutNames(continents)
+    {
+        //Generatoren vorbereiten/mischen
+        continentNameGenerator.shuffleNameList();
+        countryNameGenerator.shuffleNameList();
+        
+        //Alle Kontinenten durchgehen
+        for(var i = 0; i < continents.length; i++)
+        {
+            //Aktueller Kontinent
+            var currentContinent = continents[i];
+            //Kontinent Namen geben
+            currentContinent.name = continentNameGenerator.getNextName();
+            
+            //Alle Länder des Kontinents durchgehen
+            for(var j = 0; j < currentContinent.countries.length; j++)
+            {
+                //Aktuellen Land Namen vergeben
+                currentContinent.countries[j].name = countryNameGenerator.getNextName();
+            }
+        }
+    } 
+    
     //###############################################################################################################
     //Pseudo-Kartenobjekt-Erzeugung
     //###############################################################################################################
@@ -1071,49 +1096,60 @@ function mapGenerator()
     }
     
     //Serialisieren
-    function serializeAsJSON(map){
+    function serializeAsJSON(map)
+    {
         var json = {};
         json.continents = [];
         
-        for(var c=0;c<map.continents.length;c++){
+        //All Kontinente durchgehen
+        for(var c=0;c<map.continents.length;c++)
+        {
+            //Kontinentwerte schreiben
             json.continents[c]={};
             json.continents[c].id = map.continents[c].id;
             json.continents[c].name = map.continents[c].name;
             json.continents[c].unitBonus = map.continents[c].unitBonus;
             
             json.continents[c].countries = [];
-            for(var countr=0;countr<map.continents[c].countries.length;countr++){
+            //Alle Länder des aktuellen Kontinents durchgehen
+            for(var countr=0;countr<map.continents[c].countries.length;countr++)
+            {
+                //Aktuelle Länderwerte schreiben
                 json.continents[c].countries[countr] = {};
                 json.continents[c].countries[countr].id = map.continents[c].countries[countr].id;
                 json.continents[c].countries[countr].name = map.continents[c].countries[countr].name;
                 json.continents[c].countries[countr].size = map.continents[c].countries[countr].size;
                 
                 json.continents[c].countries[countr].borders = [];
+                //Grenzen des aktuellen Landes durchgehen
                 for(var b=0;b<map.continents[c].countries[countr].borders.length;b++){
                     json.continents[c].countries[countr].borders[b] = map.continents[c].countries[countr].borders[b].id;
                 }
             }
         }
         
+        //Wasserwerte schreiben
         json.water={};
         json.water.id = map.water.id;
         json.water.name = map.water.name;
         json.water.size = map.water.size;
         json.water.fields = map.water.fields;
         json.water.border = [[]];
-        for(var i in map.water.borders){
+        //Wassergrenzen durchgehen
+        for(var i in map.water.borders)
+        {
             if(map.water.borders[i].length>0)
             json.water.border.push([map.water.borders[i][0].id,map.water.borders[i][1].id]);
         }
         
+        //Grid schreiben
         json.gridMap = createArray(getMapWidth(),getMapHeight());
         for(var x=0; x<getMapWidth(); x++){
             for(var y=0; y<getMapHeight(); y++){
                 json.gridMap[x][y] = {};
                 json.gridMap[x][y].id = cellGrid[x][y].id;
             }
-        }
-        
+        }        
         
         return JSON.stringify(json);
     }
@@ -1139,11 +1175,9 @@ function mapGenerator()
     this.getMinimumWaterNumber = getMinimumWaterNumber;
     this.setMinimumWaterNumber = setMinimumWaterNumber;
     this.getMaximumWaterNumber = getMaximumWaterNumber;
-    this.setMaximumWaterNumber = setMaximumWaterNumber;
-    this.getMinimumWaterSize = getMinimumWaterSize;
-    this.setMinimumWaterSize = setMinimumWaterSize;
-    this.getMaximumWaterSize = getMaximumWaterSize;
-    this.setMaximumWaterSize = setMaximumWaterSize;   
+    this.setMaximumWaterNumber = setMaximumWaterNumber;  
+    this.getContinentNameGenerator = getContinentNameGenerator;
+    this.getCountryNameGenerator = getCountryNameGenerator;
     this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
     this.serializeAsJSON = serializeAsJSON;
@@ -1171,6 +1205,50 @@ function mapGenerator()
 //###############################################################################################################################
 //Ausgemusterter Code
 //###############################################################################################################################
+    /*Holt minimale Gewässergröße
+    function getMinimumWaterSize()
+    {
+        return minimumWaterSize;
+    }
+    
+    //Setzt minimale Gewässergröße
+    function setMinimumWaterSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        minimumWaterSize = size;
+        
+        if(maximumWaterSize < minimumWaterSize)
+            maximumWaterSize = minimumWaterSize;
+    }
+    
+    //Holt maximal Gewässergröße
+    function getMaximumWaterSize()
+    {
+        return maximumWaterSize;
+    }
+    
+    //Setzt maximale Gewässergröße
+    function setMaximumWaterSize(size)
+    {
+        if(isNaN(size))
+            throw new TypeError;
+        
+        if(size <= 0)
+            throw new Error("Size musst be one or higher");
+        
+        if(size < minimumWaterSize)
+            throw new Error("Size cant be below minimumWaterSize");
+        
+        maximumWaterSize = size;
+    }*/
+
+
+
 /*Entfernt nicht mehr benötigte Borders
 function removeCircularAndDuplicateBorders()
 {

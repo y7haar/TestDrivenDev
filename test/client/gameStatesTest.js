@@ -22,7 +22,8 @@ TestCase("stateTests", {
         this.waiting = new tddjs.client.waitingState(this.map);  
     },
     tearDown: function ()
-    {        this.placing = null;
+    {        
+        this.placing = null;
         this.attacking = null;
         this.waiting = null; 
     },

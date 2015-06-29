@@ -81,9 +81,8 @@ TestCase("LobbyControllerTest", {
     },
     "test lobbyController should throw Exception if lobbyController does not store an element with the given id ": function() {
         var lobbyController = this.lobbyController;
-        assertException(function() {
-            lobbyController.getLobbyById(5);
-        }, "Error");
+        
+        assertNull(lobbyController.getLobbyById(5));
     },
     "test lobbyController should throw Exception if parameter is no number ": function() {
         var lobbyController = this.lobbyController;

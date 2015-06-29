@@ -8,6 +8,7 @@
 TestCase("LobbyResponseControllerTest", {
     setUp: function() {
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
 
     },
     tearDown: function()
@@ -127,6 +128,68 @@ TestCase("LobbyResponseControllerTest", {
         assertException(function() {
             controller.respondJoin(0, obj);
         }, "LobbyIdError");
+    },
+    
+    "test lobbyResponseController should have function to respond to a new lobby update": function() {
+        assertFunction(this.lobbyResponseController.respondLobbyUpdate);
+    },
+    
+    "test respondLobbyUpdate should have parameter of type object, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondLobbyUpdate(3, "a");
+        }, "TypeError");
+    },
+    
+    "test respondLobbyUpdate should have parameter of type number, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondLobbyUpdate("a", {});
+        }, "TypeError");
+    },
+    
+    
+    "test lobbyResponseController should have function to update player": function() {
+        assertFunction(this.lobbyResponseController.respondPlayerUpdate);
+    },
+    
+    "test respondPlayerUpdate should have parameter of type object, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondPlayerUpdate(3, "a");
+        }, "TypeError");
+    },
+    
+    "test respondPlayerUpdate should have parameter of type number, else throw Error": function() {
+        var controller = this.lobbyResponseController;
+
+        assertException(function() {
+            controller.respondPlayerUpdate("a", {});
+        }, "TypeError");
+    },
+    
+     "test lobbyResponseController should have function to set a token": function() {
+        assertFunction(this.lobbyResponseController.setToken);
+    },
+    
+    "test lobbyResponseController should have function to get a token": function() {
+        assertFunction(this.lobbyResponseController.getToken);
+    },
+    
+    "test setToken should set a token": function() {
+        assertNotEquals("123456", this.lobbyResponseController.getToken());
+        this.lobbyResponseController.setToken("123456");
+        assertEquals("123456", this.lobbyResponseController.getToken());
+    },
+    
+    "test setToken should throw Error if token is not a string": function() {
+        var controller = this.lobbyResponseController;
+        
+        assertNoException(function() { controller.setToken("1234"); });
+        assertException(function() { controller.setToken(1); }, "TypeError");
     }
 });
 
@@ -138,6 +201,7 @@ TestCase("LobbyResponseControllerCallTest", {
         this.lobbyController.getLobbies().length = 0;
         
         this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
         
         // Must be client player
         this.player = new tddjs.client.player();
@@ -149,6 +213,11 @@ TestCase("LobbyResponseControllerCallTest", {
             lobby: null,
             player: this.player.serializeAsObject()
         };
+        
+        
+        this.lobby50 = new tddjs.server.model.lobby();
+        this.lobby50.setId(50);
+        this.lobbyController.addLobby(this.lobby50);
         
     },
     tearDown: function()
@@ -192,5 +261,160 @@ TestCase("LobbyResponseControllerCallTest", {
         assertEquals(2, lobby.getPlayers().length);
         assertEquals("New Player", lobby.getPlayers()[1].getName());
         assertEquals("#eeeeee", lobby.getPlayers()[1].getColor());
+    },
+    
+        
+    "test respondLobbyUpdate should update lobby name": function() {
+        var data = {
+            type: "lobbyUpdate",
+            data: {
+                name: "NewName"
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        assertNotEquals("NewName", this.lobbyController.getLobbyById(id).getName());
+        
+        this.lobbyResponseController.respondLobbyUpdate(id, data);
+        
+        assertEquals("NewName", this.lobbyController.getLobbyById(id).getName());
+    },
+    
+    "test respondLobbyUpdate should update MaxPlayers": function() {
+        var data = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        assertNotEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
+        
+        this.lobbyResponseController.respondLobbyUpdate(id, data);
+        
+        assertEquals(3, this.lobbyController.getLobbyById(id).getMaxPlayers());
+    },
+    
+    "test respondPlayerUpdate should update player name": function() {
+         var data = {
+            type: "playerUpdate",
+            data: {
+                id: 0,
+                name: "NewName"
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        assertNotEquals("NewName", this.lobbyController.getLobbyById(id).getPlayers()[0].getName());
+        
+        this.lobbyResponseController.respondPlayerUpdate(id, data);
+        
+        assertEquals("NewName", this.lobbyController.getLobbyById(id).getPlayers()[0].getName());
+    },
+    
+    "test respondPlayerUpdate should throw Exception if player with Id does not exist": function() {
+         var data = {
+            type: "playerUpdate",
+            data: {
+                id: 50,
+                name: "NewName"
+            }
+        };
+        
+        // New Lobby
+        this.lobbyResponseController.respondNewLobby(this.request);
+        
+        var id = this.lobbyController.getNextId() - 1;
+        
+        var controller = this.lobbyResponseController;
+        
+        assertException(function() { controller.respondPlayerUpdate(id, data); }, "LobbyIdError");
+    },
+    
+    "test controller should have function to braodcast a message to all players": function() {
+        assertFunction(this.lobbyResponseController.broadcastMessage);
+    },
+    
+    "test broadcastMessage should throw Exception if message is no object": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
+        
+        assertException(function() { controller.broadcastMessage(50, "asd", "event"); }, "TypeError");
+    },
+    
+    "test broadcastMessage should throw Exception if event is no string": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
+        
+        assertException(function() { controller.broadcastMessage(50, {}, 3); }, "TypeError");
+    },
+    
+    "test broadcastMessage should throw Exception if id is no number": function() {
+        var controller = this.lobbyResponseController;
+        assertNoException(function() { controller.broadcastMessage(50, {}, "event"); });
+        
+        assertException(function() { controller.broadcastMessage("0", {}, "event"); }, "TypeError");
+    },
+    
+    "tes controller should have function to set response": function() {
+        assertFunction(this.lobbyResponseController.setResponse);
+    }
+});
+
+TestCase("LobbyResponseControllerTypeTest", {
+    setUp: function() {
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        
+        // Needed because of Singleton
+        this.lobbyController.getLobbies().length = 0;
+        
+        this.lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
+        this.lobbyResponseController.setToken("1234");
+        this.sandbox = sinon.sandbox.create();
+        this.id = 0;
+        
+    },
+    tearDown: function()
+    {
+        this.sandbox.restore();
+        
+        // Hack for removing all lobbies
+        this.lobbyController.getLobbies().length = 0;
+        delete this.lobbyController;
+    },
+    
+    "test controller should have function to call other functions reliant on type": function() {
+        assertFunction(this.lobbyResponseController.switchLobbyPostTypes);
+    },
+    
+    // Bug in Sinon because Scope is incorrect
+    
+    "test switchLobbyPostTypes should call respondLobbyUpdate if type = lobbyUpdate": function() {
+      var spy = this.sandbox.stub(this.lobbyResponseController, "respondLobbyUpdate");
+      
+      var data = {
+            type: "lobbyUpdate",
+            data: {
+                maxPlayers: 3
+            }
+        };
+      
+      sinon.assert.notCalled(spy);
+      this.lobbyResponseController.switchLobbyPostTypes(this.id, data);
+      sinon.assert.calledOnce(spy);
     }
 });

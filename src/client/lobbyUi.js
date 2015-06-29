@@ -221,6 +221,8 @@ function lobbyUi(aRequestController)
         maxPlayersSelect.add(playersOptions[0]);
         maxPlayersSelect.add(playersOptions[1]);
         maxPlayersSelect.add(playersOptions[2]);
+        maxPlayersSelect.value = aLobby.getMaxPlayers();
+        
         maxPlayersSelect.className = "lobbyMaxPlayersSelect";
         maxPlayersSelect.onchange = function() {
             var maxPlayersNumber = parseInt(maxPlayersSelect.value);
@@ -412,7 +414,7 @@ function lobbyUi(aRequestController)
 
         var playerName = playerDiv.childNodes[0].childNodes[0].childNodes[1];
         playerName.contentEditable = true;
-        playerName.innerHTML = "";
+
         playerName.onblur = function() {
             _lobbyRequestController.updatePlayerName(_currentLobby.getId(), aId, playerName.textContent);
         };
@@ -430,9 +432,6 @@ function lobbyUi(aRequestController)
             _lobbyRequestController.updatePlayerColor(_currentLobby.getId(), aId, _colors[_colorIndex % _colors.length]);
             _colorIndex++;
         };
-
-
-        playerName.focus();
     }
 
     function addStartButton(aLobbyWrapper)
@@ -556,7 +555,7 @@ function lobbyUi(aRequestController)
         return _currentLobby;
     }
     
-    function setCurrentPLayer(aPlayer)
+    function setCurrentPlayer(aPlayer)
     {
         if(! (aPlayer instanceof tddjs.client.player))
             throw new TypeError("Player must be of type player");
@@ -565,7 +564,7 @@ function lobbyUi(aRequestController)
     }
     
     function updateColor(aPlayerId, aColor)
-    {
+    {   
         if(typeof aPlayerId !== "number")
             throw new TypeError("Id must be number");
         
@@ -590,16 +589,23 @@ function lobbyUi(aRequestController)
     
     function showLobbyForPlayer()
     {
+        _resetBody();
         this.createLobbyContent();
         this.createWrapper();
         
-        if(_currentLobby.getLeader() === _currentPlayer)
+        if(_currentLobby.getLeader().getId() === _currentPlayer.getId())
             this.showLeaderLobby(_currentLobby);
             
         else
             this.showLobby(_currentLobby);
         
         this.setPlayerEditable(_currentPlayer.getId());
+    }
+    
+    function _resetBody()
+    {
+        var body = document.getElementsByTagName("body")[0];
+        body.innerHTML = "";
     }
 
     this.createContent = createContent;
@@ -620,7 +626,7 @@ function lobbyUi(aRequestController)
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
-    this.setCurrentPlayer = setCurrentPLayer;
+    this.setCurrentPlayer = setCurrentPlayer;
 
     //Events
     this.submitPlayerName = submitPlayerName;

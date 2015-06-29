@@ -66,8 +66,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function endPhase()
     {
         var player = JSON.parse(_player.serialize());
-        var message = {player:player,type:'endPhase', 'phaseName':_currentState.toString()};           
-  
+        var message = {player:player,type:'endPhase', phaseName:_currentState.toString()};           
         var ajax = tddjs.util.ajax;
         var options = {
             headers:{
@@ -87,8 +86,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function makeMove(move)
     {
+        //console.log("makeMove-------------");
         if (_currentState.isMoveLegal(move))
-        {
+        {   
+            //console.log("MOVE:\n");
+            //console.dir(move);
             var ajax = tddjs.util.ajax; 
             var options = {
               headers:{
@@ -122,19 +124,20 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function addAllEventListner()
     {        
         addAllEventListnerCalled = true;
-        
+       
         _eventSource.addEventListener("changeToPlacing", changeToPlacingState);
         _eventSource.addEventListener("changeToAttacking", changeToAttackingState);
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
-        _eventSource.addEventListener("placeUnits", placeUnits);          
+        _eventSource.addEventListener("placeUnits", placeUnits);
+        console.log("added Events");
     }      
     
     
     // EventSource events
     function changeToPlacingState(e)
-    {
-        var data = JSON.parse(e.data);
+    {     
+        var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.placingState(_map, unitCount);
@@ -177,8 +180,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _map.getContinent(changes1.continent).getCountry(changes1.country).setOwner(players[changes1.owner]);        
         //changes 2
         _map.getContinent(changes2.continent).getCountry(changes2.country).setUnitCount(changes2.unitCount);
-        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);
-                
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);                
     }
     
     function placeUnits(e)

@@ -607,12 +607,13 @@ function gameUiController(aGLC,aCtx){
         //get all Continents
         for(var c=0;c<map.continents.length;c++){
             if(cache_continents.indexOf(map.continents[c].id) === -1)
-                    cache_continents.push(map.continents[c].id);
+                    cache_continents.push(map.continents[c]);
         }
         for(var i=0; i<cache_continents.length; i++){
             continents[i] = new tddjs.client.map.continent();
-            continents[i].id=cache_continents[i];
-            continents[i].setName("ID:"+cache_continents[i]);
+            continents[i].id=cache_continents[i].id;
+            continents[i].setName(cache_continents[i].name);
+            continents[i].setUnitBonus(cache_continents[i].unitBonus);
             continents[i].color=getRandomColor();
         }
         

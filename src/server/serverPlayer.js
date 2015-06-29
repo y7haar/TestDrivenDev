@@ -14,6 +14,7 @@ function player()
     var type = "human";
 
     var _token;
+    var _response;
 
     //Holt den Namen
     function getName()
@@ -73,7 +74,17 @@ function player()
         id = settedId;
         idIsSetted = true;
     }
-
+    
+    function getResponseObject()
+    {
+        return _response;
+    }
+    
+    function setResponseObject(res)
+    {
+        _response = res;
+    }
+    
     function setToken(token)
     {
         if (typeof token !== "string")
@@ -181,4 +192,7 @@ function player()
 
     this.setType = setType;
     this.getType = getType;
+    
+    this.setResponseObject = setResponseObject;
+    this.getResponseObject = getResponseObject;
 }

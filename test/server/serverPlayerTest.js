@@ -69,6 +69,25 @@ TestCase("PlayerServerTest",
                     player.setToken("ad");
                 }, "Error");
             },
+            
+            "test player should have function to set NodeJs Response object": function()
+            {
+                assertFunction(this.player1.setResponseObject);
+            },
+            
+            "test player should have function to get NodeJs Response object": function()
+            {
+                assertFunction(this.player1.getResponseObject);
+            },
+            
+            "test setter / getter for ResponseObject should work": function()
+            {
+                var obj = {};
+                assertUndefined(this.player1.getResponseObject());
+                this.player1.setResponseObject(obj);
+                assertSame(obj, this.player1.getResponseObject());
+            },
+            
             "test Should be able to set and get Hex-Values for Colors": function()
             {
                 this.player1.setColor("#FFFFFF");

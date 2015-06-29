@@ -8,11 +8,15 @@ function player()
     //Länder des Spielers
     var countrys = {};
 
-    //Werte
+    //Name
     var name = "";
+    //id
     var id;
+    //Wurde id schon gesetzt?
     var idIsSetted = false;
+    //Farbe
     var color = "#000000";
+    //Typ
     var type = "human";
 
     //Holt den Namen
@@ -107,13 +111,14 @@ function player()
         if (typeof settedColor !== "string")
             throw new TypeError("Setted Color is not a String");
 
-        //Scheint unnötig jetzt
+        //Scheint unnötig jetzt mit Regex
         //if(settedColor.charAt(0) !== '#')
         //throw new Error("Color doesnt start with a #");
 
         //if(settedColor.length !== 7)
         //throw new Error("Color not long enough");
 
+        //Regular Expression
         if (settedColor.match(/^#[\da-f]{3}([\da-f]{3}|)$/i))
             color = settedColor;
         else
@@ -138,12 +143,14 @@ function player()
         idIsSetted = true;
     }
 
+    //Deserialisierung
     function deserialize(json)
     {
         var obj = JSON.parse(json);
         deserializeObject(obj);
     }
     
+    //Deserialisierung
     function deserializeObject(obj)
     {
         if (typeof obj.id !== "number" && typeof obj.id !== "undefined")
@@ -200,11 +207,13 @@ function player()
         return playerObject;
     }
 
+    //Holt den Typ
     function getType()
     {
         return type;
     }
 
+    //Setzt den Typ
     function setType(aType)
     {
         if (typeof aType !== "string")

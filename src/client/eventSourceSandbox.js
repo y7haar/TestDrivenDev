@@ -107,7 +107,16 @@ function eventSourceSandbox()
     {
         this.clients = [];
         this.requests = [];
+        this.handleResponse = true;
         
+        
+        this.setHandleResponse = function(bool)
+        {
+          if(typeof bool !== 'boolean')
+              throw new TypeError("Expected Boolean but recived "+typeof bool);
+          else
+              this.handleResponse = bool;
+        };
         this.sendMessage = function(clientIndex, eventName, message){    
             
             if(isNaN(clientIndex) || typeof clientIndex === 'undefined')throw new TypeError("clientIndex is not a Number");            
@@ -175,12 +184,19 @@ function eventSourceSandbox()
             var requestURL = sinonSandbox.server.requests[i].url;
             if(typeof server[requestURL] !== 'undefined')
             {
-                server[requestURL].requests.push(sinonSandbox.server.requests[i]);
-                sinonSandbox.server.requests[i].respond(200, "", "");
+                if(server[requestURL].handleResponse)
+                {
+                    server[requestURL].requests.push(sinonSandbox.server.requests[i]);
+                    sinonSandbox.server.requests[i].respond(200, "", "");
+                }
+                else if(! server[requestURL].handleResponse)
+                {
+                    server[requestURL].requests.push(sinonSandbox.server.requests[i]);
+                }
             }
             else
             {              
-                sinonSandbox.server.requests[i].respond(404, "", "");
+                sinonSandbox.server.requests[i].respond(404, "", "");         
             }            
         }
         sinonSandbox.server.requests.length = 0;        

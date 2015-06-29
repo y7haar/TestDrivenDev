@@ -14,7 +14,7 @@ TestCase("GameLoopConstructorTests", {
         this.player1 = null;
         this.url = null;
     },
-    "test gameLoop should throw exception if Map prameter is wrong": function () {
+    "test gameLoop should throw exception if Map argument is wrong": function () {
         var player = this.player1;
         var url = this.url;
         var fakeMap = {mapName:'PremiumMap'};
@@ -32,7 +32,7 @@ TestCase("GameLoopConstructorTests", {
             new tddjs.client.gameLoopController(x,player,url);
         },"TypeError");
     },
-    "test gameLoop should throw exception if Player prameter is wrong": function () {
+    "test gameLoop should throw exception if Player argument is wrong": function () {
         var map = this.map;
         var url = this.url;
         var fakePlayer = {name:'HansWurst'};
@@ -50,7 +50,7 @@ TestCase("GameLoopConstructorTests", {
             new tddjs.client.gameLoopController(map,x,url);
         },"TypeError");
     },
-    "test gameLoop should throw exception if Url prameter is wrong": function () {
+    "test gameLoop should throw exception if Url argument is wrong": function () {
         var map = this.map;
         var player = this.player1;
         

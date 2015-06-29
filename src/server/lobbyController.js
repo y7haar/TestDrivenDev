@@ -27,7 +27,7 @@ function lobbyController()
 
         var index = aLobby.getId();
 
-        if (typeof _lobbies[index] != "undefined")
+        if (typeof _lobbies[index] !== "undefined")
             throw new Error("Index already in use");
 
         _lobbies[index] = aLobby;
@@ -66,7 +66,8 @@ function lobbyController()
         var lobby = _lobbies[aId];
 
         if (typeof (lobby) === "undefined" || lobby === null)
-            throw new Error("Lobby with id " + aId + " doesnt exist");
+            return null;
+            //throw new Error("Lobby with id " + aId + " doesnt exist");
 
         return lobby;
     }

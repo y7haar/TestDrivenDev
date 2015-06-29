@@ -153,6 +153,33 @@ function lobby()
             throw new Error(e);
         }
     }
+    
+    function deserializeObject(data)
+    {
+        try
+        {
+            _id = data.id;
+            this.setName(data.name);
+            this.setMaxPlayers(data.maxPlayers);
+            
+            for(var i = 0;i < data.players.length;++i)
+            {
+                var player = new tddjs.client.player();
+                player.deserializeObject(data.players[i]);
+                
+                this.addPlayer(player);
+                
+                if(player.getId() === data.leader)
+                    this.setLeader(player);
+            }
+            
+        }
+        
+        catch(e)
+        {
+            throw new Error(e);
+        }
+    }
 
     this.addPlayer = addPlayer;
     this.getPlayers = getPlayers;
@@ -174,5 +201,6 @@ function lobby()
     this.serializeAsObject = serializeAsObject;
     
     this.deserialize = deserialize;
+    this.deserializeObject = deserializeObject;
 }
 

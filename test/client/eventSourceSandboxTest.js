@@ -45,7 +45,7 @@ TestCase("eventSourceSandbox", {
     },
     "test sandBox.update method should be a function ": function () {
         assertFunction(this.sandbox.update);
-    },    
+    },   
     "test sandbox shoulde have a object that hold all servers": function () {
         assertNotUndefined(this.sandbox.server);
     },
@@ -96,6 +96,34 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox server.clients should be empty ": function () {
         assertEquals(0, this.sandbox.server[this.server1URL].clients.length);
         assertEquals([], this.sandbox.server[this.server1URL].clients);
+    },
+    "test sandbox should hold bool handleResponse":function(){
+       assertNotUndefined(this.sandbox.server[this.server1URL].handleResponse);
+       assertEquals("boolean", typeof this.sandbox.server[this.server1URL].handleResponse);
+    },
+    "test sandbox.server setHandleResponse should be a function":function(){
+       assertFunction(this.sandbox.server[this.server1URL].setHandleResponse);
+    },
+    "test sandbox.server.setHandleResponse should expect Bool as paramter":function(){
+       var server = this.sandbox.server[this.server1URL];
+       assertException(function(){
+           server.setHandleResponse(null);
+       },"TypeError");
+       
+       assertException(function(){
+           server.setHandleResponse("true");
+       },"TypeError");
+       
+       assertNoException(function(){
+           server.setHandleResponse(true);
+       });           
+    },
+    "test sandbox.server handleResponse should be true at init":function(){
+        assertTrue(this.sandbox.server[this.server1URL].handleResponse);
+    },
+    "test sandbox.server setHandleResponse set handleResponse to false":function(){
+        this.sandbox.server[this.server1URL].setHandleResponse(false);
+        assertFalse(this.sandbox.server[this.server1URL].handleResponse);
     },
     "test sandbox server should have a client if EventSource object is created with this serverUrl as source": function () {
         var es = new EventSource(this.server1URL);
@@ -267,6 +295,25 @@ TestCase("eventSourceSandboxServer", {
     "test sandbox.server requets should hold all requests at start 0": function(){
         assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
     },
+    "test sandbox.server update should handle responses if handleRespons is true": function(){
+        assertTrue(this.sandbox.server[this.server1URL].handleResponse);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
+        var es = new EventSource(this.server1URL);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        assertEquals(1,es.readyState);        
+    },
+    "test sandbox.server update should not handle responses if handleResponse is false": function(){
+        this.sandbox.server[this.server1URL].setHandleResponse(false);
+        assertFalse(this.sandbox.server[this.server1URL].handleResponse);
+        assertEquals(0,this.sandbox.server[this.server1URL].requests.length);
+        
+        var es = new EventSource(this.server1URL);
+        assertEquals(0, es.readyState);
+        assertEquals(1,this.sandbox.server[this.server1URL].requests.length);
+        this.sandbox.server[this.server1URL].requests[0].respond(200,"","");
+        assertEquals(1, es.readyState);   
+    },
     "test sandbox.server requets should have 1 entry after a ajax request to server, sandbox.upgrade should upgrade all servers": function(){
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
@@ -333,7 +380,7 @@ TestCase("eventSourceSandboxServer", {
         assertTrue(failureCalled);
         assertFalse(succesCalled);
     },
-    "test sandbox.update should not add same requests at second call": function(){
+    "test sandbox.update should add requests but not add same requests at second call": function(){
         var es = new EventSource(this.server1URL);
         var ajax = tddjs.util.ajax;
     

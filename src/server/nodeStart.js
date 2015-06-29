@@ -5,7 +5,13 @@ var logger = require('connect-logger');
 var express = require('express');
 var sessions = require("client-sessions");
 var bodyParser = require("body-parser");
+
+console.log("loaded all modules.");
+
 var lobbyApp = require("./lobbyApp");
+var gameApp = require("./gameApp");
+
+console.log("loaded all Apps.");
 
 /*
  *  Internal Requires
@@ -38,8 +44,8 @@ function useCors(req, res)
 app.use(sessions({
   cookieName: 'session',
   secret: 'usdnzfu303un04fu43fnpp09suwendwe', 
-  duration: 1000 * 2, // 1 Day valid 24 * 60 * 60 * 1000
-  activeDuration: 1000 * 3 //1000 * 60 * 5 
+  duration: 1000 * 20, // 1 Day valid 24 * 60 * 60 * 1000
+  activeDuration: 1000 * 30 //1000 * 60 * 5 
 }));
 
 app.use(bodyParser.json({}));
@@ -47,6 +53,8 @@ app.use(logger({}));
 
 
 app.listen(8080);
+
+console.log("Server started on port 8080");
 
 /*
  *  Routing information
@@ -56,12 +64,8 @@ app.all("*", function (req, res, next) {
     useCors(req, res);
     
     req.accepts("application/json");
-    
-    next();
-});
 
-app.get('/lobbies/:id', function (req, res) {
-  res.send('Lobby ' + req.params.id);
+    next();
 });
 
 //app.post('/lobbies/:id', function (req, res) {
@@ -81,10 +85,16 @@ app.get('/lobbies/:id', function (req, res) {
 //});
 
 
-
+console.log("routing...");
 
 app.use("/lobbies", lobbyApp);
+app.use("/game", gameApp);
 
+console.log("routed all apps. ");
+
+/*
+ *  Name List generator
+ */
 
 
 var nlg = require('./nameListGenerator');
