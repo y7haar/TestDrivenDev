@@ -68,6 +68,20 @@ function lobbyResponseController()
 
         }
     }
+    
+    function respondJoin(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
 
 
     //test
@@ -80,5 +94,6 @@ function lobbyResponseController()
 
     this.setLobbyById = setLobbyById;
     this.acceptEventSource = acceptEventSource;
+    this.respondJoin = respondJoin;
     this.broadcastMessage = broadcastMessage;
 }
