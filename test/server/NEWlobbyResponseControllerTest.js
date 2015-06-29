@@ -320,6 +320,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         assertFunction(this.lrc.respondJoin);
     },
     
+    
     "test respondJoin should call sendStatus with 400 if req.body is no object": function() {
         this.req.body = undefined;
         
@@ -329,5 +330,34 @@ TestCase("LobbyResponseControllerJoinTest", {
         
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondJoin should call sendStatus with 400 if req.body.player is no object": function() {
+        this.req.body = {};
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondJoin should NOT call sendStatus with 400 if player object in body is valid": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.notCalled(this.resSendStatusSpy);
     }
 });
