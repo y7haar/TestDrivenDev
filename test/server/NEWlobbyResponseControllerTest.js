@@ -738,5 +738,241 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
         sinon.assert.calledOnce(this.broadcastMessageSpy);
 
         sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+    }
+});
+
+
+TestCase("LobbyResponseControllerPlayerUpdateTest", {
+    setUp: lobbyResponseControllerSetup,
+    
+    tearDown: function ()
+    {
+        this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
     },
+    
+    "test lobbyResponseController should have function to respond on player update": function () {
+        assertFunction(this.lrc.respondPlayerUpdate);
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 400 if req.body is no object": function () {
+        this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 400 if req.body.data is no object": function () {
+        this.req.body = {};
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+     "test respondPlayerUpdate should call sendStatus with 400 if req.body.data.id is no number": function () {
+        this.req.body = {
+            data: {
+                name: "name"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should NOT call sendStatus with 400 if data object in body has valid id and name": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 400 if request has no token": function () {
+        this.req.session.token = undefined;
+        
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 400 if request was not made from player with given id": function () {
+        // Token from player2
+        this.req.session.token = "2345";
+        
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                id: 0,
+                name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should NOT call sendStatus with 400 if data object in body has valid id and color": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                color: "#123123"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
+    },
+    
+    
+    ///
+    
+    ////
+    
+    
+    // TODO Tests
+    /*
+    
+    "test respondLobbyUpdate should set lobby maxPlayers if data has maxPlayers": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        assertEquals(4, this.lobby.getMaxPlayers());
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals(3, this.lobby.getMaxPlayers());
+        
+        
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 2
+            }
+        };
+        
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals(2, this.lobby.getMaxPlayers());
+    },
+    
+    "test respondLobbyUpdate should set lobby name if data has name": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                name: "New"
+            }
+        };
+
+        assertEquals("GameLobby", this.lobby.getName());
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals("New", this.lobby.getName());
+        
+        
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                name: "New2"
+            }
+        };
+        
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals("New2", this.lobby.getName());
+    },
+    
+    "test respondLobbyUpdate should call sendStatus with 200 if data is valid": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 200);
+    },
+    
+    "test respondLobbyUpdate should call broadcastMessage with correct data": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+    }
+    
+    */
 });
