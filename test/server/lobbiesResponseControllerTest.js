@@ -66,7 +66,7 @@ TestCase("LobbyResponseControllerTest", {
         this.req = new fakeReq();
         this.res = new fakeRes();
         
-        this.lobbyControllerSerializeOSpy = this.sandbox.stub(this.lobbyController, "serializeAsObject");
+        this.lobbyControllerSerializeOSpy = this.sandbox.stub(this.lobbyController, "serializeAsArray");
         this.resJsonSpy = this.sandbox.stub(this.res, "json");
     },
     tearDown: function ()
@@ -87,7 +87,7 @@ TestCase("LobbyResponseControllerTest", {
     "test respondAllLobbies should call serialize method in lobbyController": function () {
         sinon.assert.notCalled(this.lobbyControllerSerializeOSpy);
         
-        this.lrc.respondAllLobbies();
+        this.lrc.respondAllLobbies(this.req, this.res);
         
         sinon.assert.calledOnce(this.lobbyControllerSerializeOSpy);
     },
@@ -95,10 +95,10 @@ TestCase("LobbyResponseControllerTest", {
     "test respondAllLobbies should call res.json with serialized lobbies": function () {
         sinon.assert.notCalled(this.resJsonSpy);
         
-        this.lrc.respondAllLobbies();
+        this.lrc.respondAllLobbies(this.req, this.res);
         
         sinon.assert.calledOnce(this.resJsonSpy);
-        sinon.assert.calledWith(this.resJsonSpy, this.lobbyController.serializeAsObject());
+        sinon.assert.calledWith(this.resJsonSpy, this.lobbyController.serializeAsArray());
     }
     
 });
