@@ -165,12 +165,21 @@ function lobbyResponseController()
             {
                 player.setColor(req.body.data.color);
                 res.sendStatus(200);
+                
+                var wrapper = {
+                    id: player.getId(),
+                    color: player.getColor()
+                };
+                
+                this.broadcastMessage(wrapper, "colorchange");
             }
             
             else if(typeof req.body.data.name === "string")
             {
                 player.setName(req.body.data.name);
                 res.sendStatus(200);
+                
+                this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
             }
             
             else
