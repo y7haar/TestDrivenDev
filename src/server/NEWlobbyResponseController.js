@@ -69,6 +69,17 @@ function lobbyResponseController()
         }
     }
     
+    
+    function respondByType(req, res)
+    {
+        
+    }
+    
+    function respondBadRequest(req, res)
+    {
+        res.sendStatus(400);
+    }
+    
     function respondJoin(req, res)
     {
         try
@@ -208,7 +219,6 @@ function lobbyResponseController()
         }
     });
 
-
     this.setLobbyById = setLobbyById;
     this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
@@ -216,6 +226,11 @@ function lobbyResponseController()
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
     
+    this.respondByType = respondByType;
+    this.respondBadRequest = respondBadRequest;
    // Should be private
    this.joinPlayer = _joinPlayer;
+   
+   this.respondMethods = [];
+   
 }
