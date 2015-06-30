@@ -112,6 +112,11 @@ function lobbyResponseController()
             
             if(typeof req.body.data !== "object")
                 throw new Error("Player must not be empty");
+            
+            var token = req.session.token;
+            
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
         }
         
         catch(e)
