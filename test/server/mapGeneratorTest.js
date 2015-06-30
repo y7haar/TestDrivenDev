@@ -680,6 +680,7 @@ TestCase("MapGeneratorTest for Pseudo-Object-Generation", {
         
         assertEquals(true, map.isMap);
         assertArray(map.continents);
+        assertArray(map.allCountries);
         assertTrue(map.water.isWater);
     },
     
