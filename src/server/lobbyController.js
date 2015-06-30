@@ -82,6 +82,14 @@ function lobbyController()
 
     function serialize()
     {
+        var lobbies = serializeAsArray();
+        var lobbiesJson = JSON.stringify(lobbies);
+
+        return lobbiesJson;
+    }
+    
+    function serializeAsArray()
+    {
         var lobbies = [];
 
         for (var i = 0; i < _lobbies.length; ++i)
@@ -95,9 +103,7 @@ function lobbyController()
             lobbies.push(lobbyObj);
         }
 
-        var lobbiesJson = JSON.stringify(lobbies);
-
-        return lobbiesJson;
+        return lobbies;
     }
 
     this.addLobby = addLobby;
@@ -110,5 +116,6 @@ function lobbyController()
     this.getNextId = getNextId;
 
     this.serialize = serialize;
+    this.serializeAsArray = serializeAsArray;
 
 }
