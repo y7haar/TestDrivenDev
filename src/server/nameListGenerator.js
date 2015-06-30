@@ -26,7 +26,7 @@ function nameListGenerator()
         var fs = require('fs');
 
         var data = fs.readFileSync(file, {encoding: "utf-8"});
-        var splits = data.split("\n");
+        var splits = data.split("\r\n");
         setNameList(splits);
     }
 
