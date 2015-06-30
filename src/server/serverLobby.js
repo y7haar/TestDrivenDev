@@ -14,7 +14,7 @@ function lobby()
     var _leader;
     var _currentPlayerId = 0;
     var _usedTokens = {};
-
+    var _started = false;
 
     function setId(aId)
     {
@@ -31,6 +31,16 @@ function lobby()
     function getId()
     {
         return _id;
+    }
+    
+    function isStarted()
+    {
+        return _started;
+    }
+    
+    function setStarted(aStarted)
+    {
+        _started = aStarted;
     }
 
     function addPlayer(aPlayer)
@@ -220,6 +230,9 @@ function lobby()
 
     this.getId = getId;
     this.setId = setId;
+    
+    this.isStarted = isStarted;
+    this.setStarted = setStarted;
     
     this.getPlayerByToken = getPlayerByToken;
     this.isPlayerTokenValid = isPlayerTokenValid;
