@@ -547,5 +547,57 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
     
     "test lobbyResponseController should have function to respond on lobby update": function () {
         assertFunction(this.lrc.respondLobbyUpdate);
-    }
+    },
+    
+    "test respondLobbyUpdate should call sendStatus with 400 if req.body is no object": function () {
+        this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondLobbyUpdate should call sendStatus with 400 if req.body.data is no object": function () {
+        this.req.body = {};
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondLobbyUpdate should NOT call sendStatus with 400 if data object in body has name": function () {
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+    
+    "test respondLobbyUpdate should NOT call sendStatus with 400 if data object in body has maxPlayers": function () {
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
 });
