@@ -69,6 +69,7 @@ TestCase("LobbyResponseControllerTest", {
         this.respondJoinSpy = this.sandbox.stub(this.lrc, "respondJoin");
         this.respondLobbyUpdateSpy = this.sandbox.stub(this.lrc, "respondLobbyUpdate");
         this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc, "respondPlayerUpdate");
+        this.respondBadRequestSpy = this.sandbox.spy(this.lrc, "respondBadRequest");
         
         this.resSendStatusSpy = this.sandbox.stub(this.res, "sendStatus");
     },
@@ -114,9 +115,59 @@ TestCase("LobbyResponseControllerTest", {
         
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
-    }
+    },
     
-
+     "test respondByType should call respondJoin if type is join": function () {
+        this.req.body = {
+            type: "join"
+        };
+         
+         sinon.assert.notCalled(this.respondJoinSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondJoinSpy);
+        sinon.assert.calledWith(this.respondJoinSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondLobbyUpdate if type is lobbyUpdate": function () {
+        this.req.body = {
+            type: "lobbyUpdate"
+        };
+        
+        sinon.assert.notCalled(this.respondLobbyUpdateSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondLobbyUpdateSpy);
+        sinon.assert.calledWith(this.respondLobbyUpdateSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondPlayerUpdate if type is playerUpdate": function () {
+        this.req.body = {
+            type: "playerUpdate"
+        };
+        
+        sinon.assert.notCalled(this.respondPlayerUpdateSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondPlayerUpdateSpy);
+        sinon.assert.calledWith(this.respondPlayerUpdateSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondBadRequest if type is not valid": function () {
+        this.req.body = {
+            type: "getR00tPass"
+        };
+        
+        sinon.assert.notCalled(this.respondBadRequestSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondBadRequestSpy);
+        sinon.assert.calledWith(this.respondBadRequestSpy, this.req, this.res);
+    }
 });
 
 TestCase("LobbyResponseControllerEventSourceTest", {
