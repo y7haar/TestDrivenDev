@@ -70,6 +70,7 @@ TestCase("LobbyResponseControllerTest", {
         this.respondLobbyUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "lobbyUpdate");
         this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "playerUpdate");
         this.respondBadRequestSpy = this.sandbox.spy(this.lrc, "respondBadRequest");
+        this.respondGameStartSpy = this.sandbox.stub(this.lrc, "respondGameStart");
         
         this.resSendStatusSpy = this.sandbox.stub(this.res, "sendStatus");
     },
@@ -165,6 +166,19 @@ TestCase("LobbyResponseControllerTest", {
         
         sinon.assert.calledOnce(this.respondPlayerUpdateSpy);
         sinon.assert.calledWith(this.respondPlayerUpdateSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondGameStart if type is gameStart": function () {
+        this.req.body = {
+            type: "gameStart"
+        };
+        
+        sinon.assert.notCalled(this.respondGameStartSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondGameStartSpy);
+        sinon.assert.calledWith(this.respondGameStartSpy, this.req, this.res);
     },
     
     "test respondByType should call respondBadRequest if type is not valid": function () {
@@ -1156,5 +1170,83 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
         sinon.assert.calledOnce(this.broadcastMessageSpy);
 
         sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+    }
+});
+
+
+
+TestCase("LobbyResponseControllerLobbyStartTest", {
+    setUp: lobbyResponseControllerSetup,
+    
+    tearDown: function ()
+    {
+        this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
+    },
+    
+    "test lobbyResponseController should have function to respond on game start": function () {
+        assertFunction(this.lrc.respondGameStart);
+    },
+    
+    "test respondGameStart should call sendStatus with 400 if request has no token": function () {
+        this.req.session.token = undefined;
+        
+        this.req.body = {
+           type: "gameStart"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondGameStart(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondGameStart should call sendStatus with 400 if request is not from leader": function () {
+        // Token from player2
+        this.req.session.token = "2345";
+        
+        this.req.body = {
+           type: "gameStart"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondGameStart(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondGameStart should call sendStatus with 200 if request is correct": function () {
+        // Token from player2
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "gameStart"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondGameStart(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 200);
+    },
+    
+    "test respondGameStart should set lobby to start": function () {
+        // Token from player2
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "gameStart"
+        };
+
+        assertFalse(this.lobby.isStarted());
+
+        this.lrc.respondGameStart(this.req, this.res);
+        
+        assertTrue(this.lobby.isStarted());
     }
 });
