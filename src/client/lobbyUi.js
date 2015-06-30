@@ -396,7 +396,7 @@ function lobbyUi(aRequestController)
                 playerTypeRoll.add(type3);
                 playerTypeRoll.selectedIndex = 2;
             }
-
+           
             playerName.innerHTML = aPlayer.getName();
             playerColor.style.backgroundColor = aPlayer.getColor();
         }
@@ -608,6 +608,27 @@ function lobbyUi(aRequestController)
         body.innerHTML = "";
     }
 
+
+
+    function onPlayerRollChange()
+    {
+        
+    }
+    
+    function onBotRollChange()
+    {
+        
+    }
+    
+    function onSlotRollChange(aSelect)
+    {
+        if(aSelect.value === "Bot")
+        {
+            _lobbyRequestController.addBot(_currentLobby.getId());
+        }
+    }
+    
+    
     this.createContent = createContent;
     this.createLobbyContent = createLobbyContent;
     this.createWrapper = createWrapper;
@@ -623,6 +644,11 @@ function lobbyUi(aRequestController)
     this.showLobbyOverview = showLobbyOverview;
     this.getPlayerColorBoxById = getPlayerColorBoxById;
     this.showLobbyForPlayer = showLobbyForPlayer;
+
+
+    this.onSlotRollChange = onSlotRollChange;
+    this.onPlayerRollChange = onPlayerRollChange;
+    this.onBotRollChange = onBotRollChange;
 
     this.setCurrentLobby = setCurrentLobby;
     this.getCurrentLobby = getCurrentLobby;
