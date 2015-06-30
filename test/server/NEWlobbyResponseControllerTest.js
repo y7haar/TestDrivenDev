@@ -626,9 +626,10 @@ TestCase("LobbyResponseControllerJoinTest", {
 
         this.lrc.respondJoin(this.req, this.res);
 
+        var newPlayer = this.lobby.getPlayers()[this.lobby.getPlayers().length - 1];
         sinon.assert.calledOnce(this.broadcastMessageSpy);
 
-        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange", newPlayer);
     },
     
     "test lrc should have private helper to join a specific Player": function () {
