@@ -345,7 +345,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
         this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
         this.resJsonSpy = this.sandbox.spy(this.res, "json");
-        this.broadcastMessageSpy = this.sandbox.spy(this.lrc, "broadcastMessage");
+        this.broadcastMessageSpy = this.sandbox.stub(this.lrc, "broadcastMessage");
         
     },
     tearDown: function()
