@@ -572,6 +572,9 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
     },
     
     "test respondLobbyUpdate should NOT call sendStatus with 400 if data object in body has name": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        
         this.req.body = {
            type: "lobbyUpdate",
            data: {
