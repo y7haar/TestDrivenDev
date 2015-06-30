@@ -642,4 +642,62 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
 
         sinon.assert.notCalled(this.resSendStatusSpy);
     },
+    
+    "test respondLobbyUpdate should set lobby maxPlayers if data has maxPlayers": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        assertEquals(4, this.lobby.getMaxPlayers());
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals(3, this.lobby.getMaxPlayers());
+        
+        
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 2
+            }
+        };
+        
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals(2, this.lobby.getMaxPlayers());
+    },
+    
+    "test respondLobbyUpdate should set lobby name if data has name": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                name: "New"
+            }
+        };
+
+        assertEquals("GameLobby", this.lobby.getName());
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals("New", this.lobby.getName());
+        
+        
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                name: "New2"
+            }
+        };
+        
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        assertEquals("New2", this.lobby.getName());
+    }
 });
