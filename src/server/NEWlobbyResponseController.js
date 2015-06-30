@@ -93,6 +93,8 @@ function lobbyResponseController()
             obj.currentPlayerId = newPlayer.getId();
             
             res.json(obj);
+            
+            this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
         catch(e)
