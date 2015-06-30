@@ -47,7 +47,7 @@ function fakeRes()
     };
 }
 
-TestCase("LobbyResponseControllerTest", {
+TestCase("LobbiesResponseControllerTest", {
     setUp: function () {
         // Must be changed 
         this.lrc = new tddjs.server.controller.lobbiesResponseController();
@@ -58,6 +58,10 @@ TestCase("LobbyResponseControllerTest", {
         
         this.lobbyFactory = new tddjs.server.controller.lobbyFactory();
         this.lobby = this.lobbyFactory.getNewLobby();
+        this.player1 = new tddjs.server.player();
+        this.lobby.addPlayer(this.player1);
+        this.lobby.setLeader(this.player1);
+        
         this.lobbyController.addLobby(this.lobby);
         
         
@@ -66,7 +70,7 @@ TestCase("LobbyResponseControllerTest", {
         this.req = new fakeReq();
         this.res = new fakeRes();
         
-        this.lobbyControllerSerializeOSpy = this.sandbox.stub(this.lobbyController, "serializeAsArray");
+        this.lobbyControllerSerializeOSpy = this.sandbox.stub(this.lobbyController, "serializeUnstartedAsArray");
         this.resJsonSpy = this.sandbox.stub(this.res, "json");
     },
     tearDown: function ()
@@ -98,7 +102,7 @@ TestCase("LobbyResponseControllerTest", {
         this.lrc.respondAllLobbies(this.req, this.res);
         
         sinon.assert.calledOnce(this.resJsonSpy);
-        sinon.assert.calledWith(this.resJsonSpy, this.lobbyController.serializeAsArray());
+        sinon.assert.calledWith(this.resJsonSpy, this.lobbyController.serializeUnstartedAsArray());
     }
     
 });

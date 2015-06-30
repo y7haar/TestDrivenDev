@@ -19,7 +19,7 @@ function lobbiesResponseController()
     
     function respondAllLobbies(req, res)
     {
-        var lobbies = _lobbyController.serializeAsArray();
+        var lobbies = _lobbyController.serializeUnstartedAsArray();
         
         res.json(lobbies);
     }

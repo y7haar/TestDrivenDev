@@ -105,6 +105,24 @@ function lobbyController()
 
         return lobbies;
     }
+    
+    function serializeUnstartedAsArray()
+    {
+        var lobbies = [];
+
+        for (var i = 0; i < _lobbies.length; ++i)
+        {
+            var lobby = _lobbies[i];
+
+            if (typeof lobby === "undefined" || lobby.isStarted())
+                continue;
+
+            var lobbyObj = lobby.serializeAsObject();
+            lobbies.push(lobbyObj);
+        }
+
+        return lobbies;
+    }
 
     this.addLobby = addLobby;
     this.removeLobby = removeLobby;
@@ -117,5 +135,6 @@ function lobbyController()
 
     this.serialize = serialize;
     this.serializeAsArray = serializeAsArray;
+    this.serializeUnstartedAsArray = serializeUnstartedAsArray;
 
 }
