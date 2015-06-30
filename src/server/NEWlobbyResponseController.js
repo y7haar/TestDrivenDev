@@ -172,6 +172,11 @@ function lobbyResponseController()
                 player.setName(req.body.data.name);
                 res.sendStatus(200);
             }
+            
+            else
+            {
+                res.sendStatus(400);
+            }
         }
         
         catch(e)
