@@ -719,5 +719,24 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
 
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 200);
-    }
+    },
+    
+    "test respondLobbyUpdate should call broadcastMessage with correct data": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+    },
 });
