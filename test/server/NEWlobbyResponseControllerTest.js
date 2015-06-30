@@ -808,7 +808,7 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
 
         this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
@@ -885,7 +885,7 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
 
         this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
@@ -933,7 +933,8 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
                 color: "#123123"
             }
         };
-
+        
+        this.player1.setColor("#ffffff");
         assertEquals("#ffffff", this.player1.getColor());
 
         this.lrc.respondPlayerUpdate(this.req, this.res);
