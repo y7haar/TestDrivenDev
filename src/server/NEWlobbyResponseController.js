@@ -238,6 +238,26 @@ function lobbyResponseController()
         }
     }
     
+    
+    function respondGameStart(req, res)
+    {
+        try
+        {
+            var token = req.session.token;
+            
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
+            
+            _lobby.setStarted(true);
+            
+            res.sendStatus(200);
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
 
     //test
     Object.defineProperty(this, 'lobby', {
@@ -254,6 +274,7 @@ function lobbyResponseController()
     this.broadcastMessage = broadcastMessage;
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
+    this.respondGameStart = respondGameStart;
     
     this.respondByType = respondByType;
     this.respondBadRequest = respondBadRequest;
@@ -263,5 +284,6 @@ function lobbyResponseController()
    this.respondMethods["join"] = this.respondJoin;
    this.respondMethods["lobbyUpdate"] = this.respondLobbyUpdate;
    this.respondMethods["playerUpdate"] = this.respondPlayerUpdate;
+   this.respondMethods["gameStart"] = this.respondGameStart;
    
 }
