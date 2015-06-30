@@ -72,6 +72,12 @@ function lobbyResponseController()
     
     function respondByType(req, res)
     {
+        if(typeof req.body === "undefined")
+        {
+            this.respondBadRequest(req, res);
+            return;
+        }
+        
         var method = this.respondMethods[req.body.type];
         
         if(typeof method === "function")
