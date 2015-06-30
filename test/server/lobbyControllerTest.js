@@ -234,7 +234,6 @@ TestCase("LobbyControllerTest", {
         assertArray(json);
         assertEquals(1, json.length);
         assertObject(json[0]);
-        assertObject(json[1]);
 
         // No tests for type --> is already tested in lobby / player tests
 
