@@ -72,7 +72,17 @@ function lobbyResponseController()
     
     function respondByType(req, res)
     {
+        var method = this.respondMethods[req.body.type];
         
+        if(typeof method === "function")
+        {
+            this.respondMethods[req.body.type](req, res);
+        }
+        
+        else
+        {
+            this.respondBadRequest(req, res);
+        }
     }
     
     function respondBadRequest(req, res)
@@ -231,6 +241,9 @@ function lobbyResponseController()
    // Should be private
    this.joinPlayer = _joinPlayer;
    
-   this.respondMethods = [];
+   this.respondMethods = {};
+   this.respondMethods["join"] = this.respondJoin;
+   this.respondMethods["lobbyUpdate"] = this.respondLobbyUpdate;
+   this.respondMethods["playerUpdate"] = this.respondPlayerUpdate;
    
 }
