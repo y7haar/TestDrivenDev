@@ -151,9 +151,14 @@ function lobbyResponseController()
             if(typeof req.body.data.id !== "number")
                 throw new Error("Player Id must be number");
             
+            var player = _lobby.getPlayerById(req.body.data.id);
+            
+            if(player === null)
+                throw new Error("Player with Id does not exist");
+            
             var token = req.session.token;
             
-            if(typeof token === "undefined")
+            if(typeof token === "undefined" || ! _lobby.isPlayerTokenValid(player, token))
                 throw new Error("Token must not be undefined");
         }
         
