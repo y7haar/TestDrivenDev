@@ -101,10 +101,6 @@ var nlg = require('./nameListGenerator');
 
 var nameListGenerator = new nlg();
 
-
-nameListGenerator.readFileList(nameListGenerator.DEFAULT_LIST, function(){
-    console.log("DONE");
-    nameListGenerator.shuffleNameList();
-    console.log(nameListGenerator.getNameList());
-    
-});
+nameListGenerator.readFileList(nameListGenerator.COUNTRY_LIST);
+nameListGenerator.shuffleNameList();
+console.log(nameListGenerator.getNameList());

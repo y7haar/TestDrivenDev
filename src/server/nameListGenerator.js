@@ -18,21 +18,16 @@ function nameListGenerator()
     var _nameList = [];
     var _currentIndex = 0;
     var DEFAULT_LIST = "./nameLists/games.txt";
+    var COUNTRY_LIST = "./nameLists/RanolsCountrys.txt";
+    var CONTINENT_LIST = "./nameLists/RanolsContinents.txt";
 
-    function readFileList(file, callback)
+    function readFileList(file)
     {
         var fs = require('fs');
 
-        fs.readFile(file, {encoding: "utf-8"}, function(err, data) {
-
-            if (err)
-                throw err;
-
-            var splits = data.split("\n");
-            setNameList(splits);
-
-            callback();
-        });
+        var data = fs.readFileSync(file, {encoding: "utf-8"});
+        var splits = data.split("\n");
+        setNameList(splits);
     }
 
     function setNameList(aNameList)
@@ -73,5 +68,7 @@ function nameListGenerator()
     this.getNextName = getNextName;
     this.readFileList = readFileList;
     this.DEFAULT_LIST = DEFAULT_LIST;
+    this.COUNTRY_LIST = COUNTRY_LIST;
+    this.CONTINENT_LIST = CONTINENT_LIST;
 
 }
