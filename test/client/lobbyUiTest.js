@@ -727,6 +727,11 @@ TestCase("SingleLobbyUiLeaderTest", {
     
     "test onSlotRollChange should call req-controller addBot if Bot is selected": function() {
         var roll = document.createElement("select");
+        var option1 = document.createElement("option");
+        option1.innerHTML = "Bot";
+        
+        roll.add(option1);
+        
         roll.value = "Bot";
         
         var addBotSpy = this.sandbox.stub(this.lobbyRequestController, "addBot");
@@ -737,6 +742,25 @@ TestCase("SingleLobbyUiLeaderTest", {
         
         sinon.assert.calledOnce(addBotSpy);
         sinon.assert.calledWith(addBotSpy, this.lobby3.getId());
+    },
+    
+    "test onPlayerRollChange should call req-controller kickPlayer if Open Slot is selected": function() {
+        var roll = document.createElement("select");
+        var option1 = document.createElement("option");
+        option1.innerHTML = "Open Slot";
+        
+        roll.add(option1);
+        
+        roll.value = "Open Slot";
+        
+        var kickPlayerSpy = this.sandbox.stub(this.lobbyRequestController, "kickPlayer");
+        
+        sinon.assert.notCalled(kickPlayerSpy);
+        
+        this.lobbyUi.onPlayerRollChange(roll, 1);
+        
+        sinon.assert.calledOnce(kickPlayerSpy);
+        sinon.assert.calledWith(kickPlayerSpy, this.lobby3.getId(), 1);
     }
 });
 
