@@ -61,6 +61,9 @@ function lobby()
      */
     function setMaxPlayers(aMaxPlayers)
     {
+        if(typeof aMaxPlayers !== "number")
+            throw new TypeError("Max Players must be number");
+        
         _maxPlayers = aMaxPlayers;
 
         while (_players.length > aMaxPlayers)
