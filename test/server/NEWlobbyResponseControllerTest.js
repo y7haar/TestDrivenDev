@@ -69,8 +69,9 @@ TestCase("LobbyResponseControllerTest", {
         this.respondJoinSpy = this.sandbox.stub(this.lrc.respondMethods, "join");
         this.respondLobbyUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "lobbyUpdate");
         this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "playerUpdate");
+        this.respondGameStartSpy = this.sandbox.stub(this.lrc.respondMethods, "gameStart");
+        
         this.respondBadRequestSpy = this.sandbox.spy(this.lrc, "respondBadRequest");
-        this.respondGameStartSpy = this.sandbox.stub(this.lrc, "respondGameStart");
         
         this.resSendStatusSpy = this.sandbox.stub(this.res, "sendStatus");
     },
