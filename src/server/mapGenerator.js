@@ -56,7 +56,10 @@ function mapGenerator()
     //Entscheidung ob auf Node js oder nicht
     if(typeof module !== "undefined")
     {
-        //Noch keine Ahnung
+        //NodeJs
+        var nrg = require("./nameListGenerator.js");
+        countryNameGenerator = new nrg();
+        continentNameGenerator = new nrg();
     }
     else
     {
@@ -342,6 +345,8 @@ function mapGenerator()
         
         //Namensvergabe für Länder und Kontinente
         handOutNames(map.continents);
+        
+        map.allCountries = allCountries;
         
         //return
         return map;
@@ -1091,6 +1096,7 @@ function mapGenerator()
         var map = {};
         map.continents = [];
         map.water = createWater();
+        map.allCountries = [];
         map.isMap = true;
         return map;
     }

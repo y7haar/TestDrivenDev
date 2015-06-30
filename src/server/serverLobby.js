@@ -61,6 +61,9 @@ function lobby()
      */
     function setMaxPlayers(aMaxPlayers)
     {
+        if(typeof aMaxPlayers !== "number")
+            throw new TypeError("Max Players must be number");
+        
         _maxPlayers = aMaxPlayers;
 
         while (_players.length > aMaxPlayers)
@@ -180,9 +183,20 @@ function lobby()
         return (aPlayer.getToken() === aToken);
     }
     
-    function isLeaderTokenValid(aPlayer, aToken)
+    function isLeaderTokenValid(aToken)
     {
-        return (this.isPlayerTokenValid(aPlayer, aToken) && aPlayer === _leader);
+        try
+        {
+            var player = this.getPlayerByToken(aToken);
+            return (this.isPlayerTokenValid(player, aToken) && player === _leader);
+        }
+        
+        catch(e)
+        {
+            return false;
+        }
+        
+        return false;
     }
     
     function getUniqueToken()

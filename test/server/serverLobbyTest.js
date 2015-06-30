@@ -59,6 +59,13 @@ TestCase("LobbyPlayerServerTest", {
             this.lobby.setId("a");
         }, "TypeError");
     },
+    
+    "test setMaxPlayers should throw Error if param is not a number": function() {
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.setMaxPlayers("5"); }, "TypeError");
+    },
+    
     "test Lobby should store player1 and player2 and player 3": function() {
         this.lobby.setMaxPlayers(3);
 
@@ -412,19 +419,19 @@ TestCase("LobbyServerAuthentificationTest", {
     },
     
      "test isLeaderTokenValid should return true if player is Leader and has specified token": function() {
-        var value1 = this.lobby.isLeaderTokenValid(this.player1, "T1");
+        var value1 = this.lobby.isLeaderTokenValid("T1");
         
         assertTrue(value1);
     },
     
     "test isLeaderTokenValid should return false if player has not specified token": function() {
-        var value2 = this.lobby.isLeaderTokenValid(this.player1, "T2");
+        var value2 = this.lobby.isLeaderTokenValid("T-1");
 
         assertFalse(value2);
     },
     
     "test isLeaderTokenValid should return false if player has specified token but is not leader": function() {
-        var value2 = this.lobby.isLeaderTokenValid(this.player2, "T2");
+        var value2 = this.lobby.isLeaderTokenValid("T2");
 
         assertFalse(value2);
     },
