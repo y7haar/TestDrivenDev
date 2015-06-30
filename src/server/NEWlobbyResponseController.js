@@ -117,6 +117,16 @@ function lobbyResponseController()
             
             if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
                 throw new Error("Player is not valid");
+            
+            if(typeof req.body.data.name === "string")
+            {
+                _lobby.setName(req.body.data.name);
+            }
+            
+            else if(typeof req.body.data.maxPlayers === "number")
+            {
+                _lobby.setMaxPlayers(req.body.data.maxPlayers);
+            }
         }
         
         catch(e)
