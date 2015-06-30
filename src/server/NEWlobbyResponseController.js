@@ -121,15 +121,15 @@ function lobbyResponseController()
             if(typeof req.body.data.name === "string")
             {
                 _lobby.setName(req.body.data.name);
-                res.sendStatus(200);
-                
             }
             
             else if(typeof req.body.data.maxPlayers === "number")
             {
                 _lobby.setMaxPlayers(req.body.data.maxPlayers);
-                res.sendStatus(200);
             }
+            
+            res.sendStatus(200);
+            this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
         catch(e)
