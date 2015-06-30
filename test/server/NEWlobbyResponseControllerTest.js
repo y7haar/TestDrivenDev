@@ -855,10 +855,29 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
         this.req.session.token = "2345";
         
         this.req.body = {
-           type: "lobbyUpdate",
+           type: "playerUpdate",
            data: {
                 id: 0,
                 name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 400 if data has not color or name": function () {
+        // Token from player2
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0
             }
         };
 
