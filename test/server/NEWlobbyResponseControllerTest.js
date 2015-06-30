@@ -345,6 +345,7 @@ TestCase("LobbyResponseControllerJoinTest", {
         this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
         this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
         this.resJsonSpy = this.sandbox.spy(this.res, "json");
+        this.broadcastMessageSpy = this.sandbox.spy(this.lrc, "broadcastMessage");
         
     },
     tearDown: function()
@@ -496,6 +497,27 @@ TestCase("LobbyResponseControllerJoinTest", {
         sinon.assert.calledOnce(this.resJsonSpy);
         
         assertEquals(out, this.resJsonSpy.args[0][0]);
+    },
+    
+    "test respondJoin should call broadcastMessage with correct data": function() {
+        this.req.body = {
+            type: "join", 
+            
+            player: {
+                name: "Unnamed Player", 
+                color: "#ffffff", 
+                type: "human"
+            }
+        };
+        
+  
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+        
+        this.lrc.respondJoin(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+        
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
     },
     
     "test lrc should have private helper to join a specific Player": function() {
