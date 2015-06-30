@@ -232,6 +232,23 @@ TestCase("LobbyServerTest", {
         delete this.player2;
         delete this.player3;
     },
+    
+    "test Lobby should have function to set Lobby started": function() {
+        assertFunction(this.lobby.setStarted);
+    },
+    
+    "test Lobby should have function to get Lobby started": function() {
+        assertFunction(this.lobby.isStarted);
+    },
+    
+    "test setStarted should set lobby started": function() {
+        assertFalse(this.lobby.isStarted());
+        
+        this.lobby.setStarted(true);
+        assertTrue(this.lobby.isStarted());
+    },
+    
+    
     "test Lobby should have a serialize method that returns a json string": function() {
         this.player1.setName("Bob");
         this.player2.setName("Hanswurst");
