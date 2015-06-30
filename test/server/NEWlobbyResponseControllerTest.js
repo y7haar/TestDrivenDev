@@ -117,6 +117,17 @@ TestCase("LobbyResponseControllerTest", {
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
     },
     
+     "test respondByType should call respondBadRequest if body is empty": function () {
+        this.req.body = undefined;
+         
+         sinon.assert.notCalled(this.respondBadRequestSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondBadRequestSpy);
+        sinon.assert.calledWith(this.respondBadRequestSpy, this.req, this.res);
+    },
+    
      "test respondByType should call respondJoin if type is join": function () {
         this.req.body = {
             type: "join"
