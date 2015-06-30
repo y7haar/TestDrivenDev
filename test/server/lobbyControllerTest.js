@@ -4,6 +4,14 @@
 
 TestCase("LobbyControllerTest", {
     setUp: function() {
+        var controllerInstance = new tddjs.server.controller.lobbyController();
+        this.realGetInstance = tddjs.server.controller.lobbyController.getInstance;
+        
+        tddjs.server.controller.lobbyController.getInstance = function()
+        {
+            return controllerInstance;
+        };
+        
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
         this.lobby1 = new tddjs.server.model.lobby();
         this.lobby2 = new tddjs.server.model.lobby();
@@ -56,6 +64,8 @@ TestCase("LobbyControllerTest", {
         delete this.lobby2;
         delete this.lobby5;
         delete this.lobbyController;
+        
+        tddjs.server.controller.lobbyController.getInstance = this.realGetInstance;
     },
     "test object of LobbyController should not be undefined": function() {
         assertObject(this.lobbyController);
@@ -207,7 +217,6 @@ TestCase("LobbyControllerTest", {
         assertEquals(4, json[1].players[1].id);
         assertEquals("#333333", json[1].players[1].color);
     }
-
 });
 
 
