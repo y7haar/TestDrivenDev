@@ -889,91 +889,91 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
         sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
-    
-    ///
-    
-    ////
-    
-    
-    // TODO Tests
-    /*
-    
-    "test respondLobbyUpdate should set lobby maxPlayers if data has maxPlayers": function () {
+
+    "test respondPlayerUpdate should set player name if data has name": function () {
         // Token from leader
         this.req.session.token = "1234";
         this.req.body = {
-           type: "lobbyUpdate",
+           type: "playerUpdate",
            data: {
-                maxPlayers: 3
-            }
-        };
-
-        assertEquals(4, this.lobby.getMaxPlayers());
-
-        this.lrc.respondLobbyUpdate(this.req, this.res);
-
-        assertEquals(3, this.lobby.getMaxPlayers());
-        
-        
-        this.req.body = {
-           type: "lobbyUpdate",
-           data: {
-                maxPlayers: 2
+                id: 0,
+                name: "NewName"
             }
         };
         
-        this.lrc.respondLobbyUpdate(this.req, this.res);
+        this.player1.setName("P1");
+        
+        assertEquals("P1", this.player1.getName());
 
-        assertEquals(2, this.lobby.getMaxPlayers());
-    },
-    
-    "test respondLobbyUpdate should set lobby name if data has name": function () {
-        // Token from leader
-        this.req.session.token = "1234";
-        this.req.body = {
-           type: "lobbyUpdate",
-           data: {
-                name: "New"
-            }
-        };
+        this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        assertEquals("GameLobby", this.lobby.getName());
-
-        this.lrc.respondLobbyUpdate(this.req, this.res);
-
-        assertEquals("New", this.lobby.getName());
+        assertEquals("NewName", this.player1.getName());
         
         
         this.req.body = {
-           type: "lobbyUpdate",
+           type: "playerUpdate",
            data: {
+                id: 0,
                 name: "New2"
             }
         };
         
-        this.lrc.respondLobbyUpdate(this.req, this.res);
+        this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        assertEquals("New2", this.lobby.getName());
+        assertEquals("New2", this.player1.getName());
     },
     
-    "test respondLobbyUpdate should call sendStatus with 200 if data is valid": function () {
+    "test respondPlayerUpdate should set color if data has color": function () {
         // Token from leader
         this.req.session.token = "1234";
         this.req.body = {
-           type: "lobbyUpdate",
+           type: "playerUpdate",
            data: {
-                maxPlayers: 3
+                id: 0,
+                color: "#123123"
+            }
+        };
+
+        assertEquals("#ffffff", this.player1.getColor());
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        assertEquals("#123123", this.player1.getColor());
+        
+        
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                color: "#321123"
+            }
+        };
+        
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        assertEquals("#321123", this.player1.getColor());
+    },
+    
+    "test respondPlayerUpdate should call sendStatus with 200 if data is valid": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                color: "#000000"
             }
         };
 
         sinon.assert.notCalled(this.resSendStatusSpy);
 
-        this.lrc.respondLobbyUpdate(this.req, this.res);
+        this.lrc.respondPlayerUpdate(this.req, this.res);
 
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 200);
     },
     
+    /*
     "test respondLobbyUpdate should call broadcastMessage with correct data": function () {
         // Token from leader
         this.req.session.token = "1234";
@@ -992,6 +992,5 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
 
         sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
     }
-    
     */
 });
