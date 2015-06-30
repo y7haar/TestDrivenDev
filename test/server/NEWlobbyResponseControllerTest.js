@@ -60,28 +60,63 @@ TestCase("LobbyResponseControllerTest", {
 
         this.lobby = this.lobbyFactory.getNewLobby();
         this.lobbyController.addLobby(this.lobby);
+        
+        this.sandbox = sinon.sandbox.create();
+        
+        this.req = new fakeReq();
+        this.res = new fakeRes();
+        
+        this.respondJoinSpy = this.sandbox.stub(this.lrc, "respondJoin");
+        this.respondLobbyUpdateSpy = this.sandbox.stub(this.lrc, "respondLobbyUpdate");
+        this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc, "respondPlayerUpdate");
+        
+        this.resSendStatusSpy = this.sandbox.stub(this.res, "sendStatus");
     },
     tearDown: function ()
     {
+        this.sandbox.restore();
         this.lobbyController.getLobbies().length = 0;
         delete this.lrc;
     },
     "test constructor should create new instance of controller": function () {
         assertObject(this.lrc);
     },
+    
     "test constructor should have function to set Lobby by Id": function () {
         assertFunction(this.lrc.setLobbyById);
     },
+    
     "test setLobbyById should set lobby if lobby with id exists": function () {
         this.lrc.setLobbyById(this.lobby.getId());
         assertSame(this.lobby, this.lrc.lobby);
     },
+    
     "test setLobbyById should throw Error if lobby with id does not exist": function () {
         var lrc = this.lrc;
         assertException(function () {
             lrc.setLobbyById(-1);
         }, "LobbyIdError");
+    },
+    
+    
+    "test lrc should have function to switch by type": function () {
+        assertFunction(this.lrc.performResponseByType);
+    },
+    
+    "test lrc should have function to return 400 if type is invalid": function () {
+        assertFunction(this.lrc.respondBadRequest);
+    },
+    
+    "test respondBadRequest should send status 400": function () {
+        sinon.assert.notCalled(this.resSendStatusSpy);
+        
+        this.lrc.respondBadRequest();
+        
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
     }
+    
+
 });
 
 TestCase("LobbyResponseControllerEventSourceTest", {
