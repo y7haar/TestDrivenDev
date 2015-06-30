@@ -26,7 +26,7 @@ function fakeRes()
 
     };
 
-    this.append = function (header, value)
+    this.set = function (header, value)
     {
         this.headers[header.toLowerCase()] = value;
     };
@@ -362,6 +362,28 @@ TestCase("LobbyResponseControllerBroadcastTest", {
         sinon.assert.calledOnce(this.res1SendSpy);
         sinon.assert.calledOnce(this.res2SendSpy);
     },
+    
+    "test broadcastMessage should get all human players res objects and call res.write if not excluded": function () {
+        sinon.assert.notCalled(this.pl1GetResSpy);
+        sinon.assert.notCalled(this.pl2GetResSpy);
+        sinon.assert.notCalled(this.pl3GetResSpy);
+
+        sinon.assert.notCalled(this.res1SendSpy);
+        sinon.assert.notCalled(this.res2SendSpy);
+
+        // Eclude  player2 from broadcast
+        this.lrc.broadcastMessage({}, "myEvent", this.player2);
+
+        sinon.assert.calledOnce(this.pl1GetResSpy);
+        sinon.assert.notCalled(this.pl2GetResSpy);
+
+        // player3 ist bot, sollte daher nicht aufgerufen werden
+        sinon.assert.notCalled(this.pl3GetResSpy);
+
+        sinon.assert.calledOnce(this.res1SendSpy);
+        sinon.assert.notCalled(this.res2SendSpy);
+    },
+    
     "test broadcastMessage should call res.write with correct message": function () {
         var msg = {
             data1: "data1",
