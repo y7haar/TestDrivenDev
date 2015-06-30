@@ -993,24 +993,48 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
         sinon.assert.calledWith(this.resSendStatusSpy, 200);
     },
     
-    /*
-    "test respondLobbyUpdate should call broadcastMessage with correct data": function () {
+    "test respondPlayerUpdate should call broadcastMessage with colorchange event if data has color": function () {
         // Token from leader
         this.req.session.token = "1234";
         this.req.body = {
-           type: "lobbyUpdate",
+           type: "playerUpdate",
            data: {
-                maxPlayers: 3
+                id: 0,
+                color: "#123456"
             }
         };
-
+        
+        var wrapper = {
+            id: 0,
+            color: "#123456"
+        };
+        
         sinon.assert.notCalled(this.broadcastMessageSpy);
 
-        this.lrc.respondLobbyUpdate(this.req, this.res);
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+
+        sinon.assert.calledWith(this.broadcastMessageSpy, wrapper, "colorchange");
+    },
+    
+    "test respondPlayerUpdate should call broadcastMessage with lobbychange event if data has name": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: 0,
+                name: "newName"
+            }
+        };
+        
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
 
         sinon.assert.calledOnce(this.broadcastMessageSpy);
 
         sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
     }
-    */
 });
