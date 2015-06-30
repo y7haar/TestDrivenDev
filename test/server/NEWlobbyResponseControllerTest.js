@@ -586,7 +586,8 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
 
         this.lrc.respondLobbyUpdate(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
     "test respondLobbyUpdate should call sendStatus with 400 if request has no token": function () {
@@ -640,7 +641,8 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
 
         this.lrc.respondLobbyUpdate(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
     "test respondLobbyUpdate should set lobby maxPlayers if data has maxPlayers": function () {
@@ -699,5 +701,23 @@ TestCase("LobbyResponseControllerLobbyUpdateTest", {
         this.lrc.respondLobbyUpdate(this.req, this.res);
 
         assertEquals("New2", this.lobby.getName());
+    },
+    
+    "test respondLobbyUpdate should call sendStatus with 200 if data is valid": function () {
+        // Token from leader
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "lobbyUpdate",
+           data: {
+                maxPlayers: 3
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondLobbyUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 200);
     }
 });
