@@ -100,7 +100,7 @@ TestCase("LobbyResponseControllerTest", {
     
     
     "test lrc should have function to switch by type": function () {
-        assertFunction(this.lrc.performResponseByType);
+        assertFunction(this.lrc.respondByType);
     },
     
     "test lrc should have function to return 400 if type is invalid": function () {
@@ -110,7 +110,7 @@ TestCase("LobbyResponseControllerTest", {
     "test respondBadRequest should send status 400": function () {
         sinon.assert.notCalled(this.resSendStatusSpy);
         
-        this.lrc.respondBadRequest();
+        this.lrc.respondBadRequest(this.req, this.res);
         
         sinon.assert.calledOnce(this.resSendStatusSpy);
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
