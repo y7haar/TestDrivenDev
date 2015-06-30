@@ -216,6 +216,43 @@ TestCase("LobbyControllerTest", {
         assertEquals("P4", json[1].players[1].name);
         assertEquals(4, json[1].players[1].id);
         assertEquals("#333333", json[1].players[1].color);
+    },
+    
+    "test lobbyController should provide a serialize-method and return an array of all unstarted serialized lobbies": function() {
+        // cleanup because of singleton
+        this.lobbyController.getLobbies().length = 0;
+
+        this.lobbyController.addLobby(this.lobby1);
+        this.lobbyController.addLobby(this.lobby2);
+        
+        this.lobby2.setStarted(true);
+        
+        assertFunction(this.lobbyController.serializeUnstartedAsArray);
+
+        var json = this.lobbyController.serializeUnstartedAsArray();
+
+        assertArray(json);
+        assertEquals(1, json.length);
+        assertObject(json[0]);
+        assertObject(json[1]);
+
+        // No tests for type --> is already tested in lobby / player tests
+
+        // L1
+        assertEquals("L1", json[0].name);
+        assertEquals(0, json[0].id);
+        assertEquals(2, json[0].maxPlayers);
+        assertEquals(1, json[0].leader);
+
+        // P1
+        assertEquals("P1", json[0].players[0].name);
+        assertEquals(1, json[0].players[0].id);
+        assertEquals("#000000", json[0].players[0].color);
+
+        // P2
+        assertEquals("P2", json[0].players[1].name);
+        assertEquals(2, json[0].players[1].id);
+        assertEquals("#111111", json[0].players[1].color);
     }
 });
 
