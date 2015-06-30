@@ -59,6 +59,13 @@ TestCase("LobbyPlayerServerTest", {
             this.lobby.setId("a");
         }, "TypeError");
     },
+    
+    "test setMaxPlayers should throw Error if param is not a number": function() {
+        var lobby = this.lobby;
+        
+        assertException(function() { lobby.setMaxPlayers("5"); }, "TypeError");
+    },
+    
     "test Lobby should store player1 and player2 and player 3": function() {
         this.lobby.setMaxPlayers(3);
 
