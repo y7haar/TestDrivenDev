@@ -710,6 +710,33 @@ TestCase("SingleLobbyUiLeaderTest", {
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(showLeaderLobbySpy);
         sinon.assert.calledOnce(setPlayerEditableSpy);
+    },
+    
+    
+     "test ui should have function for player roll change": function() {
+        assertFunction(this.lobbyUi.onPlayerRollChange);
+    },
+    
+    "test ui should have function for bot roll change": function() {
+        assertFunction(this.lobbyUi.onBotRollChange);
+    },
+    
+    "test ui should have function for slot roll change": function() {
+        assertFunction(this.lobbyUi.onSlotRollChange);
+    },
+    
+    "test onSlotRollChange should call req-controller addBot if Bot is selected": function() {
+        var roll = document.createElement("select");
+        roll.value = "Bot";
+        
+        var addBotSpy = this.sandbox.stub(this.lobbyRequestController, "addBot");
+        
+        sinon.assert.notCalled(addBotSpy);
+        
+        this.lobbyUi.onSlotRollChange(roll);
+        
+        sinon.assert.calledOnce(addBotSpy);
+        sinon.assert.calledWith(addBotSpy, this.lobby3.getId());
     }
 });
 
