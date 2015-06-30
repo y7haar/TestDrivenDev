@@ -2,13 +2,24 @@
  * Source-Code for lobbyResponseController
  */
 
-tddjs.namespace("server.controller").NEWlobbyResponseController = lobbyResponseController;
+if (typeof module !== "undefined")
+{
+    module.exports = lobbyResponseController;
+}
+
+else
+{
+    tddjs.namespace("server.controller").NEWlobbyResponseController = lobbyResponseController;
+}
+
 
 function lobbyResponseController()
 {
     var _lobby;
     var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
-
+    
+    // Needed because of different Scope in NodeJs
+    var _self = this;
 
     function setLobbyById(aId)
     {
@@ -17,7 +28,7 @@ function lobbyResponseController()
             throw { 
             name:        "LobbyIdError", 
             message:     "Lobby with given Id does not exist",
-            toString:    function(){return this.name + ": " + this.message;}}; 
+            toString:    function(){return _self.name + ": " + _self.message;}}; 
         }
         
         _lobby = _lobbyController.getLobbyById(aId);
@@ -27,9 +38,9 @@ function lobbyResponseController()
     {
         if (req.get("accept") === "text/event-stream" && (typeof req.session.token !== "undefined"))
         {
-            res.append("content-type", "text/event-stream");
-            res.append("cache-control", "no-cache");
-            res.append("connection", "keep-alive");
+            res.set("content-type", "text/event-stream");
+            res.set("cache-control", "no-cache");
+            res.set("connection", "keep-alive");
             res.connection.setTimeout(0);
 
 
@@ -48,7 +59,7 @@ function lobbyResponseController()
         }
     }
 
-    function broadcastMessage(aMessage, aEvent)
+    function broadcastMessage(aMessage, aEvent, aExcluded)
     {
         if (typeof aMessage !== "object")
             throw new TypeError("Message must be object");
@@ -60,7 +71,7 @@ function lobbyResponseController()
         {
             var player = _lobby.getPlayers()[i];
 
-            if (player.getType() === "human")
+            if (player.getType() === "human" && player !== aExcluded)
             {
                 var res = player.getResponseObject();
                 res.write("event: " + aEvent + "\n" + "data: " + JSON.stringify(aMessage) + "\n\n");
@@ -69,25 +80,30 @@ function lobbyResponseController()
         }
     }
     
+    function joinPlayer(aPlayer, aToken)
+    {
+        aPlayer.setToken(aToken);
+        _lobby.addPlayer(aPlayer);
+    }
     
     function respondByType(req, res)
     {
         if(typeof req.body === "undefined")
         {
-            this.respondBadRequest(req, res);
+            _self.respondBadRequest(req, res);
             return;
         }
         
-        var method = this.respondMethods[req.body.type];
+        var method = _self.respondMethods[req.body.type];
         
         if(typeof method === "function")
         {
-            this.respondMethods[req.body.type](req, res);
+            _self.respondMethods[req.body.type](req, res);
         }
         
         else
         {
-            this.respondBadRequest(req, res);
+            _self.respondBadRequest(req, res);
         }
     }
     
@@ -111,21 +127,22 @@ function lobbyResponseController()
             req.session.token = token;
             
             var newPlayer = new tddjs.server.player();
-            newPlayer.deserialize(req.body.player);
-            
-            this.joinPlayer(newPlayer, token);
+            newPlayer.deserialize(req.body.player);         
+     
+            _self.joinPlayer(newPlayer, token);
             
             var obj = {};
             obj.lobby = _lobby.serializeAsObject();
             obj.currentPlayerId = newPlayer.getId();
             
             res.json(obj);
-            
-            this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
         catch(e)
         {
+            console.log("BAD REQUEST");
+            console.log(e);
             res.sendStatus(400);
         }
     }
@@ -156,7 +173,7 @@ function lobbyResponseController()
             }
             
             res.sendStatus(200);
-            this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
         catch(e)
@@ -198,7 +215,7 @@ function lobbyResponseController()
                     color: player.getColor()
                 };
                 
-                this.broadcastMessage(wrapper, "colorchange");
+                _self.broadcastMessage(wrapper, "colorchange");
             }
             
             else if(typeof req.body.data.name === "string")
@@ -206,7 +223,7 @@ function lobbyResponseController()
                 player.setName(req.body.data.name);
                 res.sendStatus(200);
                 
-                this.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+                _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
             }
             
             else
@@ -221,12 +238,6 @@ function lobbyResponseController()
         }
     }
     
-    function _joinPlayer(aPlayer, aToken)
-    {
-        aPlayer.setToken(aToken);
-        _lobby.addPlayer(aPlayer);
-    }
-
 
     //test
     Object.defineProperty(this, 'lobby', {
@@ -235,6 +246,8 @@ function lobbyResponseController()
         }
     });
 
+    this.joinPlayer = joinPlayer;
+    
     this.setLobbyById = setLobbyById;
     this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
@@ -244,8 +257,7 @@ function lobbyResponseController()
     
     this.respondByType = respondByType;
     this.respondBadRequest = respondBadRequest;
-   // Should be private
-   this.joinPlayer = _joinPlayer;
+   
    
    this.respondMethods = {};
    this.respondMethods["join"] = this.respondJoin;
