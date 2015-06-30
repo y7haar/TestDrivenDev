@@ -160,6 +160,18 @@ function lobbyResponseController()
             
             if(typeof token === "undefined" || ! _lobby.isPlayerTokenValid(player, token))
                 throw new Error("Token must not be undefined");
+            
+            if(typeof req.body.data.color === "string")
+            {
+                player.setColor(req.body.data.color);
+                res.sendStatus(200);
+            }
+            
+            else if(typeof req.body.data.name === "string")
+            {
+                player.setName(req.body.data.name);
+                res.sendStatus(200);
+            }
         }
         
         catch(e)
