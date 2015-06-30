@@ -808,7 +808,7 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
 
         this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.notCalled(this.resSendStatusSpy);
         sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
@@ -819,6 +819,25 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
            type: "playerUpdate",
            data: {
                 id: 0,
+                name: "NewName"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondPlayerUpdate(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+     "test respondPlayerUpdate should call sendStatus with 400 if player with Id does not exist": function () {
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "playerUpdate",
+           data: {
+                id: -1,
                 name: "NewName"
             }
         };
@@ -866,7 +885,7 @@ TestCase("LobbyResponseControllerPlayerUpdateTest", {
 
         this.lrc.respondPlayerUpdate(this.req, this.res);
 
-        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.notCalled(this.resSendStatusSpy);
         sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
