@@ -103,6 +103,23 @@ function lobbyResponseController()
         }
     }
     
+    function respondLobbyUpdate(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(typeof req.body.data !== "object")
+                throw new Error("Player must not be empty");
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
+    
     function _joinPlayer(aPlayer, aToken)
     {
         aPlayer.setToken(aToken);
@@ -122,6 +139,7 @@ function lobbyResponseController()
     this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
     this.broadcastMessage = broadcastMessage;
+    this.respondLobbyUpdate = respondLobbyUpdate;
     
    // Should be private
    this.joinPlayer = _joinPlayer;
