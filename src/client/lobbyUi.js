@@ -374,6 +374,11 @@ function lobbyUi(aRequestController)
             playerTypeRoll.add(type1);
             playerTypeRoll.add(type2);
             playerTypeRoll.selectedIndex = 0;
+            
+            
+            playerTypeRoll.onchange = function(){
+                onSlotRollChange(playerTypeRoll);
+            };
         }
 
         // Real Player
@@ -610,9 +615,12 @@ function lobbyUi(aRequestController)
 
 
 
-    function onPlayerRollChange()
+    function onPlayerRollChange(aSelect, aId)
     {
-        
+        if(aSelect.value === "Open Slot")
+        {
+            _lobbyRequestController.kickPlayer(_currentLobby.getId(), aId);
+        }
     }
     
     function onBotRollChange()
