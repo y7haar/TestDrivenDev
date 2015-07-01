@@ -582,6 +582,25 @@ TestCase("LobbyResponseControllerJoinTest", {
         assertString(this.req.session.token);
     },
     
+    "test respondJoin should call sendStatus with 400 if req.session.token is already used in lobby": function () {
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "join",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
     "test respondJoin should call lobby.getUniqueToken": function () {
         this.req.body = {
            type: "join",
