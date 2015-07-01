@@ -7,10 +7,8 @@ if (typeof module !== "undefined")
     module.exports = nameListGenerator;
 }
 
-else
-{
-    tddjs.namespace("server.controller").nameListGenerator = nameListGenerator;
-}
+tddjs.namespace("server.controller").nameListGenerator = nameListGenerator;
+
 
 function nameListGenerator()
 {
