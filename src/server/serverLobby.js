@@ -15,6 +15,16 @@ function lobby()
     var _currentPlayerId = 0;
     var _usedTokens = {};
     var _started = false;
+    var _botNames = ["Peter", "Gregor", "Valentin", "Dennis", "Sebastian", "Christian", "Jonny"];
+    var _botColors = ["#808000", "#804000", "#6d946b", "#5a89a5", "#808080", "#9b9bce"];
+    var _botNameGenerator = new tddjs.server.controller.nameListGenerator();
+    var _botColorGenerator = new tddjs.server.controller.nameListGenerator(); 
+
+    _botNameGenerator.setNameList(_botNames);
+    _botNameGenerator.shuffleNameList();
+    
+    _botColorGenerator.setNameList(_botColors);
+    _botColorGenerator.shuffleNameList();
 
     function setId(aId)
     {
@@ -59,6 +69,8 @@ function lobby()
         
         var bot = new tddjs.server.player();
         bot.setType("bot");
+        bot.setName("BOT " + _botNameGenerator.getNextName());
+        bot.setColor(_botColorGenerator.getNextName());
         
         addPlayer(bot);
         
