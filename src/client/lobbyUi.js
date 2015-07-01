@@ -15,7 +15,8 @@ function lobbyUi(aRequestController)
     var _colorBoxes = [];
 
     var _startButton;
-
+    
+    var _self = this;
 
     function createContent()
     {
@@ -33,6 +34,8 @@ function lobbyUi(aRequestController)
         var refreshButton = document.createElement("div");
         refreshButton.innerHTML = "Search Lobbies";
         refreshButton.className = "lobbyRefresh";
+        
+        refreshButton.onclick = showLobbyOverview;
         
         h1Div.appendChild(h1);
         h1Div.appendChild(refreshButton);
@@ -91,7 +94,7 @@ function lobbyUi(aRequestController)
 
         td4Div.innerHTML = "Join";
 
-        var submit = this.onJoinSubmit;
+        var submit = _self.onJoinSubmit;
 
         td4.onclick = function() {
             submit(lobbyId);
@@ -475,8 +478,8 @@ function lobbyUi(aRequestController)
 
     function showLobbyOverview()
     {
-        this.createContent();
-        this.createWrapper();
+        _self.createContent();
+        _self.createWrapper();
 
         var wrapper = document.getElementById("lobbyWrapper");
         _lobbyRequestController.requestAllLobbies();
@@ -598,23 +601,23 @@ function lobbyUi(aRequestController)
     {
         var lobby = new tddjs.client.model.lobby();
         lobby.deserialize(aLobby);
-        this.setCurrentLobby(lobby);
-        this.showLobbyForPlayer();
+        _self.setCurrentLobby(lobby);
+        _self.showLobbyForPlayer();
     }
     
     function showLobbyForPlayer()
     {
         _resetBody();
-        this.createLobbyContent();
-        this.createWrapper();
+        _self.createLobbyContent();
+        _self.createWrapper();
         
         if(_currentLobby.getLeader().getId() === _currentPlayer.getId())
-            this.showLeaderLobby(_currentLobby);
+            _self.showLeaderLobby(_currentLobby);
             
         else
-            this.showLobby(_currentLobby);
+            _self.showLobby(_currentLobby);
         
-        this.setPlayerEditable(_currentPlayer.getId());
+        _self.setPlayerEditable(_currentPlayer.getId());
     }
     
     function _resetBody()
