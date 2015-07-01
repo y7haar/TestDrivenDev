@@ -26,14 +26,6 @@ var lobbyApp = express();
 
 lobbyApp.use(bodyParser.json({}));
 
-lobbyApp.use(sessions({
-  cookieName: 'session',
-  secret: 'usdnzfu303un04fu43fnpp09suwendwe', 
-  duration: 1000 * 60 * 60, // 1 Day valid 24 * 60 * 60 * 1000
-  activeDuration: 1000 * 60 * 5 //1000 * 60 * 5 
-}));
-
-
 var lobbyController = tddjs.server.controller.lobbyController.getInstance();
 
 lobbyApp.get("", function (req, res) {
