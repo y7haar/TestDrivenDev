@@ -2,7 +2,7 @@
  *
  * Testcases for Country
  */
-TestCase("CountryBorderTest",
+TestCase("serverCountryBorderTest",
 {
     setUp: function () 
     {
@@ -78,7 +78,7 @@ TestCase("CountryBorderTest",
 });
 
 // testcaes for Country name
-TestCase("CountryNameTest",
+TestCase("serverCountryNameTest",
 {
     setUp: function () 
     {
@@ -130,7 +130,7 @@ TestCase("CountryNameTest",
 
 
 // Testcaes for Soldier --> Units of a Country
-TestCase("CountryUnitsTest", 
+TestCase("serverCountryUnitsTest", 
 {
     setUp: function ()
     {
@@ -221,7 +221,7 @@ TestCase("CountryUnitsTest",
 });
 
 // Testcases for Player --> Owner of a country
-TestCase("CountryOwnerTest",
+TestCase("serverCountryOwnerTest",
 {
     setUp: function ()
     {
