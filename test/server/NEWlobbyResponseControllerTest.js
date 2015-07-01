@@ -70,6 +70,7 @@ TestCase("NewLobbyResponseControllerTest", {
         this.respondLobbyUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "lobbyUpdate");
         this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "playerUpdate");
         this.respondGameStartSpy = this.sandbox.stub(this.lrc.respondMethods, "gameStart");
+        this.respondBotJoinSpy = this.sandbox.stub(this.lrc.respondMethods, "botJoin");
         
         this.respondBadRequestSpy = this.sandbox.spy(this.lrc, "respondBadRequest");
         
@@ -180,6 +181,19 @@ TestCase("NewLobbyResponseControllerTest", {
         
         sinon.assert.calledOnce(this.respondGameStartSpy);
         sinon.assert.calledWith(this.respondGameStartSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondBotJoin if type is botJoin": function () {
+        this.req.body = {
+            type: "botJoin"
+        };
+        
+        sinon.assert.notCalled(this.respondBotJoinSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondBotJoinSpy);
+        sinon.assert.calledWith(this.respondBotJoinSpy, this.req, this.res);
     },
     
     "test respondByType should call respondBadRequest if type is not valid": function () {
@@ -470,7 +484,7 @@ function lobbyResponseControllerSetup()
     this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
     this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
     this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
-    //this.addBotSpy = this.sandbox.spy(this.lobby, "addBot");
+    this.addBotSpy = this.sandbox.spy(this.lobby, "addBot");
     this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
     this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
     this.resJsonSpy = this.sandbox.spy(this.res, "json");
