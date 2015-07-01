@@ -283,7 +283,7 @@ function lobbyRequestController()
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
 
-    function kickBot(aLobbyId, aId)
+    function kickBot(aLobbyId, aId, callback)
     {
         if (typeof aLobbyId !== "number")
             throw new TypeError("Id must be number");
@@ -304,13 +304,15 @@ function lobbyRequestController()
             headers: {
                 "Content-Type": "application/json"
             },
-            data: data
+            data: data,
+            
+            onSuccess: callback
         };
 
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
     }
 
-    function kickPlayer(aLobbyId, aId)
+    function kickPlayer(aLobbyId, aId, callback)
     {
         if (typeof aLobbyId !== "number")
             throw new TypeError("Id must be number");
@@ -331,7 +333,9 @@ function lobbyRequestController()
             headers: {
                 "Content-Type": "application/json"
             },
-            data: data
+            data: data,
+            
+            onSuccess: callback
         };
 
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);

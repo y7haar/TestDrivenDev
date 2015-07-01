@@ -400,6 +400,11 @@ function lobbyUi(aRequestController)
             {
                 playerTypeRoll.add(type3);
                 playerTypeRoll.selectedIndex = 2;
+                
+                playerTypeRoll.onchange = function(){
+                onPlayerRollChange(playerTypeRoll, aPlayer.getId());
+            };
+                
             }
            
             playerName.innerHTML = aPlayer.getName();
@@ -620,6 +625,13 @@ function lobbyUi(aRequestController)
         if(aSelect.value === "Open Slot")
         {
             _lobbyRequestController.kickPlayer(_currentLobby.getId(), aId);
+        }
+        
+        else if(aSelect.value === "Bot")
+        {
+            _lobbyRequestController.kickPlayer(_currentLobby.getId(), aId, function(){
+                _lobbyRequestController.addBot(_currentLobby.getId());
+            });
         }
     }
     
