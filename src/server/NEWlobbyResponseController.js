@@ -125,6 +125,10 @@ function lobbyResponseController()
             if(_lobby.isStarted())
                 throw new Error("Lobby already started");
             
+            // Is player already logged in lobby as other player?
+            if(typeof req.session.token !== "undefined" && _lobby.getPlayerByToken(req.session.token) !== null)
+                throw new Error("Player already logged in");
+            
             var token = _lobby.getUniqueToken().toString();
             req.session.token = token;
             
