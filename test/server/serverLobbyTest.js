@@ -469,3 +469,85 @@ TestCase("LobbyServerAuthentificationTest", {
         assertNotEquals(tokens[1], tokens[2]);
     }
 });
+
+TestCase("LobbyBotTest", {
+    setUp: function() {
+        this.lobby = new tddjs.server.model.lobby();
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        
+        this.player1.setId(1);
+        this.player2.setId(2);
+        this.player1.setToken("T1");
+        this.player2.setToken("T2");
+        
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        this.lobby.setLeader(this.player1);
+    },
+    tearDown: function() {
+        delete this.lobby;
+        delete this.player1;
+        delete this.player2;
+    },
+    "test Lobby should have function to add bot": function() {
+        assertFunction(this.lobby.addBot);
+    },
+    
+    "test addBot should return instance of player": function() {
+        assertTrue(this.lobby.addBot() instanceof tddjs.server.player);
+    },
+    
+    "test new bot should have type of bot": function() {
+        var bot = this.lobby.addBot();
+        
+        assertEquals("bot", bot.getType());
+    },
+    
+    "test addBot should add new Bot to lobby if slots are empty": function() {
+        assertEquals(2, this.lobby.getPlayers().length);
+        
+        this.lobby.addBot();
+        assertEquals(3, this.lobby.getPlayers().length);
+    },
+    
+    "test addBot should not add new Bot to lobby if lobby is full": function() {
+        this.lobby.setMaxPlayers(2);
+        assertEquals(2, this.lobby.getPlayers().length);
+        
+        this.lobby.addBot();
+        assertEquals(2, this.lobby.getPlayers().length);
+    },
+    
+    "test addBot should return null if lobby is full": function() {
+        this.lobby.setMaxPlayers(2);
+        
+        var bot = this.lobby.addBot();
+        assertNull(bot);
+    },
+    
+    "test new bots should have different names": function() {
+        var bot1 = this.lobby.addBot();
+        var bot2 = this.lobby.addBot();
+        
+        assertNotEquals(bot1.getName(), bot2.getName());
+    },
+    
+    "test bot names should start with BOT {name}": function() {
+        var bot1 = this.lobby.addBot();
+        var bot2 = this.lobby.addBot();
+        
+        var nameSub1 = bot1.getName().substring(0, 3);
+        var nameSub2 = bot2.getName().substring(0, 3);
+        
+        assertEquals("BOT ", nameSub1);
+        assertEquals("BOT ", nameSub2);
+    },
+    
+    "test new bots should have different colors": function() {
+        var bot1 = this.lobby.addBot();
+        var bot2 = this.lobby.addBot();
+        
+        assertNotEquals(bot1.getColor(), bot2.getColor());
+    }
+});
