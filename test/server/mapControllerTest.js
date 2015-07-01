@@ -30,6 +30,13 @@ TestCase("MapControllerTest", {
         assertException(this.mapCon.getSerializedMap(),"Error");
     },
     
+    "test mapController should be reseted when reset is called":function(){
+        this.mapCon.init();
+        this.mapCon.reset();
+        
+        assertException(this.mapCon.getMap(),"Error");
+    },
+    
     "test if mapController return valid serverMap": function(){  
         this.mapCon.init();
         //TODO: strukture überlegen, wie was aufgerufen werden muss
