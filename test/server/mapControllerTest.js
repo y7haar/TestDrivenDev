@@ -23,13 +23,17 @@ TestCase("MapControllerTest", {
     },
     
     "test mapController should be setup before getMap is called":function(){
-        //TODO: test auf exeptionc etc
+        assertException(this.mapCon.getMap(),"Error");
+    },
+    
+    "test mapController should be setup before getSerializedMap is called":function(){
+        assertException(this.mapCon.getSerializedMap(),"Error");
     },
     
     "test if mapController return valid serverMap": function(){  
         this.mapCon.init();
         //TODO: strukture überlegen, wie was aufgerufen werden muss
-        this.mapCon.setPlayer();
+        this.mapCon.setPlayer(); //<- evtl in init direkt legen
         
         var map = this.mapCon.getMap();
         //TODO: test map
