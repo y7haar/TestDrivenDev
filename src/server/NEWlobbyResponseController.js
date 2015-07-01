@@ -163,7 +163,33 @@ function lobbyResponseController()
             
             var bot = _lobby.addBot();
             
-            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange", bot);
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
+    
+    function respondKick(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(typeof req.body.data.id !== "number")
+                throw new Error("Id must be setted");
+                
+            var player = _lobby.getPlayerById(req.body.data.id);
+            
+            if(player === null)
+                throw new Error("Player with Id does not exist");    
+                
+            _lobby.kickPlayer(player);
+                
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
         catch(e)
@@ -297,6 +323,7 @@ function lobbyResponseController()
     this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
     this.respondBotJoin = respondBotJoin;
+    this.respondKick = respondKick;
     this.broadcastMessage = broadcastMessage;
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
