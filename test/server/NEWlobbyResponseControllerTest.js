@@ -47,7 +47,7 @@ function fakeRes()
     };
 }
 
-TestCase("LobbyResponseControllerTest", {
+TestCase("NewLobbyResponseControllerTest", {
     setUp: function () {
         // Must be changed 
         this.lrc = new tddjs.server.controller.NEWlobbyResponseController();
