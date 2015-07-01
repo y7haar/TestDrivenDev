@@ -470,6 +470,7 @@ function lobbyResponseControllerSetup()
     this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
     this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
     this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+    //this.addBotSpy = this.sandbox.spy(this.lobby, "addBot");
     this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
     this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
     this.resJsonSpy = this.sandbox.spy(this.res, "json");
@@ -687,6 +688,84 @@ TestCase("LobbyResponseControllerJoinTest", {
 
         sinon.assert.calledOnce(this.addPlayerSpy);
         sinon.assert.calledWith(this.addPlayerSpy, this.newPlayer);
+    }
+});
+
+
+TestCase("LobbyResponseControllerBotJoinTest", {
+    setUp: lobbyResponseControllerSetup,
+    
+    tearDown: function ()
+    {
+        this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
+    },
+    
+    
+    "test lobbyResponseController should have function to respond on bot join": function () {
+        assertFunction(this.lrc.respondBotJoin);
+    },
+    
+    "test respondBotJoin should call sendStatus with 400 if req.body is no object": function () {
+        this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondBotJoin should call sendStatus with 400 if lobby already started": function () {
+        this.lobby.setStarted(true);
+        
+        this.req.body = {
+           type: "botJoin"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondBotJoin should NOT call sendStatus with 400 if object in body is valid": function () {
+        this.req.body = {
+           type: "botJoin"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+
+    "test respondBotJoin should call broadcastMessage with correct data": function () {
+        this.req.body = {
+           type: "botJoin"
+        };
+
+
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        var newPlayer = this.lobby.getPlayers()[this.lobby.getPlayers().length - 1];
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange", newPlayer);
+    },
+    
+    "test respondBotJoin should call lobby.addBot": function () {
+        sinon.assert.notCalled(this.addBotSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.addBotSpy);
     }
 });
 
