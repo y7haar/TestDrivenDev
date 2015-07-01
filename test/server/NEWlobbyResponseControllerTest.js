@@ -843,6 +843,22 @@ TestCase("LobbyResponseControllerKickTest", {
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
     },
     
+    "test respondKick should call sendStatus with 400 if no player with id exists": function () {
+        this.req.body = {
+            type: "botKick",
+            data: {
+                id: -1
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
     "test respondKick should NOT call sendStatus with 400 if object in body is valid": function () {
         this.req.body = {
            type: "playerKick",
