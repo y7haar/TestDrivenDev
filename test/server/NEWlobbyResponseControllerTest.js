@@ -514,6 +514,26 @@ TestCase("LobbyResponseControllerJoinTest", {
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
     },
     
+    "test respondJoin should call sendStatus with 400 if lobby already started": function () {
+        this.lobby.setStarted(true);
+        
+        this.req.body = {
+           type: "join",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
     "test respondJoin should NOT call sendStatus with 400 if player object in body is valid": function () {
         this.req.body = {
            type: "join",
