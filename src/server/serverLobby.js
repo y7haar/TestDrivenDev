@@ -51,7 +51,25 @@ function lobby()
         if (_players.length < _maxPlayers)
             _players.push(aPlayer);
     }
-
+    
+    function addBot()
+    {
+        if(_isFull())
+            return null;
+        
+        var bot = new tddjs.server.player();
+        bot.setType("bot");
+        
+        addPlayer(bot);
+        
+        return bot;
+    }
+    
+    function _isFull()
+    {
+        return (_players.length >= _maxPlayers);
+    }
+    
     function getPlayers()
     {
         return _players;
@@ -223,6 +241,7 @@ function lobby()
     }
 
     this.addPlayer = addPlayer;
+    this.addBot = addBot;
     this.getPlayers = getPlayers;
     this.setMaxPlayers = setMaxPlayers;
     this.getMaxPlayers = _getMaxPlayers;
