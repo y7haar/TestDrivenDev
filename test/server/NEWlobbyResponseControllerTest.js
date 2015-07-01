@@ -484,6 +484,7 @@ function lobbyResponseControllerSetup()
     this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
     this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
     this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+    this.kickPlayerSpy = this.sandbox.spy(this.lobby, "kickPlayer");
     this.addBotSpy = this.sandbox.spy(this.lobby, "addBot");
     this.lobbyUniqueTokenSpy = this.sandbox.spy(this.lobby, "getUniqueToken");
     this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
@@ -819,6 +820,20 @@ TestCase("LobbyResponseControllerKickTest", {
     
     "test respondKick should call sendStatus with 400 if req.body is no object": function () {
         this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondKick should call sendStatus with 400 if req.body.data.id is no number": function () {
+        this.req.body = {
+            type: "botKick",
+            data: {}
+        };
 
         sinon.assert.notCalled(this.resSendStatusSpy);
 
