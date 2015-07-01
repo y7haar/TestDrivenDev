@@ -349,5 +349,7 @@ function lobbyResponseController()
    this.respondMethods["lobbyUpdate"] = this.respondLobbyUpdate;
    this.respondMethods["playerUpdate"] = this.respondPlayerUpdate;
    this.respondMethods["gameStart"] = this.respondGameStart;
+   this.respondMethods["botKick"] = this.respondKick;
+   this.respondMethods["playerKick"] = this.respondKick;
    
 }
