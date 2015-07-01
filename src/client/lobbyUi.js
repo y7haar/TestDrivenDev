@@ -35,7 +35,10 @@ function lobbyUi(aRequestController)
         refreshButton.innerHTML = "Search Lobbies";
         refreshButton.className = "lobbyRefresh";
         
-        refreshButton.onclick = showLobbyOverview;
+        refreshButton.onclick = function()
+        {
+            _lobbyRequestController.requestAllLobbies();
+        };
         
         h1Div.appendChild(h1);
         h1Div.appendChild(refreshButton);
@@ -478,6 +481,7 @@ function lobbyUi(aRequestController)
 
     function showLobbyOverview()
     {
+        _resetBody();
         _self.createContent();
         _self.createWrapper();
 
