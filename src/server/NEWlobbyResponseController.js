@@ -304,6 +304,7 @@ function lobbyResponseController()
    
    this.respondMethods = {};
    this.respondMethods["join"] = this.respondJoin;
+   this.respondMethods["botJoin"] = this.respondBotJoin;
    this.respondMethods["lobbyUpdate"] = this.respondLobbyUpdate;
    this.respondMethods["playerUpdate"] = this.respondPlayerUpdate;
    this.respondMethods["gameStart"] = this.respondGameStart;
