@@ -803,6 +803,81 @@ TestCase("LobbyResponseControllerBotJoinTest", {
 });
 
 
+TestCase("LobbyResponseControllerKickTest", {
+    setUp: lobbyResponseControllerSetup,
+    
+    tearDown: function ()
+    {
+        this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
+    },
+    
+    
+    "test lobbyResponseController should have function to respond on player/bot kick": function () {
+        assertFunction(this.lrc.respondKick);
+    },
+    
+    "test respondKick should call sendStatus with 400 if req.body is no object": function () {
+        this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondKick should NOT call sendStatus with 400 if object in body is valid": function () {
+        this.req.body = {
+           type: "playerKick",
+           data: {
+               id: 1
+           }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+
+    "test respondKick should call broadcastMessage with correct data": function () {
+        this.req.body = {
+           type: "playerKick",
+           data: {
+               id: 1
+           }
+        };
+
+
+        sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
+    },
+    
+    "test respondKick should call lobby.kickPlayer": function () {
+        this.req.body = {
+           type: "playerKick",
+           data: {
+               id: 1
+           }
+        };
+        
+        sinon.assert.notCalled(this.kickPlayerSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.kickPlayerSpy);
+        sinon.assert.calledWith(this.kickPlayerSpy, 1);
+    }
+});
+
+
 TestCase("LobbyResponseControllerLobbyUpdateTest", {
     setUp: lobbyResponseControllerSetup,
     
