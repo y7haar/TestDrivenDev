@@ -147,6 +147,27 @@ function lobbyResponseController()
         }
     }
     
+    function respondBotJoin(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(_lobby.isStarted())
+                throw new Error("Lobby already started");
+            
+            var bot = _lobby.addBot();
+            
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange", bot);
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
+    
     function respondLobbyUpdate(req, res)
     {
         try
@@ -271,6 +292,7 @@ function lobbyResponseController()
     this.setLobbyById = setLobbyById;
     this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
+    this.respondBotJoin = respondBotJoin;
     this.broadcastMessage = broadcastMessage;
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
