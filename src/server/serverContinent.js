@@ -3,7 +3,7 @@ Source-Code for Continent
  */
 if(typeof module !== "undefined")
 {
-    module.exports = mapGenerator;
+    module.exports = continent;
 }
 else
     tddjs.namespace("server.map").continent = continent;
