@@ -537,8 +537,8 @@ TestCase("LobbyBotTest", {
         var bot1 = this.lobby.addBot();
         var bot2 = this.lobby.addBot();
         
-        var nameSub1 = bot1.getName().substring(0, 3);
-        var nameSub2 = bot2.getName().substring(0, 3);
+        var nameSub1 = bot1.getName().substring(0, 4);
+        var nameSub2 = bot2.getName().substring(0, 4);
         
         assertEquals("BOT ", nameSub1);
         assertEquals("BOT ", nameSub2);
