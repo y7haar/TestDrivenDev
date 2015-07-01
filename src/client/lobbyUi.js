@@ -28,9 +28,14 @@ function lobbyUi(aRequestController)
         h1Div.className = "lobbiesTitle";
 
         var h1 = document.createElement("h1");
-        h1.innerHTML = "Lobbies";
-
+        h1.innerHTML = "Game Lobbies";
+        
+        var refreshButton = document.createElement("div");
+        refreshButton.innerHTML = "Search Lobbies";
+        refreshButton.className = "lobbyRefresh";
+        
         h1Div.appendChild(h1);
+        h1Div.appendChild(refreshButton);
         content.appendChild(h1Div);
 
         body.appendChild(content);
@@ -158,7 +163,7 @@ function lobbyUi(aRequestController)
         var wrapper = document.getElementById("lobbyWrapper");
         var title = document.createElement("h1");
         title.innerHTML = "#" + aLobby.getId() + " " + aLobby.getName();
-        title.className = "lobbyTitle";
+        title.className = "lobbySingleTitle";
 
         var p = document.createElement("p");
         p.className = "lobbyMaxPlayers";

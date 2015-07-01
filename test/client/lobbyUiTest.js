@@ -271,7 +271,7 @@ TestCase("SingleLobbyUiTest", {
         var wrapperNodes = wrapper.childNodes;
         var h1 = wrapperNodes[0];
         assertTagName("h1", h1);
-        assertEquals("lobbyTitle", h1.className);
+        assertEquals("lobbySingleTitle", h1.className);
         assertEquals("#" + 0 + " " + "L1", h1.innerHTML);
     },
     "test showLobby should show a lobby with correct players / maxPlayers": function() {

@@ -7,11 +7,19 @@
 body
 {
     font-family: "Verdana";
+    background-color: #aaa;
 }
 
 .content
 {
     margin: 0 auto;
+    //margin-top: 50px;
+    padding-bottom: 20px;
+    max-width: 1000px;
+    background-color: #cccccc;
+    border-radius: 5px;
+    
+    //box-shadow: 0px 0px 5px 2px #444;
 }
 
 .lobbyWrapper
@@ -20,7 +28,7 @@ body
 
     margin: 0 auto;
     background-color: #cccccc;
-    padding-top: 20px;
+    //padding-top: 20px;
     padding-bottom: 20px;
     padding-left: 0px;
     padding-right: 0px;
@@ -36,11 +44,11 @@ body
     margin: 0 auto;
     background-color: #cccccc;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 7px;
 
 }
 
-.lobbyTitle
+.lobbyTitle, .lobbySingleTitle
 {
     max-width: 900px;
     min-width: 630px;
@@ -56,16 +64,25 @@ body
 
 }
 
+.lobbySingleTitle
+{
+    padding-top: 20px;
+}
+
+
 .lobby
 {
-    border: 1px solid #fff;
     background-color: #bbb;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 10px;
     padding-right: 10px;
 
+    margin-bottom: 7px;
+    
     font-size: 20px;
+    
+    border-radius: 1px;
 }
 
 .lobbiesId
@@ -94,7 +111,7 @@ body
     padding-left:20px;
 }
 
-.lobbyJoin
+.lobbyJoin, .lobbyRefresh
 {
     text-align: center;
 
@@ -113,10 +130,19 @@ body
     cursor: pointer;
 }
 
+.lobbyRefresh
+{
+    margin: 0 auto;
+    margin-top: 50px;
+    //max-width: 500px;
+    border: none;
+    border-radius: 1px;
+    background-color: #aaa;
+    color: steelblue;
+}
 
 .lobbyPlayer
 {
-    border: 1px solid #fff;
     background-color: #bbb;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -124,6 +150,9 @@ body
     padding-right: 10px;
 
     font-size: 20px;
+    
+    margin-bottom: 5px;
+    border-radius: 1px;
 }
 
 .playerColor
@@ -156,7 +185,7 @@ body
     min-width: 100px;
     height:25px;
     text-align: left;
-    border: 2px solid seagreen;
+    border: 2px solid steelblue;
     border-radius: 3px;
     background-color: #dddddd;
 
@@ -191,7 +220,7 @@ body
     min-width: 40px;
     height:25px;
     text-align: left;
-    border: 2px solid seagreen;
+    border: 2px solid steelblue;
     border-radius: 3px;
     background-color: #dddddd;
 
