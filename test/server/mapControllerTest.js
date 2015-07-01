@@ -22,6 +22,10 @@ TestCase("MapControllerTest", {
         assertInstanceOf(tddjs.server.controller.mapController,mapGen);
     },
     
+    "test mapController should be setup before getMap is called":function(){
+        //TODO: test auf exeptionc etc
+    },
+    
     "test if mapController return valid serverMap": function(){  
         this.mapCon.init();
         //TODO: strukture überlegen, wie was aufgerufen werden muss
