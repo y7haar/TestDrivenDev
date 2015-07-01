@@ -767,6 +767,7 @@ TestCase("LobbyResponseControllerBotJoinTest", {
     },
     
     "test respondBotJoin should NOT call sendStatus with 400 if object in body is valid": function () {
+        this.req.session.token = "1234";
         this.req.body = {
            type: "botJoin"
         };
@@ -777,7 +778,38 @@ TestCase("LobbyResponseControllerBotJoinTest", {
 
         sinon.assert.notCalled(this.resSendStatusSpy);
     },
+    
+    "test respondBotJoin should call sendStatus with 400 if request has no token": function () {
+        this.req.session.token = undefined;
+        
+        this.req.body = {
+           type: "botJoin"
+        };
 
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondBotJoin should call sendStatus with 400 if request is not from leader": function () {
+        // Token from player2
+        this.req.session.token = "2345";
+        
+        this.req.body = {
+           type: "botJoin"
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondBotJoin(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
     "test respondBotJoin should call broadcastMessage with correct data": function () {
         this.req.body = {
            type: "botJoin"
@@ -791,7 +823,7 @@ TestCase("LobbyResponseControllerBotJoinTest", {
         var newPlayer = this.lobby.getPlayers()[this.lobby.getPlayers().length - 1];
         sinon.assert.calledOnce(this.broadcastMessageSpy);
 
-        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange", newPlayer);
+        sinon.assert.calledWith(this.broadcastMessageSpy, this.lobby.serializeAsObject(), "lobbychange");
     },
     
     "test respondBotJoin should call lobby.addBot": function () {
@@ -873,6 +905,43 @@ TestCase("LobbyResponseControllerKickTest", {
 
         sinon.assert.notCalled(this.resSendStatusSpy);
     },
+    
+     "test respondKick should call sendStatus with 400 if request has no token": function () {
+        this.req.session.token = undefined;
+        
+        this.req.body = {
+           type: "playerKick",
+           data: {
+               id: 1
+           }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondKick should call sendStatus with 400 if request is not from leader": function () {
+        // Token from player2
+        this.req.session.token = "2345";
+        
+       this.req.body = {
+           type: "playerKick",
+           data: {
+               id: 1
+           }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondKick(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
 
     "test respondKick should call broadcastMessage with correct data": function () {
         this.req.body = {
@@ -904,7 +973,7 @@ TestCase("LobbyResponseControllerKickTest", {
         this.lrc.respondKick(this.req, this.res);
 
         sinon.assert.calledOnce(this.kickPlayerSpy);
-        sinon.assert.calledWith(this.kickPlayerSpy, 1);
+        sinon.assert.calledWith(this.kickPlayerSpy, this.player2);
     }
 });
 
