@@ -161,6 +161,11 @@ function lobbyResponseController()
             if(_lobby.isStarted())
                 throw new Error("Lobby already started");
             
+            var token = req.session.token;
+                
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
+            
             var bot = _lobby.addBot();
             
             _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
@@ -182,6 +187,11 @@ function lobbyResponseController()
             if(typeof req.body.data.id !== "number")
                 throw new Error("Id must be setted");
                 
+            var token = req.session.token;
+                
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
+            
             var player = _lobby.getPlayerById(req.body.data.id);
             
             if(player === null)
