@@ -761,6 +761,27 @@ TestCase("SingleLobbyUiLeaderTest", {
         
         sinon.assert.calledOnce(kickPlayerSpy);
         sinon.assert.calledWith(kickPlayerSpy, this.lobby3.getId(), 1);
+    },
+    
+    "test onPlayerRollChange should call req-controller kickPlayer with callback if Bot is selected": function() {
+        var roll = document.createElement("select");
+        var option1 = document.createElement("option");
+        option1.innerHTML = "Bot";
+        
+        roll.add(option1);
+        
+        roll.value = "Bot";
+        
+        var kickPlayerSpy = this.sandbox.stub(this.lobbyRequestController, "kickPlayer");
+        
+        sinon.assert.notCalled(kickPlayerSpy);
+        
+        this.lobbyUi.onPlayerRollChange(roll, 1);
+        
+        sinon.assert.calledOnce(kickPlayerSpy);
+        sinon.assert.calledWith(kickPlayerSpy, this.lobby3.getId(), 1);
+        
+        assertTrue(typeof kickPlayerSpy.args[0][2] === "function");
     }
 });
 
