@@ -71,6 +71,8 @@ TestCase("NewLobbyResponseControllerTest", {
         this.respondPlayerUpdateSpy = this.sandbox.stub(this.lrc.respondMethods, "playerUpdate");
         this.respondGameStartSpy = this.sandbox.stub(this.lrc.respondMethods, "gameStart");
         this.respondBotJoinSpy = this.sandbox.stub(this.lrc.respondMethods, "botJoin");
+        this.respondPlayerKickSpy = this.sandbox.stub(this.lrc.respondMethods, "playerKick");
+        this.respondBotKickSpy = this.sandbox.stub(this.lrc.respondMethods, "botKick");
         
         this.respondBadRequestSpy = this.sandbox.spy(this.lrc, "respondBadRequest");
         
@@ -194,6 +196,32 @@ TestCase("NewLobbyResponseControllerTest", {
         
         sinon.assert.calledOnce(this.respondBotJoinSpy);
         sinon.assert.calledWith(this.respondBotJoinSpy, this.req, this.res);
+    },
+    
+    "test respondByType should call respondKick if type is playerKick": function () {
+        this.req.body = {
+            type: "playerKick"
+        };
+        
+        sinon.assert.notCalled(this.respondPlayerKickSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondPlayerKickSpy);
+        sinon.assert.calledWith(this.respondPlayerKickSpy, this.req, this.res);
+    },
+    
+     "test respondByType should call respondKick if type is botKick": function () {
+        this.req.body = {
+            type: "botKick"
+        };
+        
+        sinon.assert.notCalled(this.respondBotKickSpy);
+        
+        this.lrc.respondByType(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.respondBotKickSpy);
+        sinon.assert.calledWith(this.respondBotKickSpy, this.req, this.res);
     },
     
     "test respondByType should call respondBadRequest if type is not valid": function () {
