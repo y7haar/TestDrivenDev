@@ -741,6 +741,7 @@ TestCase("LobbyResponseControllerBotJoinTest", {
     },
     
     "test respondBotJoin should call sendStatus with 400 if req.body is no object": function () {
+        this.req.session.token = "1234";
         this.req.body = undefined;
 
         sinon.assert.notCalled(this.resSendStatusSpy);
@@ -752,6 +753,7 @@ TestCase("LobbyResponseControllerBotJoinTest", {
     },
     
     "test respondBotJoin should call sendStatus with 400 if lobby already started": function () {
+        this.req.session.token = "1234";
         this.lobby.setStarted(true);
         
         this.req.body = {
@@ -811,6 +813,7 @@ TestCase("LobbyResponseControllerBotJoinTest", {
     },
     
     "test respondBotJoin should call broadcastMessage with correct data": function () {
+        this.req.session.token = "1234";
         this.req.body = {
            type: "botJoin"
         };
@@ -827,6 +830,11 @@ TestCase("LobbyResponseControllerBotJoinTest", {
     },
     
     "test respondBotJoin should call lobby.addBot": function () {
+        this.req.session.token = "1234";
+        this.req.body = {
+           type: "botJoin"
+        };
+        
         sinon.assert.notCalled(this.addBotSpy);
 
         this.lrc.respondBotJoin(this.req, this.res);
@@ -851,6 +859,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
     
     "test respondKick should call sendStatus with 400 if req.body is no object": function () {
+        this.req.session.token = "1234";
         this.req.body = undefined;
 
         sinon.assert.notCalled(this.resSendStatusSpy);
@@ -862,6 +871,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
     
     "test respondKick should call sendStatus with 400 if req.body.data.id is no number": function () {
+        this.req.session.token = "1234";
         this.req.body = {
             type: "botKick",
             data: {}
@@ -876,6 +886,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
     
     "test respondKick should call sendStatus with 400 if no player with id exists": function () {
+        this.req.session.token = "1234";
         this.req.body = {
             type: "botKick",
             data: {
@@ -892,6 +903,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
     
     "test respondKick should NOT call sendStatus with 400 if object in body is valid": function () {
+        this.req.session.token = "1234";
         this.req.body = {
            type: "playerKick",
            data: {
@@ -944,6 +956,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
 
     "test respondKick should call broadcastMessage with correct data": function () {
+        this.req.session.token = "1234";
         this.req.body = {
            type: "playerKick",
            data: {
@@ -961,6 +974,7 @@ TestCase("LobbyResponseControllerKickTest", {
     },
     
     "test respondKick should call lobby.kickPlayer": function () {
+        this.req.session.token = "1234";
         this.req.body = {
            type: "playerKick",
            data: {
