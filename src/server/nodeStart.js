@@ -44,8 +44,8 @@ function useCors(req, res)
 app.use(sessions({
   cookieName: 'session',
   secret: 'usdnzfu303un04fu43fnpp09suwendwe', 
-  duration: 1000 * 20, // 1 Day valid 24 * 60 * 60 * 1000
-  activeDuration: 1000 * 30 //1000 * 60 * 5 
+  duration: 1000 * 60 * 60, // 1 Day valid 24 * 60 * 60 * 1000
+  activeDuration: 1000 * 60 * 5 //1000 * 60 * 5 
 }));
 
 app.use(bodyParser.json({}));
