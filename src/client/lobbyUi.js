@@ -635,9 +635,12 @@ function lobbyUi(aRequestController)
         }
     }
     
-    function onBotRollChange()
+    function onBotRollChange(aSelect, aId)
     {
-        
+        if(aSelect.value === "Open Slot")
+        {
+            _lobbyRequestController.kickBot(_currentLobby.getId(), aId);
+        }
     }
     
     function onSlotRollChange(aSelect)
