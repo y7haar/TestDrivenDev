@@ -122,6 +122,8 @@ function lobbyResponseController()
             if(typeof req.body.player !== "object")
                 throw new Error("Player must not be empty");
             
+            if(_lobby.isStarted())
+                throw new Error("Lobby already started");
             
             var token = _lobby.getUniqueToken().toString();
             req.session.token = token;
@@ -141,8 +143,6 @@ function lobbyResponseController()
         
         catch(e)
         {
-            console.log("BAD REQUEST");
-            console.log(e);
             res.sendStatus(400);
         }
     }
