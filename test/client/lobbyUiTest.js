@@ -257,7 +257,7 @@ TestCase("LobbyUiTest", {
     },
     
     "test showLobbyOverview should call requestAllLobbies in interval": function() {
-        
+        var interval = 10000;
 
         var requestController = this.lobbyUi.getLobbyRequestController();
         var requestAllLobbiesSpy = this.sandbox.spy(requestController, "requestAllLobbies");
@@ -268,11 +268,11 @@ TestCase("LobbyUiTest", {
 
         sinon.assert.calledOnce(requestAllLobbiesSpy);
         
-        this.clock.tick(5000);
+        this.clock.tick(interval);
         
         sinon.assert.calledTwice(requestAllLobbiesSpy);
         
-        this.clock.tick(5000);
+        this.clock.tick(interval);
         
         sinon.assert.calledThrice(requestAllLobbiesSpy);
     }
