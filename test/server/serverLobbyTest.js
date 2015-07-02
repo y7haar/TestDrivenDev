@@ -255,7 +255,7 @@ TestCase("LobbyServerTest", {
      "test startGame should set started to true": function() {
          assertFalse(this.lobby.isStarted());
          this.lobby.startGame();
-         assertTrue(this.lobby.isStarted);
+         assertTrue(this.lobby.isStarted());
     },
     
     
