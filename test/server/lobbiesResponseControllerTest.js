@@ -175,6 +175,15 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
     },
     
     "test _initLobby should set req.session.token": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+        
         assertUndefined(this.req.session.token);
         this.lrc._initializeLobby(new tddjs.server.model.lobby(), this.req, this.res);
 
@@ -213,6 +222,23 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         this.lrc._initializeLobby(lobby, this.req, this.res);
         
         assertEquals(1, lobby.getPlayers().length);
+    },
+    
+    "test _initLobby should create a new Player and set it as leader": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+        
+        var lobby = new tddjs.server.model.lobby();
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        assertEquals(0, lobby.getLeader().getId());
     },
     
      "test _initLobby should set Players name": function () {
