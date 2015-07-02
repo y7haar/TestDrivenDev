@@ -312,7 +312,7 @@ function lobbyResponseController()
             if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
                 throw new Error("Player is not valid");
             
-            _lobby.setStarted(true);
+            _lobby.startGame();
             
             res.sendStatus(200);
         }
