@@ -14,6 +14,8 @@ function lobbyUi(aRequestController)
     var _currentPlayer;
     var _colorBoxes = [];
 
+    var _refreshHandler;
+    
     var _startButton;
     
     var _self = this;
@@ -146,7 +148,9 @@ function lobbyUi(aRequestController)
 
         if (typeof aPlayer === "undefined")
             aPlayer = defaultPlayer;
-
+        
+        clearInterval(_refreshHandler);
+        
         _lobbyRequestController.requestJoin(aLobbyId, aPlayer);
     }
     
@@ -491,6 +495,10 @@ function lobbyUi(aRequestController)
 
         var wrapper = document.getElementById("lobbyWrapper");
         _lobbyRequestController.requestAllLobbies();
+        
+        _refreshHandler = setInterval(function(){
+            _lobbyRequestController.requestAllLobbies();
+        }, 10000);
     }
     
     function onNewLobbySubmit()
@@ -500,6 +508,9 @@ function lobbyUi(aRequestController)
             var defaultPlayer = new tddjs.client.player();
             defaultPlayer.setName("Unnamed Player");
             defaultPlayer.setColor("#ffffff");
+            
+            clearInterval(_refreshHandler);
+            
             _lobbyRequestController.requestNewLobby(defaultPlayer);
         }
         catch(e)
