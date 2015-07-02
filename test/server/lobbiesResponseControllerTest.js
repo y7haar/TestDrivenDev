@@ -338,5 +338,40 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         this.lrc.respondNewLobby(this.req, this.res);
         
         assertEquals(length + 1, this.lobbyController.getLobbies().length);
+    },
+    
+    "test respondNewLobby should call res.json with new lobby and current player": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#123123",
+                type: "human"
+            }
+        };
+        
+        var wrapper = {
+            lobby: {
+                id: 0,
+                name: "GameLobby",
+                
+                players: [ ]
+            },
+            currentPlayerId: 0
+        };
+        
+        wrapper.lobby.players[0] = {
+            id: 0,
+            name: "Unamed Player",
+            type: "human",
+            color: "#123123"
+        };
+        
+        sinon.assert.notCalled(this.resJsonSpy);
+
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resJsonSpy);
+        sinon.assert.calledWith(this.resJsonSpy, wrapper);
     }
 });
