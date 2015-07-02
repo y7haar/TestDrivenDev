@@ -311,7 +311,22 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         this.lrc._initializeLobby(lobby, this.req, this.res);
         
         sinon.assert.calledOnce(spy);
-    }
+    },
     
-    // TODO helper method for creating a new lobby / adding player to lobby
+    "test respondNewLobby should add lobby to lobbyController": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#123123",
+                type: "human"
+            }
+        };
+        
+        var length = this.lobbyController.getLobbies().length;
+        
+        this.lrc.respondNewLobby(this.req, this.res);
+        
+        assertEquals(length + 1, this.lobbyController.getLobbies().length);
+    }
 });
