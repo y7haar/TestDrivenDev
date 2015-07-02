@@ -20,6 +20,8 @@ function lobby()
     var _botNameGenerator = new tddjs.server.controller.nameListGenerator();
     var _botColorGenerator = new tddjs.server.controller.nameListGenerator(); 
 
+    var _mapController = new tddjs.server.controller.mapController();
+
     _botNameGenerator.setNameList(_botNames);
     _botNameGenerator.shuffleNameList();
     
@@ -43,6 +45,11 @@ function lobby()
         return _id;
     }
     
+    function getMapController()
+    {
+        return _mapController;
+    }
+    
     function isStarted()
     {
         return _started;
@@ -50,6 +57,7 @@ function lobby()
     
     function startGame()
     {
+        _mapController.init(_players);
         setStarted(true);
     }
     
@@ -270,6 +278,8 @@ function lobby()
     this.isStarted = isStarted;
     this.setStarted = setStarted;
     this.startGame = startGame;
+    
+    this.getMapController = getMapController;
     
     this.getPlayerByToken = getPlayerByToken;
     this.isPlayerTokenValid = isPlayerTokenValid;
