@@ -113,11 +113,14 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
     {
         this.lrc = new tddjs.server.controller.lobbiesResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        
+        this.req = new fakeReq();
+        this.res = new fakeRes();
+        
         this.sandbox = sinon.sandbox.create();
         
         this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
-        this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
-        this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+        this.initLobbySpy = this.sandbox.spy(this.lrc, "_initializeLobby");
         this.resJsonSpy = this.sandbox.spy(this.res, "json");
     },
     
@@ -171,7 +174,14 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         sinon.assert.notCalled(this.resSendStatusSpy);
     },
     
-    "test respondNewLobby should set req.session.token": function () {
+    "test _initLobby should set req.session.token": function () {
+        assertUndefined(this.req.session.token);
+        this.lrc._initializeLobby(new tddjs.server.model.lobby(), this.req, this.res);
+
+        assertString(this.req.session.token);
+    },
+    
+    "test respondNewLobby should call _initLobby": function () {
         this.req.body = {
            type: "create",
             player: {
@@ -180,11 +190,12 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
                 type: "human"
             }
         };
+        
+        sinon.assert.notCalled(this.initLobbySpy);
 
-        assertUndefined(this.req.session.token);
         this.lrc.respondNewLobby(this.req, this.res);
 
-        assertString(this.req.session.token);
+        sinon.assert.calledOnce(this.initLobbySpy);
     }
     
     // TODO helper method for creating a new lobby / adding player to lobby
