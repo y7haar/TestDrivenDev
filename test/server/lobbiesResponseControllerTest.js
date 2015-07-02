@@ -106,3 +106,86 @@ TestCase("LobbiesResponseControllerTest", {
     }
     
 });
+
+
+TestCase("LobbiesResponseControllerNewLobbyTest", {
+    setUp: function()
+    {
+        this.lrc = new tddjs.server.controller.lobbiesResponseController();
+        this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
+        this.sandbox = sinon.sandbox.create();
+        
+        this.resSendStatusSpy = this.sandbox.spy(this.res, "sendStatus");
+        this.newPlayerTokenSpy = this.sandbox.spy(this.newPlayer, "setToken");
+        this.addPlayerSpy = this.sandbox.spy(this.lobby, "addPlayer");
+        this.resJsonSpy = this.sandbox.spy(this.res, "json");
+    },
+    
+    tearDown: function ()
+    {
+        this.sandbox.restore();
+        this.lobbyController.getLobbies().length = 0;
+    },
+    
+    
+    "test lobbiesResponseController should have function to respond on new lobby request": function () {
+        assertFunction(this.lrc.respondNewLobby);
+    },
+    
+    "test respondNewLobby should call sendStatus with 400 if req.body is no object": function () {
+        this.req.body = undefined;
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondNewLobby should call sendStatus with 400 if req.body.player is no object": function () {
+        this.req.body = {};
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
+    "test respondNewLobby should NOT call sendStatus with 400 if player object in body is valid": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+    },
+    
+    "test respondNewLobby should set req.session.token": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+
+        assertUndefined(this.req.session.token);
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        assertString(this.req.session.token);
+    }
+    
+    // TODO helper method for creating a new lobby / adding player to lobby
+});
