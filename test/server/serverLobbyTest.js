@@ -248,6 +248,16 @@ TestCase("LobbyServerTest", {
         assertTrue(this.lobby.isStarted());
     },
     
+    "test lobby should have function startGame": function() {
+        assertFunction(this.lobby.startGame);
+    },
+    
+     "test startGame should set started to true": function() {
+         assertFalse(this.lobby.isStarted());
+         this.lobby.startGame();
+         assertTrue(this.lobby.isStarted);
+    },
+    
     
     "test Lobby should have a serialize method that returns a json string": function() {
         this.player1.setName("Bob");
