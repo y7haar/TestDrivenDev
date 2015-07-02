@@ -224,6 +224,8 @@ TestCase("LobbyServerTest", {
         this.player2 = new tddjs.server.player();
         this.player3 = new tddjs.server.player();
         this.lobby.setMaxPlayers(4);
+        
+        this.sandbox = sinon.sandbox.create();
     },
     tearDown: function() {
         this.lobby.getPlayers().length = 0;
@@ -231,6 +233,8 @@ TestCase("LobbyServerTest", {
         delete this.player1;
         delete this.player2;
         delete this.player3;
+        
+        this.sandbox.restore();
     },
     
     "test Lobby should have function to set Lobby started": function() {
@@ -256,6 +260,25 @@ TestCase("LobbyServerTest", {
          assertFalse(this.lobby.isStarted());
          this.lobby.startGame();
          assertTrue(this.lobby.isStarted());
+    },
+    
+    "test lobby should have function to get mapController": function() {
+        assertFunction(this.lobby.getMapController);
+    },
+    
+    "test getMapController should return instance of mapController": function() {
+        assertTrue(this.lobby.getMapController() instanceof tddjs.server.controller.mapController);
+    },
+    
+    "test startGame should call init method of mapController with players": function() {
+        var spy = this.sandbox.stub(this.lobby.getMapController(), "init");
+        
+        sinon.assert.notCalled(spy);
+        
+        this.lobby.startGame();
+        
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, this.lobby.getPlayers());
     },
     
     
