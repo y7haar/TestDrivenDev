@@ -35,20 +35,8 @@ lobbyApp.get("", function (req, res) {
 });
 
 lobbyApp.post("", function (req, res) {
-    try
-    {
-        var lobbyResponseController = new tddjs.server.controller.lobbyResponseController();
-        var response = lobbyResponseController.respondNewLobby(req.body);
-        
-        req.session.token = lobbyResponseController.getToken();
-        
-        res.json(response);
-    }
     
-    catch(e)
-    {
-        res.status(400).send("Wrong JSON Format");
-    }
+    lobbiesResponseController.respondNewLobby(req, res);
 });
 
 lobbyApp.post("/:id", function (req, res) {
