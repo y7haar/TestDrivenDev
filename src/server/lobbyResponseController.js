@@ -2,270 +2,357 @@
  * Source-Code for lobbyResponseController
  */
 
-tddjs.namespace("server.controller").lobbyResponseController= lobbyResponseController;
-       
+if (typeof module !== "undefined")
+{
+    module.exports = lobbyResponseController;
+}
+
+else
+{
+    tddjs.namespace("server.controller").NEWlobbyResponseController = lobbyResponseController;
+}
+
+
 function lobbyResponseController()
-{   
+{
+    var _lobby;
     var _lobbyController = tddjs.server.controller.lobbyController.getInstance();
-    var _lobbyFactory = new tddjs.server.controller.lobbyFactory();
-    var _methodTypes = {};
-    var _currentToken;
-    var _response;
-    var _lobbyId;
-    var _message;
-    var _event;
     
-    function setToken(aToken)
+    // Needed because of different Scope in NodeJs
+    var _self = this;
+
+    function setLobbyById(aId)
     {
-        if(typeof aToken !== "string")
-            throw new TypeError("Token must be string");
+        if(_lobbyController.getLobbyById(aId) === null)
+        {
+            throw { 
+            name:        "LobbyIdError", 
+            message:     "Lobby with given Id does not exist",
+            toString:    function(){return _self.name + ": " + _self.message;}}; 
+        }
         
-        _currentToken = aToken;
+        _lobby = _lobbyController.getLobbyById(aId);
     }
-    
-    function getToken()
+
+    function acceptEventSource(req, res)
     {
-        return _currentToken;
+        if (req.get("accept") === "text/event-stream" && (typeof req.session.token !== "undefined"))
+        {
+            res.set("content-type", "text/event-stream");
+            res.set("cache-control", "no-cache");
+            res.set("connection", "keep-alive");
+            res.connection.setTimeout(0);
+
+
+            var player = _lobby.getPlayerByToken(req.session.token);
+
+            if (player === null)
+                res.sendStatus(400);
+
+            else
+                player.setResponseObject(res);
+        }
+
+        else
+        {
+            res.sendStatus(400);
+        }
     }
-    
-    function setResponse(res)
+
+    function broadcastMessage(aMessage, aEvent, aExcluded)
     {
-        _response = res;
-    }
-    
-    function broadcastMessage(aLobbyId, aMessage, aEvent)
-    {
-        if(typeof aLobbyId !== "number")
-            throw new TypeError("Id must be number");
-        
-        if(typeof aMessage !== "object")
+        if (typeof aMessage !== "object")
             throw new TypeError("Message must be object");
-        
-        if(typeof aEvent !== "string")
+
+        if (typeof aEvent !== "string")
             throw new TypeError("Event must be string");
-        
-        var lobby = _lobbyController.getLobbyById(aLobbyId);
-        
-        for(var i = 0;i < lobby.getPlayers().length;++i)
-        {
-            var res = lobby.getPlayers()[i].getResponseObject();
-            res.write("event: " + aEvent + "\n" + "data: " + JSON.stringify(aMessage) + "\n\n");
-        }
-    }
-    
-    function respondNewLobby(obj)
-    {    
-        if(typeof obj !== "object")
-            throw new TypeError("Request must be object");
-        
-        try
-        {
-            
-            var player = obj.player;
-            if(typeof player !== "object")
-                throw new Error("Player must be an object");
-            
-            if(typeof player.name !== "string")
-                throw new Error("Name must be a string");
-            
-            if(typeof player.color !== "string")
-                throw new Error("Color must be a string");
-            
-            var lobby = _lobbyFactory.getNewLobby();
-            var leader = new tddjs.server.player();
-            
-            var token = lobby.getUniqueToken();
-            leader.deserialize(obj.player);
-            leader.setToken(token);
-            this.setToken(token);
 
-            lobby.addPlayer(leader);
-            lobby.setLeader(leader);
-            _lobbyController.addLobby(lobby);
-            
-            var obj = {};
-            obj.lobby = lobby.serializeAsObject();
-            obj.currentPlayerId = leader.getId();
-            
-            return obj;
-            
-        }
-        catch(e)
+        for (var i = 0; i < _lobby.getPlayers().length; ++i)
         {
-            throw new Error("JSON is not valid");
+            var player = _lobby.getPlayers()[i];
+
+            if (player.getType() === "human" && player !== aExcluded)
+            {
+                var res = player.getResponseObject();
+                res.write("event: " + aEvent + "\n" + "data: " + JSON.stringify(aMessage) + "\n\n");
+            }
+
         }
-        
     }
     
-    function respondJoin(id, obj)
-    {    
-        if(typeof obj !== "object")
-            throw new TypeError("Request must be object");
-        
-        if(typeof id !== "number")
-            throw new TypeError("Id must be number");
-        
-        try
+    function joinPlayer(aPlayer, aToken)
+    {
+        aPlayer.setToken(aToken);
+        _lobby.addPlayer(aPlayer);
+    }
+    
+    function respondByType(req, res)
+    {
+        if(typeof req.body === "undefined")
         {
-            
-            var player = obj.player;
-            if(typeof player !== "object")
-                throw new Error("Player must be an object");
-            
-            if(typeof player.name !== "string")
-                throw new Error("Name must be a string");
-            
-            if(typeof player.color !== "string")
-                throw new Error("Color must be a string");
-        }
-        catch(e)
-        {
-            throw new Error("JSON is not valid");
+            _self.respondBadRequest(req, res);
+            return;
         }
         
+        var method = _self.respondMethods[req.body.type];
+        
+        if(typeof method === "function")
+        {
+            _self.respondMethods[req.body.type](req, res);
+        }
+        
+        else
+        {
+            _self.respondBadRequest(req, res);
+        }
+    }
+    
+    function respondBadRequest(req, res)
+    {
+        res.sendStatus(400);
+    }
+    
+    function respondJoin(req, res)
+    {
         try
         {
-            var lobby = _lobbyController.getLobbyById(id);
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(typeof req.body.player !== "object")
+                throw new Error("Player must not be empty");
+            
+            if(_lobby.isStarted())
+                throw new Error("Lobby already started");
+            
+            // Is player already logged in lobby as other player?
+            if(typeof req.session.token !== "undefined" && _lobby.getPlayerByToken(req.session.token) !== null)
+                throw new Error("Player already logged in");
+            
+            var token = _lobby.getUniqueToken().toString();
+            req.session.token = token;
+            
             var newPlayer = new tddjs.server.player();
-            newPlayer.deserialize(obj.player);
-           
-            var token = lobby.getUniqueToken();      
-            newPlayer.setToken(token);
-            _currentToken = token;
-
-            lobby.addPlayer(newPlayer);
+            newPlayer.deserialize(req.body.player);         
+     
+            _self.joinPlayer(newPlayer, token);
             
             var obj = {};
-            obj.lobby = lobby.serializeAsObject();
+            obj.lobby = _lobby.serializeAsObject();
             obj.currentPlayerId = newPlayer.getId();
             
-            //broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
+            res.json(obj);
             
-            return obj;
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange", newPlayer);
         }
         
         catch(e)
         {
-            throw { 
-            name:        "LobbyIdError", 
-            message:     "Lobby with given Id does not exist",
-            toString:    function(){return this.name + ": " + this.message;} 
-}; 
+            res.sendStatus(400);
         }
     }
     
-    function respondLobbyUpdate(id, obj)
+    function respondBotJoin(req, res)
     {
-        if(typeof obj !== "object")
-            throw new TypeError("Request must be object");
-        
-        if(typeof id !== "number")
-            throw new TypeError("Id must be number");
-        
-        if(typeof obj.data !== "object")
-        {
-            throw new Error("Object must contain data");
-        }
-        
         try
         {
-            var lobby = _lobbyController.getLobbyById(id);
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
             
-            if(typeof obj.data.maxPlayers === "number")
-            {
-                lobby.setMaxPlayers(obj.data.maxPlayers);
-            }
+            if(_lobby.isStarted())
+                throw new Error("Lobby already started");
             
-            if(typeof obj.data.name === "string")
-            {
-                lobby.setName(obj.data.name);
-            }
+            var token = req.session.token;
+                
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
             
-            broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
+            var bot = _lobby.addBot();
+            
+            res.sendStatus(200);
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
+        
         catch(e)
         {
-            throw { 
-            name:        "LobbyIdError", 
-            message:     "Lobby with given Id does not exist",
-            toString:    function(){return this.name + ": " + this.message;} 
-}; 
+            res.sendStatus(400);
         }
     }
     
-    function respondPlayerUpdate(id, obj)
+    function respondKick(req, res)
     {
-        if(typeof obj !== "object")
-            throw new TypeError("Request must be object");
-        
-        if(typeof id !== "number")
-            throw new TypeError("Id must be number");
-        
-        if(typeof obj.data !== "object")
-        {
-            throw new Error("Object must contain data");
-        }
-        
         try
         {
-            var lobby = _lobbyController.getLobbyById(id);
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
             
-            if(typeof obj.data.id !== "number")
-                throw new TypeError("Id must be setted");
+            if(typeof req.body.data.id !== "number")
+                throw new Error("Id must be setted");
+                
+            var token = req.session.token;
+                
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
             
-            var playerId = obj.data.id;
+            var player = _lobby.getPlayerById(req.body.data.id);
             
-            if(typeof obj.data.color === "string")
+            if(player === null)
+                throw new Error("Player with Id does not exist");    
+                
+            _lobby.kickPlayer(player);
+                
+            res.sendStatus(200);    
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
+    
+    function respondLobbyUpdate(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(typeof req.body.data !== "object")
+                throw new Error("Player must not be empty");
+            
+            var token = req.session.token;
+            
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
+            
+            if(typeof req.body.data.name === "string")
             {
-                lobby.getPlayerById(playerId).setColor(obj.data.color);
+                _lobby.setName(req.body.data.name);
+            }
+            
+            else if(typeof req.body.data.maxPlayers === "number")
+            {
+                _lobby.setMaxPlayers(req.body.data.maxPlayers);
+            }
+            
+            res.sendStatus(200);
+            _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
+    }
+    
+    function respondPlayerUpdate(req, res)
+    {
+        try
+        {
+            if(typeof req.body !== "object")
+                throw new Error("Body must not be empty");
+            
+            if(typeof req.body.data !== "object")
+                throw new Error("Player must not be empty");
+            
+            if(typeof req.body.data.id !== "number")
+                throw new Error("Player Id must be number");
+            
+            var player = _lobby.getPlayerById(req.body.data.id);
+            
+            if(player === null)
+                throw new Error("Player with Id does not exist");
+            
+            var token = req.session.token;
+            
+            if(typeof token === "undefined" || ! _lobby.isPlayerTokenValid(player, token))
+                throw new Error("Token must not be undefined");
+            
+            if(typeof req.body.data.color === "string")
+            {
+                player.setColor(req.body.data.color);
+                res.sendStatus(200);
+                
                 var wrapper = {
-                    id: playerId,
-                    color: obj.data.color
+                    id: player.getId(),
+                    color: player.getColor()
                 };
                 
-                broadcastMessage(id, wrapper, "colorchange");
+                _self.broadcastMessage(wrapper, "colorchange");
             }
             
-            if(typeof obj.data.name === "string")
+            else if(typeof req.body.data.name === "string")
             {
-                lobby.getPlayerById(playerId).setName(obj.data.name);
+                player.setName(req.body.data.name);
+                res.sendStatus(200);
                 
-                broadcastMessage(id, lobby.serializeAsObject(), "lobbychange");
+                _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
+            }
+            
+            else
+            {
+                res.sendStatus(400);
             }
         }
+        
         catch(e)
         {
-            throw { 
-            name:        "LobbyIdError", 
-            message:     "Lobby with given Id does not exist",
-            toString:    function(){return this.name + ": " + this.message;} 
-}; 
+            res.sendStatus(400);
         }
     }
     
-    function switchLobbyPostTypes(id, data)
+    
+    function respondGameStart(req, res)
     {
-        var type = data.type;
-        
-        if(typeof _methodTypes[type] === "function")
+        try
         {
-           return  _methodTypes[type](id, data);
-        }
+            var token = req.session.token;
             
+            if(typeof token === "undefined" || ! _lobby.isLeaderTokenValid(token))
+                throw new Error("Player is not valid");
+            
+            _lobby.setStarted(true);
+            
+            res.sendStatus(200);
+        }
+        
+        catch(e)
+        {
+            res.sendStatus(400);
+        }
     }
+
+    //test
+    Object.defineProperty(this, 'lobby', {
+        get: function () {
+            return _lobby;
+        }
+    });
+
+    this.joinPlayer = joinPlayer;
     
-    this.switchLobbyPostTypes = switchLobbyPostTypes;
-    this.respondNewLobby = respondNewLobby;
+    this.setLobbyById = setLobbyById;
+    this.acceptEventSource = acceptEventSource;
     this.respondJoin = respondJoin;
+    this.respondBotJoin = respondBotJoin;
+    this.respondKick = respondKick;
+    this.broadcastMessage = broadcastMessage;
     this.respondLobbyUpdate = respondLobbyUpdate;
     this.respondPlayerUpdate = respondPlayerUpdate;
-    this.setToken = setToken;
-    this.getToken = getToken;
+    this.respondGameStart = respondGameStart;
     
-    this.broadcastMessage = broadcastMessage;
-    this.setResponse = setResponse;
-    
-    _methodTypes["lobbyUpdate"] = this.respondLobbyUpdate;
-    _methodTypes["playerUpdate"] = this.respondPlayerUpdate;
-    _methodTypes["join"] = this.respondJoin;
+    this.respondByType = respondByType;
+    this.respondBadRequest = respondBadRequest;
+   
+   
+   this.respondMethods = {};
+   this.respondMethods["join"] = this.respondJoin;
+   this.respondMethods["botJoin"] = this.respondBotJoin;
+   this.respondMethods["lobbyUpdate"] = this.respondLobbyUpdate;
+   this.respondMethods["playerUpdate"] = this.respondPlayerUpdate;
+   this.respondMethods["gameStart"] = this.respondGameStart;
+   this.respondMethods["botKick"] = this.respondKick;
+   this.respondMethods["playerKick"] = this.respondKick;
+   
 }

@@ -17,7 +17,7 @@ require("./lobbyController");
 require("./lobbyFactory");
 require("./lobbyResponseController");
 
-var LobbyResponseController = require("./NEWlobbyResponseController");
+var LobbyResponseController = require("./lobbyResponseController");
 var LobbiesResponseController = require("./lobbiesResponseController");
 var lobbyResponseController = new LobbyResponseController();
 var lobbiesResponseController = new LobbiesResponseController();
