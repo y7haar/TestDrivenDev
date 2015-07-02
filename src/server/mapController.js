@@ -13,8 +13,10 @@ function mapController()
     
     var _mapGenerator = new tddjs.server.controller.mapGenerator();
     
-    function init(){
+    function init(playerarr){
         //TODO: switch-case for playercount
+        _player = playerarr;
+        
         setUp2Player();
         
     }
