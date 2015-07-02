@@ -30,7 +30,16 @@ function lobbiesResponseController()
     
     function _initializeLobby(aLobby, req, res)
     {
-        req.session.token = "1234";
+        var leader = new tddjs.server.player();
+        var token = aLobby.getUniqueToken();
+        
+        req.session.token = token;
+        leader.setToken(token);
+        leader.setName(req.body.player.name);
+        leader.setColor(req.body.player.color);
+        
+        aLobby.addPlayer(leader);
+        aLobby.setLeader(leader);
     }
     
     function respondNewLobby(req, res)
@@ -43,7 +52,12 @@ function lobbiesResponseController()
             if(typeof req.body.player !== "object")
                 throw new Error("Body must have player");
             
-            _self._initializeLobby(new tddjs.server.model.lobby(), req, res);
+            var lobbyFactory = new tddjs.server.controller.lobbyFactory();
+            var lobby = lobbyFactory.getNewLobby();
+            
+            _self._initializeLobby(lobby, req, res);
+            
+            tddjs.server.controller.lobbyController.getInstance().addLobby(lobby);
         }
         
         catch(e)
