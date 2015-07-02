@@ -2,6 +2,8 @@
  * Source-Code for lobbyResponseController
  */
 
+/*
+
 tddjs.namespace("server.controller").lobbyResponseController= lobbyResponseController;
        
 function lobbyResponseController()
@@ -269,3 +271,5 @@ function lobbyResponseController()
     _methodTypes["playerUpdate"] = this.respondPlayerUpdate;
     _methodTypes["join"] = this.respondJoin;
 }
+
+*/

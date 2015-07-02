@@ -9,7 +9,7 @@ if (typeof module !== "undefined")
 
 else
 {
-    tddjs.namespace("server.controller").NEWlobbyResponseController = lobbyResponseController;
+    tddjs.namespace("server.controller").lobbyResponseController = lobbyResponseController;
 }
 
 
