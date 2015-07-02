@@ -196,6 +196,95 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         this.lrc.respondNewLobby(this.req, this.res);
 
         sinon.assert.calledOnce(this.initLobbySpy);
+    },
+    
+    "test _initLobby should create a new Player and add it to the lobby": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+        
+        var lobby = new tddjs.server.model.lobby();
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        assertEquals(1, lobby.getPlayers().length);
+    },
+    
+     "test _initLobby should set Players name": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#ffffff",
+                type: "human"
+            }
+        };
+        
+         var lobby = new tddjs.server.model.lobby();
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        assertEquals("Unnamed Player", lobby.getPlayerById(0).getName());
+    },
+    
+    "test _initLobby should set Players color": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#123123",
+                type: "human"
+            }
+        };
+        
+        var lobby = new tddjs.server.model.lobby();
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        assertEquals("#123123", lobby.getPlayerById(0).getColor());
+    },
+    
+    "test _initLobby should set Player token equal to req.session.token": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#123123",
+                type: "human"
+            }
+        };
+        
+        var lobby = new tddjs.server.model.lobby();
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        assertString(lobby.getPlayerById(0).getToken());
+        assertEquals(this.req.session.token, lobby.getPlayerById(0).getToken());
+    },
+    
+    "test _initLobby should call lobby getUniqueToken": function () {
+         this.req.body = {
+           type: "create",
+            player: {
+                name: "Unnamed Player",
+                color: "#123123",
+                type: "human"
+            }
+        };
+        
+        var lobby = new tddjs.server.model.lobby();
+        var spy = this.sandbox.spy(lobby, "getUniqueToken");
+        
+        sinon.assert.notCalled(spy);
+        
+        this.lrc._initializeLobby(lobby, this.req, this.res);
+        
+        sinon.assert.calledOnce(spy);
     }
     
     // TODO helper method for creating a new lobby / adding player to lobby
