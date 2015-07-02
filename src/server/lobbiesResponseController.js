@@ -28,6 +28,11 @@ function lobbiesResponseController()
         res.json(lobbies);
     }
     
+    function _initializeLobby(aLobby, req, res)
+    {
+        req.session.token = "1234";
+    }
+    
     function respondNewLobby(req, res)
     {
         try
@@ -38,7 +43,7 @@ function lobbiesResponseController()
             if(typeof req.body.player !== "object")
                 throw new Error("Body must have player");
             
-            req.session.token = "1234";
+            _self._initializeLobby(new tddjs.server.model.lobby(), req, res);
         }
         
         catch(e)
@@ -47,6 +52,13 @@ function lobbiesResponseController()
         }
     }
     
+
+    
+        // private
+    this._initializeLobby = _initializeLobby;
+    
     this.respondAllLobbies = respondAllLobbies;
     this.respondNewLobby = respondNewLobby;
+    
+
 }
