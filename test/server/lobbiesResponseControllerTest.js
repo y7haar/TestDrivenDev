@@ -354,6 +354,8 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
             lobby: {
                 id: 0,
                 name: "GameLobby",
+                leader: 0,
+                maxPlayers: 4,
                 
                 players: [ ]
             },
@@ -362,7 +364,7 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         
         wrapper.lobby.players[0] = {
             id: 0,
-            name: "Unamed Player",
+            name: "Unnamed Player",
             type: "human",
             color: "#123123"
         };
@@ -372,6 +374,6 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         this.lrc.respondNewLobby(this.req, this.res);
 
         sinon.assert.calledOnce(this.resJsonSpy);
-        sinon.assert.calledWith(this.resJsonSpy, wrapper);
+        assertEquals(wrapper, this.resJsonSpy.args[0][0]);
     }
 });
