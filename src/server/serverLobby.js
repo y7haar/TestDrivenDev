@@ -48,6 +48,11 @@ function lobby()
         return _started;
     }
     
+    function startGame()
+    {
+        setStarted(true);
+    }
+    
     function setStarted(aStarted)
     {
         _started = aStarted;
@@ -264,6 +269,7 @@ function lobby()
     
     this.isStarted = isStarted;
     this.setStarted = setStarted;
+    this.startGame = startGame;
     
     this.getPlayerByToken = getPlayerByToken;
     this.isPlayerTokenValid = isPlayerTokenValid;
