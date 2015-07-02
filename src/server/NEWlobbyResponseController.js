@@ -142,6 +142,7 @@ function lobbyResponseController()
             obj.currentPlayerId = newPlayer.getId();
             
             res.json(obj);
+            
             _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange", newPlayer);
         }
         
@@ -168,6 +169,7 @@ function lobbyResponseController()
             
             var bot = _lobby.addBot();
             
+            res.sendStatus(200);
             _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         
@@ -199,6 +201,7 @@ function lobbyResponseController()
                 
             _lobby.kickPlayer(player);
                 
+            res.sendStatus(200);    
             _self.broadcastMessage(_lobby.serializeAsObject(), "lobbychange");
         }
         

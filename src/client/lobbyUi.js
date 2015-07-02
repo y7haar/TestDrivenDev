@@ -405,6 +405,10 @@ function lobbyUi(aRequestController)
             if (aPlayer.getType() === "bot")
             {
                 playerTypeRoll.selectedIndex = 1;
+                
+                playerTypeRoll.onchange = function(){
+                onBotRollChange(playerTypeRoll, aPlayer.getId());
+            };
             }
 
             else if (aPlayer.getType() === "human")

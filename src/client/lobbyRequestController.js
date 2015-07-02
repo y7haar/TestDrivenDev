@@ -57,7 +57,7 @@ function lobbyRequestController()
     }
 
     function onAllLobbiesSuccess(xhr)
-    {
+    {        
         var data = xhr.responseText;
         data = JSON.parse(data);
 

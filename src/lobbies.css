@@ -91,10 +91,10 @@ body
     font-weight: bold;
 
     //min-width: 50px;
-    text-align: right;
+    text-align: right; 
     padding-right:25px;
     padding-left:15px;
-
+    
 }
 
 .lobbiesName

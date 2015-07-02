@@ -15,7 +15,7 @@ function lobby()
     var _currentPlayerId = 0;
     var _usedTokens = {};
     var _started = false;
-    var _botNames = ["Peter", "Gregor", "Valentin", "Dennis", "Sebastian", "Christian", "Jonny"];
+    var _botNames = ["Peter", "Gregor", "Valentin", "Dennis", "Sebastian", "Christian", "Johnny"];
     var _botColors = ["#808000", "#804000", "#6d946b", "#5a89a5", "#808080", "#9b9bce"];
     var _botNameGenerator = new tddjs.server.controller.nameListGenerator();
     var _botColorGenerator = new tddjs.server.controller.nameListGenerator(); 
