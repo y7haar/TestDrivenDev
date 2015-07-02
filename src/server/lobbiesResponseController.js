@@ -58,6 +58,12 @@ function lobbiesResponseController()
             _self._initializeLobby(lobby, req, res);
             
             tddjs.server.controller.lobbyController.getInstance().addLobby(lobby);
+            
+            var wrapper = {};
+            wrapper.currentPlayerId = lobby.getLeader().getId();
+            wrapper.lobby = lobby.serializeAsObject();
+            
+            res.json(wrapper);
         }
         
         catch(e)
