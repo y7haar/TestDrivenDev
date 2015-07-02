@@ -111,6 +111,15 @@ TestCase("LobbiesResponseControllerTest", {
 TestCase("LobbiesResponseControllerNewLobbyTest", {
     setUp: function()
     {
+        this.realGetInstance = tddjs.server.controller.lobbyController.getInstance;
+        
+        var instance = new tddjs.server.controller.lobbyController();
+        
+         tddjs.server.controller.lobbyController.getInstance = function()
+         {
+             return instance;
+         };
+        
         this.lrc = new tddjs.server.controller.lobbiesResponseController();
         this.lobbyController = tddjs.server.controller.lobbyController.getInstance();
         
@@ -126,6 +135,7 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
     
     tearDown: function ()
     {
+        tddjs.server.controller.lobbyController.getInstance = this.realGetInstance;
         this.sandbox.restore();
         this.lobbyController.getLobbies().length = 0;
     },
