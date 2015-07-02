@@ -518,8 +518,6 @@ function lobbyResponseControllerSetup()
     this.joinPlayerSpy = this.sandbox.spy(this.lrc, "joinPlayer");
     this.resJsonSpy = this.sandbox.spy(this.res, "json");
     this.broadcastMessageSpy = this.sandbox.stub(this.lrc, "broadcastMessage");
-
-
 }
 
 TestCase("LobbyResponseControllerJoinTest", {
@@ -806,7 +804,8 @@ TestCase("LobbyResponseControllerBotJoinTest", {
 
         this.lrc.respondBotJoin(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
     "test respondBotJoin should call sendStatus with 400 if request has no token": function () {
@@ -943,7 +942,8 @@ TestCase("LobbyResponseControllerKickTest", {
 
         this.lrc.respondKick(this.req, this.res);
 
-        sinon.assert.notCalled(this.resSendStatusSpy);
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.neverCalledWith(this.resSendStatusSpy, 400);
     },
     
      "test respondKick should call sendStatus with 400 if request has no token": function () {
