@@ -71,6 +71,7 @@ function lobbyUiSetup()
     this.lobbyUi.setCurrentLobby(this.lobby3);
 
     this.sandbox = sinon.sandbox.create();
+    this.clock = this.sandbox.useFakeTimers();
 }
 
 function lobbyUiTeardown()
@@ -79,6 +80,7 @@ function lobbyUiTeardown()
     delete this.lobby1;
     delete this.lobby2;
 
+    this.clock.restore();
     this.sandbox.restore();
 }
 
@@ -233,6 +235,7 @@ TestCase("LobbyUiTest", {
     "test lobbyUi should have function to show lobby overview": function() {
         assertFunction(this.lobbyUi.showLobbyOverview);
     },
+    
     "test lobbyUi should call methods to create Lobby Overview UI": function() {
 
         var requestController = this.lobbyUi.getLobbyRequestController();
@@ -251,6 +254,27 @@ TestCase("LobbyUiTest", {
         sinon.assert.calledOnce(createContentSpy);
         sinon.assert.calledOnce(createWrapperSpy);
         sinon.assert.calledOnce(requestAllLobbiesSpy);
+    },
+    
+    "test showLobbyOverview should call requestAllLobbies in interval": function() {
+        
+
+        var requestController = this.lobbyUi.getLobbyRequestController();
+        var requestAllLobbiesSpy = this.sandbox.spy(requestController, "requestAllLobbies");
+
+        sinon.assert.notCalled(requestAllLobbiesSpy);
+
+        this.lobbyUi.showLobbyOverview();
+
+        sinon.assert.calledOnce(requestAllLobbiesSpy);
+        
+        this.clock.tick(5000);
+        
+        sinon.assert.calledTwice(requestAllLobbiesSpy);
+        
+        this.clock.tick(5000);
+        
+        sinon.assert.calledThrice(requestAllLobbiesSpy);
     }
 });
 
