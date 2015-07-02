@@ -167,6 +167,24 @@ TestCase("LobbiesResponseControllerNewLobbyTest", {
         sinon.assert.calledWith(this.resSendStatusSpy, 400);
     },
     
+    "test respondNewLobby should call sendStatus with 400 if body.player is not valid": function () {
+        this.req.body = {
+           type: "create",
+            player: {
+                nae: "Unnamed Player",
+                clor: "#ffffff",
+                tpe: "human"
+            }
+        };
+
+        sinon.assert.notCalled(this.resSendStatusSpy);
+
+        this.lrc.respondNewLobby(this.req, this.res);
+
+        sinon.assert.calledOnce(this.resSendStatusSpy);
+        sinon.assert.calledWith(this.resSendStatusSpy, 400);
+    },
+    
     "test respondNewLobby should NOT call sendStatus with 400 if player object in body is valid": function () {
         this.req.body = {
            type: "create",
