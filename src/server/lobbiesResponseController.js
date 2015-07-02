@@ -34,9 +34,10 @@ function lobbiesResponseController()
         var token = aLobby.getUniqueToken();
         
         req.session.token = token;
+        
+        leader.deserialize(req.body.player);
+        
         leader.setToken(token);
-        leader.setName(req.body.player.name);
-        leader.setColor(req.body.player.color);
         
         aLobby.addPlayer(leader);
         aLobby.setLeader(leader);
