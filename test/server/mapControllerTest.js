@@ -6,12 +6,50 @@ TestCase("MapControllerTest",
     setUp: function ()
     {
         this.mapCon = new tddjs.server.controller.mapController();
+        
+        //Namen für Generation Testweise!
+        var countryList = ["Bakaresh", "Rodkaresh", "Bastion Akundur", "Ankh Morpork", "Serandur", "Sturmgipfel",
+                    "Kristallnarbe", "Kristallwüste", "Gewundener Wald", "Piltover", "Zaun", "Demacia", 
+                    "Schicksalsschlucht", "Cavalon", "Haus zu Heltzer", "Zentrum von Kaineng", "Kloster von Shingjea",
+                    "Borlispass", "Gunnars Feste", "Ratasum", "Droknars Schmiede", "Oase Amnoon", 
+                    "Steinkreis von Denravi", "Löwenstein", "Wachturmküste", "Frosttor", "Nolani-Akademie",
+                    "Der große Nordwall", "Fort Ranik", "Erntetempel", "Skyrim", "Kamadan", "Halle der Sonnenspeere",
+                    "Faring", "Valorian", "Sardelek-Sanatorium", "Drascir", "Die schwarze Zitadelle", "Ebonhawk",
+                    "Kluft der Beschwörer", "Abbadons Maul", "Tor des Wahnsinns", "Tor der Angst", "Tor der Schmerzen",
+                    "Tor der Pein", "Vaabi", "Schwarzwasserküste", "Eisminen von Moladune", "Ödland", "Rin",
+                    "Markt von Faible", "Seufzer-Graftschaft", "Dünen der Verzweiflung", "Fels der Weissagung",
+                    "Maguuma-Dschungel", "Zittergipfelgebirge", "Ruinen von Surmia", "Drachenschlund ",
+                    "Pockennarbenebene", "Grooble-Schlucht", "Signalfeuerposten", "Lornarpass", "Arah", 
+                    "Das Trockene Meer", "Auroralichtung", "Ostgrenze", "Tempel der Zeitalter", "Halle der Helden",
+                    "Idylissches Tal", "Noxus", "Ionia", "Shurima", "Platonien", "Gefrorenes Herz",
+                    "Tal des Erzengels", "Trauerschlucht", "Kimberleys Tränen", "Tal des Schreckens", "Minental",
+                    "Khorinis", "Jharkendar", "Irdorath", "Myrtana", "Nordmar", "Varant", "Velen", "Novigrad",
+                    "Skellige", "Weißgarten", "Oxenfurt", "Kaer Morhen", "Wyzima", "Weißlauf", "Flusswald", "Riften",
+                    "Winterfeste", "Morthal", "Windhelm", "Markarth", "Helgen"];
+        //Kontinentnamen
+        var list = ["Aranonda", "Lorna", "Lors", "Faridon", "Elona", "Cantha", "Tyria",
+                    "Nod", "Rod", "Kryta", "Ascalon", "Elysium", "Braktarien", "Karatie"];
+                
+        this.mapCon.getMapGenerator().getContinentNameGenerator().setNameList(countryList);
+        this.mapCon.getMapGenerator().getCountryNameGenerator().setNameList(list);
    
         //Spieler
         this.player1 = new tddjs.server.player();
+        this.player1.setId(1);
+        this.player1.setName("Ranol");
+        this.player1.setColor("#FFA500");
         this.player2 = new tddjs.server.player();
+        this.player2.setId(2);
+        this.player2.setName("Kimberley");
+        this.player2.setColor("#FFFF00");
         this.player3 = new tddjs.server.player();
+        this.player3.setId(3);
+        this.player3.setName("Riodian");
+        this.player3.setColor("#7FFF00");
         this.player4 = new tddjs.server.player();
+        this.player4.setId(4);
+        this.player4.setName("Merowinger");
+        this.player4.setColor("#87CEFA");
         
         //Spielergruppen
         this.one = [this.player1];
