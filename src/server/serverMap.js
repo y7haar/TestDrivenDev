@@ -58,11 +58,26 @@ function map()
         return true;
     }
     
+    function getContinentsByPlayer(player){
+        //TODO: check is player is instanceof player
+        var continents={};
+        for(var c in getContinents()){
+            for(var countr in getContinents()[c].getCountrys()){
+                if(getContinents()[c].getCountrys()[countr].getOwner() === player){
+                    if(continents.indexOf(getContinents()[c]) === -1)
+                        continents[getContinents()[c].getName()] = getContinents()[c];
+                    break;
+                }
+            }
+        }
+    }
+    
     this.addContinent = addContinent;
     this.hasContinent = hasContinent;
     this.getContinents = getContinents;
     this.getContinentCount = getContinentCount;
     this.getContinent = getContinent;
+    this.getContinentsByPlayer = getContinentsByPlayer;
 }
     
 
