@@ -144,5 +144,25 @@ TestCase("ServerContinentTest",
         {
             continent.setName(1337);
         },"TypeError");
+    },
+    
+    "test contienent should return Countries owned by player": function()
+    {
+        var player = tddjs.server.player();
+        player.setName("Test");
+        this.continent1.addCountry(this.country1);
+        this.continent1.addCountry(this.country2);
+        this.continent1.addCountry(this.country3);
+        this.country1.setOwner(player);
+        this.country2.setOwner(player);
+        this.country3.setOwner(player);
+        
+        assertFunction(this.continent1.getCountriesByPlayer);
+        
+        var countries = this.continent1.getCountriesByPlayer(player);
+        
+        for(c in countries){
+            assertTrue(countries[c].getOwner() === player);
+        }
     }
 });

@@ -17,10 +17,28 @@ function lobby()
     var _started = false;
     var _botNames = ["Peter", "Gregor", "Valentin", "Dennis", "Sebastian", "Christian", "Johnny"];
     var _botColors = ["#808000", "#804000", "#6d946b", "#5a89a5", "#808080", "#9b9bce"];
-    var _botNameGenerator = new tddjs.server.controller.nameListGenerator();
-    var _botColorGenerator = new tddjs.server.controller.nameListGenerator(); 
+    
+    if(typeof module !== "undefined")
+    {
+        var NameListGenerator = require("./nameListGenerator");
+        var MapController = require("./mapController");
+        
+        var _botNameGenerator = new NameListGenerator();
+        var _botColorGenerator = new NameListGenerator(); 
 
-    var _mapController = new tddjs.server.controller.mapController();
+        var _mapController = new MapController();
+    }
+    
+    else
+    {
+        var _botNameGenerator = new tddjs.server.controller.nameListGenerator();
+        var _botColorGenerator = new tddjs.server.controller.nameListGenerator(); 
+
+        var _mapController = new tddjs.server.controller.mapController();
+    }
+    
+    
+    
 
     _botNameGenerator.setNameList(_botNames);
     _botNameGenerator.shuffleNameList();
@@ -59,6 +77,8 @@ function lobby()
     {
         _mapController.init(_players);
         setStarted(true);
+        
+        console.log("Map generated");
     }
     
     function setStarted(aStarted)
