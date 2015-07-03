@@ -16,7 +16,7 @@ require("./serverPlayer");
 require("./lobbyController");
 require("./lobbyFactory");
 require("./lobbyResponseController");
-require("./mapController");
+var MapGenerator = require("./mapController");
 require("./mapGenerator");
 
 var LobbyResponseController = require("./lobbyResponseController");
