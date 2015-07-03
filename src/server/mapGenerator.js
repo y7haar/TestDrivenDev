@@ -347,6 +347,7 @@ function mapGenerator()
         handOutNames(map.continents);
         
         map.allCountries = allCountries;
+        map.cellGrid = cellGrid;
         
         //return
         return map;
