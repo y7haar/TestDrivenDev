@@ -162,9 +162,73 @@ function mapController()
     //ServerMap
     function generateServerMap()
     {
+        var sMap;
+        var sContinent;
+        var sCountry;
         
+        //Entscheidung ob Server oder nicht
+        if(typeof module !== "undefined")
+        {
+            sMap = module.require("./serverMap");
+            sContinent = module.require("./serverContinent");
+            sCountry = module.requre("./serverCountry");
+        }
+        else
+        {
+            sMap = tddjs.server.map.map;
+            sContinent = tddjs.server.map.continent;
+            sCountry = tddjs.server.map.country;
+        }
+        
+        //Servermap
+        var serverMap = new sMap();
+        
+        var countrys= [];
+        
+        //Alle Länder durchgehen
+        for(var i = 0; i < _map.allCountries.length; i++)
+        {
+            var currentPseudo = _map.allCountries[i];
+            
+            var current = new sCountry();
+            current.setName(currentPseudo.name);
+            current.setOwner(currentPseudo.player);
+            countrys[currentPseudo.id] = current;
+        }
+        
+        //Nochmal
+        for(var i = 0; i < _map.allCountries.length; i++)
+        {
+            var currentBorders = _map.allCountries[i].borders;
+            
+            //Alle Grenzen durchgehen
+            for(var j = 0; j < currentBorders.length; j++)
+            {
+                countrys[_map.allCountries[i].id].addBorder(countrys[currentBorders[j].id]);
+            }
+        }
+        
+        //Kontinente durchgehen
+        for(var i = 0; i < _map.continents.length; i++)
+        {
+            var currentPseudo = _map.continents[i];
+            var current = new sContinent();
+            
+            current.setName(currentPseudo.name);
+            current.setUnitBonus(currentPseudo.unitBonus);
+            
+            //Länder durchgehen
+            for(var j = 0; j < currentPseudo.countries.length; j++)
+            {
+                current.addCountry(countrys[currentPseudo.countries[j].id]);
+            }
+            
+            serverMap.addContinent(current);
+        }
+        
+        return serverMap;
     }
-    
+            
     //Serialisieren
     function serializeAsJSON()
     {
