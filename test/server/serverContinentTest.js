@@ -161,7 +161,7 @@ TestCase("ServerContinentTest",
         
         var countries = this.continent1.getCountriesByPlayer(player);
         
-        for(c in countries){
+        for(var c in countries){
             assertTrue(countries[c].getOwner() === player);
         }
     }
