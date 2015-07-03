@@ -124,6 +124,18 @@ function continent()
         
         return true;
     }
+    
+    function getCountriesByPlayer(player){
+        //TODO: check is player is instanceof player
+        var countries={};
+        for(var c in getCountrys()){
+            if(getCountrys()[c].getOwner() === player){
+                if(countries.indexOf(getCountrys()[c]) === -1)
+                    countries[getCountrys()[c].getName()] = getCountrys()[c];
+            }
+        }
+        return countries;
+    }
 
     this.setUnitBonus = setUnitBonus;
     this.getUnitBonus = getUnitBonus;
@@ -137,6 +149,8 @@ function continent()
     
     this.getName = getName;
     this.setName = setName;
+    
+    this.getCountriesByPlayer = getCountriesByPlayer;
 
 };
 
