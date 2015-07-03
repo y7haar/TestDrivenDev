@@ -148,7 +148,7 @@ TestCase("ServerContinentTest",
     
     "test contienent should return Countries owned by player": function()
     {
-        var player = tddjs.server.player();
+        var player = new tddjs.server.player();
         player.setName("Test");
         this.continent1.addCountry(this.country1);
         this.continent1.addCountry(this.country2);
