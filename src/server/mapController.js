@@ -169,9 +169,9 @@ function mapController()
         //Entscheidung ob Server oder nicht
         if(typeof module !== "undefined")
         {
-            sMap = module.require("./serverMap");
-            sContinent = module.require("./serverContinent");
-            sCountry = module.require("./serverCountry");
+            sMap = module.require("./serverMap.js");
+            sContinent = module.require("./serverContinent.js");
+            sCountry = module.require("./serverCountry.js");
         }
         else
         {
