@@ -1100,65 +1100,6 @@ function mapGenerator()
         map.isMap = true;
         return map;
     }
-    
-    //Serialisieren
-    function serializeAsJSON(map)
-    {
-        var json = {};
-        json.continents = [];
-        
-        //All Kontinente durchgehen
-        for(var c=0;c<map.continents.length;c++)
-        {
-            //Kontinentwerte schreiben
-            json.continents[c]={};
-            json.continents[c].id = map.continents[c].id;
-            json.continents[c].name = map.continents[c].name;
-            json.continents[c].unitBonus = map.continents[c].unitBonus;
-            
-            json.continents[c].countries = [];
-            //Alle Länder des aktuellen Kontinents durchgehen
-            for(var countr=0;countr<map.continents[c].countries.length;countr++)
-            {
-                //Aktuelle Länderwerte schreiben
-                json.continents[c].countries[countr] = {};
-                json.continents[c].countries[countr].id = map.continents[c].countries[countr].id;
-                json.continents[c].countries[countr].name = map.continents[c].countries[countr].name;
-                json.continents[c].countries[countr].size = map.continents[c].countries[countr].size;
-                
-                json.continents[c].countries[countr].borders = [];
-                //Grenzen des aktuellen Landes durchgehen
-                for(var b=0;b<map.continents[c].countries[countr].borders.length;b++){
-                    json.continents[c].countries[countr].borders[b] = map.continents[c].countries[countr].borders[b].id;
-                }
-            }
-        }
-        
-        //Wasserwerte schreiben
-        json.water={};
-        json.water.id = map.water.id;
-        json.water.name = map.water.name;
-        json.water.size = map.water.size;
-        json.water.fields = map.water.fields;
-        json.water.border = [[]];
-        //Wassergrenzen durchgehen
-        for(var i in map.water.borders)
-        {
-            if(map.water.borders[i].length>0)
-            json.water.border.push([map.water.borders[i][0].id,map.water.borders[i][1].id]);
-        }
-        
-        //Grid schreiben
-        json.gridMap = createArray(getMapWidth(),getMapHeight());
-        for(var x=0; x<getMapWidth(); x++){
-            for(var y=0; y<getMapHeight(); y++){
-                json.gridMap[x][y] = {};
-                json.gridMap[x][y].id = cellGrid[x][y].id;
-            }
-        }        
-        
-        return JSON.stringify(json);
-    }
     //###############################################################################################################
     //Funktionsdeklaration
     //###############################################################################################################
@@ -1186,7 +1127,6 @@ function mapGenerator()
     this.getCountryNameGenerator = getCountryNameGenerator;
     this.getCountriesInContinents = getCountriesInContinents;
     this.generateMap = generateMap;
-    this.serializeAsJSON = serializeAsJSON;
    
     //Eig private
     this.collectAllCountriesBelowMinSize = collectAllCountriesBelowMinSize;
