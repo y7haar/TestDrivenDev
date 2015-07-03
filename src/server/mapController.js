@@ -171,7 +171,7 @@ function mapController()
         {
             sMap = module.require("./serverMap");
             sContinent = module.require("./serverContinent");
-            sCountry = module.requre("./serverCountry");
+            sCountry = module.require("./serverCountry");
         }
         else
         {
