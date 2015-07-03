@@ -70,6 +70,7 @@ function map()
                 }
             }
         }
+        return continents;
     }
     
     this.addContinent = addContinent;
