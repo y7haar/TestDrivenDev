@@ -550,35 +550,42 @@ function gameUiController(aGLC,aCtx){
     
     
     // <editor-fold defaultstate="collapsed" desc="Map-functions for init">
-    function _deserialize(map){
+    function _deserialize(map)
+    {
         map=JSON.parse(map);
         
         _gridMapW=map.gridMap.length;
         _gridMapH=map.gridMap[0].length;
         _gridMap=map.gridMap;
+        var countries = map.countries;
+        var _players = map.players;
         
-        var cache_countrys=[];
-        var countrys=[];
-        var cache_water;
-        //get all Countrys
-        for(var x=0; x<map.gridMap.length; x++){
-            for(var y=0; y<map.gridMap[0].length; y++){
-                if(cache_countrys.indexOf(map.gridMap[x][y].id) === -1 && map.gridMap[x][y].id >= 0)
-                    cache_countrys.push(map.gridMap[x][y].id);
-                else if(map.gridMap[x][y].id < 0)
-                    cache_water=map.gridMap[x][y];
-            }
+        var players = [];
+        var countrys = [];
+        
+        //Spieler erzeugen
+        for(var i = 0; i < _players.length; i++)
+        {
+            players[_players[i].id] = new tddjs.client.player();
+            players[_players[i].id].deserializeObject(_players[i]);
         }
-        for(var i=0; i<cache_countrys.length; i++){
+        
+        //Länder erzeugen
+        for(var i=0; i < countries.length; i++)
+        {
             countrys[i] = new tddjs.client.map.country();
-            countrys[i].id=cache_countrys[i];
-            countrys[i].setName("ID:"+cache_countrys[i]);
+            countrys[i].id = countries[i].id;
+            countrys[i].setName(countries[i].name);
+            countrys[i].setOwner(players[countries[i].player]);
         }
         
         //init Borders
-        for(var c=0;c<map.continents.length;c++){
-            for(var countr=0;countr<map.continents[c].countries.length;countr++){
-                for(var b=0; b<map.continents[c].countries[countr].borders.length; b++){
+        for(var c=0; c < map.continents.length; c++)
+        {
+            for(var countr=0; countr < map.continents[c].countries.length; countr++)
+            {
+                for(var b=0; b<map.continents[c].countries[countr].borders.length; b++)
+                {
                     _addBorder(map.continents[c].countries[countr].id,map.continents[c].countries[countr].borders[b]);
                 }
             }
