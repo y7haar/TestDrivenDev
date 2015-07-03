@@ -5,19 +5,32 @@
 
 function startGame(){
     var controller;
-    var m;
-    var m2;
-
-    //Einstellungen Generator
-    m=new tddjs.server.controller.mapGenerator();
-    m.setGridSize(150,150);
-    m.setMaximumCountrySize(300);
-    m.setMinimumCountrySize(200);
-    m.setMinimumContinentNumber(6);
-    m.setMaximumContinentNumber(10);
-    m.setMinimumContinentSize(4);
-    m.setMinimumWaterNumber(6);
-    m.setMinimumWaterNumber(4);
+    var mapController = new tddjs.server.controller.mapController();
+    var map;
+    
+    //Spieler
+    var players = [];
+    
+    var player1 = new tddjs.client.player();
+    player1.setId(1);
+    player1.setName("Ranol");
+    player1.setColor("#FFA500");
+    players.push(player1);
+    var player2 = new tddjs.client.player();
+    player2.setId(2);
+    player2.setName("Kimberley");
+    player2.setColor("#FFFF00");
+    players.push(player2);
+    var player3 = new tddjs.client.player();
+    player3.setId(3);
+    player3.setName("Riodian");
+    player3.setColor("#7FFF00");
+    players.push(player3);
+    var player4 = new tddjs.client.player();
+    player4.setId(4);
+    player4.setName("Merowinger");
+    player4.setColor("#87CEFA");
+    players.push(player4);
     
     //Namen für Generation Testweise!
     var countryList = ["Bakaresh", "Rodkaresh", "Bastion Akundur", "Ankh Morpork", "Serandur", "Sturmgipfel",
@@ -38,11 +51,13 @@ function startGame(){
                     "Khorinis", "Jharkendar", "Irdorath", "Myrtana", "Nordmar", "Varant", "Velen", "Novigrad",
                     "Skellige", "Weißgarten", "Oxenfurt", "Kaer Morhen", "Wyzima", "Weißlauf", "Flusswald", "Riften",
                     "Winterfeste", "Morthal", "Windhelm", "Markarth", "Helgen"];
-    m.getCountryNameGenerator().setNameList(countryList);
     //Kontinentnamen
     var list = ["Aranonda", "Lorna", "Lors", "Faridon", "Elona", "Cantha", "Tyria",
                     "Nod", "Rod", "Kryta", "Ascalon", "Elysium", "Braktarien", "Karatie"];
-    m.getContinentNameGenerator().setNameList(list); 
+                
+    //Namenslisten setzen
+    mapController.getMapGenerator().getCountryNameGenerator().setNameList(countryList);
+    mapController.getMapGenerator().getContinentNameGenerator().setNameList(list); 
     
     canvas = document.getElementById('game');
     if (canvas && canvas.getContext) {
@@ -50,14 +65,14 @@ function startGame(){
        if (ctx) {
             controller = new tddjs.client.ui.gameUiController(null,ctx);
             
-            m2 = m.generateMap();
-            // nur zur hilfe  mfg Alex
-            console.log("MAP: \n"+m2);
-            m2 = m.serializeAsJSON(m2);
+            //Karten erstellen
+            mapController.init(players);
+
+            map = mapController.getSerializedMap();
             //controller._getMap(m2);
             //controller._initMap();
             //window.requestAnimationFrame(controller.drawLoading);
-            controller.init(m2);
+            controller.init(map);
        }
    }
 }
