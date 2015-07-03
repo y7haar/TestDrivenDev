@@ -123,6 +123,25 @@ TestCase("ServerMapTest",
         this.map1.addContinent(this.continent2);
         x =  this.map1.getContinentCount();
         assertTrue(x === 2);
+    },
+    
+    "test map should return Continents owned by player": function()
+    {
+        assertFunction(this.map1.getContinentsByPlayer);
+        
+        var continents = this.map1.getContinentsByPlayer(this.player1);
+        
+        var c;
+        for(var i in continents){
+            for(var j in continents[i].getCountrys()){
+                c=continents[i].getCountrys()[j]
+                break;
+            }
+            break;
+        }
+        
+        assertTrue(continents.length > 0);
+        assertTrue(c.getOwner()===this.player1);
     }
 });
 
