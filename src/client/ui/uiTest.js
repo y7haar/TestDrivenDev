@@ -82,6 +82,8 @@ function startGame(){
             buttons["attackingState"][1]=new tddjs.client.ui.button(130,635,"Finish",ctx);
             buttons["waitingState"]=[];
             buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
+            controller.setPlayerColor(player1.getColor());
+            controller.setStateStr(player1.getName() +": "+ "attackingState")
             controller.setButtons(buttons["attackingState"]);
             controller.init(map);
        }
