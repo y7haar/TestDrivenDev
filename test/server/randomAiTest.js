@@ -50,6 +50,7 @@ TestCase("RandomAiTest", {
         this.sandbox = sinon.sandbox.create();
         this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
         this.placeUnitsSpy = this.sandbox.spy(this.ai, "placeUnits");
+        this.sglcPlaceUnitsSpy = this.sandbox.spy(this.sglc, "placeUnits");
         
         this.realUnitStock = this.sglc.getUnitStockByPlayer;
         
@@ -178,6 +179,15 @@ TestCase("RandomAiTest", {
     
      "test ai should have function to place units": function() {
         assertFunction(this.ai.placeUnits);
+    },
+    
+    "test placeUnits should call placeUnits method in sglc": function() {
+        sinon.assert.notCalled(this.sglcPlaceUnitsSpy);
+        
+        this.ai.placeUnits(this.c1, 1);
+        
+        sinon.assert.calledOnce(this.sglcPlaceUnitsSpy);
+        sinon.assert.calledWith(this.sglcPlaceUnitsSpy, this.c1, 1);
     }
 
 });
