@@ -673,7 +673,7 @@ function gameUiController(aGLC,aCtx){
                 _deserialize(map);
             else
                 throw new Error("Map isn't initialized!");
-        return map;
+        return _map;
     }
     
     function _initGridMap(){
