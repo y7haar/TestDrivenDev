@@ -37,7 +37,7 @@ function randomAi(aPlayer, aMap, aGlc)
     
     function placeUnits(aCountry, aCount)
     {
-        
+        _gameLoopController.placeUnits(aCountry, aCount);
     }
     
     function placeAllUnits()
