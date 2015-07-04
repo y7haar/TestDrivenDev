@@ -48,6 +48,20 @@ function gameLoopController()
         _map = aMap;
     }
     
+    // This method should place units in map
+    // No Validation checking is needed
+    function placeUnits(aCountry, aCount)
+    {
+        
+    }
+    
+    // This method should update map with battle result of two countries
+    //No Validation is needed
+    function attack(aFrom, aTo)
+    {
+        
+    }
+    
     function playerMove(req, res)
     {      
         var type = req.body.type;
@@ -183,5 +197,8 @@ function gameLoopController()
     this.setMap = setMap;
     this.setMaxPlayers = setMaxPlayers;
     this.addClient = addClient;
+    
+    this.attack = attack;
+    this.placeUnits = placeUnits;
     
 }
