@@ -60,7 +60,17 @@ function gameController(aCtx){
         
     }
     function attackingMove(x,y){
-
+        var id = _gridMap[x][y].id;
+        var imgCacheHover = _gameUiController.getImgCacheHover();
+        if(id>=0){ //kein wasser
+            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")");
+            for (var i in imgCacheHover){
+                if(imgCacheHover[i].id === id)
+                   imgCacheHover[i].activ = true;
+                else
+                   imgCacheHover[i].activ = false;
+            }
+        }
     }
     function waitingMove(x,y){
         
