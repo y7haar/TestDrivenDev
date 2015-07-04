@@ -63,7 +63,7 @@ function startGame(){
     if (canvas && canvas.getContext) {
        ctx = canvas.getContext("2d");
        if (ctx) {
-            controller = new tddjs.client.ui.gameUiController(null,ctx);
+            controller = new tddjs.client.ui.gameUiController(ctx);
             
             //Karten erstellen
             mapController.init(players);
