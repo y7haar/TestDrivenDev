@@ -283,7 +283,7 @@ function gameUiController(aCtx){
         for(var x=0;x<_gridMap.length;x++){
             for(var y=0;y<_gridMap[0].length;y++){
                 if(_gridMap[x][y].id > 0){
-                    _ctx.fillStyle = _gridMap[x][y].getOwner().getColor(); //"#C88C00"
+                    _ctx.fillStyle = getRgbaColor(_gridMap[x][y].getOwner().getColor(),0.75); //"#C88C00"
                     _ctx.fillRect(x+(x*w)+border/2+w/2,y+(y*h)+border/2+h/2,1,1);
                 }
             }
