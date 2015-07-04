@@ -49,6 +49,7 @@ TestCase("RandomAiTest", {
         this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1, this.sglc);
         this.sandbox = sinon.sandbox.create();
         this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
+        this.placeUnitsSpy = this.sandbox.spy(this.ai, "placeUnits");
         
         this.realUnitStock = this.sglc.getUnitStockByPlayer;
         
@@ -147,6 +148,32 @@ TestCase("RandomAiTest", {
         this.ai.placeAllUnits();
         
         assertEquals(unitsBefore + 10, this.c1.getUnitCount() + this.c3.getUnitCount());
+    },
+    
+     "test placeAllUnits should call placeUnits, only 1 country with enemy": function() {
+         sinon.assert.notCalled(this.placeUnitsSpy);
+        
+        this.ai.placeAllUnits();
+        
+        sinon.assert.calledTwice(this.placeUnitsSpy);
+        assertEquals(10, this.placeUnitsSpy.args[0][1]);
+        assertEquals(0, this.placeUnitsSpy.args[1][1]);
+    },
+    
+    "test placeAllUnits should call placeUnits, more countries with enemy": function() {
+        this.c3.addBorder(this.c2);
+        this.c2.addBorder(this.c3);
+        
+        this.c1.setUnitCount(2);
+        
+        sinon.assert.notCalled(this.placeUnitsSpy);
+        
+        this.ai.placeAllUnits();
+        
+        sinon.assert.calledThrice(this.placeUnitsSpy);
+        assertEquals(3, this.placeUnitsSpy.args[0][1]);
+        assertEquals(6, this.placeUnitsSpy.args[1][1]);
+        assertEquals(1, this.placeUnitsSpy.args[2][1]);
     },
     
      "test ai should have function to place units": function() {
