@@ -193,7 +193,7 @@ function gameUiController(aCtx){
         _ctx.font = "25px Arial";
         _ctx.fillRect(5,_ctx.canvas.height/2-20,step/maxSteps*_ctx.canvas.width-5,40);
         _ctx.fillStyle = "#000";
-        _ctx.fillText(str,_ctx.canvas.width/2-_ctx.measureText(str).width/2,_ctx.canvas.height/2+5);
+        _ctx.fillText(str,_ctx.canvas.width/2-_ctx.measureText(str).width/2,_ctx.canvas.height/2+7);
     }
     function _afterLoading(){
         _ctx.canvas.addEventListener('mousemove', mouseMove, false);
@@ -454,10 +454,10 @@ function gameUiController(aCtx){
        //Text
        _ctx.font="20px Georgia";
        _ctx.fillStyle = "#000000";
-       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2+2,21);
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2+2,19);
        _ctx.font="20px Georgia";
        _ctx.fillStyle = _playerColor;
-       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,18);
        _ctx.fillStyle = "#000000";
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
