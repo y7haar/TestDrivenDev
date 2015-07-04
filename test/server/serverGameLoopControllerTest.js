@@ -487,6 +487,18 @@ TestCase("serverGameLoopControllerTest", {
        assertFalse(this.serverGameLoop.messageAllClientsCalled);
        this.serverGameLoop.messageAllClients();
        assertTrue(this.serverGameLoop.messageAllClientsCalled);    
+    },
+    
+    
+    
+    "test sglc should implement method to place units":function()
+    {
+        assertFunction(this.serverGameLoop.placeUnits);
+    },
+    
+    "test sglc should implement method to perform an attack":function()
+    {
+        assertFunction(this.serverGameLoop.attack);
     }
     
   
