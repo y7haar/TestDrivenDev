@@ -55,6 +55,13 @@ function gameLoopController()
         
     }
     
+    // Method should return count of new units when a new round is started
+    // It should also include Continent Bonus id player owns whole contintent
+    function getUnitStockByPlayer(aPlayer)
+    {
+        
+    }
+    
     // This method should update map with battle result of two countries
     //No Validation is needed
     function attack(aFrom, aTo)
@@ -200,5 +207,6 @@ function gameLoopController()
     
     this.attack = attack;
     this.placeUnits = placeUnits;
+    this.getUnitStockByPlayer = getUnitStockByPlayer;
     
 }
