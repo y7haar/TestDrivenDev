@@ -4,7 +4,7 @@
 
 TestCase("RandomAiTest", {
     setUp: function() {
-        this.ai = new tddjs.server.controller.randomAi();
+        
         
         this.map1 = new tddjs.server.map.map();
         this.player1 = new tddjs.server.player();
@@ -42,6 +42,8 @@ TestCase("RandomAiTest", {
         this.continent1.addCountry(this.c3);
         
         this.map1.addContinent(this.continent1);
+        
+        this.ai = new tddjs.server.controller.randomAi(this.player1);
         //-------------------------------------
     },
     
@@ -64,12 +66,16 @@ TestCase("RandomAiTest", {
     "test evaluateAttack should return higher values if country from has more units than country to": function() {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
         
+        this.ai = new tddjs.server.controller.randomAi(this.player2);
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         assertTrue(value1 > value2);
     },
     
     "test evaluateAttack should return quotient of unit counts of both countries": function() {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
+        
+        
+        this.ai = new tddjs.server.controller.randomAi(this.player2);
         
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         
@@ -97,6 +103,8 @@ TestCase("RandomAiTest", {
     "test evaluatePlacing should return sum of all enemy border values": function() {
         var value = this.ai.evaluatePlacing(this.c1);
         assertEquals(2 / 10, value);
+        
+        this.ai = new tddjs.server.controller.randomAi(this.player2);
         
         var value = this.ai.evaluatePlacing(this.c2);
         assertEquals(10 / 2, value);
