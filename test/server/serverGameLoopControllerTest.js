@@ -499,8 +499,11 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc should implement method to perform an attack":function()
     {
         assertFunction(this.serverGameLoop.attack);
-    }
+    },
     
-  
+     "test sglc should implement method to get new unit stock":function()
+    {
+        assertFunction(this.serverGameLoop.getUnitStockByPlayer);
+    }
 });
     
