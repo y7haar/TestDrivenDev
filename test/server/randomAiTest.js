@@ -41,7 +41,7 @@ TestCase("RandomAiTest", {
         this.continent1.addCountry(this.c2);
         this.continent1.addCountry(this.c3);
         
-        this.map.addContinent(this.continent1);
+        this.map1.addContinent(this.continent1);
         //-------------------------------------
     },
     
@@ -66,6 +66,15 @@ TestCase("RandomAiTest", {
         
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         assertTrue(value1 > value2);
+    },
+    
+    "test evaluateAttack should return quotient of unit counts of both countries": function() {
+        var value1 = this.ai.evaluateAttack(this.c1, this.c2);
+        
+        var value2 = this.ai.evaluateAttack(this.c2, this.c1);
+        
+        assertEquals(10 / 2, value1);
+        assertEquals(2 / 10, value2);
     }
 
 });
