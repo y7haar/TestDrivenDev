@@ -10,6 +10,12 @@ else
 
 function randomAi()
 {
+    function evaluateAttack(aFrom, aTo)
+    {
+        return aFrom.getUnitCount() / aTo.getUnitCount();
+    }
+    
+    this.evaluateAttack = evaluateAttack;
 };
 
 
