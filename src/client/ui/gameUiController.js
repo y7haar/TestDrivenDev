@@ -5,12 +5,10 @@
 
 tddjs.namespace("client.ui").gameUiController = gameUiController;
 
-function gameUiController(aGLC,aCtx){
+function gameUiController(aCtx){
     
-    var gameLoopController = null;
     var _ctx = null;
-    if(arguments.length === 2){
-        gameLoopController = aGLC;
+    if(arguments.length === 1){
         _ctx = aCtx;
     }
     else
@@ -483,6 +481,9 @@ function gameUiController(aGLC,aCtx){
     function getButtons(){
         return _btn;
     }
+    function setButtons(aBtnArr){
+        _btn = aBtnArr;
+    }
     
     // <editor-fold defaultstate="collapsed" desc="Event-Listener">
     function mouseMove(oEvent){
@@ -684,6 +685,10 @@ function gameUiController(aGLC,aCtx){
                 _gridMap[x][y] = _getCountryById(_gridMap[x][y].id);
             }
         }
+    }
+    
+    function getGridMap(){
+        return _gridMap;
     }
     
     function _getCountryById(id){
@@ -909,11 +914,15 @@ function gameUiController(aGLC,aCtx){
     
     this.addButton = addButton;
     this.getButtons = getButtons;
+    this.setButtons = setButtons;
     this.mouseMove = mouseMove;
     this.mouseDown = mouseDown;
     
+    this.mapDown = mapDown; //wird vom gameController überschrieben, je nach gamestate
+    
     //map-functions
     this.getMap = getMap;
+    this.getGridMap = getGridMap;
     
     this._initMap = _initMap;
     this._getCountries = _getCountries;
