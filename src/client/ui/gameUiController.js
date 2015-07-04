@@ -936,7 +936,7 @@ function gameUiController(aCtx){
     this.mouseDown = mouseDown;
     
     this.mapDown = mapDown; //wird vom gameController überschrieben, je nach gamestate
-    this.mapMove = mapMove;
+    this.mapMove = mapMove; //wird vom gameController überschrieben, je nach gamestate
     
     this.setCountryStrHover = setCountryStrHover;
     this.getImgCacheHover = getImgCacheHover;

@@ -8,6 +8,7 @@ function startGame(){
     var mapController = new tddjs.server.controller.mapController();
     var map;
     
+    
     //Spieler
     var players = [];
     
@@ -72,6 +73,16 @@ function startGame(){
             //controller._getMap(m2);
             //controller._initMap();
             //window.requestAnimationFrame(controller.drawLoading);
+            //buttons
+            var buttons={};
+            buttons["placingState"]=[];
+            buttons["placingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
+            buttons["attackingState"]=[];
+            buttons["attackingState"][0]=new tddjs.client.ui.button(40,635,"Attack!",ctx);
+            buttons["attackingState"][1]=new tddjs.client.ui.button(130,635,"Finish",ctx);
+            buttons["waitingState"]=[];
+            buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
+            controller.setButtons(buttons["attackingState"]);
             controller.init(map);
        }
    }

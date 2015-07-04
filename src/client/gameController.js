@@ -32,10 +32,13 @@ function gameController(aCtx){
         states["attackingState"].move=attackingMove;
         states["waitingState"].move=waitingMove;
         
-        buttons["placingState"][0]=new tddjs.client.ui.button(x,y,"str",aCtx);
-        buttons["attackingState"][0]=new tddjs.client.ui.button(x,y,"Attack!",aCtx);
-        buttons["attackingState"][1]=new tddjs.client.ui.button(x,y,"Finish",aCtx);
-        buttons["waitingState"][0]=new tddjs.client.ui.button(x,y,"str",aCtx);
+        buttons["placingState"]=[];
+        buttons["placingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
+        buttons["attackingState"]=[];
+        buttons["attackingState"][0]=new tddjs.client.ui.button(40,635,"Attack!",ctx);
+        buttons["attackingState"][1]=new tddjs.client.ui.button(130,635,"Finish",ctx);
+        buttons["waitingState"]=[];
+        buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
         // </editor-fold>
         
         
