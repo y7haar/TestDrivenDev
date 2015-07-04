@@ -43,11 +43,14 @@ TestCase("RandomAiTest", {
         
         this.map1.addContinent(this.continent1);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player1);
+        this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1);
+        this.sandbox = sinon.sandbox.create();
+        this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
         //-------------------------------------
     },
     
     tearDown: function() {
+        this.sandbox.restore();
     },
     
     "test object of ai should not be undefined": function() {
@@ -66,7 +69,7 @@ TestCase("RandomAiTest", {
     "test evaluateAttack should return higher values if country from has more units than country to": function() {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         assertTrue(value1 > value2);
     },
@@ -75,7 +78,7 @@ TestCase("RandomAiTest", {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
         
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
         
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         
@@ -104,10 +107,28 @@ TestCase("RandomAiTest", {
         var value = this.ai.evaluatePlacing(this.c1);
         assertEquals(2 / 10, value);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
         
         var value = this.ai.evaluatePlacing(this.c2);
         assertEquals(10 / 2, value);
+    },
+    
+    "test ai should have function to place all units": function() {
+        assertFunction(this.ai.placeAllUnits);
+    },
+    
+    "test placeAllUnits should call evaluatePlacing for each country owned": function() {
+        sinon.assert.notCalled(this.evaluatePlacingSpy);
+        
+        this.ai.placeAllUnits();
+        
+        sinon.assert.calledTwice(this.evaluatePlacingSpy);
+        assertEquals(this.c1, this.evaluatePlacingSpy.args[0][0]);
+        assertEquals(this.c3, this.evaluatePlacingSpy.args[1][0]);
+    },
+    
+     "test ai should have function to place units": function() {
+        assertFunction(this.ai.placeUnits);
     }
 
 });
