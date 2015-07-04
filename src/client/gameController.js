@@ -11,6 +11,7 @@ function gameController(aCtx){
     var _Map;
     var _gridMap;
     var states={};
+    var buttons={};
     
     var _selected=[];
     
@@ -20,12 +21,22 @@ function gameController(aCtx){
         _Map = _gameUiController.getMap(/*TODO: daten vom server*/);
         _gridMap = _gameUiController.getGridMap();
         _gameUiController.mapDown = mapDown;
+        _gameUiController.mapMove = mapMove;
         
-        //gamestates
+        // <editor-fold defaultstate="collapsed" desc="Game-States">
         states["placingState"].down=placingDown;
         states["attackingState"].down=attackingDown;
         states["waitingState"].down=waitingDown;
         
+        states["placingState"].move=placingMove;
+        states["attackingState"].move=attackingMove;
+        states["waitingState"].move=waitingMove;
+        
+        buttons["placingState"][0]=new tddjs.client.ui.button(x,y,"str",aCtx);
+        buttons["attackingState"][0]=new tddjs.client.ui.button(x,y,"Attack!",aCtx);
+        buttons["attackingState"][1]=new tddjs.client.ui.button(x,y,"Finish",aCtx);
+        buttons["waitingState"][0]=new tddjs.client.ui.button(x,y,"str",aCtx);
+        // </editor-fold>
         
         
         _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
@@ -39,6 +50,23 @@ function gameController(aCtx){
     function mapDown(x,y){
         states[_gameLoopController.getStateName()].down(x,y);
     }
+    function mapMove(x,y){
+        _gameUiController.setButtons(buttons[_gameLoopController.getStateName()])
+        states[_gameLoopController.getStateName()].move(x,y);
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="Game-States-MouseMove">
+    function placingMove(x,y){
+        
+    }
+    function attackingMove(x,y){
+
+    }
+    function waitingMove(x,y){
+        
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Game-States-MouseDown">
     function placingDown(x,y){
         
     }
@@ -68,5 +96,6 @@ function gameController(aCtx){
     function waitingDown(x,y){
         
     }
+    // </editor-fold>
     // </editor-fold>
 }
