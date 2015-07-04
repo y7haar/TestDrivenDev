@@ -75,6 +75,31 @@ TestCase("RandomAiTest", {
         
         assertEquals(10 / 2, value1);
         assertEquals(2 / 10, value2);
+    },
+    
+    "test ai should have function to evaluate placing of units to specified country": function() {
+        assertFunction(this.ai.evaluatePlacing);
+    },
+    
+     "test evaluatePlacing should return 0 if selected country only has own borders": function() {
+        var c4 = new tddjs.server.map.country();
+        
+        c4.setName("Country4");
+        c4.setOwner(this.player1);
+        c4.setUnitCount(1);
+        c4.addBorder(this.c3);
+        this.c3.addBorder(c4);
+        
+        var value = this.ai.evaluatePlacing(c4);
+        assertEquals(0, value);
+    },
+    
+    "test evaluatePlacing should return sum of all enemy border values": function() {
+        var value = this.ai.evaluatePlacing(this.c1);
+        assertEquals(2 / 10, value);
+        
+        var value = this.ai.evaluatePlacing(this.c2);
+        assertEquals(10 / 2, value);
     }
 
 });
