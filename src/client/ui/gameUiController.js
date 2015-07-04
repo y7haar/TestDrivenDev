@@ -229,6 +229,12 @@ function gameUiController(aCtx){
             }   
         }
         
+        //hover
+        for (var i in imgCacheHover){
+            if(imgCacheHover[i].activ)
+                _ctx.drawImage(imgCacheHover[i].img,0,0);
+        }
+        
         _ctx.drawImage(imgCacheUnits,0,0);
     }
     
@@ -286,7 +292,7 @@ function gameUiController(aCtx){
         clear();
         for(var i in _countries){
             var id = _countries[i].id;
-            var ok=false
+            var ok=false;
             for(var x=0;x<_gridMap.length;x++){
                 for(var y=0;y<_gridMap[0].length;y++){
                     if(_gridMap[x][y].id === id){
@@ -485,15 +491,21 @@ function gameUiController(aCtx){
         _btn = aBtnArr;
     }
     
+    function setCountryStrHover(str){
+        countryStrHover = str;
+    }
+    function getImgCacheHover(){
+        return imgCacheHover;
+    }
     // <editor-fold defaultstate="collapsed" desc="Event-Listener">
     function mouseMove(oEvent){
         var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
         var y = Math.round((oEvent.offsetY-border/2) * _gridMap[0].length / (_ctx.canvas.height-border-bottom));
-
-        drawGame();
         
         for (var i in _btn)
             _btn[i].isCoordOnButton(oEvent.offsetX,oEvent.offsetY);
+        
+        drawGame();
         
         if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
             return; //nicht auf dem grid
@@ -522,9 +534,13 @@ function gameUiController(aCtx){
         if(id>=0){ //kein wasser
             for (var i in imgCacheHover){
                 if(imgCacheHover[i].id === id){
-                    _ctx.drawImage(imgCacheHover[i].img,0,0);
-                    countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
+                    imgCacheHover[i].activ = true;
+                    //_ctx.drawImage(imgCacheHover[i].img,0,0);
+                    //countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
+                    setCountryStrHover(_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")");
                 }
+                else
+                    imgCacheHover[i].activ = false;
             }
         }
     }
@@ -912,6 +928,7 @@ function gameUiController(aCtx){
     this.init = init;
     this.drawGame=drawGame;
     
+    //UI
     this.addButton = addButton;
     this.getButtons = getButtons;
     this.setButtons = setButtons;
@@ -919,6 +936,10 @@ function gameUiController(aCtx){
     this.mouseDown = mouseDown;
     
     this.mapDown = mapDown; //wird vom gameController überschrieben, je nach gamestate
+    this.mapMove = mapMove;
+    
+    this.setCountryStrHover = setCountryStrHover;
+    this.getImgCacheHover = getImgCacheHover;
     
     //map-functions
     this.getMap = getMap;
@@ -927,6 +948,7 @@ function gameUiController(aCtx){
     this._initMap = _initMap;
     this._getCountries = _getCountries;
     this._deserialize = _deserialize;
+    this._getContinentFromCountryById = _getContinentFromCountryById;
     
     //helper
     this.getRgbaColor=getRgbaColor;
