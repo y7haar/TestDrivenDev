@@ -73,6 +73,7 @@ function startGame(){
             //controller._getMap(m2);
             //controller._initMap();
             //window.requestAnimationFrame(controller.drawLoading);
+            
             //buttons
             var buttons={};
             buttons["placingState"]=[];
@@ -85,6 +86,8 @@ function startGame(){
             controller.setPlayerColor(player1.getColor());
             controller.setStateStr(player1.getName() +": "+ "attackingState")
             controller.setButtons(buttons["attackingState"]);
+            
+            
             controller.init(map);
        }
    }

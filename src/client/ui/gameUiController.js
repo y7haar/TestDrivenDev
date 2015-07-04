@@ -50,6 +50,7 @@ function gameUiController(aCtx){
     var _gridMapW;
     var _gridMapH;
     var _map;
+    var _playerarr=[];
     var _water;
     var _seaRoute=[];
     
@@ -454,14 +455,22 @@ function gameUiController(aCtx){
        //Text
        _ctx.font="20px Georgia";
        _ctx.fillStyle = "#000000";
-       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2+2,19);
-       _ctx.font="20px Georgia";
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2+2,20);
        _ctx.fillStyle = _playerColor;
        _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,18);
        _ctx.fillStyle = "#000000";
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
        _ctx.fillText(countryStrSelected,_ctx.canvas.width-border-_ctx.measureText(countryStrSelected).width,_ctx.canvas.height-border/2-bottom+40);
+       
+       //Player
+       for(var i=0;i<_playerarr.length;i++){
+           _ctx.font="20px Georgia";
+           _ctx.fillStyle = "#000000";
+           _ctx.fillText(_playerarr[i].getName(),28+i*150,_ctx.canvas.height-border/2-bottom+68);
+           _ctx.fillStyle = _playerarr[i].getColor();
+           _ctx.fillText(_playerarr[i].getName(),26+i*150,_ctx.canvas.height-border/2-bottom+66);
+       }
     }
     
     function getRgbaColor(color,alpha){        
@@ -596,6 +605,7 @@ function gameUiController(aCtx){
         {
             players[_players[i].id] = new tddjs.client.player();
             players[_players[i].id].deserializeObject(_players[i]);
+            _playerarr.push(players[_players[i].id]);
         }
         
         //Länder erzeugen
