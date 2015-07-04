@@ -69,7 +69,7 @@ function map()
             for(var country in countries)
             {
                 if(countries[country].getOwner() === player && ! out.hasOwnProperty(continents[continent].getName()))
-                    out[continents[continent].getName()] = continent;
+                    out[continents[continent].getName()] = continents[continent];
             }
         }
         return out;
