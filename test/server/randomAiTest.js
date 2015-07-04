@@ -7,6 +7,9 @@ TestCase("RandomAiTest", {
         
         
         this.map1 = new tddjs.server.map.map();
+        this.sglc = new tddjs.server.controller.gameLoopController();
+        this.sglc.setMap(this.map1);
+        
         this.player1 = new tddjs.server.player();
         this.player2 = new tddjs.server.player();
         
@@ -43,14 +46,24 @@ TestCase("RandomAiTest", {
         
         this.map1.addContinent(this.continent1);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1);
+        this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1, this.sglc);
         this.sandbox = sinon.sandbox.create();
         this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
+        
+        this.realUnitStock = this.sglc.getUnitStockByPlayer;
+        
+        this.sglc.getUnitStockByPlayer = function(player)
+        {
+            return 10;
+        };
+        
         //-------------------------------------
     },
     
     tearDown: function() {
         this.sandbox.restore();
+        this.sglc.getUnitStockByPlayer = this.realUnitStock;
+        
     },
     
     "test object of ai should not be undefined": function() {
@@ -69,7 +82,7 @@ TestCase("RandomAiTest", {
     "test evaluateAttack should return higher values if country from has more units than country to": function() {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1, this.sglc);
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         assertTrue(value1 > value2);
     },
@@ -78,7 +91,7 @@ TestCase("RandomAiTest", {
         var value1 = this.ai.evaluateAttack(this.c1, this.c2);
         
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1, this.sglc);
         
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         
@@ -107,7 +120,7 @@ TestCase("RandomAiTest", {
         var value = this.ai.evaluatePlacing(this.c1);
         assertEquals(2 / 10, value);
         
-        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1);
+        this.ai = new tddjs.server.controller.randomAi(this.player2, this.map1, this.sglc);
         
         var value = this.ai.evaluatePlacing(this.c2);
         assertEquals(10 / 2, value);
@@ -125,6 +138,15 @@ TestCase("RandomAiTest", {
         sinon.assert.calledTwice(this.evaluatePlacingSpy);
         assertEquals(this.c1, this.evaluatePlacingSpy.args[0][0]);
         assertEquals(this.c3, this.evaluatePlacingSpy.args[1][0]);
+    },
+    
+    "test placeAllUnits should dispense all Units": function() {
+        
+        var unitsBefore = this.c1.getUnitCount() + this.c3.getUnitCount();
+        
+        this.ai.placeAllUnits();
+        
+        assertEquals(unitsBefore + 10, this.c1.getUnitCount() + this.c3.getUnitCount());
     },
     
      "test ai should have function to place units": function() {
