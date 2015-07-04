@@ -41,6 +41,7 @@ function gameController(aCtx){
         buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
         // </editor-fold>
         
+        _gameUiController.setPlayerColor(_Player.getColor());
         
         _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
         
@@ -54,7 +55,8 @@ function gameController(aCtx){
         states[_gameLoopController.getStateName()].down(x,y);
     }
     function mapMove(x,y){
-        _gameUiController.setButtons(buttons[_gameLoopController.getStateName()])
+        _gameUiController.setButtons(buttons[_gameLoopController.getStateName()]);
+        _gameUiController.setStateStr(_Player.getName() +": "+ _gameLoopController.getStateName())
         states[_gameLoopController.getStateName()].move(x,y);
     }
     

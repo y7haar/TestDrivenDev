@@ -72,6 +72,8 @@ function gameUiController(aCtx){
     
     var countryStrHover;
     var countryStrSelected;
+    var stateStr;
+    var _playerColor;
     
     
     var serializedMap;
@@ -451,8 +453,11 @@ function gameUiController(aCtx){
 
        //Text
        _ctx.font="20px Georgia";
-       _ctx.fillStyle = "#000000";/*
-       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);*/
+       _ctx.fillStyle = "#000000";
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2+2,21);
+       _ctx.font="20px Georgia";
+       _ctx.fillStyle = _playerColor;
+       _ctx.fillText(stateStr,_ctx.canvas.width/2-_ctx.measureText(stateStr).width/2,20);
        _ctx.fillStyle = "#000000";
        _ctx.fillText(countryStrHover,_ctx.canvas.width-border-_ctx.measureText(countryStrHover).width,_ctx.canvas.height-border/2-bottom+20);
        _ctx.fillStyle = "#FF0000";
@@ -493,6 +498,12 @@ function gameUiController(aCtx){
     
     function setCountryStrHover(str){
         countryStrHover = str;
+    }
+    function setStateStr(str){
+        stateStr = str;
+    }
+    function setPlayerColor(color){
+        _playerColor = color;
     }
     function getImgCacheHover(){
         return imgCacheHover;
@@ -938,7 +949,10 @@ function gameUiController(aCtx){
     this.mapDown = mapDown; //wird vom gameController überschrieben, je nach gamestate
     this.mapMove = mapMove; //wird vom gameController überschrieben, je nach gamestate
     
+    //UI-Helper
     this.setCountryStrHover = setCountryStrHover;
+    this.setStateStr = setStateStr;
+    this.setPlayerColor = setPlayerColor;
     this.getImgCacheHover = getImgCacheHover;
     
     //map-functions
