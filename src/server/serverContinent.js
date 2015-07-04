@@ -131,7 +131,7 @@ function continent()
         
         for(var country in countries)
         {
-            if(countries[country].getOwner === player)
+            if(countries[country].getOwner() === player)
                 out[country] = countries[country];
                 
         }
