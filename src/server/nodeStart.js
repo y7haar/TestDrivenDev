@@ -13,10 +13,26 @@ GLOBAL.gameApp = require("./gameApp");
 
 console.log("loaded all Apps.");
 
+
+
+
+
 /*
  *  Internal Requires
  */
 var namespace = require('./tdd');
+var NameListGenerator = require('./nameListGenerator');
+
+var continentGenerator = new NameListGenerator();
+var countryGenerator = new NameListGenerator();
+
+continentGenerator.readFileList(continentGenerator.CONTINENT_LIST);
+countryGenerator.readFileList(countryGenerator.COUNTRY_LIST);
+
+GLOBAL.CONTINENT_NAMES_ARRAY = continentGenerator.getNameList();
+GLOBAL.COUNTRY_NAMES_ARRAY = countryGenerator.getNameList();
+
+console.log("Loaded Namelists");
 
 var app = express();
 
@@ -68,22 +84,6 @@ app.all("*", function (req, res, next) {
     next();
 });
 
-//app.post('/lobbies/:id', function (req, res) {
-//
-//   console.log(req.body);
-//   
-//    if(typeof req.session.token === "undefined")
-//    {
-//        console.log();
-//        console.log("SESSION UNDEFINED");
-//        req.session.token = parseInt((Math.random() * 100000000));
-//        console.log("NEW TOKEN: " + req.session.token);
-//        console.log();
-//    }
-//    
-//  res.send('Lobby ' + req.params.id);
-//});
-
 
 console.log("routing...");
 
@@ -98,10 +98,3 @@ console.log("routed all apps. ");
  */
 
 
-var nlg = require('./nameListGenerator');
-
-var nameListGenerator = new nlg();
-
-nameListGenerator.readFileList(nameListGenerator.COUNTRY_LIST);
-nameListGenerator.shuffleNameList();
-console.log(nameListGenerator.getNameList());
