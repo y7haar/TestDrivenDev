@@ -56,7 +56,7 @@ function gameLoopController()
     }
     
     // Method should return count of new units when a new round is started
-    // It should also include Continent Bonus id player owns whole contintent
+    // It should also include Continent Bonus if player owns whole contintent
     function getUnitStockByPlayer(aPlayer)
     {
         
