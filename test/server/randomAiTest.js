@@ -50,6 +50,7 @@ TestCase("RandomAiTest", {
         this.sandbox = sinon.sandbox.create();
         this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
         this.evaluateAttackSpy = this.sandbox.spy(this.ai, "evaluateAttack");
+        this.attackSpy = this.sandbox.spy(this.ai, "attack");
         this.placeUnitsSpy = this.sandbox.spy(this.ai, "placeUnits");
         this.sglcPlaceUnitsSpy = this.sandbox.spy(this.sglc, "placeUnits");
         this.sglcAttackSpy = this.sandbox.spy(this.sglc, "attack");
@@ -67,6 +68,9 @@ TestCase("RandomAiTest", {
     tearDown: function() {
         this.sandbox.restore();
         this.sglc.getUnitStockByPlayer = this.realUnitStock;
+        this.sglc.attack = this.realAttack;
+        
+        delete this.map;
         
     },
     
@@ -244,6 +248,99 @@ TestCase("RandomAiTest", {
         assertFalse(bool);
         
         sinon.assert.notCalled(this.sglcAttackSpy);
+    }
+
+});
+
+
+/* 
+ *  Tests for randomAi
+ */
+
+TestCase("RandomAiAttackAllTest", {
+    setUp: function() {
+        
+        
+        this.map1 = new tddjs.server.map.map();
+        this.sglc = new tddjs.server.controller.gameLoopController();
+        this.sglc.setMap(this.map1);
+        
+        this.player1 = new tddjs.server.player();
+        this.player2 = new tddjs.server.player();
+        
+        //Continent1-------------------------------------
+        this.continent1 = new tddjs.server.map.continent();
+        this.continent1.setName("Europa");
+        
+        this.c1 = new tddjs.server.map.country();
+        this.c1.setName("Country1");
+        this.c1.setOwner(this.player1);
+        this.c1.setUnitCount(10);
+        
+        this.c2 = new tddjs.server.map.country();
+        this.c2.setName("Country2");
+        this.c2.setOwner(this.player2);
+        this.c2.setUnitCount(2);
+        
+        this.c3 = new tddjs.server.map.country();
+        this.c3.setName("Country3");
+        this.c3.setOwner(this.player1);
+        this.c3.setUnitCount(1);
+        
+        // Borders
+        
+        this.c1.addBorder(this.c2);
+        this.c2.addBorder(this.c1);
+        
+        this.c1.addBorder(this.c3);
+        this.c3.addBorder(this.c1);
+        
+        this.continent1.addCountry(this.c1);
+        this.continent1.addCountry(this.c2);
+        this.continent1.addCountry(this.c3);
+        
+        this.map1.addContinent(this.continent1);
+        
+        this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1, this.sglc);
+        this.sandbox = sinon.sandbox.create();
+        this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
+        this.evaluateAttackSpy = this.sandbox.spy(this.ai, "evaluateAttack");
+        this.attackSpy = this.sandbox.spy(this.ai, "attack");
+        this.placeUnitsSpy = this.sandbox.spy(this.ai, "placeUnits");
+        this.sglcPlaceUnitsSpy = this.sandbox.spy(this.sglc, "placeUnits");
+        this.sglcAttackSpy = this.sandbox.spy(this.sglc, "attack");
+        
+        this.realUnitStock = this.sglc.getUnitStockByPlayer;
+        this.realAttack = this.sglc.attack;
+        
+        // Hack because real method is not yet implemented
+        this.sglc.attack = function(from, to)
+        {
+            to.setOwner(from.getOwner());  
+        };
+        
+        this.sglc.getUnitStockByPlayer = function(player)
+        {
+            return 10;
+        };
+        
+        //-------------------------------------
+    },
+    
+    tearDown: function() {
+        this.sandbox.restore();
+        this.sglc.getUnitStockByPlayer = this.realUnitStock;
+        this.sglc.attack = this.realAttack;
+        
+        delete this.map;
+        
+    },
+    "test attackAll should repeatedly call attack as long as attacks can be performed": function() {
+        sinon.assert.notCalled(this.attackSpy);
+        
+        this.ai.attackAll();
+        
+        sinon.assert.calledOnce(this.attackSpy);
     }
 
 });
