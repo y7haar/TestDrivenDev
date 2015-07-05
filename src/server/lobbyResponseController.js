@@ -313,7 +313,6 @@ function lobbyResponseController()
                 throw new Error("Player is not valid");
             
             _lobby.startGame();
-            
             res.sendStatus(200);
         }
         
