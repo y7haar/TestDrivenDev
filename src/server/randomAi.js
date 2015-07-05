@@ -156,7 +156,12 @@ function randomAi(aPlayer, aMap, aGlc)
     
     function attackAll()
     {
+        var attacksWorth = true;
         
+        while(attacksWorth)
+        {
+            attacksWorth = _self.attack();
+        }
     }
     
     this.evaluateAttack = evaluateAttack;
