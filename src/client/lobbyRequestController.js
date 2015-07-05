@@ -345,7 +345,14 @@ function lobbyRequestController()
     {
         if (typeof aLobbyId !== "number")
             throw new TypeError("Id must be number");
-
+        
+        var id = aLobbyId;
+        
+        var success = function()
+        {
+            triggerGameStart(id);
+        };
+        
         var data = {
             type: "gameStart"
         };
@@ -356,10 +363,20 @@ function lobbyRequestController()
             headers: {
                 "Content-Type": "application/json"
             },
-            data: data
+            data: data,
+            
+            onSuccess: success
         };
 
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);
+    }
+    
+    function triggerGameStart(aId)
+    {
+        if (typeof aId !== "number")
+            throw new TypeError("Id must be number");
+
+        ajax.get(BASE_URL + "game/" + aId);
     }
 
     this.setLobbyUi = setLobbyUi;
@@ -384,4 +401,5 @@ function lobbyRequestController()
     this.kickBot = kickBot;
     this.kickPlayer = kickPlayer;
     this.startGame = startGame;
+    this.triggerGameStart = triggerGameStart;
 }
