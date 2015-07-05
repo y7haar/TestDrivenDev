@@ -648,11 +648,32 @@ TestCase("LobbyRequestControllerUpdateTest", {
     "test startGame should perform a POST request with correct Content-Type header": function() {
         this.lobbyRequestController.startGame(1);
         assertEquals("application/json;charset=utf-8", this.sandbox.server.requests[0].requestHeaders["Content-Type"]);
+    },
+    
+     "test controller should have function to trigger gameStart": function() {
+        assertFunction(this.lobbyRequestController.triggerGameStart);
+    },
+    
+    "test triggerGameStart should throw Exception if gameId is no number": function() {
+        var controller = this.lobbyRequestController;
+
+        assertException(function() {
+            controller.triggerGameStart("number");
+        }, "TypeError");
+        
+        assertNoException(function() {
+            controller.triggerGameStart(1);
+        });
+    },
+    "test triggerGameStart should perform POST request without data": function() {
+        this.lobbyRequestController.triggerGameStart(1);
+
+        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals(BASE_URL + "game/1", this.sandbox.server.requests[0].url);
+        assertEquals("", this.sandbox.server.requests[0].requestBody);
     }
 
 });
-
-
 TestCase("LobbyRequestControllerEventSourceTest", {
     setUp: lobbyRequestSetup,
     tearDown: lobbyRequestTeardown,
