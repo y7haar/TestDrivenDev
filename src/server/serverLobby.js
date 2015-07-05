@@ -75,10 +75,10 @@ function lobby()
     
     function startGame()
     {
+        _mapController.getMapGenerator().getCountryNameGenerator().setNameList(COUNTRY_NAMES_ARRAY);
+        _mapController.getMapGenerator().getContinentNameGenerator().setNameList(CONTINENT_NAMES_ARRAY);
         _mapController.init(_players);
         setStarted(true);
-        
-        console.log("Map generated");
     }
     
     function setStarted(aStarted)
