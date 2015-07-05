@@ -49,8 +49,10 @@ TestCase("RandomAiTest", {
         this.ai = new tddjs.server.controller.randomAi(this.player1, this.map1, this.sglc);
         this.sandbox = sinon.sandbox.create();
         this.evaluatePlacingSpy = this.sandbox.spy(this.ai, "evaluatePlacing");
+        this.evaluateAttackSpy = this.sandbox.spy(this.ai, "evaluateAttack");
         this.placeUnitsSpy = this.sandbox.spy(this.ai, "placeUnits");
         this.sglcPlaceUnitsSpy = this.sandbox.spy(this.sglc, "placeUnits");
+        this.sglcAttackSpy = this.sandbox.spy(this.sglc, "attack");
         
         this.realUnitStock = this.sglc.getUnitStockByPlayer;
         
@@ -97,8 +99,8 @@ TestCase("RandomAiTest", {
         
         var value2 = this.ai.evaluateAttack(this.c2, this.c1);
         
-        assertEquals(10 / 2, value1);
-        assertEquals(2 / 10, value2);
+        assertEquals((10 - 1) / 2, value1);
+        assertEquals((2 - 1) / 10, value2);
     },
     
     "test ai should have function to evaluate placing of units to specified country": function() {
@@ -188,6 +190,57 @@ TestCase("RandomAiTest", {
         
         sinon.assert.calledOnce(this.sglcPlaceUnitsSpy);
         sinon.assert.calledWith(this.sglcPlaceUnitsSpy, this.c1, 1);
+    },
+    
+    "test ai should have function to perform attacks": function() {
+        assertFunction(this.ai.attack);
+    },
+    
+    "test ai should have function to perform all atacks": function() {
+        assertFunction(this.ai.attackAll);
+    },
+    
+    "test attack should evaluate players countries as long as value is not greater than 2.5": function() {
+        sinon.assert.notCalled(this.evaluateAttackSpy);
+        
+        this.ai.attack();
+        
+        sinon.assert.calledOnce(this.evaluateAttackSpy);
+        sinon.assert.calledWith(this.evaluateAttackSpy, this.c1, this.c2);
+    },
+    
+    "test attack should call glc attack if value is greater or equal 2.5": function() {
+        sinon.assert.notCalled(this.sglcAttackSpy);
+        
+        this.ai.attack();
+        
+        sinon.assert.calledOnce(this.sglcAttackSpy);
+        sinon.assert.calledWith(this.sglcAttackSpy, this.c1, this.c2);
+    },
+    
+    "test attack should perform best possible attack if no value is greater than 2.5": function() {
+        this.c2.setUnitCount(4);
+        this.c1.setUnitCount(7);
+        
+        // Value is 1.5
+        
+        sinon.assert.notCalled(this.sglcAttackSpy);
+        
+        this.ai.attack();
+        
+        sinon.assert.calledOnce(this.sglcAttackSpy);
+        sinon.assert.calledWith(this.sglcAttackSpy, this.c1, this.c2);
+    },
+    
+    "test attack should not perform any attack if highest value < 1.5": function() {
+        this.c2.setUnitCount(4);
+        this.c1.setUnitCount(3);
+        
+        sinon.assert.notCalled(this.sglcAttackSpy);
+        
+        this.ai.attack();
+        
+        sinon.assert.notCalled(this.sglcAttackSpy);
     }
 
 });
