@@ -670,7 +670,7 @@ TestCase("LobbyRequestControllerUpdateTest", {
 
         assertEquals("GET", this.sandbox.server.requests[0].method);
         assertEquals(BASE_URL + "game/1", this.sandbox.server.requests[0].url);
-        assertEquals("", this.sandbox.server.requests[0].requestBody);
+        assertEquals(null, this.sandbox.server.requests[0].requestBody);
     }
 
 });
