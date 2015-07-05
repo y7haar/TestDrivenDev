@@ -8,8 +8,8 @@ var bodyParser = require("body-parser");
 
 console.log("loaded all modules.");
 
-var lobbyApp = require("./lobbyApp");
-var gameApp = require("./gameApp");
+GLOBAL.lobbyApp = require("./lobbyApp");
+GLOBAL.gameApp = require("./gameApp");
 
 console.log("loaded all Apps.");
 
@@ -87,8 +87,9 @@ app.all("*", function (req, res, next) {
 
 console.log("routing...");
 
-app.use("/lobbies", lobbyApp);
 app.use("/game", gameApp);
+app.use("/lobbies", lobbyApp);
+
 
 console.log("routed all apps. ");
 
