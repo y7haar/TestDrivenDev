@@ -340,7 +340,7 @@ TestCase("RandomAiAttackAllTest", {
         
         this.ai.attackAll();
         
-        sinon.assert.calledOnce(this.attackSpy);
+        sinon.assert.calledTwice(this.attackSpy);
     }
 
 });
