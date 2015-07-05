@@ -665,10 +665,10 @@ TestCase("LobbyRequestControllerUpdateTest", {
             controller.triggerGameStart(1);
         });
     },
-    "test triggerGameStart should perform POST request without data": function() {
+    "test triggerGameStart should perform GET request without data": function() {
         this.lobbyRequestController.triggerGameStart(1);
 
-        assertEquals("POST", this.sandbox.server.requests[0].method);
+        assertEquals("GET", this.sandbox.server.requests[0].method);
         assertEquals(BASE_URL + "game/1", this.sandbox.server.requests[0].url);
         assertEquals("", this.sandbox.server.requests[0].requestBody);
     }
