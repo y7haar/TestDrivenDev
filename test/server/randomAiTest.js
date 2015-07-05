@@ -226,8 +226,9 @@ TestCase("RandomAiTest", {
         
         sinon.assert.notCalled(this.sglcAttackSpy);
         
-        this.ai.attack();
+        var bool = this.ai.attack();
         
+        assertTrue(bool);
         sinon.assert.calledOnce(this.sglcAttackSpy);
         sinon.assert.calledWith(this.sglcAttackSpy, this.c1, this.c2);
     },
@@ -238,7 +239,9 @@ TestCase("RandomAiTest", {
         
         sinon.assert.notCalled(this.sglcAttackSpy);
         
-        this.ai.attack();
+        var bool = this.ai.attack();
+        
+        assertFalse(bool);
         
         sinon.assert.notCalled(this.sglcAttackSpy);
     }
