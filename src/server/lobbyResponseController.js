@@ -314,6 +314,8 @@ function lobbyResponseController()
             
             _lobby.startGame();
             res.sendStatus(200);
+            
+            _self.broadcastMessage(null, "lobbystart");
         }
         
         catch(e)
