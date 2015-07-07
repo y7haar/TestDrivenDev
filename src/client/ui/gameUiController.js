@@ -718,6 +718,13 @@ function gameUiController(aCtx){
         return _map;
     }
     
+    function getPlayerById(id){
+        for(var p in _playerarr){
+            if(p.getId() === id)
+                return p;
+        }
+    }
+    
     function getMap(map){
         if(!_map)
             if(arguments.length > 0)
