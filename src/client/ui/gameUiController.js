@@ -572,7 +572,7 @@ function gameUiController(aCtx){
                     imgCacheHover[i].activ = true;
                     //_ctx.drawImage(imgCacheHover[i].img,0,0);
                     //countryStrHover=_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")";
-                    setCountryStrHover(_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")");
+                    setCountryStrHover(_gridMap[x][y].getName()+" ("+_getContinentFromCountryById(id).getName()+")["+_gridMap[x][y].getUnitCount()+"]");
                 }
                 else
                     imgCacheHover[i].activ = false;
@@ -722,8 +722,8 @@ function gameUiController(aCtx){
     
     function getPlayerById(id){
         for(var p in _playerarr){
-            if(p.getId() === id)
-                return p;
+            if(_playerarr[p].getId() === id)
+                return _playerarr[p];
         }
     }
     

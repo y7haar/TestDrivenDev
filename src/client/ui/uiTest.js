@@ -107,7 +107,7 @@ function startGame(){
        
        var id = _gridMap[x][y].id;
         
-        if(id>=0 & left !==0){ //kein wasser
+        if(id>=0 & left !==0 & _gridMap[x][y].getOwner() === controller.getPlayerById(1)){ //kein wasser
             _gridMap[x][y].addUnits(1);
             left--;
         }

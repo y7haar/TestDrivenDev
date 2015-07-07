@@ -95,13 +95,23 @@ function gameController(aCtx){
     
     // <editor-fold defaultstate="collapsed" desc="Game-States-MouseMove">
     function placingMove(x,y){
-        
+        var id = _gridMap[x][y].id;
+        var imgCacheHover = _gameUiController.getImgCacheHover();
+        if(id>=0){ //kein wasser
+            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")["+_gridMap[x][y].getUnitCount()+"]");
+            for (var i in imgCacheHover){
+                if(imgCacheHover[i].id === id)
+                   imgCacheHover[i].activ = true;
+                else
+                   imgCacheHover[i].activ = false;
+            }
+        }
     }
     function attackingMove(x,y){
         var id = _gridMap[x][y].id;
         var imgCacheHover = _gameUiController.getImgCacheHover();
         if(id>=0){ //kein wasser
-            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")");
+            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")["+_gridMap[x][y].getUnitCount()+"]");
             for (var i in imgCacheHover){
                 if(imgCacheHover[i].id === id)
                    imgCacheHover[i].activ = true;
