@@ -3,7 +3,7 @@
  */
 
 
-TestCase("ContinentTest", {
+TestCase("ClientContinentTest", {
 
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
