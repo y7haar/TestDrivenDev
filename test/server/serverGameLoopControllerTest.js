@@ -89,7 +89,7 @@ TestCase("serverGameLoopControllerTest", {
             
             this.getResponseObject = function()
             {
-                return this.res;
+                return res;
             }
             Object.defineProperty(this, 'sendCalled', {
             get: function () {
