@@ -647,9 +647,13 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(this.attackResultData, JSON.parse(this.glc2.fromServerLogs[1].data));   
         assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));           
     },
-    "test sglc should implement method to validate a move":function()
+    "test sglc should implement method to validate a placingMove":function()
     {
-        assertFunction(this.serverGameLoop.validateMove);
+        assertFunction(this.serverGameLoop.validatePlacingMove);
+    },
+     "test sglc should implement method to validate a attackingMove":function()
+    {
+        assertFunction(this.serverGameLoop.validateAttackingMove);
     },
     
     
