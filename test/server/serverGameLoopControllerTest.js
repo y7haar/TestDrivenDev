@@ -65,32 +65,24 @@ TestCase("serverGameLoopControllerTest", {
                 country:"Country1",
                 unitCount:12
             }
-        };
-        
-
-        this.fakeClient = function (eventSource, aServer, aName) {
-            var name = aName;
+        };        
+  
+        this.fakeRes = function (eventSource, aServer) 
+        {
             var server = aServer;
             var eventSourceIndex = server.clients.indexOf(eventSource);
-        
-            var req = {};
-            var res = {};   
+          
             var sendCalledBool = false;
-            var data = "test";
-            res.write = function (msg) {        
-                sendCalledBool = true;
-                
+            var data = "";
+            this.write = function (msg) {        
+                sendCalledBool = true;                
                 var array = msg.split("\n");
                 var event = array[0].split(":")[1];                
                 var message = array[1].substring(5,array[1].length);                
                 data = (message);           
                 server.sendMessage(eventSourceIndex,event, {data:data});                
-            };
-            
-            this.getResponseObject = function()
-            {
-                return res;
-            }
+            };           
+           
             Object.defineProperty(this, 'sendCalled', {
             get: function () {
                 return sendCalledBool;
@@ -98,11 +90,7 @@ TestCase("serverGameLoopControllerTest", {
             Object.defineProperty(this, 'data', {
             get: function () {
                 return data;
-            }});
-            Object.defineProperty(this, 'name', {
-            get: function () {
-                return name;
-            }});   
+            }});         
         };
         
         this.map = generateMap();
@@ -125,11 +113,23 @@ TestCase("serverGameLoopControllerTest", {
         this.glc4 = new tddjs.client.gameLoopController(this.map, this.player4, this.url);
         this.glc4.establishConnection();
 
-        this.client1 = new this.fakeClient(this.glc1.eventSource,this.sandbox.server[this.url],this.player1.getName());
-        this.client2 = new this.fakeClient(this.glc2.eventSource,this.sandbox.server[this.url],this.player1.getName());
-        this.client3 = new this.fakeClient(this.glc3.eventSource,this.sandbox.server[this.url],this.player1.getName());
-        this.client4 = new this.fakeClient(this.glc4.eventSource,this.sandbox.server[this.url],this.player1.getName());
         
+        this.serverPlayer1 = new tddjs.server.player();
+        this.serverPlayer1.setName(this.player1.getName());
+        this.serverPlayer1.setResponseObject(new this.fakeRes(this.glc1.eventSource,this.sandbox.server[this.url]));
+        
+        this.serverPlayer2 = new tddjs.server.player();
+        this.serverPlayer2.setName(this.player2.getName());
+        this.serverPlayer2.setResponseObject(new this.fakeRes(this.glc2.eventSource,this.sandbox.server[this.url]));
+        
+        this.serverPlayer3 = new tddjs.server.player();
+        this.serverPlayer3.setName(this.player3.getName());
+        this.serverPlayer3.setResponseObject(new this.fakeRes(this.glc3.eventSource,this.sandbox.server[this.url]));
+        
+        this.serverPlayer4 = new tddjs.server.player();
+        this.serverPlayer4.setName(this.player4.getName());
+        this.serverPlayer4.setResponseObject(new this.fakeRes(this.glc4.eventSource,this.sandbox.server[this.url]));
+
         var sandbox = this.sandbox;
         var url = this.url;
         
@@ -188,35 +188,35 @@ TestCase("serverGameLoopControllerTest", {
         assertFunction(this.serverGameLoop.addClient);
     },    
     "test sgl addClient should add Clients to sgl" : function(){    
-       this.serverGameLoop.addClient(this.client1);
-       this.serverGameLoop.addClient(this.client2);
-       this.serverGameLoop.addClient(this.client3);
-       this.serverGameLoop.addClient(this.client4);
+       this.serverGameLoop.addClient(this.serverPlayer1);
+       this.serverGameLoop.addClient(this.serverPlayer2);
+       this.serverGameLoop.addClient(this.serverPlayer3);
+       this.serverGameLoop.addClient(this.serverPlayer4);
        assertEquals(4, this.serverGameLoop.clients.length);       
-       assertEquals([this.client1,this.client2,this.client3,this.client4], this.serverGameLoop.clients);       
+       assertEquals([this.serverPlayer1,this.serverPlayer2,this.serverPlayer3,this.serverPlayer4], this.serverGameLoop.clients);       
     },
     "test if fakeClient res.write was called": function(){
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
-        assertFalse(this.serverGameLoop.clients[0].sendCalled);
+        assertFalse(this.serverGameLoop.clients[0].getResponseObject().sendCalled);
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
-        assertTrue(this.serverGameLoop.clients[0].sendCalled);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
+        assertTrue(this.serverGameLoop.clients[0].getResponseObject().sendCalled);
     },
     "test if sgl.fakeClient send msg to Client": function(){
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
         assertEquals(0,this.glc1.fromServerLogs.length);
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         assertEquals(1,this.glc1.fromServerLogs.length);
     },
     "test if client changes state after sglcfakeClient send changeToAttackState event": function(){
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         assertEquals("waitingState", this.glc1.getStateName());
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         assertEquals("attackingState", this.glc1.getStateName());       
     },
     "test sgl should hold currentClient Name" : function(){
@@ -228,7 +228,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sgl.currentClient should be 0 after allConnected is true" : function(){
         assertEquals(null,this.serverGameLoop.currentClient);
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         assertEquals(0, this.serverGameLoop.currentClient);
     },
     
@@ -256,19 +256,19 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc.allConnected should be true if all Clients Connected": function(){
         assertFalse(this.serverGameLoop.allConnected);
         this.serverGameLoop.setMaxPlayers(2);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         assertFalse(this.serverGameLoop.allConnected);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         assertTrue(this.serverGameLoop.allConnected);
     },
-    "test sglc should change client1 to placingState if allConnected is true": function(){
+    "test sglc should change serverPlayer1 to placingState if allConnected is true": function(){
         this.serverGameLoop.setMaxPlayers(2);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         assertFalse(this.serverGameLoop.allConnected);
         assertEquals("waitingState", this.glc1.getStateName());
         
-        this.serverGameLoop.addClient(this.client2);
+        this.serverGameLoop.addClient(this.serverPlayer2);
         assertTrue(this.serverGameLoop.allConnected);
         
         assertEquals("waitingState", this.glc2.getStateName());
@@ -279,7 +279,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to endPhase move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         assertEquals("placingState" ,this.glc1.getStateName());
         
         assertEquals(0,this.glc1.toServerLogs.length);
@@ -300,7 +300,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(endPhase:placing) should be attacking after call": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);       
+        this.serverGameLoop.addClient(this.serverPlayer1);       
      
         assertEquals("placingState" ,this.glc1.getStateName());
         
@@ -308,7 +308,7 @@ TestCase("serverGameLoopControllerTest", {
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();  
-        
+     
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4); 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -317,34 +317,34 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(endPhase:attacking) should be waiting after call": function(){
         this.serverGameLoop.setMaxPlayers(2);
-        this.serverGameLoop.addClient(this.client1);
-        this.serverGameLoop.addClient(this.client2);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         
         assertEquals("attackingState" ,this.glc1.getStateName());    
 
         this.glc1.endPhase();
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
-        this.sandbox.update();
-         
+        this.sandbox.update();        
+   
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
-        
+     
         assertEquals("waitingState", this.glc1.getStateName());        
     },
     "test sglc should change currentState to the next Client if prev.Client changed to waitingState":function()
     {
         this.serverGameLoop.setMaxPlayers(2);
-        this.serverGameLoop.addClient(this.client1);
-        this.serverGameLoop.addClient(this.client2);        
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);        
         
         // changeing client to attacking 
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         
         assertEquals(0,this.serverGameLoop.currentClient);
         assertEquals("attackingState", this.glc1.getStateName());
@@ -359,7 +359,7 @@ TestCase("serverGameLoopControllerTest", {
         var fakeRes = this.getFakeRes(4);       
     
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
-        // client1 should now be in waiting state --> currentClient should change to 1 because its client2 turn
+        // serverPlayer1 should now be in waiting state --> currentClient should change to 1 because its serverPlayer2 turn
         assertEquals(1,this.serverGameLoop.currentClient);
         // cleint should now be in waiting statte because endPhase in attacking ==> waiting 
         assertEquals("waitingState", this.glc1.getStateName());
@@ -368,10 +368,10 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.currentState should start at Client1 if last client changed to waitingState":function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);     
+        this.serverGameLoop.clients[0].getResponseObject().write(data);     
   
         this.glc1.endPhase();
         // tell the server to not Response automaticly 
@@ -386,7 +386,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to makeMove(placingType) move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         assertEquals(0,this.glc1.toServerLogs.length);
         this.glc1.makeMove(this.validPlacingMove);
@@ -408,10 +408,10 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to makeMove(attckingType) move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         
         assertEquals("attackingState", this.glc1.getStateName());
         
@@ -435,7 +435,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(placing) should send move back without validate": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);       
+        this.serverGameLoop.addClient(this.serverPlayer1);       
 
         assertEquals(1,this.glc1.fromServerLogs.length);
         this.glc1.makeMove(this.validPlacingMove);
@@ -456,10 +456,10 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(attacking) should send move back without validate": function(){
         this.serverGameLoop.setMaxPlayers(1);
-        this.serverGameLoop.addClient(this.client1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
-        this.serverGameLoop.clients[0].res.write(data);
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
         
         assertEquals(2,this.glc1.fromServerLogs.length);
         this.glc1.makeMove(this.validAttackMove);
