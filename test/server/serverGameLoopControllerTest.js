@@ -93,8 +93,7 @@ TestCase("serverGameLoopControllerTest", {
             }});         
         };
         
-        this.map = generateMap();
-
+        //CLIENT___________________________________
         this.player1 = new tddjs.client.player();
         this.player1.setName('Peter');
         this.player2 = new tddjs.client.player();
@@ -103,17 +102,55 @@ TestCase("serverGameLoopControllerTest", {
         this.player3.setName('Player3');
         this.player4 = new tddjs.client.player();
         this.player4.setName('Player4');
-
-        this.glc1 = new tddjs.client.gameLoopController(this.map, this.player1, this.url);
+        
+        
+        //clientMAP
+        this.clientMap = new tddjs.client.map.map();  
+        
+        
+        //Continent1-------------------------------------
+        this.continent1 = new tddjs.client.map.continent();
+        this.continent1.setName("Europa");
+        
+        this.c1 = new tddjs.client.map.country();
+        this.c1.setName("Country1");
+        this.c1.setOwner(this.player1);
+        this.c1.setUnitCount(10);
+        
+        this.c2 = new tddjs.client.map.country();
+        this.c2.setName("Country2");
+        this.c2.setOwner(this.player2);
+        this.c2.setUnitCount(2);
+        
+        this.c3 = new tddjs.client.map.country();
+        this.c3.setName("Country3");
+        this.c3.setOwner(this.player1);
+        this.c3.setUnitCount(1);        
+        // Borders        
+        this.c1.addBorder(this.c2);
+        this.c2.addBorder(this.c1);
+        
+        this.c1.addBorder(this.c3);
+        this.c3.addBorder(this.c1);
+        
+        this.continent1.addCountry(this.c1);
+        this.continent1.addCountry(this.c2);
+        this.continent1.addCountry(this.c3);
+        
+        this.clientMap.addContinent(this.continent1);
+        
+        //client gameloopController
+        
+        this.glc1 = new tddjs.client.gameLoopController(this.clientMap, this.player1, this.url);
         this.glc1.establishConnection();
-        this.glc2 = new tddjs.client.gameLoopController(this.map, this.player2, this.url);
+        this.glc2 = new tddjs.client.gameLoopController(this.clientMap, this.player2, this.url);
         this.glc2.establishConnection();
-        this.glc3 = new tddjs.client.gameLoopController(this.map, this.player3, this.url);
+        this.glc3 = new tddjs.client.gameLoopController(this.clientMap, this.player3, this.url);
         this.glc3.establishConnection();
-        this.glc4 = new tddjs.client.gameLoopController(this.map, this.player4, this.url);
+        this.glc4 = new tddjs.client.gameLoopController(this.clientMap, this.player4, this.url);
         this.glc4.establishConnection();
 
-        
+        //SERVER_____________________________________
         this.serverPlayer1 = new tddjs.server.player();
         this.serverPlayer1.setName(this.player1.getName());
         this.serverPlayer1.setResponseObject(new this.fakeRes(this.glc1.eventSource,this.sandbox.server[this.url]));
@@ -129,6 +166,41 @@ TestCase("serverGameLoopControllerTest", {
         this.serverPlayer4 = new tddjs.server.player();
         this.serverPlayer4.setName(this.player4.getName());
         this.serverPlayer4.setResponseObject(new this.fakeRes(this.glc4.eventSource,this.sandbox.server[this.url]));
+        
+        //server map ________________________________
+        this.map = new tddjs.server.map.map();  
+        
+        
+        //Continent1-------------------------------------
+        this.continent1 = new tddjs.server.map.continent();
+        this.continent1.setName("Europa");
+        
+        this.c1 = new tddjs.server.map.country();
+        this.c1.setName("Country1");
+        this.c1.setOwner(this.serverPlayer1);
+        this.c1.setUnitCount(10);
+        
+        this.c2 = new tddjs.server.map.country();
+        this.c2.setName("Country2");
+        this.c2.setOwner(this.serverPlayer2);
+        this.c2.setUnitCount(2);
+        
+        this.c3 = new tddjs.server.map.country();
+        this.c3.setName("Country3");
+        this.c3.setOwner(this.serverPlayer1);
+        this.c3.setUnitCount(1);        
+        // Borders        
+        this.c1.addBorder(this.c2);
+        this.c2.addBorder(this.c1);
+        
+        this.c1.addBorder(this.c3);
+        this.c3.addBorder(this.c1);
+        
+        this.continent1.addCountry(this.c1);
+        this.continent1.addCountry(this.c2);
+        this.continent1.addCountry(this.c3);
+        
+        this.map.addContinent(this.continent1);
 
         var sandbox = this.sandbox;
         var url = this.url;
@@ -163,6 +235,7 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop = null;
         this.sandbox.restore();
         this.map = null;
+        this.clientMap = null;
     },
     "test if this.serverGameLoop is instance of serverGameLoop" : function(){
         assertTrue(this.serverGameLoop instanceof tddjs.server.controller.gameLoopController);
@@ -572,12 +645,12 @@ TestCase("serverGameLoopControllerTest", {
         // test if attackmove is on all Clients
         assertEquals(this.attackResultData, JSON.parse(this.glc1.fromServerLogs[3].data));   
         assertEquals(this.attackResultData, JSON.parse(this.glc2.fromServerLogs[1].data));   
-        assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));
-        
-        
-        
+        assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));           
     },
-    
+    "test sglc should implement method to validate a move":function()
+    {
+        assertFunction(this.serverGameLoop.validateMove);
+    },
     
     
     "test sglc should implement method to place units":function()
