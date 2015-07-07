@@ -88,11 +88,13 @@ function lobby()
 
     function addPlayer(aPlayer)
     {
+        if(_players.length >= _maxPlayers)
+            throw new Error("MaxPlayers is exceeded");
+        
         if (typeof aPlayer.getId() === "undefined")
             aPlayer.setId(_currentPlayerId++);
 
-        if (_players.length < _maxPlayers)
-            _players.push(aPlayer);
+        _players.push(aPlayer);
     }
     
     function addBot()
