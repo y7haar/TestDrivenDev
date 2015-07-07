@@ -368,7 +368,7 @@ function lobbyRequestController()
         if (typeof aId !== "number")
             throw new TypeError("Id must be number");
 
-        ajax.get(BASE_URL + "game/" + aId);
+        window.location.href = BASE_URL + "game/" + aId;
     }
 
     this.setLobbyUi = setLobbyUi;
