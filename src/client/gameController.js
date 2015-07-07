@@ -83,7 +83,7 @@ function gameController(aCtx){
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Game-States-MouseDown">
     function placingDown(x,y){
-        
+        _gameUiController.updateUnitCounts();
     }
     function attackingDown(x,y){
         var id = _gridMap[x][y].id;
