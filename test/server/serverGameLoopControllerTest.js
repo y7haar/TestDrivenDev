@@ -73,11 +73,11 @@ TestCase("serverGameLoopControllerTest", {
             var server = aServer;
             var eventSourceIndex = server.clients.indexOf(eventSource);
         
-            this.req = {};
-            this.res = {};   
+            var req = {};
+            var res = {};   
             var sendCalledBool = false;
             var data = "test";
-            this.res.write = function (msg) {        
+            res.write = function (msg) {        
                 sendCalledBool = true;
                 
                 var array = msg.split("\n");
@@ -86,6 +86,11 @@ TestCase("serverGameLoopControllerTest", {
                 data = (message);           
                 server.sendMessage(eventSourceIndex,event, {data:data});                
             };
+            
+            this.getResponseObject = function()
+            {
+                return this.res;
+            }
             Object.defineProperty(this, 'sendCalled', {
             get: function () {
                 return sendCalledBool;
