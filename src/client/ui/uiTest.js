@@ -7,6 +7,7 @@ function startGame(){
     var controller;
     var mapController = new tddjs.server.controller.mapController();
     var map;
+    var left = 5;
     
     
     //Spieler
@@ -78,18 +79,42 @@ function startGame(){
             var buttons={};
             buttons["placingState"]=[];
             buttons["placingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
+            buttons["placingState"][0].click=place;
             buttons["attackingState"]=[];
             buttons["attackingState"][0]=new tddjs.client.ui.button(40,635,"Attack!",ctx);
             buttons["attackingState"][1]=new tddjs.client.ui.button(130,635,"Finish",ctx);
             buttons["waitingState"]=[];
             buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
-            controller.setPlayerColor(player1.getColor());
-            controller.setStateStr(player1.getName() +": "+ "attackingState")
-            controller.setButtons(buttons["attackingState"]);
             
+            controller.setPlayerColor(player1.getColor());
+            controller.setStateStr(player1.getName() +": "+ "placingState")
+            controller.setButtons(buttons["placingState"]);
+            buttons["placingState"][0].setText("Finished ("+left+")");
+            
+            controller.mapDown = mousePlace;
             
             controller.init(map);
        }
+   }
+   function place(){
+       //window.alert("jo");
+       left=5;
+       buttons["placingState"][0].setText("Finished ("+left+")");
+   }
+   function mousePlace(x,y){
+       var _gridMap = controller.getGridMap();
+       
+       
+       var id = _gridMap[x][y].id;
+        
+        if(id>=0 & left !==0 & _gridMap[x][y].getOwner() === controller.getPlayerById(1)){ //kein wasser
+            _gridMap[x][y].addUnits(1);
+            left--;
+        }
+       
+       controller.updateUnitCounts();
+       buttons["placingState"][0].setText("Finished ("+left+")");
+       //window.alert(x+"|"+y);
    }
 }
 // gernateMap ist schon in globals definiert 

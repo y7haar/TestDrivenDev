@@ -26,6 +26,7 @@ function lobbyEventSourceController()
     {
         _eventSource.addEventListener("colorchange", oncolorchange);
         _eventSource.addEventListener("lobbychange", onlobbychange);
+        _eventSource.addEventListener("lobbystart", onlobbystart);
     }
 
     function setLobby(aLobby)
@@ -54,8 +55,6 @@ function lobbyEventSourceController()
         return _lobbyUi;
     }
 
-
-
     function oncolorchange(e)
     {
         var data = JSON.parse(e.data);
@@ -65,6 +64,12 @@ function lobbyEventSourceController()
     function onlobbychange(e)
     {
         _lobbyUi.updateLobby(e.data);
+    }
+    
+    function onlobbystart(e)
+    {
+        var requestController = _lobbyUi.getLobbyRequestController();
+        requestController.triggerGameStart(_lobby.getId());
     }
 
     this.addEventListeners = addEventListeners;

@@ -136,7 +136,6 @@ function lobbyRequestController()
 
     function onJoinFailure(xhr)
     {
-
     }
     
     function onNewLobbySuccess(xhr)
@@ -346,12 +345,7 @@ function lobbyRequestController()
         if (typeof aLobbyId !== "number")
             throw new TypeError("Id must be number");
         
-        var id = aLobbyId;
-        
-        var success = function()
-        {
-            triggerGameStart(id);
-        };
+        var id = aLobbyId;       
         
         var data = {
             type: "gameStart"
@@ -363,9 +357,7 @@ function lobbyRequestController()
             headers: {
                 "Content-Type": "application/json"
             },
-            data: data,
-            
-            onSuccess: success
+            data: data
         };
 
         ajax.post(BASE_URL + "lobbies/" + aLobbyId, options);

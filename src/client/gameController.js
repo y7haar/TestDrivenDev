@@ -10,19 +10,33 @@ function gameController(aCtx){
     var _gameUiController;
     var _Map;
     var _gridMap;
+    var _Player;
     var states={};
     var buttons={};
+    var ajax = tddjs.util.ajax;
     
     var _selected=[];
     
     function init(){
         _gameUiController = new tddjs.client.ui.gameUiController(aCtx);
         
-        _Map = _gameUiController.getMap(/*TODO: daten vom server*/);
-        _gridMap = _gameUiController.getGridMap();
+        var options = {
+            headers: {
+                "Accept": "application/json"           },
+            onSuccess: this.onSuccess,
+            onFailure: this.onFailure
+        };
+        
+        var URL = window.location.href;
+
+        ajax.get(URL + "map", options);
+        
+        
         _gameUiController.mapDown = mapDown;
         _gameUiController.mapMove = mapMove;
-        
+    }
+    
+    function initGameStates(){
         // <editor-fold defaultstate="collapsed" desc="Game-States">
         states["placingState"].down=placingDown;
         states["attackingState"].down=attackingDown;
@@ -40,12 +54,31 @@ function gameController(aCtx){
         buttons["waitingState"]=[];
         buttons["waitingState"][0]=new tddjs.client.ui.button(40,635,"str",ctx);
         // </editor-fold>
+    }
+    
+    function onSuccess(xhr){
+        
+        
+        
+        
+        
+        _Map = _gameUiController.getMap(/*TODO: daten vom server*/);
+        _gridMap = _gameUiController.getGridMap();
+        _Player = _gameUiController.getPlayerById(/*TODO: daten vom server*/);
         
         _gameUiController.setPlayerColor(_Player.getColor());
         
         _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
         
         _gameUiController.init(null);
+    }
+    
+    function getGameUiController(){
+        return _gameUiController;
+    }
+    
+    function getGameLoopController(){
+        return _gameLoopController;
     }
     
     
@@ -62,13 +95,23 @@ function gameController(aCtx){
     
     // <editor-fold defaultstate="collapsed" desc="Game-States-MouseMove">
     function placingMove(x,y){
-        
+        var id = _gridMap[x][y].id;
+        var imgCacheHover = _gameUiController.getImgCacheHover();
+        if(id>=0){ //kein wasser
+            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")["+_gridMap[x][y].getUnitCount()+"]");
+            for (var i in imgCacheHover){
+                if(imgCacheHover[i].id === id)
+                   imgCacheHover[i].activ = true;
+                else
+                   imgCacheHover[i].activ = false;
+            }
+        }
     }
     function attackingMove(x,y){
         var id = _gridMap[x][y].id;
         var imgCacheHover = _gameUiController.getImgCacheHover();
         if(id>=0){ //kein wasser
-            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")");
+            _gameUiController.setCountryStrHover(_gridMap[x][y].getName()+" ("+_gameUiController._getContinentFromCountryById(id).getName()+")["+_gridMap[x][y].getUnitCount()+"]");
             for (var i in imgCacheHover){
                 if(imgCacheHover[i].id === id)
                    imgCacheHover[i].activ = true;
@@ -113,4 +156,12 @@ function gameController(aCtx){
     }
     // </editor-fold>
     // </editor-fold>
+    
+    this.init = init;
+    this.onSuccess = onSuccess;
+    
+    this.initGameStates = initGameStates;
+    
+    this.getGameUiController = getGameUiController;
+    this.getGameLoopController = getGameLoopController;
 }
