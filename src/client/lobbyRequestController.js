@@ -136,7 +136,6 @@ function lobbyRequestController()
 
     function onJoinFailure(xhr)
     {
-
     }
     
     function onNewLobbySuccess(xhr)

@@ -59,8 +59,6 @@ function lobbyRequestSetup()
     this.player = new tddjs.client.player();
     this.player.setName("Peter");
     this.player.setColor("#ffffff");
-    
-    this.alertStub = this.sandbox.stub(window, "alert");
 }
 
 function lobbyRequestTeardown()
@@ -289,14 +287,6 @@ TestCase("LobbyRequestControllerTest", {
 
         this.sandbox.server.requests[0].respond(400, "", "");
         sinon.assert.calledOnce(callback);
-    },
-    
-    "onJoinFailure should display an alert": function() {
-        sinon.assert.notCalled(this.alertStub);
-
-        this.onJoinFailure();
-
-        sinon.assert.calledOnce(alertStub);
     }
 });
 
