@@ -92,7 +92,9 @@ function gameController(aCtx){
         return _gameLoopController;
     }
     
-    
+    function update(req){
+        _gameUiController.updateUnitCounts();
+    }
     
     // <editor-fold defaultstate="collapsed" desc="Game-States">
     function mapDown(x,y){
@@ -132,12 +134,22 @@ function gameController(aCtx){
         }
     }
     function waitingMove(x,y){
-        
+        var imgCacheHover = _gameUiController.getImgCacheHover();
+        for (var i in imgCacheHover){
+            imgCacheHover[i].activ = false;
+        }
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Game-States-MouseDown">
     function placingDown(x,y){
-        _gameUiController.updateUnitCounts();
+        var id = _gridMap[x][y].id;
+        
+        if(id>=0 & left !==0 & _gridMap[x][y].getOwner() === _Player){ //kein wasser
+            _gridMap[x][y].addUnits(1);
+            left--;
+        }
+       
+       _gameUiController.updateUnitCounts();
     }
     function attackingDown(x,y){
         var id = _gridMap[x][y].id;
