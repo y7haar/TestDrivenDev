@@ -145,6 +145,16 @@ TestCase("LobbyEventSourceControllerTest", {
        assertFunction(this.lobbyEventSourceController.eventSource.onlobbychange);
     },
     
+    "test addEventListeners should add onlobbystart event": function() {
+       assertUndefined(this.lobbyEventSourceController.eventSource);
+       this.lobbyEventSourceController.setLobby(this.lobby);
+       
+       this.lobbyEventSourceController.establishConnection();
+       
+       assertNotUndefined(this.lobbyEventSourceController.eventSource.onlobbystart);
+       assertFunction(this.lobbyEventSourceController.eventSource.onlobbystart);
+    },
+    
     "test establishConnection should throw Error if no lobby is setted": function() {
         var controller = this.lobbyEventSourceController;
         var lobby = this.lobby;
@@ -181,6 +191,8 @@ TestCase("LobbyEventSourceControllerTest", {
         this.ui.createLobbyContent();
         this.ui.createWrapper();
         this.ui.showLobby(this.lobby);
+        
+        this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
         
         this.url = BASE_URL + "lobbies/" + this.lobby.getId();
         
@@ -248,6 +260,25 @@ TestCase("LobbyEventSourceControllerTest", {
         
         sinon.assert.calledOnce(spy);
         sinon.assert.calledWith(spy, data);
+    },
+    
+    "test onlobbystart event should call triggerGameStart in lobby request controller": function() {
+        var spy = this.sinonSandbox.stub(this.lobbyRequestController, "triggerGameStart");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "lobbystart", {data:""});
+        
+        sinon.assert.calledOnce(spy);
+    },
+    
+    "test onlobbystart event should call triggerGameStart in lobby request controller with correct parameters": function() {
+        var spy = this.sinonSandbox.stub(this.lobbyRequestController, "triggerGameStart");
+        
+        sinon.assert.notCalled(spy);
+        this.sandbox.server[this.url].sendMessage(0, "lobbystart", {data:""});
+        
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, 1);
     }
 
     });
