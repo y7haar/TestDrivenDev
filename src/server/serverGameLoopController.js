@@ -68,6 +68,17 @@ function gameLoopController()
         
     }
     
+    
+    function validateAttackingMove()
+    {
+        
+    }
+    
+    function validatePlacingMove()
+    {
+        
+    }
+    
     function playerMove(req, res)
     {      
         var type = req.body.type;
@@ -211,6 +222,8 @@ function gameLoopController()
     this.setMap = setMap;
     this.setMaxPlayers = setMaxPlayers;
     this.addClient = addClient;
+    this.validateAttackingMove = validateAttackingMove;
+    this.validatePlacingMove = validatePlacingMove;
     
     this.attack = attack;
     this.placeUnits = placeUnits;
