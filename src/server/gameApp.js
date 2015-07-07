@@ -40,9 +40,8 @@ gameApp.use(function(req, res, next) {
 });
 
 gameApp.get("/", function (req, res) {
-    res.send("Welcome");    
+    res.send("Welcome");  
     
-
 });
 
 gameApp.get("/secret", function (req, res) {
@@ -55,13 +54,17 @@ gameApp.get("/secret", function (req, res) {
 gameApp.get("/:id", function (req, res) {
     if(req.headers.accept === 'text/event-stream')
     {
+        
         try
         {
             console.log(req.session.token);
-         
             var lobby = lobbyController.getLobbyById(req.params.id);
             var player = lobby.getPlayerByToken(req.session.token);
+            player.setResponseObject(res);
+            
+            console.log("Player: ");
             console.log(player.serializeAsObject());
+            console.log("connected to game "+req.params.id);
             
             res.header('Content-Type', 'text/event-stream');
             res.header('Cache-Control', 'no-cache');
@@ -69,29 +72,31 @@ gameApp.get("/:id", function (req, res) {
             res.connection.setTimeout(0);
 
             if(controllers[req.params.id] === undefined)
-            {
-                var lobby = lobbyController.getLobbyById(req.params.id);
-                var map = lobby.getMapController.getMap();
-                var playerCount = lobby.getPlayers().length;
+            {                  
+                var map = lobby.getMapController().getMap();           
+                var players = lobby.getPlayers();
+                var playerCount = players.length;
                 
                 controllers[req.params.id]= new controller();
                 controllers[req.params.id].setMaxPlayers(playerCount);
-                controllers[req.params.id].setMap(map);              
+                controllers[req.params.id].setMap(map); 
+                
+                //adding all bots
+                for(var i = 0; i< playerCount;i++)                
+                    if(players[i].getType() === 'bot')                    
+                        controllers[req.params.id].addClient(players[i]);                    
             }      
+            
+            controllers[req.params.id].addClient(player);  
 
-            controllers[req.params.id].addClient({
-                res: res,
-                req: req
-            });   
-            //console.log(req.session.seenyou);
-            console.log("Incomming connection id:"+ req.params.id); 
         }
         catch(e)
         {
             res.sendStatus(404);
             console.log(e);
-        }               
+        }              
     }
+   
     else
     {
         console.log("GET-Request but not event-stream");
