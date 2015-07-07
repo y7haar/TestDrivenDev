@@ -65,7 +65,7 @@ TestCase("ClientCountryBorderTest", {
     }
 });
 // testcaes for Country name
-TestCase("CountryNameTest", {
+TestCase("ClientCountryNameTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
     },
