@@ -1570,7 +1570,7 @@ TestCase("LobbyResponseControllerLobbyStartTest", {
     },
     
     "test respondGameStart should call sendStatus with 200 if request is correct": function () {
-        // Token from player2
+        // Token from player1
         this.req.session.token = "1234";
         
         this.req.body = {
@@ -1586,7 +1586,7 @@ TestCase("LobbyResponseControllerLobbyStartTest", {
     },
     
     "test respondGameStart should set lobby to start": function () {
-        // Token from player2
+        // Token from player1
         this.req.session.token = "1234";
         
         this.req.body = {
@@ -1598,5 +1598,21 @@ TestCase("LobbyResponseControllerLobbyStartTest", {
         this.lrc.respondGameStart(this.req, this.res);
         
         assertTrue(this.lobby.isStarted());
+    },
+    
+     "test respondGameStart should broadcast message with lobbystart event": function () {
+         sinon.assert.notCalled(this.broadcastMessageSpy);
+
+        // Token from player1
+        this.req.session.token = "1234";
+        
+        this.req.body = {
+           type: "gameStart"
+        };
+
+        this.lrc.respondGameStart(this.req, this.res);
+        
+        sinon.assert.calledOnce(this.broadcastMessageSpy);
+        sinon.assert.calledWith(this.broadcastMessageSpy, null, "lobbystart");
     }
 });
