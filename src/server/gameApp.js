@@ -57,8 +57,12 @@ gameApp.get("/:id", function (req, res) {
     {
         try
         {
-            //console.log(lobbyController.getLobbyById(req.params.id));
-            console.log(req.session.seenyou);
+            console.log(req.session.token);
+         
+            var lobby = lobbyController.getLobbyById(req.params.id);
+            var player = lobby.getPlayerByToken(req.session.token);
+            console.log(player.serializeAsObject());
+            
             res.header('Content-Type', 'text/event-stream');
             res.header('Cache-Control', 'no-cache');
             res.header('Connection', 'keep-alive');  
@@ -66,9 +70,13 @@ gameApp.get("/:id", function (req, res) {
 
             if(controllers[req.params.id] === undefined)
             {
+                var lobby = lobbyController.getLobbyById(req.params.id);
+                var map = lobby.getMapController.getMap();
+                var playerCount = lobby.getPlayers().length;
+                
                 controllers[req.params.id]= new controller();
-                controllers[req.params.id].setMaxPlayers(2);
-
+                controllers[req.params.id].setMaxPlayers(playerCount);
+                controllers[req.params.id].setMap(map);              
             }      
 
             controllers[req.params.id].addClient({
@@ -80,6 +88,7 @@ gameApp.get("/:id", function (req, res) {
         }
         catch(e)
         {
+            res.sendStatus(404);
             console.log(e);
         }               
     }
@@ -88,6 +97,28 @@ gameApp.get("/:id", function (req, res) {
         console.log("GET-Request but not event-stream");
         res.sendStatus(404);
     }
+});
+
+gameApp.get("/:id/map", function (req, res) {
+    try
+    {
+        var lobby = lobbyController.getLobbyById(req.params.id);
+
+        var playerId = lobby.getPlayerByToken(req.session.token).getId;
+        var info = {
+            playerId: playerId
+        };
+
+        var map = lobby.getMapController.getSerializedMap(info);
+
+        res.send(map);
+    }
+    catch (e)
+    {
+        res.sendStatus(404);
+        console.log(e);
+    }
+    res.sendStatus(404);
 });
 
 gameApp.post("/:id", function (req, res) {
