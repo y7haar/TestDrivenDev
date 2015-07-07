@@ -989,6 +989,7 @@ function gameUiController(aCtx){
     //map-functions
     this.getMap = getMap;
     this.getGridMap = getGridMap;
+    this.getPlayerById = getPlayerById;
     
     this._initMap = _initMap;
     this._getCountries = _getCountries;
