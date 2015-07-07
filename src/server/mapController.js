@@ -136,12 +136,14 @@ function mapController()
         return _map;
     }
     
-    function getSerializedMap()
+    function getSerializedMap(obj)
     {
         if(!_map)
             throw new Error("Call init first!");
         //TODO: serialisieren
-        return _jsonMap;
+        var out = _jsonMap;
+        out.info = obj;
+        return JSON.stringify(out);
     }
     
     //Setzt Werte zurück
@@ -310,7 +312,7 @@ function mapController()
             }
         }        
         
-        return JSON.stringify(json);
+        return json;
     }
     
     //Erzeugt Array
