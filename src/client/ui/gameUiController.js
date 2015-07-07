@@ -505,6 +505,19 @@ function gameUiController(aCtx){
         _btn = aBtnArr;
     }
     
+    function updateUnitCounts(){
+        _ctx.canvas.removeEventListener('mousemove', mouseMove, false);
+        _ctx.canvas.removeEventListener('mousedown', mouseDown, false);
+        
+        var w = (_ctx.canvas.width-border-_gridMap.length)/_gridMap.length;
+        var h = (_ctx.canvas.height-border-bottom-_gridMap[0].length)/_gridMap[0].length;
+        cachePlayer(w,h);
+        cacheUnits(w,h);
+        
+        _ctx.canvas.addEventListener('mousemove', mouseMove, false);
+        _ctx.canvas.addEventListener('mousedown', mouseDown, false);
+    }
+    
     function setCountryStrHover(str){
         countryStrHover = str;
     }
@@ -703,6 +716,13 @@ function gameUiController(aCtx){
             }
         }
         return _map;
+    }
+    
+    function getPlayerById(id){
+        for(var p in _playerarr){
+            if(p.getId() === id)
+                return p;
+        }
     }
     
     function getMap(map){
@@ -964,6 +984,7 @@ function gameUiController(aCtx){
     this.setStateStr = setStateStr;
     this.setPlayerColor = setPlayerColor;
     this.getImgCacheHover = getImgCacheHover;
+    this.updateUnitCounts = updateUnitCounts;
     
     //map-functions
     this.getMap = getMap;

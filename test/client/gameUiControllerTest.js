@@ -15,6 +15,17 @@ function gameUiSetup()
     this.button = new tddjs.client.ui.button(170,65,"button",this.ctx);
     this.buttonW = this.ctx.measureText("button").width;
     this.buttonH = this.ctx.measureText("button").height;
+    
+    this.mapCon = new tddjs.server.controller.mapGenerator();
+    
+    this.player1 = new tddjs.server.player();
+    this.player1.setId(1);
+    this.player1.setName("Ranol");
+    this.player1.setColor("#FFA500");
+    this.player2 = new tddjs.server.player();
+    this.player2.setId(2);
+    this.player2.setName("Kimberley");
+    this.player2.setColor("#FFFF00");
 }
 
 function gameUiTeardown()
@@ -23,6 +34,10 @@ function gameUiTeardown()
     delete this.canvas;
     delete this.ctx;
     delete this.button;
+    
+    delete this.mapCon;
+    delete this.player1;
+    delete this.player2;
 }
 
 TestCase("GameUiControllerTests", {
@@ -105,5 +120,20 @@ TestCase("GameUiControllerTests", {
         var color = this.gameUi.getRgbaColor("#C88C00",0.5);
         
         assertEquals(color,"rgba(200,140,0,0.5)");
+    },
+    
+    "test if getPlayerById return a valid Player":function(){
+        var parr=[];
+        parr.push(this.player1);
+        parr.push(this.player2);
+        this.mapCon.init(parr);
+        var map = this.mapCon.getSerializedMap();
+        this.gameUi.init(map);
+        
+        var player = this.gameUi.getPlayerById(1);
+        
+        
+        assertInstanceOf(player,tddjs.client.player);
+        assertTrue(player,this.player1);
     }
 });
