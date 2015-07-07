@@ -187,12 +187,14 @@ TestCase("LobbyEventSourceControllerTest", {
         this.lobby.addPlayer(this.player1);
         this.lobby.setLeader(this.player1);
         
-        this.ui = new tddjs.client.ui.lobbyUi();
+        this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+        
+        this.ui = new tddjs.client.ui.lobbyUi(this.lobbyRequestController);
         this.ui.createLobbyContent();
         this.ui.createWrapper();
         this.ui.showLobby(this.lobby);
         
-        this.lobbyRequestController = new tddjs.client.controller.lobbyRequestController();
+        this.lobbyRequestController.setLobbyUi(this.ui);
         
         this.url = BASE_URL + "lobbies/" + this.lobby.getId();
         
