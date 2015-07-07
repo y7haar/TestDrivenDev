@@ -504,6 +504,7 @@ TestCase("serverGameLoopControllerTest", {
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
+        console.log( this.sandbox.server[this.url].requests);
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
 
@@ -516,11 +517,15 @@ TestCase("serverGameLoopControllerTest", {
         
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.addClient(this.serverPlayer1);
-   
+        
+        var data = "event:changetoattacking\ndata:change to attacking state\n\n";
+        this.serverGameLoop.clients[0].getResponseObject().write(data);
+        
         this.glc1.makeMove(this.validAttackMove);
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
+        console.log( this.sandbox.server[this.url].requests);
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
 
@@ -528,13 +533,12 @@ TestCase("serverGameLoopControllerTest", {
         assertTrue(this.serverGameLoop.messageAllClientsCalled);
     },
     "test sglc messageAllClients should send move to all clients":function()
-    {   
-        
+    {  
         this.serverGameLoop.setMaxPlayers(3);
         this.serverGameLoop.addClient(this.serverPlayer1);
         this.serverGameLoop.addClient(this.serverPlayer2);
         this.serverGameLoop.addClient(this.serverPlayer3);
-   
+        
         this.glc1.makeMove(this.validPlacingMove);
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
@@ -542,12 +546,36 @@ TestCase("serverGameLoopControllerTest", {
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);        
+       
+        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[1].data));   
+        assertEquals(this.placeUnitData, JSON.parse(this.glc2.fromServerLogs[0].data));   
+        assertEquals(this.placeUnitData, JSON.parse(this.glc3.fromServerLogs[0].data));
+        
+        // ending Phase
+        this.glc1.endPhase();
+        this.sandbox.update();
+        
+        var fakeReq = this.getFakeReq(5);
+        var fakeRes = this.getFakeRes(5);
+        
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         
-        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[2].data));   
-        assertEquals(this.placeUnitData, JSON.parse(this.glc2.fromServerLogs[2].data));   
-        assertEquals(this.placeUnitData, JSON.parse(this.glc3.fromServerLogs[2].data));   
-      
+        // now in attacking Phase and make attack move
+        this.glc1.makeMove(this.validAttackMove);
+        this.sandbox.update();      
+
+        var fakeReq = this.getFakeReq(6);
+        var fakeRes = this.getFakeRes(6);
+        
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        // test if attackmove is on all Clients
+        assertEquals(this.attackResultData, JSON.parse(this.glc1.fromServerLogs[3].data));   
+        assertEquals(this.attackResultData, JSON.parse(this.glc2.fromServerLogs[1].data));   
+        assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));
+        
+        
+        
     },
     
     
