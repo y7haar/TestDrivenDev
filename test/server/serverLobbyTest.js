@@ -98,8 +98,15 @@ TestCase("LobbyPlayerServerTest", {
         this.lobby.addPlayer(this.player2);
         assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
-
-        this.lobby.addPlayer(this.player3);
+        
+        try
+        {
+        
+            this.lobby.addPlayer(this.player3);
+        }
+        
+        catch(e) {}
+        
         assertTrue(this.lobby.getPlayers().indexOf(this.player1) >= 0);
         assertTrue(this.lobby.getPlayers().indexOf(this.player2) >= 0);
         assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
@@ -110,6 +117,18 @@ TestCase("LobbyPlayerServerTest", {
         assertFalse(this.lobby.getPlayers().indexOf(this.player3) >= 0);
 
     },
+    
+     "test Lobby should throw Error if player joins but maxPlayers is exceeded": function() {
+        this.lobby.setMaxPlayers(2);
+
+        this.lobby.addPlayer(this.player1);
+        this.lobby.addPlayer(this.player2);
+        
+        var lobby = this.lobby;
+        var player3 = this.player3;
+        assertException(function() { lobby.addPlayer(player3); }, "Error");
+    },
+    
     "test Lobby should store player1 and kick player2 and player3": function() {
         this.lobby.setMaxPlayers(4);
 
