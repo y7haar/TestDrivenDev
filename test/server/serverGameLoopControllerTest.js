@@ -651,9 +651,13 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.validatePlacingMove);
     },
+    "test sglc.validatePlacingMove should return true (validMove)":function()
+    {
+        assertTrue(this.serverGameLoop.validateAttackingMove(this.validAttackMove));
+    },
      "test sglc should implement method to validate a attackingMove":function()
     {
-        assertFunction(this.serverGameLoop.validateAttackingMove);
+        assertTrue(this.serverGameLoop.validateAttackingMove(this.validPlacingMove));
     },
     
     
