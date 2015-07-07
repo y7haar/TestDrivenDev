@@ -957,7 +957,7 @@ TestCase("SingleLobbyUiEventTest", {
     this.lobbyUi.setCurrentLobby(this.lobby3);
 
     this.sandbox = sinon.sandbox.create();
-
+    
     this.lobbyUi.createLobbyContent();
     this.lobbyUi.createWrapper();
     this.lobbyUi.showLobby(this.lobby3);
