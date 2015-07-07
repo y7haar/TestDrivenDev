@@ -6,6 +6,7 @@
 tddjs.namespace("client.ui").gameUiController = gameUiController;
 
 function gameUiController(aCtx){
+    var _self = this;
     
     var _ctx = null;
     if(arguments.length === 1){
@@ -543,7 +544,7 @@ function gameUiController(aCtx){
         if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
             return; //nicht auf dem grid
         
-        mapMove(x,y);
+        _self.mapMove(x,y);
     }
     function mouseDown(oEvent){
         var x = Math.round((oEvent.offsetX-border/2) * _gridMap.length / (_ctx.canvas.width-border));
@@ -556,10 +557,11 @@ function gameUiController(aCtx){
         if(x>=_gridMap.length || y>=_gridMap[0].length || x<0 || y<0)
             return; //nicht auf dem grid
         
-        mapDown(x,y);
+        _self.mapDown(x,y);
         drawGame();
     }
     // </editor-fold>
+
     
     // <editor-fold defaultstate="collapsed" desc="Map-States">
     function mapMove(x,y){
