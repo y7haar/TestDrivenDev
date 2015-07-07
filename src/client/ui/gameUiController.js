@@ -722,8 +722,8 @@ function gameUiController(aCtx){
     
     function getPlayerById(id){
         for(var p in _playerarr){
-            if(p.getId() === id)
-                return p;
+            if(_playerarr[p].getId() === id)
+                return _playerarr[p];
         }
     }
     
