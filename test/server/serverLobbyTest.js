@@ -276,6 +276,10 @@ TestCase("LobbyServerTest", {
     },
     
      "test startGame should set started to true": function() {
+         this.lobby.addPlayer(this.player1);
+         this.lobby.addPlayer(this.player2);
+         this.lobby.setLeader(this.player1);
+         
          assertFalse(this.lobby.isStarted());
          this.lobby.startGame();
          assertTrue(this.lobby.isStarted());
