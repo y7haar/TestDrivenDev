@@ -20,8 +20,7 @@ function gameLoopController()
     
     function addClient(aClient)
     {
-        _clients.push(aClient);
-        console.log("add Client. connected Clients: "+_clients.length);
+        _clients.push(aClient);        
         if(_clients.length === _maxPlayers)
         {
             _allConnected = true;
@@ -35,7 +34,7 @@ function gameLoopController()
             };
             msg = JSON.stringify(msg);            
             var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
-            _clients[_currentClient].res.write(data);
+            _clients[_currentClient].getResponseObject().write(data);
         }
     }
     function setMaxPlayers(intValue)
@@ -78,16 +77,20 @@ function gameLoopController()
             case 'endPhase':             
                 res.status(200).send("OK");
                 if (body.phaseName === "placingState")
-                {
+                {                   
                     var data = "event:changeToAttacking\ndata:ChangeToAttacking\n\n";
-                    _clients[_currentClient].res.write(data);
+                    _clients[_currentClient].getResponseObject().write(data);
                 }
                 else if (body.phaseName === "attackingState")
                 {
+               
                     var data = "event:changeToWaiting\ndata:ChangeToWaiting\n\n";
-                    _clients[_currentClient].res.write(data);
+                    _clients[_currentClient].getResponseObject().write(data);
+                 
                     // next Client
-                    _currentClient++;                    
+                    _currentClient++; 
+                    
+               
                     // start at first Client if lastClient ended his turn
                     if(_currentClient === _clients.length)_currentClient = 0;
                     
@@ -97,7 +100,7 @@ function gameLoopController()
                     };
                     msg = JSON.stringify(msg);   
                     var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
-                    _clients[_currentClient].res.write(data);
+                    _clients[_currentClient].getResponseObject().write(data);
                 }
                 break;
             case 'placing':
@@ -114,7 +117,7 @@ function gameLoopController()
                 };               
                 msg = JSON.stringify(msg);
                 var data = "event:placeUnits\ndata:"+msg+"\n\n";            
-                _clients[_currentClient].res.write(data);
+                messageAllClients(data);
                 break;
             case 'attack':                 
                 res.status(200).send("OK");
@@ -145,7 +148,7 @@ function gameLoopController()
                     };
                 msg = JSON.stringify(msg);
                 var data = "event:attackResult\ndata:"+msg+"\n\n";            
-                _clients[_currentClient].res.write(data);   
+                messageAllClients(data); 
             
                 break;
             default:
@@ -157,9 +160,13 @@ function gameLoopController()
     }
     
     var messageAllClientsCalled = false;
-    function messageAllClients()
+    function messageAllClients(msg)
     {
-        
+        messageAllClientsCalled = true;
+        for(var i = 0, count = _clients.length ; i < count; i++)
+        {
+            if(_clients[i].getType() === 'human')_clients[i].getResponseObject().write(msg);
+        }      
     }
 
     

@@ -6,7 +6,7 @@
  
 
 
-TestCase("CountryBorderTest", {
+TestCase("ClientCountryBorderTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
         this.country2 = new tddjs.client.map.country(); 
@@ -65,7 +65,7 @@ TestCase("CountryBorderTest", {
     }
 });
 // testcaes for Country name
-TestCase("CountryNameTest", {
+TestCase("ClientCountryNameTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
     },
@@ -104,7 +104,7 @@ TestCase("CountryNameTest", {
 
 
 // Testcaes for Soldier --> Units of a Country
-TestCase("CountryUnitsTest", {
+TestCase("ClientCountryUnitsTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
         this.x = 10;
@@ -186,7 +186,7 @@ TestCase("CountryUnitsTest", {
 });
 
 // Tastacaes for Player --> Owner of a country
-TestCase("CountryOwnerTest", {
+TestCase("ClientCountryOwnerTest", {
     setUp: function () {
         this.country1 = new tddjs.client.map.country();
         this.player1 = new tddjs.client.player();
