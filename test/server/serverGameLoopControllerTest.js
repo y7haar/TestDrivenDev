@@ -493,6 +493,62 @@ TestCase("serverGameLoopControllerTest", {
        this.serverGameLoop.messageAllClients();
        assertTrue(this.serverGameLoop.messageAllClientsCalled);    
     },
+    "test sglc messageAllClientsCalled should be called when playerMove(placing)": function ()
+    {
+        assertFalse(this.serverGameLoop.messageAllClientsCalled);
+        
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+   
+        this.glc1.makeMove(this.validPlacingMove);
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4);
+
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        assertTrue(this.serverGameLoop.messageAllClientsCalled);
+    },
+    "test sglc messageAllClientsCalled should be called when playerMove(attacking)": function ()
+    {
+        assertFalse(this.serverGameLoop.messageAllClientsCalled);
+        
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+   
+        this.glc1.makeMove(this.validAttackMove);
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4);
+
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        assertTrue(this.serverGameLoop.messageAllClientsCalled);
+    },
+    "test sglc messageAllClients should send move to all clients":function()
+    {   
+        
+        this.serverGameLoop.setMaxPlayers(3);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        this.serverGameLoop.addClient(this.serverPlayer3);
+   
+        this.glc1.makeMove(this.validPlacingMove);
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4);
+
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertEquals(this.placeUnitData, JSON.parse(this.glc1.fromServerLogs[2].data));   
+        assertEquals(this.placeUnitData, JSON.parse(this.glc2.fromServerLogs[2].data));   
+        assertEquals(this.placeUnitData, JSON.parse(this.glc3.fromServerLogs[2].data));   
+      
+    },
     
     
     
