@@ -1121,19 +1121,28 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.calcPlacingResult);
     },
-    "test sglc should implement function to apply AttackResult to Map":function()
-    {
-        assertFunction(this.serverGameLoop.applyAttackResult);
-    },
-    "test sglc should implement function to apply PlacingMove to Map":function()
-    {
-        assertFunction(this.serverGameLoop.applyPlacingMove);
-    },
     "test sglc.applyPlacingMove should apply changes to map":function()
     {
         this.serverGameLoop.setMap(this.map);
         assertEquals(this.serverGameLoop.map, this.map);
-        this.serverGameLoop.applyPlacingMove(this.validPlacingMove);
+        this.serverGameLoop.applyPlacingMove(this.placeUnitData);
+        assertEquals(13, this.serverGameLoop.map.getContinent("Europa").getCountry("Country1").getUnitCount());
+    },
+    
+    
+    "test sglc should implement function to apply AttackResult to Map":function()
+    {
+        assertFunction(this.serverGameLoop.applyAttackResult);
+    },
+    "test sglc should implement function to apply PlacingResult to Map":function()
+    {
+        assertFunction(this.serverGameLoop.applyPlacingResult);
+    },
+    "test sglc.applyPlacingResult should apply changes to map":function()
+    {
+        this.serverGameLoop.setMap(this.map);
+        assertEquals(this.serverGameLoop.map, this.map);
+        this.serverGameLoop.applyPlacingMove(this.placeUnitData);
         assertEquals(13, this.serverGameLoop.map.getContinent("Europa").getCountry("Country1").getUnitCount());
     },
     
