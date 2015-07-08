@@ -794,9 +794,166 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongContinentPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongCountryPMove));
     },
-     "test sglc should implement method to validate a attackingMove":function()
+    "test sglc should implement method to validate a attackingMove":function()
     {
-         assertFunction(this.serverGameLoop.validateAMove);
+         assertFunction(this.serverGameLoop.validateAttackingMove);
+    },
+    "test sglc.validateAttackingMove should return true (validMove)":function()
+    {
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        
+        assertTrue(this.serverGameLoop.validateAttackingMove(this.validAttackMove));
+    },
+    "test sglc.validateAttackingMove should return true (validMove)":function()
+    {
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        
+        
+        var wrongAttackerPlayerMove = {
+            type: 'attack',
+            from: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        
+        var wrongAttackerOwnerMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country2'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        var wrongAttackerCountryMove = {
+            type: 'attack',
+            from: {
+                player: 'Peterlustig',
+                continent: 'Europa',
+                country: 'Country45'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        
+        var wrongAttackerContinentMove = {
+            type: 'attack',
+            from: {
+                player: 'Peterlustig',
+                continent: '3ur0p4',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        
+        
+        var wrongDefenderOwnerMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country3'
+            }
+        };
+        var wrongDefenderCountryMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country4'
+            }
+        };
+        
+        var wrongDefenderContinentMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Asien',
+                country: 'Country3'
+            }
+        };
+        
+        var wrongTypeMove = {
+            type: 'winGame',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country1'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Asien',
+                country: 'Country3'
+            }
+        };
+         var wrongBorderMove = {
+            type: 'attack',
+            from: {
+                player: 'Peter',
+                continent: 'Europa',
+                country: 'Country3'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        
+        
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongAttackerPlayerMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongAttackerOwnerMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongAttackerContinentMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongAttackerCountryMove));
+        
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongDefenderOwnerMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongDefenderContinentMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongDefenderCountryMove));
+        
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongTypeMove));
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongBorderMove));
+        
     },
     
     
