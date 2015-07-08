@@ -84,6 +84,34 @@ app.all("*", function (req, res, next) {
     next();
 });
 
+app.get("/", function (req, res) {
+    res.redirect("/public/lobbies.html");
+});
+
+
+app.get('/public/*', function (req, res) {
+  var options = {
+    root: __dirname + '/public/',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
+
+  var fileName = req.params[0];
+  
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      console.log('Sent:', fileName);
+    }
+  });
+
+});
 
 console.log("routing...");
 
