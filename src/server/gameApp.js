@@ -99,8 +99,7 @@ gameApp.get("/:id", function (req, res) {
    
     else
     {
-        console.log("GET-Request but not event-stream");
-        res.sendStatus(404);
+         res.redirect("/public/game.html");
     }
 });
 
