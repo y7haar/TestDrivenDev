@@ -414,7 +414,22 @@ function gameLoopController()
     
     function applyAttackResult(move)
     {
+        var changes1 = move.changes[0];
+        var changes2 = move.changes[1];
+        var players = {};
+        var player1Name = _map.getContinent(changes1.continent).getCountry(changes1.country).getOwner().getName();
+        var player2Name = _map.getContinent(changes2.continent).getCountry(changes2.country).getOwner().getName();
         
+        players[player1Name] = _map.getContinent(changes1.continent).getCountry(changes1.country).getOwner();
+        players[player2Name] = _map.getContinent(changes2.continent).getCountry(changes2.country).getOwner();
+ 
+       
+       //changes 1
+        _map.getContinent(changes1.continent).getCountry(changes1.country).setUnitCount(changes1.unitCount);
+        _map.getContinent(changes1.continent).getCountry(changes1.country).setOwner(players[changes1.owner]);        
+        //changes 2
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setUnitCount(changes2.unitCount);
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]); 
     }
     
     function applyPlacingResult(move)
