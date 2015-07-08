@@ -665,7 +665,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc should should hold boolean gameStarted":function()
     {
-        assertNotUndfined(this.serverGameLoop.gameStarted);
+        assertNotUndefined(this.serverGameLoop.gameStarted);
     },
     "test sglc.gameStarted should be false at init":function()
     {
