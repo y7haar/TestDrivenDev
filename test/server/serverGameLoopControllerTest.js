@@ -15,7 +15,7 @@ TestCase("serverGameLoopControllerTest", {
         
         this.validPlacingMove = {
             type: 'placing',
-            unitCount: 12,
+            unitCount: 3,
             player: 'Peter',
             continent: 'Europa',
             country: 'Country1'
@@ -65,7 +65,7 @@ TestCase("serverGameLoopControllerTest", {
             change:{
                 continent:"Europa",
                 country:"Country1",
-                unitCount:12
+                unitCount:3
             }
         };        
   
