@@ -2,7 +2,7 @@
  *  Some global variables
  */
 
-var BASE_URL = "http://localhost:8080/";
+var BASE_URL = "http://mjrb.ddns.net:8181/";
 
 var COUNTRY_NAMES_ARRAY = ["Bakaresh", "Rodkaresh", "Bastion Akundur", "Ankh Morpork", "Serandur", "Sturmgipfel",
     "Kristallnarbe", "Kristallwüste", "Gewundener Wald", "Piltover", "Zaun", "Demacia",
