@@ -1117,6 +1117,10 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.calcAttackResult);
     },
+    "test sglc should implement function to calculate PlaceingResult":function()
+    {
+        assertFunction(this.serverGameLoop.calcPlacingResult);
+    },
     "test sglc should implement function to apply AttackResult to Map":function()
     {
         assertFunction(this.serverGameLoop.applyAttackResult);
