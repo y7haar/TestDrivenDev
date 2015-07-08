@@ -1,0 +1,285 @@
+
+/* 
+    Created on : 04.06.2015, 21:13:47
+    Author     : Yannic
+*/
+
+body
+{
+    font-family: "Verdana";
+    background-color: #aaa;
+}
+
+.content
+{
+    margin: 0 auto;
+    //margin-top: 50px;
+    padding-bottom: 20px;
+    max-width: 1000px;
+    background-color: #cccccc;
+    border-radius: 5px;
+    
+    //box-shadow: 0px 0px 5px 2px #444;
+}
+
+.lobbyWrapper
+{
+    max-width: 900px;
+
+    margin: 0 auto;
+    background-color: #cccccc;
+    //padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+
+}
+
+.lobbiesTitle
+{
+    max-width: 900px;
+
+    color: seagreen;
+
+    margin: 0 auto;
+    background-color: #cccccc;
+    padding-top: 10px;
+    padding-bottom: 7px;
+
+}
+
+.lobbyTitle, .lobbySingleTitle
+{
+    max-width: 900px;
+    min-width: 630px;
+
+    color: seagreen;
+
+    text-align:left;
+
+    background-color: #cccccc;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left:10px;
+
+}
+
+.lobbySingleTitle
+{
+    padding-top: 20px;
+}
+
+
+.lobby
+{
+    background-color: #bbb;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    margin-bottom: 7px;
+    
+    font-size: 20px;
+    
+    border-radius: 1px;
+}
+
+.lobbiesId
+{
+    color: seagreen;
+    font-weight: bold;
+
+    //min-width: 50px;
+    text-align: right; 
+    padding-right:25px;
+    padding-left:15px;
+    
+}
+
+.lobbiesName
+{
+    min-width: 550px;
+    padding-right:20px;
+    text-align: left;
+}
+
+.lobbyPlayers
+{
+    text-align: right;
+    padding-right:35px;
+    padding-left:20px;
+}
+
+.lobbyJoin, .lobbyRefresh
+{
+    text-align: center;
+
+    padding-left:20px;
+    padding-right:20px;
+
+    padding-bottom:5px;
+    padding-top:5px;
+
+    color:#eee;
+    background-color:steelblue; 
+
+    border: 3px solid #777;
+    border-radius: 3px;
+
+    cursor: pointer;
+}
+
+.lobbyRefresh
+{
+    margin: 0 auto;
+    margin-top: 50px;
+    //max-width: 500px;
+    border: none;
+    border-radius: 1px;
+    background-color: #aaa;
+    color: steelblue;
+}
+
+.lobbyPlayer
+{
+    background-color: #bbb;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    font-size: 20px;
+    
+    margin-bottom: 5px;
+    border-radius: 1px;
+}
+
+.playerColor
+{
+    width:25px;
+    height:25px;
+
+    margin-right:20px;
+
+    border: 2px solid #444;
+    border-radius: 2px;
+}
+
+.playerName
+{
+    padding-left: 20px;
+    min-width: 400px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.playerType
+{
+    min-width: 100px;
+    text-align: left;
+}
+
+.playerTypeSelect
+{
+    min-width: 100px;
+    height:25px;
+    text-align: left;
+    border: 2px solid steelblue;
+    border-radius: 3px;
+    background-color: #dddddd;
+
+    padding: 0px;
+    margin: 0px;
+    font-size: 18px;
+}
+
+.lobbyMaxPlayers
+{
+    text-align: left;
+    padding-left: 20px;
+    font-size: 20px;
+}
+
+.lobbyId
+{
+    padding-left:10px;
+    color: seagreen;
+}
+
+.lobbyMaxPlayersSpan
+{
+    font-size: 18px;
+    //color: seagreen;
+    //font-weight: bold;
+    padding-right: 10px;
+}
+
+.lobbyMaxPlayersSelect
+{
+    min-width: 40px;
+    height:25px;
+    text-align: left;
+    border: 2px solid steelblue;
+    border-radius: 3px;
+    background-color: #dddddd;
+
+    font-size: 18px;
+
+    padding: 0px;
+    margin: 0px;
+}
+
+.lobbyStartButton
+{
+    border-radius: 5px;
+    padding: 10px;
+    width: 100px;
+
+    background-color: #ddd;
+    box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.75);
+
+    color: seagreen;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    font-size: 25px;
+
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.lobbyStartButton:active
+{
+    box-shadow: inset 0px 2px 5px 1px rgba(0,0,0,0.75);
+    background-color: #bbb;
+    color: rgb(36, 129, 77);
+}
+
+.newLobbyButton
+{
+    border-radius: 5px;
+    padding: 10px;
+    width: 150px;
+
+    background-color: #ddd;
+    box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.75);
+
+    color: steelblue;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.newLobbyButton:active
+{
+    box-shadow: inset 0px 2px 5px 1px rgba(0,0,0,0.75);
+    background-color: #bbb;
+    color: rgb(60, 120, 170);
+}
