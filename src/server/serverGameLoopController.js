@@ -129,11 +129,17 @@ function gameLoopController()
     
     function validatePlacingMove(move)
     {      
-        if(typeof move !== 'object') return false;
+        if(typeof move !== 'object') 
+            return false;
         
-        if(move.type !== 'placing') return false;
+        if(move.type !== 'placing') 
+            return false;
         
-        if(move.unitCount > _clients[_currentClient].unitCount) return false;
+        if (_clients[_currentClient].getName() !== move.player) 
+            return false;
+        
+        if(move.unitCount > _clients[_currentClient].unitCount) 
+            return false;
         
         if (!_map.hasContinent(move.continent))
             return false;
