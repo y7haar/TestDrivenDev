@@ -17,28 +17,42 @@ function gameLoopController()
     var _maxPlayers = -1;
     var _allConnected = false;
     var _currentClient = null;
+    var _gameStarted = false;
     
     function addClient(aClient)
     {
         _clients.push(aClient);        
         if(_clients.length === _maxPlayers)
         {
-            _allConnected = true;
-            
-            // starting game, changeing currentPlayer to first player in array
-            
-            _currentClient = 0;            
-
-            calculateUnitBonus(_clients[_currentClient]);
+            _allConnected = true;             
+            startGame();
+        }
+    }   
+    
+    function startGame()
+    {
+        _gameStarted = true;
+        _currentClient = 0;   
+        var unitCount = calculateUnitBonus(_clients[_currentClient]);
+        _clients[_currentClient].setUnitCount(unitCount);      
+   
+        if(_clients[_currentClient].getType() ==="bot")
+        {
+               
+        }
+        else
+        {         
             var msg = {
-                unitCount:12,
-                info:"changeToPlacing"
+                unitCount: unitCount,
+                info: "changeToPlacing"
             };
-            msg = JSON.stringify(msg);            
-            var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
+            msg = JSON.stringify(msg);
+            var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
             _clients[_currentClient].getResponseObject().write(data);
         }
+        
     }
+    
     function setMaxPlayers(intValue)
     {
         _maxPlayers = intValue;
@@ -77,8 +91,24 @@ function gameLoopController()
     }
     
     function validatePlacingMove(move)
-    {
+    {      
+        if(typeof move !== 'object') return false;
         
+        if(move.type !== 'placing') return false;
+        
+        if(move.unitCount > _clients[_currentClient].unitCount) return false;
+        
+        if (!_map.hasContinent(move.continent))
+            return false;
+   
+        if (!_map.getContinent(move.continent).hasCountryByName(move.country))
+            return false;
+  
+        if (_map.getContinent(move.continent).getCountry(move.country).getOwner().getName() !== move.player)
+            return false;
+        
+        // if passed till here move is Valid
+        return true;
     }
     
     function calculateUnitBonus(aPlayer)
@@ -93,9 +123,8 @@ function gameLoopController()
             var playerCountries = playerContinents[continent].getCountriesByPlayer(aPlayer);
             var ownedCountries = Object.keys(playerCountries).length;
     
-            if(countryCount === ownedCountries)unitBonus += playerContinents[continent].getUnitBonus();
-            else
-                unitBonus += Math.round(ownedCountries /3);
+            if(countryCount === ownedCountries)unitBonus += playerContinents[continent].getUnitBonus();            
+            unitBonus += Math.round(ownedCountries /3);
 
         }
         
@@ -139,9 +168,7 @@ function gameLoopController()
                 }
                 break;
             case 'placing':
-                res.status(200).send("OK");
-                console.log("SGLC playerMove placing case");
-                console.log(body);
+                res.status(200).send("OK");          
                 var msg = {
                   type:body.type,
                   player:body.player,
@@ -156,9 +183,7 @@ function gameLoopController()
                 messageAllClients(data);
                 break;
             case 'attack':                 
-                res.status(200).send("OK");
-                console.log("SGLC playerMove attacking case");
-                console.log(body);
+                res.status(200).send("OK");        
                 var msg = {
                     type: "attacking",
                     attacker: {
@@ -209,6 +234,11 @@ function gameLoopController()
 
     
     //test
+    Object.defineProperty(this, 'gameStarted', {
+        get: function () {
+            return _gameStarted;
+        }
+    });
     Object.defineProperty(this, 'clients', {
         get: function () {
             return _clients;
@@ -252,6 +282,7 @@ function gameLoopController()
     this.validateAttackingMove = validateAttackingMove;
     this.validatePlacingMove = validatePlacingMove;
     this.calculateUnitBonus = calculateUnitBonus;
+    
     
     this.attack = attack;
     this.placeUnits = placeUnits;
