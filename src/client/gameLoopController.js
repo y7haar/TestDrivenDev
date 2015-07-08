@@ -198,6 +198,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function setGameController(aController)
     {
+        if(! (aController instanceof tddjs.client.controller.gameController) )
+            throw new TypeError("Expectet instance of gameController got " + typeof aController);
         _gameController = aController;
     }
     
