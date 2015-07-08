@@ -329,7 +329,7 @@ function gameLoopController()
         console.log("a lost: "+attackerLoses);
         console.log("d lost: "+defenderLoses);
         
-        var newAttackerUnitCount = attackerUnitCount - attackerLoses;
+        var newAttackerUnitCount = attackerUnitCount - attackerLoses +1;
         var newDefenderUnitCount = defenderUnitCount - defenderLoses;
         
         var attackerOutcome;
@@ -353,7 +353,7 @@ function gameLoopController()
             defenderChanges = {
                 continent: move.to.continent,
                 country: move.to.country,
-                owner: move.to.player,
+                owner: move.from.player,
                 unitCount: newAttackerUnitCount -1
             };
             
@@ -392,7 +392,8 @@ function gameLoopController()
             changes:[attackerChanges, defenderChanges]
         };        
       
-        console.log("AtackResult: \n"+result);
+        console.log("AtackResult: \n");
+        console.dir(result);
         return result;
     }
     function calcPlacingResult(move)
