@@ -15,6 +15,7 @@ function gameUiController(aCtx){
     else
         throw new Error("Wrong parametercount!");
     
+    //Farben für die Kontinente
     // <editor-fold defaultstate="collapsed" desc="color-array">
     var _colors=[
     /*    "#FF8F3D",
@@ -55,6 +56,7 @@ function gameUiController(aCtx){
     var _water;
     var _seaRoute=[];
     
+    //Texturen für die hover-effekte und Wasser
     var _selectedImg = new Image();
     _selectedImg.src = "client/ui/selectedImg.png";
     var _hoverImg = new Image();
@@ -64,6 +66,7 @@ function gameUiController(aCtx){
     var _waterImg = new Image();
     _waterImg.src = "client/ui/waterImg.png";
     
+    //Cached Bilder für den Renderer
     var imgCacheMap;
     var imgCachePlayer;
     var imgCacheUnits;
@@ -72,15 +75,25 @@ function gameUiController(aCtx){
     var imgCacheSelected=[];
     var imgCacheActiv=[];
     
+    //Strings für die Texte in der UI
     var countryStrHover;
     var countryStrSelected;
     var stateStr;
     var _playerColor;
     
-    
+    /*
+     * Wenn init() aufgerufen wird, werden sämtliche Daten geladen
+     * 
+     * @type map
+     * muss nur übergeben werden, falls vorher nicht scho mit getMap(map)
+     * die Map initialisiert wurde
+     */
     var serializedMap;
     function init(map){
-        serializedMap=map;/*
+        if(arguments.length === 1){
+        serializedMap=map;
+        }
+        /*
         _getMap(serializedMap);
         _initGridMap();
         _initMap();
@@ -214,7 +227,7 @@ function gameUiController(aCtx){
     function drawCache(){
         _ctx.putImageData(imgCacheMap,0,0);
         _ctx.drawImage(imgCacheSeaRoutes,0,0);
-        //_ctx.drawImage(imgCachePlayer,0,0);
+        //_ctx.drawImage(imgCachePlayer,0,0); //überzeichnet die Länder mit der Playerfarbe
         
         countryStrSelected="|";
         for (var i in _countries){
@@ -506,6 +519,10 @@ function gameUiController(aCtx){
         _btn = aBtnArr;
     }
     
+    /*
+     * Enfternt EventListener, damit diese nicht einen redraw triggern
+     * Die Units der Map werden neu gecached
+     */
     function updateUnitCounts(){
         _ctx.canvas.removeEventListener('mousemove', mouseMove, false);
         _ctx.canvas.removeEventListener('mousedown', mouseDown, false);
@@ -564,7 +581,7 @@ function gameUiController(aCtx){
 
     
     // <editor-fold defaultstate="collapsed" desc="Map-States">
-    function mapMove(x,y){
+    function mapMove(x,y){ //wird vom gameController überschrieben, je nach gamestate
         var id = _gridMap[x][y].id;
         if(id>=0){ //kein wasser
             for (var i in imgCacheHover){
@@ -579,7 +596,7 @@ function gameUiController(aCtx){
             }
         }
     }
-    function mapDown(x,y){
+    function mapDown(x,y){ //wird vom gameController überschrieben, je nach gamestate
         var id = _gridMap[x][y].id;
         if(id>=0){ //kein wasser
             _gridMap[x][y].selected=!_gridMap[x][y].selected;
@@ -658,7 +675,7 @@ function gameUiController(aCtx){
                     break;
                 }
             }
-            //if(cBorder) //<<<<<<<<<<--------------------------------HACK!!!!!!!!!!!!!
+            //if(cBorder)
                 countrys[c].addBorder(countrys[cBorder]);
         }
        
@@ -785,6 +802,10 @@ function gameUiController(aCtx){
         return _countries;
     }
     
+    /*
+     * Versucht den die beste Koordinate für die Unitcounts zu finden
+     * mehrer implementierungen wurden versucht     
+     */
     function _cacheCountryCenter(){
         /*
         for(x=5;x<_gridMap.length-5;x++){
@@ -885,6 +906,12 @@ function gameUiController(aCtx){
         }
     }
     
+    /*
+     * Hier soll eine searoute gefunden werden
+     * Die implementierung ist offengehalten,
+     * dass man diese noch optimieren kann
+     * im moment wird nur der kürzeste Weg genommen
+     */
     function _calcSeaRoutes(){
         var borders = _water.getBorders();
         

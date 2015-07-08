@@ -1,5 +1,5 @@
 /* 
- * 
+ * Test für die grafischen Ausgaben
  */
 
 

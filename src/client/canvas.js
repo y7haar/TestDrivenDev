@@ -1,5 +1,7 @@
 /* 
  * Source-Code for Canvas
+ * 
+ * Alter Renderer, mitlerweilen wird gameUiController verwendet
  */
 
 var canvas;
