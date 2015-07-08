@@ -208,7 +208,11 @@ TestCase("GameLoopCommunicationTests", {
         this.player1 = new tddjs.client.player();
         this.url = "/serverURL";
         
+        var gameController = new tddjs.client.controller.gameController(null);
+        gameController.update = function(){};
+        
         this.gameLoop =  new tddjs.client.gameLoopController(this.map, this.player1, this.url);
+        this.gameLoop.setGameController(gameController);
         
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);        
@@ -543,7 +547,13 @@ TestCase("GameLoopModifyMapTests", {
 
         this.map2 = this.map1;
         this.url = "/modifyMapTestURL";
+        
+        var gameController = new tddjs.client.controller.gameController(null);
+        gameController.update = function(){};
+        
         this.gameLoop = new tddjs.client.gameLoopController(this.map1, this.player1, this.url);
+        this.gameLoop.setGameController(gameController);
+        
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
         this.sandbox.addServer(this.url);     
         
