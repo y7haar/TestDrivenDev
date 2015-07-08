@@ -5,7 +5,7 @@
 TestCase("serverGameLoopControllerTest", {
     setUp: function() {
         this.serverGameLoop = new tddjs.server.controller.gameLoopController();
-        // sgl = serverGameLoop
+        // sglc = serverGameLoop
         this.url = "/serverGameLoopURL";
 
         this.sandbox = new tddjs.stubs.eventSourceSandbox();
@@ -647,6 +647,51 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(this.attackResultData, JSON.parse(this.glc2.fromServerLogs[1].data));   
         assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));           
     },
+    "test sglc should implement calculateUnitBonus method":function()
+    {
+        assertFunction(this.serverGameLoop.calculateUnitBonus);
+    },
+    "test sglc.calculateUnitBonus should be called if changing to placingState":function()
+    {
+        this.serverGameLoop.calculateUnitBonus = stubFn();        
+        assertFalse(this.serverGameLoop.calculateUnitBonus.called);
+ 
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.addClient(this.serverPlayer1);     
+        this.serverGameLoop.addClient(this.serverPlayer2); 
+         
+        assertEquals("placingState" ,this.glc1.getStateName());
+        assertTrue(this.serverGameLoop.calculateUnitBonus.called);       
+        assertEquals(this.serverPlayer1, this.serverGameLoop.calculateUnitBonus.args[0]);
+        
+        this.serverGameLoop.calculateUnitBonus = stubFn();
+        assertFalse(this.serverGameLoop.calculateUnitBonus.called);
+        
+        this.glc1.endPhase();
+        this.sandbox.update();        
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4);        
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        this.glc1.endPhase();
+        this.sandbox.update();        
+        var fakeReq = this.getFakeReq(5);
+        var fakeRes = this.getFakeRes(5);        
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertTrue(this.serverGameLoop.calculateUnitBonus.called);       
+        assertEquals(this.serverPlayer2, this.serverGameLoop.calculateUnitBonus.args[0]);
+        
+    },
+    "test sglc.calculateUnitBonus should return UnitBonus of currentPlayer":function()
+    {            
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.addClient(this.serverPlayer1);    
+
+    },
+    
+    
+    
     "test sglc should implement method to validate a placingMove":function()
     {
         assertFunction(this.serverGameLoop.validatePlacingMove);
