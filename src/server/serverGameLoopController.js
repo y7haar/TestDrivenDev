@@ -237,40 +237,43 @@ function gameLoopController()
               
                     break;
                 case 'attack':
-                    validateAttackingMove(body);
-                    res.status(200).send("OK");
-                    var msg = {
-                        type: "attacking",
-                        attacker: {
-                            player: "Peter",
-                            outcome: "winner"
-                        },
-                        defender: {
-                            player: "Hanswurst",
-                            outcome: "loser"
-                        },
-                        changes: [
-                            {
-                                continent: "Europa",
-                                country: "Country1",
-                                unitCount: 1,
-                                owner: "Peter"
+                    if (validateAttackingMove(body))
+                    {
+                        res.status(200).send("OK");
+                        var msg = {
+                            type: "attacking",
+                            attacker: {
+                                player: "Peter",
+                                outcome: "winner"
                             },
-                            {
-                                continent: "Europa",
-                                country: "Country2",
-                                unitCount: 6,
-                                owner: "Hanswurst"
-                            }
-                        ]
-                    };
-                    msg = JSON.stringify(msg);
-                    var data = "event:attackResult\ndata:" + msg + "\n\n";
-                    messageAllClients(data);
-
+                            defender: {
+                                player: "Hanswurst",
+                                outcome: "loser"
+                            },
+                            changes: [
+                                {
+                                    continent: "Europa",
+                                    country: "Country1",
+                                    unitCount: 1,
+                                    owner: "Peter"
+                                },
+                                {
+                                    continent: "Europa",
+                                    country: "Country2",
+                                    unitCount: 6,
+                                    owner: "Hanswurst"
+                                }
+                            ]
+                        };
+                        msg = JSON.stringify(msg);
+                        var data = "event:attackResult\ndata:" + msg + "\n\n";
+                        messageAllClients(data);
+                    }
+                    else
+                        res.status(400).send("move is notValid");
                     break;
                 default:
-                    res.status(404).send("404");
+                    res.status(400).send("400");
                     break;
 
             }
