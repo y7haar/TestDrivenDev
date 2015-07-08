@@ -29,7 +29,8 @@ function gameController(aCtx){
             onFailure: onFailure
         };
         
-        _Url = window.location.href;
+        var id = window.location.search.split('id=')[1];
+        _Url = BASE_URL + "game/" + id;
 
         ajax.get(_Url + "/map", options);
         
