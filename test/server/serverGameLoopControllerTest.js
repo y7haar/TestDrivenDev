@@ -1130,11 +1130,26 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.applyPlacingResult);
     },
+     "test sglc.calclacingResult should return object for changing the map":function()
+    {
+        var placeUnitData = {
+            type: "placing",
+            player: "Peter",
+            change: {
+                continent: "Europa",
+                country: "Country1",
+                unitCount: 13
+            }
+        };
+        var move = this.serverGameLoop.calcPlacingResult(this.validPlacingMove);
+        assertEquals(placeUnitData,move );
+    },
     "test sglc.applyPlacingResult should apply changes to map":function()
     {
         this.serverGameLoop.setMap(this.map);
         assertEquals(this.serverGameLoop.map, this.map);
-        this.serverGameLoop.applyPlacingResult(this.placeUnitData);
+        var move = this.serverGameLoop.calcPlacingResult(this.validPlacingMove);
+        this.serverGameLoop.applyPlacingResult(move);
         assertEquals(13, this.serverGameLoop.map.getContinent("Europa").getCountry("Country1").getUnitCount());
     },
     
