@@ -31,6 +31,7 @@ function gameLoopController()
     
     function startGame()
     {
+       
         _gameStarted = true;
         _currentClient = 0;   
         var unitCount = calculateUnitBonus(_clients[_currentClient]);
@@ -211,6 +212,7 @@ function gameLoopController()
                 }
                 break;
             case 'placing':
+                validatePlacingMove(body);
                 res.status(200).send("OK");          
                 var msg = {
                   type:body.type,
@@ -225,7 +227,8 @@ function gameLoopController()
                 var data = "event:placeUnits\ndata:"+msg+"\n\n";            
                 messageAllClients(data);
                 break;
-            case 'attack':                 
+            case 'attack':
+                validateAttackingMove(body);
                 res.status(200).send("OK");        
                 var msg = {
                     type: "attacking",
@@ -277,6 +280,29 @@ function gameLoopController()
 
     
     //test
+    Object.defineProperty(this, 'validatePlacingStub', {    
+        get: function () {
+            if(validatePlacingMove.called === undefined)
+            {                
+                validatePlacingMove = stubFn();            
+                return validatePlacingMove;
+            }
+            else
+                return validatePlacingMove;  
+        }
+    });    
+    Object.defineProperty(this, 'validateAttackingStub', {    
+        get: function () {
+            if(validateAttackingMove.called === undefined)
+            {                
+                validateAttackingMove = stubFn();            
+                return validateAttackingMove;
+            }
+            else
+                return validateAttackingMove;  
+        }
+    });    
+    
     Object.defineProperty(this, 'gameStarted', {
         get: function () {
             return _gameStarted;
