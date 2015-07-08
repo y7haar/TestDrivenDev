@@ -285,6 +285,22 @@ function gameLoopController()
         
     }
     
+    function calcAttackResult(move)
+    {        
+        
+    }
+    
+    function applyAttackResult()
+    {
+        
+    }
+    
+    function applyPlacingMove()
+    {
+        
+    }
+    
+    
     var messageAllClientsCalled = false;
     function messageAllClients(msg)
     {
@@ -368,6 +384,9 @@ function gameLoopController()
     this.validateAttackingMove = validateAttackingMove;
     this.validatePlacingMove = validatePlacingMove;
     this.calculateUnitBonus = calculateUnitBonus;
+    this.calcAttackResult = calcAttackResult;
+    this.applyAttackResult = applyAttackResult;
+    this.applyPlacingMove = applyPlacingMove;
     
     
     this.attack = attack;
