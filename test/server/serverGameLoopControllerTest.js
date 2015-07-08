@@ -4,6 +4,8 @@
 
 TestCase("serverGameLoopControllerTest", {
     setUp: function() {
+        
+        var randomAi = tddjs.server.controller.randomAi;
         this.serverGameLoop = new tddjs.server.controller.gameLoopController();
         // sglc = serverGameLoop
         this.url = "/serverGameLoopURL";
@@ -109,35 +111,35 @@ TestCase("serverGameLoopControllerTest", {
         
         
         //Continent1-------------------------------------
-        this.continent1 = new tddjs.client.map.continent();
-        this.continent1.setName("Europa");
+        this.clientContinent1 = new tddjs.client.map.continent();
+        this.clientContinent1.setName("Europa");
         
-        this.c1 = new tddjs.client.map.country();
-        this.c1.setName("Country1");
-        this.c1.setOwner(this.player1);
-        this.c1.setUnitCount(10);
+        this.clientC1 = new tddjs.client.map.country();
+        this.clientC1.setName("Country1");
+        this.clientC1.setOwner(this.player1);
+        this.clientC1.setUnitCount(10);
         
-        this.c2 = new tddjs.client.map.country();
-        this.c2.setName("Country2");
-        this.c2.setOwner(this.player2);
-        this.c2.setUnitCount(2);
+        this.clientC2 = new tddjs.client.map.country();
+        this.clientC2.setName("Country2");
+        this.clientC2.setOwner(this.player2);
+        this.clientC2.setUnitCount(2);
         
-        this.c3 = new tddjs.client.map.country();
-        this.c3.setName("Country3");
-        this.c3.setOwner(this.player1);
-        this.c3.setUnitCount(1);        
+        this.clientC3 = new tddjs.client.map.country();
+        this.clientC3.setName("Country3");
+        this.clientC3.setOwner(this.player1);
+        this.clientC3.setUnitCount(1);        
         // Borders        
-        this.c1.addBorder(this.c2);
-        this.c2.addBorder(this.c1);
+        this.clientC1.addBorder(this.clientC2);
+        this.clientC2.addBorder(this.clientC1);
         
-        this.c1.addBorder(this.c3);
-        this.c3.addBorder(this.c1);
+        this.clientC1.addBorder(this.clientC3);
+        this.clientC3.addBorder(this.clientC1);
         
-        this.continent1.addCountry(this.c1);
-        this.continent1.addCountry(this.c2);
-        this.continent1.addCountry(this.c3);
+        this.clientContinent1.addCountry(this.clientC1);
+        this.clientContinent1.addCountry(this.clientC2);
+        this.clientContinent1.addCountry(this.clientC3);
         
-        this.clientMap.addContinent(this.continent1);
+        this.clientMap.addContinent(this.clientContinent1);
         
         //client gameloopController
         
@@ -174,6 +176,7 @@ TestCase("serverGameLoopControllerTest", {
         //Continent1-------------------------------------
         this.continent1 = new tddjs.server.map.continent();
         this.continent1.setName("Europa");
+        this.continent1.setUnitBonus(500);
         
         this.c1 = new tddjs.server.map.country();
         this.c1.setName("Country1");
@@ -697,6 +700,29 @@ TestCase("serverGameLoopControllerTest", {
         //  shoulde be 3 serverPlayer only owns 2 countrys == 0 unitBonus but
         // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
         assertEquals(3,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
+    },
+    "test sglc.calculateUnitBonus should return 500(player owns whole continent)":function()
+    {            
+        this.serverGameLoop.setMaxPlayers(1);
+        this.c2.setOwner(this.serverPlayer1);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        //  shoulde be 3 serverPlayer only owns 2 countrys == 0 unitBonus but
+        // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
+        assertEquals(500,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
+    },
+    "test sglc.calculateUnitBonus should return 3 for p1 3 for p2":function()
+    {            
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        //  shoulde be 3 serverPlayer only owns 2 countrys == 0 unitBonus but
+        // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
+        assertEquals(3,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
+        assertEquals(3,this.serverGameLoop.calculateUnitBonus(this.serverPlayer2));
     },
     
     
