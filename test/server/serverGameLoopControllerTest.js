@@ -142,15 +142,28 @@ TestCase("serverGameLoopControllerTest", {
         this.clientMap.addContinent(this.clientContinent1);
         
         //client gameloopController
+        var gameController = new tddjs.client.controller.gameController(null);
+        gameController.update = function(){};
+        
         
         this.glc1 = new tddjs.client.gameLoopController(this.clientMap, this.player1, this.url);
+        this.glc1.setGameController(gameController);
         this.glc1.establishConnection();
+       
+        
         this.glc2 = new tddjs.client.gameLoopController(this.clientMap, this.player2, this.url);
+        this.glc2.setGameController(gameController);
         this.glc2.establishConnection();
+        
+        
         this.glc3 = new tddjs.client.gameLoopController(this.clientMap, this.player3, this.url);
+        this.glc3.setGameController(gameController);
         this.glc3.establishConnection();
+        
         this.glc4 = new tddjs.client.gameLoopController(this.clientMap, this.player4, this.url);
+        this.glc4.setGameController(gameController);
         this.glc4.establishConnection();
+     
 
         //SERVER_____________________________________
         this.serverPlayer1 = new tddjs.server.player();
