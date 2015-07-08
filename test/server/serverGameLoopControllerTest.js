@@ -1125,7 +1125,13 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.applyPlacingMove);
     },
-    
+    "test sglc.applyPlacingMove should apply changes to map":function()
+    {
+        this.serverGameLoop.setMap(this.map);
+        assertEquals(this.serverGameLoop.map, this.map);
+        this.serverGameLoop.applyPlacingMove(this.validPlacingMove);
+        assertEquals(13, this.serverGameLoop.map.getContinent("Europa").getCountry("Country1").getUnitCount());
+    },
     
     
     
