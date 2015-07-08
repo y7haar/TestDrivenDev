@@ -112,13 +112,13 @@ TestCase("GameLoopControllerTests", {
     "test gameLoop.setGameController should trhow expection if not instance of gameController": function () {
         var gameLoop = this.gameLoop;
         
-        assertExeption(function(){
+        assertException(function(){
             gameLoop.setGameController({});
         },"TypeError");
-        assertExeption(function(){
+        assertException(function(){
             gameLoop.setGameController("acontroller");
         },"TypeError");
-        assertExeption(function(){
+        assertException(function(){
             gameLoop.setGameController(112233);
         },"TypeError");
     }, 
