@@ -1172,12 +1172,12 @@ TestCase("serverGameLoopControllerTest", {
 
         var change1 = move.changes[0];
         var change2 = move.changes[1];
-        
+
         assertEquals(change1.unitCount, this.serverGameLoop.map.getContinent(change1.continent).getCountry(change1.country).getUnitCount());
-        assertEquals(change1.owner, this.serverGameLoop.map.getContinent(change1.continent).getCountry(change1.country).getOwner());
+        assertEquals(change1.owner, this.serverGameLoop.map.getContinent(change1.continent).getCountry(change1.country).getOwner().getName());
         
         assertEquals(change2.unitCount, this.serverGameLoop.map.getContinent(change2.continent).getCountry(change2.country).getUnitCount());
-        assertEquals(change2.owner, this.serverGameLoop.map.getContinent(change2.continent).getCountry(change2.country).getOwner());
+        assertEquals(change2.owner, this.serverGameLoop.map.getContinent(change2.continent).getCountry(change2.country).getOwner().getName());
     },
     
     
