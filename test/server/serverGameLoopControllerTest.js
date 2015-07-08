@@ -844,8 +844,7 @@ TestCase("serverGameLoopControllerTest", {
 
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
-        this.sandbox.update();        
-        
+        this.sandbox.update();       
 
         var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);  
@@ -855,6 +854,37 @@ TestCase("serverGameLoopControllerTest", {
         assertTrue(this.serverGameLoop.validatePlacingStub.called);
         assertEquals([this.validPlacingMove], this.serverGameLoop.validatePlacingStub.args);
     },
+    "test sglc should send 400 to request when placingMove is not valid":function()
+    { 
+        var wrongUnitCountPMove = {
+            type: 'placing',
+            unitCount: 1337,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country1'
+        };
+        var request = {
+            body:wrongUnitCountPMove,
+            session:{
+                token:this.serverPlayer1.getToken()
+            }
+        };
+        
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);   
+
+        this.glc1.makeMove(this.validPlacingMove);
+
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();      
+        var fakeRes = this.getFakeRes(4);
+ 
+        this.serverGameLoop.playerMove(request, fakeRes);
+        
+        assertEquals(400, this.sandbox.server[this.url].requests[4].status);
+    },   
     "test sglc should implement method to validate a attackingMove":function()
     {
          assertFunction(this.serverGameLoop.validateAttackingMove);
