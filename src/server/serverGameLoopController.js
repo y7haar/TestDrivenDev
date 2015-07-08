@@ -219,15 +219,9 @@ function gameLoopController()
                     if(validatePlacingMove(body))
                     {                        
                         res.status(200).send("Move is Valid");
-                        var msg = {
-                            type: body.type,
-                            player: body.player,
-                            change: {
-                                continent: body.continent,
-                                country: body.country,
-                                unitCount: body.unitCount
-                            }
-                        };
+                        var msg = calcPlacingResult(body);
+                        applyPlacingResult(msg);
+                        
                         msg = JSON.stringify(msg);
                         var data = "event:placeUnits\ndata:" + msg + "\n\n";
                         messageAllClients(data);
