@@ -11,6 +11,7 @@ function gameController(aCtx){
     var _Map;
     var _gridMap;
     var _Player;
+    var _unitsLeft=0;
     var _Url;
     var states={};
     var buttons={};
@@ -24,8 +25,8 @@ function gameController(aCtx){
         var options = {
             headers: {
                 "Accept": "application/json"           },
-            onSuccess: this.onSuccess,
-            onFailure: this.onFailure
+            onSuccess: onSuccess,
+            onFailure: onFailure
         };
         
         _Url = window.location.href;
@@ -76,6 +77,7 @@ function gameController(aCtx){
         _gameUiController.setPlayerColor(_Player.getColor());
         
         _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
+        _gameLoopController.setGameController(this);
         
         _gameUiController.init(null);
     }
@@ -93,6 +95,9 @@ function gameController(aCtx){
     }
     
     function update(req){
+        if(arguments.length === 1){
+            _unitsLeft = req.unitCount;
+        }
         _gameUiController.updateUnitCounts();
     }
     
@@ -119,6 +124,11 @@ function gameController(aCtx){
                    imgCacheHover[i].activ = false;
             }
         }
+        if (_unitsLeft <=0){
+            buttons["placingState"][0].setText("Finished!");
+        }
+        else
+            buttons["placingState"][0].setText("Place Units: "+_unitsLeft+" left");
     }
     function attackingMove(x,y){
         var id = _gridMap[x][y].id;
@@ -144,9 +154,17 @@ function gameController(aCtx){
     function placingDown(x,y){
         var id = _gridMap[x][y].id;
         
-        if(id>=0 & left !==0 & _gridMap[x][y].getOwner() === _Player){ //kein wasser
-            _gridMap[x][y].addUnits(1);
-            left--;
+        if(id>=0 & _unitsLeft !==0 & _gridMap[x][y].getOwner() === _Player){ //kein wasser
+            //_gridMap[x][y].addUnits(1);
+            var placingMove = {
+                    type: 'placing',
+                    unitCount: 1,
+                    player: _Player.getName(),
+                    continent: _gameUiController._getContinentFromCountryById(id).getName(),
+                    country: _gridMap[x][y].getName()
+                };
+            if(_gameLoopController.makeMove(placingMove))
+                _unitsLeft--;
         }
        
        _gameUiController.updateUnitCounts();
@@ -158,7 +176,10 @@ function gameController(aCtx){
             _gridMap[x][y].selected=!_gridMap[x][y].selected;
             
             if(_gridMap[x][y].selected){
-                _selected.push(_gridMap[x][y]);
+                if(_selected.length < 2)
+                    _selected.push(_gridMap[x][y]);
+                else
+                    _gridMap[x][y].selecte=false;
             }
             else
             {
@@ -169,7 +190,10 @@ function gameController(aCtx){
             }
             for(var c in _selected){
                 for(var i in _selected[c].getBorders()){
-                    _selected[c].getBorders()[i].activ=true;
+                    if(_selected.length < 2)
+                        _selected[c].getBorders()[i].activ=true;
+                    else
+                        _selected[c].getBorders()[i].activ=false;
                 }
             }
         }
@@ -181,19 +205,45 @@ function gameController(aCtx){
     
     // <editor-fold defaultstate="collapsed" desc="Game-States-Buttons">
     function placingButton(){
-        
+        if (_unitsLeft <=0){
+            _gameLoopController.endPhase();
+        }
+        else
+            window.alert("Please place all units!");
     }
     function attackingButtonAttack(){
-        
+        var from;
+        var to;
+        for(var i in _selected){
+            if(_selected[i].getOwner() === _Player)
+                from = _selected[i];
+            else
+                to = _selected[i];
+        }
+        var attackMove = {
+            type: 'attack',
+            from: {
+                player: from.getOwner().getName(),
+                continent: _gameUiController._getContinentFromCountryById(from.getId()).getName(),
+                country: from.getName()
+            },
+            to: {
+                player: to.getOwner().getName(),
+                continent: _gameUiController._getContinentFromCountryById(to.getId()).getName(),
+                country: to.getName()
+            }
+        };
+        _gameLoopController.makeMove(attackMove);
     }
     function attackingButtonFinished(){
-        
+        _gameLoopController.endPhase();
     }
     // </editor-fold>
     
     // </editor-fold>
     
     this.init = init;
+    this.update = update;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     
