@@ -1132,6 +1132,7 @@ TestCase("serverGameLoopControllerTest", {
     },
      "test sglc.calclacingResult should return object for changing the map":function()
     {
+        this.serverGameLoop.setMap(this.map);
         var placeUnitData = {
             type: "placing",
             player: "Peter",
