@@ -733,11 +733,54 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.validatePlacingMove should return true (validMove)":function()
     {
-        assertTrue(this.serverGameLoop.validateAttackingMove(this.validAttackMove));
+        assertTrue(this.serverGameLoop.validatePlacingMove(this.validPlacingMove));
+    },
+    "test sglc.validatePlacingMove should return false (notValidMove)":function()
+    {
+        var wrongUnitCountPMove = {
+            type: 'placing',
+            unitCount: 1337,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country1'
+        };
+        var wrongTypePMove = {
+            type: 'winning',
+            unitCount: 3,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country1'
+        };
+        var wrongPlayerPMove = {
+            type: 'placing',
+            unitCount: 3,
+            player: 'Hanswurst',
+            continent: 'Europa',
+            country: 'Country1'
+        };
+        var wrongContinentPMove = {
+            type: 'placing',
+            unitCount: 3,
+            player: 'Peter',
+            continent: 'Asien',
+            country: 'Country1'
+        };
+        var wrongCountryPMove = {
+            type: 'placing',
+            unitCount: 1337,
+            player: 'Peter',
+            continent: 'Europa',
+            country: 'Country2'
+        };
+        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongTypePMove));
+        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongUnitCountPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongPlayerPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongContinentPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongCountryPMove));
     },
      "test sglc should implement method to validate a attackingMove":function()
     {
-        assertTrue(this.serverGameLoop.validateAttackingMove(this.validPlacingMove));
+         assertFunction(this.serverGameLoop.validateAMove);
     },
     
     
