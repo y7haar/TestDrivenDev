@@ -156,19 +156,22 @@ TestCase("serverGameLoopControllerTest", {
         this.serverPlayer1 = new tddjs.server.player();
         this.serverPlayer1.setName(this.player1.getName());
         this.serverPlayer1.setResponseObject(new this.fakeRes(this.glc1.eventSource,this.sandbox.server[this.url]));
+        this.serverPlayer1.setToken("player1");
         
         this.serverPlayer2 = new tddjs.server.player();
         this.serverPlayer2.setName(this.player2.getName());
         this.serverPlayer2.setResponseObject(new this.fakeRes(this.glc2.eventSource,this.sandbox.server[this.url]));
+        this.serverPlayer2.setToken("player2");
         
         this.serverPlayer3 = new tddjs.server.player();
         this.serverPlayer3.setName(this.player3.getName());
         this.serverPlayer3.setResponseObject(new this.fakeRes(this.glc3.eventSource,this.sandbox.server[this.url]));
-        
+        this.serverPlayer3.setToken("player3");
+         
         this.serverPlayer4 = new tddjs.server.player();
         this.serverPlayer4.setName(this.player4.getName());
         this.serverPlayer4.setResponseObject(new this.fakeRes(this.glc4.eventSource,this.sandbox.server[this.url]));
-        
+        this.serverPlayer4.setToken("player4");
         //server map ________________________________
         this.map = new tddjs.server.map.map();  
         
@@ -208,10 +211,13 @@ TestCase("serverGameLoopControllerTest", {
         var sandbox = this.sandbox;
         var url = this.url;
         
-        this.getFakeReq = function (index)
+        this.getFakeReq = function (index, playerToken)
         {
             var fakeReq = {
-                body: JSON.parse(sandbox.server[url].requests[index].requestBody)
+                body: JSON.parse(sandbox.server[url].requests[index].requestBody),
+                session:{
+                    token:playerToken
+                }
             };
 
             return fakeReq;
@@ -357,6 +363,33 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc should implement playerMove function": function(){
         assertFunction(this.serverGameLoop.playerMove);               
     },
+    "test sglc.playerMove should send status 400 if not current Player sends Move": function(){
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        
+        var msg = {
+            unitCount: 3,
+            info: "changeToPlacing"
+        };
+        msg = JSON.stringify(msg);
+        var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+        this.serverPlayer2.getResponseObject().write(data);
+        
+        this.glc2.endPhase();
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();        
+  
+        assertEquals(0, this.sandbox.server[this.url].requests[4].status);        
+        
+        var fakeReq = this.getFakeReq(4, this.serverPlayer2.getToken());
+        var fakeRes = this.getFakeRes(4);
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertEquals(400, this.sandbox.server[this.url].requests[4].status);  
+                
+    },
     "test sglc.playerMove should react to endPhase move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
         this.serverGameLoop.setMap(this.map);
@@ -372,7 +405,7 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(0,this.glc1.toServerLogs.length);
         assertEquals(0, this.sandbox.server[this.url].requests[4].status);        
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
    
@@ -391,7 +424,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();  
      
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4); 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         
@@ -413,7 +446,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();        
    
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
      
@@ -439,7 +472,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);       
     
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -463,7 +496,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
          
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);        
     
         this.serverGameLoop.playerMove(fakeReq, fakeRes);        
@@ -484,7 +517,7 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(0,this.glc1.toServerLogs.length);
         assertEquals(0, this.sandbox.server[this.url].requests[4].status);
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);  
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -512,7 +545,7 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(0,this.glc1.toServerLogs.length);
         assertEquals(0, this.sandbox.server[this.url].requests[4].status);
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4); 
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -534,7 +567,7 @@ TestCase("serverGameLoopControllerTest", {
         
         assertEquals(1,this.glc1.fromServerLogs.length);
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);  
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -559,7 +592,7 @@ TestCase("serverGameLoopControllerTest", {
         
         assertEquals(2,this.glc1.fromServerLogs.length);
         
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);  
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -595,7 +628,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
    
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);
 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -617,7 +650,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
 
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);
 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -635,7 +668,7 @@ TestCase("serverGameLoopControllerTest", {
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);
 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);        
@@ -648,7 +681,7 @@ TestCase("serverGameLoopControllerTest", {
         this.glc1.endPhase();
         this.sandbox.update();
         
-        var fakeReq = this.getFakeReq(5);
+        var fakeReq = this.getFakeReq(5, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(5);
         
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -657,7 +690,7 @@ TestCase("serverGameLoopControllerTest", {
         this.glc1.makeMove(this.validAttackMove);
         this.sandbox.update();      
 
-        var fakeReq = this.getFakeReq(6);
+        var fakeReq = this.getFakeReq(6, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(6);
         
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -814,7 +847,7 @@ TestCase("serverGameLoopControllerTest", {
         this.sandbox.update();        
         
 
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4);  
  
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
@@ -992,14 +1025,14 @@ TestCase("serverGameLoopControllerTest", {
         this.glc1.endPhase();
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();        
-        var fakeReq = this.getFakeReq(4);
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(4); 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         
         
         this.glc1.makeMove(this.validAttackMove);  
         this.sandbox.update();     
-        var fakeReq = this.getFakeReq(5);
+        var fakeReq = this.getFakeReq(5, this.serverPlayer1.getToken());
         var fakeRes = this.getFakeRes(5); 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         

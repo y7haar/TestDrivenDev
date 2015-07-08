@@ -177,93 +177,102 @@ function gameLoopController()
     }
     
     function playerMove(req, res)
-    {      
-        var type = req.body.type;
-        var body = req.body;       
-        switch (type)
+    {
+        if (req.session.token === _clients[_currentClient].getToken())
         {
-            case 'endPhase':             
-                res.status(200).send("OK");
-                if (body.phaseName === "placingState")
-                {                   
-                    var data = "event:changeToAttacking\ndata:ChangeToAttacking\n\n";
-                    _clients[_currentClient].getResponseObject().write(data);
-                }
-                else if (body.phaseName === "attackingState")
-                {
-               
-                    var data = "event:changeToWaiting\ndata:ChangeToWaiting\n\n";
-                    _clients[_currentClient].getResponseObject().write(data);
-                 
-                    // next Client
-                    _currentClient++; 
-                    
-               
-                    // start at first Client if lastClient ended his turn
-                    if(_currentClient === _clients.length)_currentClient = 0;
-                    
-                    var msg = {
-                        unitCount: 12,
-                        info: "changeToPlacing"
-                    };
-                    msg = JSON.stringify(msg);   
-                    var data = "event:changeToPlacing\ndata:"+msg+"\n\n";            
-                    _clients[_currentClient].getResponseObject().write(data);
-                }
-                break;
-            case 'placing':
-                validatePlacingMove(body);
-                res.status(200).send("OK");          
-                var msg = {
-                  type:body.type,
-                  player:body.player,
-                  change:{
-                      continent:body.continent,
-                      country:body.country,
-                      unitCount:body.unitCount                      
+            console.log(req.session.token);
+            var type = req.body.type;
+            var body = req.body;
+            switch (type)
+            {
+                case 'endPhase':
+                    res.status(200).send("OK");
+                    if (body.phaseName === "placingState")
+                    {
+                        var data = "event:changeToAttacking\ndata:ChangeToAttacking\n\n";
+                        _clients[_currentClient].getResponseObject().write(data);
                     }
-                };               
-                msg = JSON.stringify(msg);
-                var data = "event:placeUnits\ndata:"+msg+"\n\n";            
-                messageAllClients(data);
-                break;
-            case 'attack':
-                validateAttackingMove(body);
-                res.status(200).send("OK");        
-                var msg = {
-                    type: "attacking",
-                    attacker: {
-                        player: "Peter",
-                        outcome: "winner"
-                    },
-                    defender: {
-                        player: "Hanswurst",
-                        outcome: "loser"
-                    },
-                    changes: [
-                        {
-                            continent: "Europa",
-                            country: "Country1",
-                            unitCount: 1,
-                            owner: "Peter"
-                        },
-                        {
-                            continent: "Europa",
-                            country: "Country2",
-                            unitCount: 6,
-                            owner: "Hanswurst"
-                        }
-                    ]
-                    };
-                msg = JSON.stringify(msg);
-                var data = "event:attackResult\ndata:"+msg+"\n\n";            
-                messageAllClients(data); 
-            
-                break;
-            default:
-                res.status(404).send("404");
-                break;
+                    else if (body.phaseName === "attackingState")
+                    {
 
+                        var data = "event:changeToWaiting\ndata:ChangeToWaiting\n\n";
+                        _clients[_currentClient].getResponseObject().write(data);
+
+                        // next Client
+                        _currentClient++;
+
+
+                        // start at first Client if lastClient ended his turn
+                        if (_currentClient === _clients.length)
+                            _currentClient = 0;
+
+                        var msg = {
+                            unitCount: 12,
+                            info: "changeToPlacing"
+                        };
+                        msg = JSON.stringify(msg);
+                        var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+                        _clients[_currentClient].getResponseObject().write(data);
+                    }
+                    break;
+                case 'placing':
+                    validatePlacingMove(body);
+                    res.status(200).send("OK");
+                    var msg = {
+                        type: body.type,
+                        player: body.player,
+                        change: {
+                            continent: body.continent,
+                            country: body.country,
+                            unitCount: body.unitCount
+                        }
+                    };
+                    msg = JSON.stringify(msg);
+                    var data = "event:placeUnits\ndata:" + msg + "\n\n";
+                    messageAllClients(data);
+                    break;
+                case 'attack':
+                    validateAttackingMove(body);
+                    res.status(200).send("OK");
+                    var msg = {
+                        type: "attacking",
+                        attacker: {
+                            player: "Peter",
+                            outcome: "winner"
+                        },
+                        defender: {
+                            player: "Hanswurst",
+                            outcome: "loser"
+                        },
+                        changes: [
+                            {
+                                continent: "Europa",
+                                country: "Country1",
+                                unitCount: 1,
+                                owner: "Peter"
+                            },
+                            {
+                                continent: "Europa",
+                                country: "Country2",
+                                unitCount: 6,
+                                owner: "Hanswurst"
+                            }
+                        ]
+                    };
+                    msg = JSON.stringify(msg);
+                    var data = "event:attackResult\ndata:" + msg + "\n\n";
+                    messageAllClients(data);
+
+                    break;
+                default:
+                    res.status(404).send("404");
+                    break;
+
+            }
+        }
+        else
+        {
+            res.status(400).send("Not ur Turn");
         }
         
     }
