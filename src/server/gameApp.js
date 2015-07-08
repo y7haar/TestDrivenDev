@@ -57,7 +57,7 @@ gameApp.get("/:id", function (req, res) {
         
         try
         {
-            console.log(req.session.token);
+            console.log("session: "+req.session.token);
             var lobby = lobbyController.getLobbyById(req.params.id);
             var player = lobby.getPlayerByToken(req.session.token);
             player.setResponseObject(res);
