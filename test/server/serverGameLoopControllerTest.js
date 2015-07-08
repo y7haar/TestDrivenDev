@@ -748,11 +748,7 @@ TestCase("serverGameLoopControllerTest", {
 
         this.serverGameLoop.addClient(this.serverPlayer1);
         this.serverGameLoop.addClient(this.serverPlayer2);
-        
-        console.log("TESTCASE");
-        console.log(this.serverGameLoop.gameStarted);
-      
-        
+
         var wrongUnitCountPMove = {
             type: 'placing',
             unitCount: 1337,
@@ -803,6 +799,28 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongPlayerPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongContinentPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongCountryPMove));
+    },
+    "test sglc.validatePlacingMove should be called if client send PlacingMove msg":function()
+    {        
+        assertFalse(this.serverGameLoop.validatePlacingStub.called);
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);   
+
+        this.glc1.makeMove(this.validPlacingMove);
+
+        // tell the server to not Response automaticly 
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();        
+        
+
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4);  
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertTrue(this.serverGameLoop.validatePlacingStub.called);
+        assertEquals([this.validPlacingMove], this.serverGameLoop.validatePlacingStub.args);
     },
     "test sglc should implement method to validate a attackingMove":function()
     {
@@ -962,10 +980,32 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.validateAttackingMove(wrongDefenderCountryMove));
         
         assertFalse(this.serverGameLoop.validateAttackingMove(wrongTypeMove));
-        assertFalse(this.serverGameLoop.validateAttackingMove(wrongBorderMove));
-        
+        assertFalse(this.serverGameLoop.validateAttackingMove(wrongBorderMove));        
     },
-    
+    "test sglc.validateAttackingMove should be called if client send attackingMove msg":function()
+    {        
+        assertFalse(this.serverGameLoop.validateAttackingStub.called);
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);   
+        
+        this.glc1.endPhase();
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();        
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4); 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        
+        this.glc1.makeMove(this.validAttackMove);  
+        this.sandbox.update();     
+        var fakeReq = this.getFakeReq(4);
+        var fakeRes = this.getFakeRes(4); 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        
+        assertTrue(this.serverGameLoop.validateAttackingStub.called);
+        assertEquals([this.validAttackMove], this.serverGameLoop.validateAttackingStub.args);
+    },
     
     "test sglc should implement method to place units":function()
     {
