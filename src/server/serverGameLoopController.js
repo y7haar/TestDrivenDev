@@ -88,7 +88,7 @@ function gameLoopController()
     
     function validateAttackingMove(move)
     {
-         if (typeof move !== 'object')
+        if (typeof move !== 'object')
             return false;
 
         if (move.type !== 'attack')
@@ -216,20 +216,25 @@ function gameLoopController()
                     }
                     break;
                 case 'placing':
-                    validatePlacingMove(body);
-                    res.status(200).send("OK");
-                    var msg = {
-                        type: body.type,
-                        player: body.player,
-                        change: {
-                            continent: body.continent,
-                            country: body.country,
-                            unitCount: body.unitCount
-                        }
-                    };
-                    msg = JSON.stringify(msg);
-                    var data = "event:placeUnits\ndata:" + msg + "\n\n";
-                    messageAllClients(data);
+                    if(validatePlacingMove(body))
+                    {                        
+                        res.status(200).send("Move is Valid");
+                        var msg = {
+                            type: body.type,
+                            player: body.player,
+                            change: {
+                                continent: body.continent,
+                                country: body.country,
+                                unitCount: body.unitCount
+                            }
+                        };
+                        msg = JSON.stringify(msg);
+                        var data = "event:placeUnits\ndata:" + msg + "\n\n";
+                        messageAllClients(data);
+                    }
+                    else                    
+                         res.status(400).send("Move is not Valid");
+              
                     break;
                 case 'attack':
                     validateAttackingMove(body);
