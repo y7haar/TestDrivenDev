@@ -57,14 +57,15 @@ function gameUiController(aCtx){
     var _seaRoute=[];
     
     //Texturen für die hover-effekte und Wasser
+    var base = "scripts";
     var _selectedImg = new Image();
-    _selectedImg.src = "client/ui/selectedImg.png";
+    _selectedImg.src = base+"/ui/selectedImg.png";
     var _hoverImg = new Image();
-    _hoverImg.src = "client/ui/hoverImg.png";
+    _hoverImg.src = base+"/ui/hoverImg.png";
     var _activImg = new Image();
-    _activImg.src = "client/ui/attackImg.png";
+    _activImg.src = base+"/ui/attackImg.png";
     var _waterImg = new Image();
-    _waterImg.src = "client/ui/waterImg.png";
+    _waterImg.src = base+"/ui/waterImg.png";
     
     //Cached Bilder für den Renderer
     var imgCacheMap;

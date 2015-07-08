@@ -20,8 +20,9 @@ function gameLoopController(aMap, aPlayer, aUrl)
     var _eventSource = null;
     var _fromServerLogs = [];
     var _toServerLogs =[];
-  
     
+    var _gameController = null;
+  
     function setUrl(aUrl)
     {
         if(typeof aUrl !== 'string')
@@ -86,7 +87,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function makeMove(move)
     {
-        //console.log("makeMove-------------");
+       
         if (_currentState.isMoveLegal(move))
         {   
             //console.log("MOVE:\n");
@@ -130,28 +131,35 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
         _eventSource.addEventListener("placeUnits", placeUnits);
-        console.log("added Events");
     }      
     
     
     // EventSource events
     function changeToPlacingState(e)
-    {     
+    {   
+        
         var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.placingState(_map, unitCount);
+        _gameController.update({
+            type:"placing",
+        unitCount: data.unitCount
+        });
+        
     }
     function changeToAttackingState(e)
-    {
+    {        
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.attackingState(_map);
-        
+        _gameController.update();
     }
     function changeToWaitingState(e)
     {
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.waitingState(_map);
+        _gameController.update();
+      
     }
     function attackResult(e)
     {
@@ -180,7 +188,9 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _map.getContinent(changes1.continent).getCountry(changes1.country).setOwner(players[changes1.owner]);        
         //changes 2
         _map.getContinent(changes2.continent).getCountry(changes2.country).setUnitCount(changes2.unitCount);
-        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);                
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);
+        
+        _gameController.update();
     }
     
     function placeUnits(e)
@@ -193,6 +203,15 @@ function gameLoopController(aMap, aPlayer, aUrl)
                 " placed "+ data.change.unitCount+"-Units to "+data.change.country);
         console.log("-------------------------------------------------\n\n");
         _map.getContinent(data.change.continent).getCountry(data.change.country).setUnitCount(data.change.unitCount);
+        
+        _gameController.update();
+    }
+    
+    function setGameController(aController)
+    {
+        if(! (aController instanceof tddjs.client.controller.gameController) )
+            throw new TypeError("Expectet instance of gameController got " + typeof aController);
+        _gameController = aController;
     }
     
     //  Testing
@@ -209,6 +228,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
         }
     });
     
+    Object.defineProperty(this, 'gameController', {
+        get: function () {
+            return _gameController;
+        }
+    });
     Object.defineProperty(this, 'currentState', {
         get: function () {
             return _currentState;
@@ -233,5 +257,6 @@ function gameLoopController(aMap, aPlayer, aUrl)
     this.getMap = getMap;
     this.getPlayer = getPlayer;
     this.getStateName = getStateName;
+    this.setGameController = setGameController;
  
 }
