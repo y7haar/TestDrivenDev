@@ -87,6 +87,43 @@ function gameLoopController()
     
     function validateAttackingMove(move)
     {
+         if (typeof move !== 'object')
+            return false;
+
+        if (move.type !== 'attack')
+            return false;
+
+        var attacker = move.from;
+        var defender = move.to;
+        
+        //attacker tests
+        
+        if (_clients[_currentClient].getName() !== attacker.player)
+            return false;
+        if (!_map.hasContinent(attacker.continent))
+            return false;
+        if (!_map.getContinent(attacker.continent).hasCountryByName(attacker.country))
+            return false;
+        if (_map.getContinent(attacker.continent).getCountry(attacker.country).getOwner().getName() !== attacker.player)
+            return false;
+
+        //defender tests
+        if (!_map.hasContinent(defender.continent))
+            return false;
+        if (!_map.getContinent(defender.continent).hasCountryByName(defender.country))
+            return false;
+        if (_map.getContinent(defender.continent).getCountry(defender.country).getOwner().getName() !== defender.player)
+            return false;
+
+        //border tests
+        var attackerCountry = _map.getContinent(attacker.continent).getCountry(attacker.country);
+        var defenderCountry = _map.getContinent(defender.continent).getCountry(defender.country);
+
+        if (!(attackerCountry.borders(defenderCountry) && defenderCountry.borders(attackerCountry)))
+            return false;
+        
+        // if passed till here move is Valid
+        return true;
         
     }
     
