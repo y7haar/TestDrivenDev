@@ -12,10 +12,10 @@ function player()
     var idIsSetted = false;
     var color = "#000000";
     var type = "human";
-
+    
     var _token;
     var _response;
-
+    var _unitCount = 0;
     //Holt den Namen
     function getName()
     {
@@ -175,6 +175,19 @@ function player()
 
         type = aType;
     }
+    
+    function setUnitCount(aCount)
+    {
+        if( isNaN(aCount))throw new TypeError("Expected integer but got "+ typeof aCount);
+        else
+            _unitCount = aCount;
+    }
+    
+    Object.defineProperty(this, 'unitCount', {
+        get: function () {
+            return _unitCount;
+        }
+    });
 
     this.getName = getName;
     this.setName = setName;
@@ -195,4 +208,6 @@ function player()
     
     this.setResponseObject = setResponseObject;
     this.getResponseObject = getResponseObject;
+    
+    this.setUnitCount = setUnitCount;
 }
