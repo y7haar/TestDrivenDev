@@ -76,6 +76,7 @@ function gameController(aCtx){
         _gameUiController.setPlayerColor(_Player.getColor());
         
         _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
+        _gameLoopController.setGameController(this);
         
         _gameUiController.init(null);
     }
@@ -194,6 +195,7 @@ function gameController(aCtx){
     // </editor-fold>
     
     this.init = init;
+    this.update = update;
     this.onSuccess = onSuccess;
     this.onFailure = onFailure;
     
