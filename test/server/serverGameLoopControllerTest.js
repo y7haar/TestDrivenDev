@@ -1153,6 +1153,32 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.applyPlacingResult(move);
         assertEquals(13, this.serverGameLoop.map.getContinent("Europa").getCountry("Country1").getUnitCount());
     },
+    "test sglc.calcAttackResult should return object for changing the map":function()
+    {
+        //move is allways random
+        this.serverGameLoop.setMap(this.map);      
+        var move = this.serverGameLoop.calcAttackResult(this.validAttackMove);
+        assertTrue(move.type === "attacking");
+        assertTrue(typeof move.attacker === 'object');
+        assertTrue(typeof move.defender === 'object');
+        assertTrue(typeof move.changes === 'object');
+    },
+    "test sglc.applyAttackResult should apply changes to map":function()
+    {
+        this.serverGameLoop.setMap(this.map);
+        assertEquals(this.serverGameLoop.map, this.map);
+        var move = this.serverGameLoop.calcAttackResult(this.validAttackMove);
+        this.serverGameLoop.applyAttackResult(move);
+
+        var change1 = move.changes[0];
+        var change2 = move.changes[1];
+        
+        assertEquals(change1.unitCount, this.serverGameLoop.map.getContinent(change1.continent).getCountry(change1.country).getUnitCount());
+        assertEquals(change1.owner, this.serverGameLoop.map.getContinent(change1.continent).getCountry(change1.country).getOwner());
+        
+        assertEquals(change2.unitCount, this.serverGameLoop.map.getContinent(change2.continent).getCountry(change2.country).getUnitCount());
+        assertEquals(change2.owner, this.serverGameLoop.map.getContinent(change2.continent).getCountry(change2.country).getOwner());
+    },
     
     
     
