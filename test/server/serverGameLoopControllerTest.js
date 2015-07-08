@@ -663,6 +663,27 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(this.attackResultData, JSON.parse(this.glc2.fromServerLogs[1].data));   
         assertEquals(this.attackResultData, JSON.parse(this.glc3.fromServerLogs[1].data));           
     },
+    "test sglc should should hold boolean gameStarted":function()
+    {
+        assertNotUndfined(this.serverGameLoop.gameStarted);
+    },
+    "test sglc.gameStarted should be false at init":function()
+    {
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+     
+        assertFalse(this.serverGameLoop.gameStarted);
+    },
+    "test sglc.gameStarted should be true when all Clients connected == game has Started":function()
+    {
+        assertFalse(this.serverGameLoop.gameStarted);
+        
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        
+        assertTrue(this.serverGameLoop.gameStarted);
+    },
     "test sglc should implement calculateUnitBonus method":function()
     {
         assertFunction(this.serverGameLoop.calculateUnitBonus);
