@@ -2,6 +2,7 @@
  * Testcases for GameController
  */
 
+/*
 
 TestCase("GameControllerTests", {
      setUp: function () {                 
@@ -39,3 +40,5 @@ TestCase("GameControllerTests", {
         assertInstanceOf(this.gameCon.getGameLoopController,tddjs.client.controller.gameLoopController);
     }
 });
+
+*/
