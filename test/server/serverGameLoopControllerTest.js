@@ -999,8 +999,8 @@ TestCase("serverGameLoopControllerTest", {
         
         this.glc1.makeMove(this.validAttackMove);  
         this.sandbox.update();     
-        var fakeReq = this.getFakeReq(4);
-        var fakeRes = this.getFakeRes(4); 
+        var fakeReq = this.getFakeReq(5);
+        var fakeRes = this.getFakeRes(5); 
         this.serverGameLoop.playerMove(fakeReq, fakeRes);
         
         assertTrue(this.serverGameLoop.validateAttackingStub.called);
