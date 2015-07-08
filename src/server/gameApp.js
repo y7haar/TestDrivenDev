@@ -99,7 +99,7 @@ gameApp.get("/:id", function (req, res) {
    
     else
     {
-         res.redirect("/public/game.html");
+         res.redirect("/public/game.html?id=" + req.params.id);
     }
 });
 
