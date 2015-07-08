@@ -304,6 +304,35 @@ TestCase("PlayerServerTest",
 
                 this.player1.setType("human");
                 assertEquals("human", this.player1.getType());
+            },
+            
+            "test player should should hold value for current unitCount": function()
+            {
+                assertNotUndefined(this.player1.unitCount);
+            },
+            "test player should implement setUnitCount method": function()
+            {
+                assertFunction(this.player1.setUnitCount);
+            },
+            "test player.unitCount should be 0 at init": function()
+            {
+                assertEquals(0, this.player1.unitCount);
+            },
+            "test player.setUnitCount should set unitCount": function()
+            {
+                this.player1.setUnitCount(500);
+                assertEquals(500, this.player1.unitCount);
+            },
+            "test player.setUnitCount should throw expection if argument is not int": function()
+            {
+                var player1 = this.player1;
+             
+                assertException(function() {
+                    player1.setUnitCount("onehundred");
+                }, "TypeError");
+                assertException(function() {
+                    player1.setUnitCount({unitcount: 123});
+                }, "TypeError");
             }
         });
 
