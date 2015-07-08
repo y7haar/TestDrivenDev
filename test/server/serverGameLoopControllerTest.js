@@ -899,7 +899,7 @@ TestCase("serverGameLoopControllerTest", {
         
         assertTrue(this.serverGameLoop.validateAttackingMove(this.validAttackMove));
     },
-    "test sglc.validateAttackingMove should return true (validMove)":function()
+    "test sglc.validateAttackingMove should return false (invalidMove)":function()
     {
         this.serverGameLoop.setMaxPlayers(2);
         this.serverGameLoop.setMap(this.map);
@@ -1069,6 +1069,50 @@ TestCase("serverGameLoopControllerTest", {
         assertTrue(this.serverGameLoop.validateAttackingStub.called);
         assertEquals([this.validAttackMove], this.serverGameLoop.validateAttackingStub.args);
     },
+    "test sglc should send 400 to request when attackingMove is not valid":function()
+    { 
+         var wrongAttackerPlayerMove = {
+            type: 'attack',
+            from: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            },
+            to: {
+                player: 'Hanswurst',
+                continent: 'Europa',
+                country: 'Country2'
+            }
+        };
+        var request = {
+            body:wrongAttackerPlayerMove,
+            session:{
+                token:this.serverPlayer1.getToken()
+            }
+        };
+        
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);   
+        
+        this.glc1.endPhase();
+        this.sandbox.server[this.url].setHandleResponse(false);
+        this.sandbox.update();
+        
+        var fakeReq = this.getFakeReq(4, this.serverPlayer1.getToken());
+        var fakeRes = this.getFakeRes(4);
+ 
+        this.serverGameLoop.playerMove(fakeReq, fakeRes);
+        this.glc1.makeMove(this.validAttackMove);
+        
+        this.sandbox.update();      
+        var fakeRes = this.getFakeRes(5);
+ 
+        this.serverGameLoop.playerMove(request, fakeRes);
+        
+        assertEquals(400, this.sandbox.server[this.url].requests[5].status);
+    }, 
+    
     
     "test sglc should implement method to place units":function()
     {
