@@ -1113,6 +1113,21 @@ TestCase("serverGameLoopControllerTest", {
         assertEquals(400, this.sandbox.server[this.url].requests[5].status);
     }, 
     
+    "test sglc should implement function to calculate AttackResult":function()
+    {
+        assertFunction(this.serverGameLoop.calcAttackResult);
+    },
+    "test sglc should implement function to apply AttackResult to Map":function()
+    {
+        assertFunction(this.serverGameLoop.applyAttackResult);
+    },
+    "test sglc should implement function to apply PlacingMove to Map":function()
+    {
+        assertFunction(this.serverGameLoop.applyPlacingMove);
+    },
+    
+    
+    
     
     "test sglc should implement method to place units":function()
     {
