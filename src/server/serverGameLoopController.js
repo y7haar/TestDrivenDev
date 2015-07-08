@@ -299,7 +299,7 @@ function gameLoopController()
         
     }
     
-    function applyPlacingMove(move)
+    function applyPlacingResult(move)
     {
         var newUnitCount = _map.getContinent(move.continent).getCountry(move.country).getUnitCount() + move.unitCount;
         _map.getContinent(move.continent).getCountry(move.country).setUnitCount(move.change.unitCount);
@@ -392,7 +392,7 @@ function gameLoopController()
     this.calcAttackResult = calcAttackResult;
     this.calcPlacingResult = calcPlacingResult;
     this.applyAttackResult = applyAttackResult;
-    this.applyPlacingMove = applyPlacingMove;
+    this.applyPlacingResult = applyPlacingResult;
     
     
     this.attack = attack;
