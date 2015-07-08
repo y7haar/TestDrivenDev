@@ -100,15 +100,16 @@ TestCase("GameLoopControllerTests", {
     "test gameloop should not be undefined": function () {      
         assertObject(this.gameLoop);      
     },
-    "test gameLoop should be instance of gameLoopControler": function () {        
+    "test gameLoop should be instance of gameLoopControler": function () {
         assertTrue(this.gameLoop instanceof tddjs.client.gameLoopController);
     },
-    "test gameLoop should hold reference of gameController": function () {        
-         assertNotUndefined(this.gameLoop.gameController);
+    "test gameLoop should hold reference of gameController": function () {
+        assertNotUndefined(this.gameLoop.gameController);
     },
-    "test gameLoop setUi should be implemented": function () {        
-         assertFunction(this.gameLoop.setGameController);
-    },    
+    "test gameLoop setGameController should be implemented": function () {
+
+        assertFunction(this.gameLoop.setGameController);
+    },       
     "test gameLoop getMap should be implemented": function () {        
          assertFunction(this.gameLoop.getMap);
     },
