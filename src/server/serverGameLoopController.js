@@ -227,8 +227,7 @@ function gameLoopController()
                         messageAllClients(data);
                     }
                     else                    
-                         res.status(400).send("Move is not Valid");
-              
+                         res.status(400).send("Move is not Valid");              
                     break;
                 case 'attack':
                     if (validateAttackingMove(body))
@@ -281,7 +280,120 @@ function gameLoopController()
     
     function calcAttackResult(move)
     {        
+        var attackerUnitCount = _map.getContinent(move.from.continent).getCountry(move.from.country).getUnitCount() -1;
+        var defenderUnitCount = _map.getContinent(move.to.continent).getCountry(move.to.country).getUnitCount();
         
+        var attackerDiceResults = [];
+        var defenderDiceResults = [];
+        
+        for(var i = 0; i<attackerUnitCount; i++)
+        {
+            attackerDiceResults.push(Math.floor((Math.random() * (6 - 0)) + 0));
+        }
+        
+        for(var i = 0; i<defenderUnitCount; i++)
+        {
+            defenderDiceResults.push(Math.floor((Math.random() * (6 - 0)) + 0));
+        }
+        
+        function sortNumber(a, b) {
+            return b - a;
+        }
+        
+        attackerDiceResults.sort(sortNumber);
+        defenderDiceResults.sort(sortNumber);
+        
+        console.log(attackerDiceResults.sort(sortNumber));
+        console.log(defenderDiceResults.sort(sortNumber));
+        
+        var attackerLoses = 0;
+        var defenderLoses = 0;
+        
+        if(attackerUnitCount >= defenderUnitCount)
+        {
+            for(var i = 0; i <defenderUnitCount;i++)
+            {
+                if(attackerDiceResults[i] > defenderDiceResults[i])defenderLoses++;
+                else attackerLoses++;
+            }
+        }
+        else
+        {
+            for(var i = 0; i <attackerUnitCount;i++)
+            {
+                if(attackerDiceResults[i] > defenderDiceResults[i])defenderLoses++;
+                else attackerLoses++;
+            }
+        }
+        
+        console.log("a lost: "+attackerLoses);
+        console.log("d lost: "+defenderLoses);
+        
+        var newAttackerUnitCount = attackerUnitCount - attackerLoses;
+        var newDefenderUnitCount = defenderUnitCount - defenderLoses;
+        
+        var attackerOutcome;
+        var defenderOutcome;
+        
+        var attackerChanges;
+        var defenderChanges;
+        
+        if(newDefenderUnitCount === 0)
+        {
+            attackerOutcome = "winner";
+            defenderOutcome = "loser";
+            
+            attackerChanges = {
+                continent: move.from.continent,
+                country: move.from.country,
+                owner: move.from.player,
+                unitCount: 1
+            };
+            
+            defenderChanges = {
+                continent: move.to.continent,
+                country: move.to.country,
+                owner: move.to.player,
+                unitCount: newAttackerUnitCount -1
+            };
+            
+        }
+        else
+        {
+            attackerOutcome = "loser";
+            defenderOutcome = "winner";
+            
+            attackerChanges = {
+                continent: move.from.continent,
+                country: move.from.country,
+                owner: move.from.player,
+                unitCount: newAttackerUnitCount
+            };
+            
+            defenderChanges = {
+                continent: move.to.continent,
+                country: move.to.country,
+                owner: move.to.player,
+                unitCount: newDefenderUnitCount
+            };
+        }
+        
+        
+        var result = {
+            type:"attacking",
+            attacker:{
+                player:move.from.player,
+                outcome:attackerOutcome
+            },
+            defender:{
+                player:move.to.player,
+                outcome:defenderOutcome
+            },
+            changes:[attackerChanges, defenderChanges]
+        };        
+      
+        console.log("AtackResult: \n"+result);
+        return result;
     }
     function calcPlacingResult(move)
     {
