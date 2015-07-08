@@ -767,7 +767,16 @@ TestCase("serverGameLoopControllerTest", {
             continent: 'Europa',
             country: 'Country1'
         };
+        
         var wrongPlayerPMove = {
+            type: 'placing',
+            unitCount: 3,
+            player: 'Hanswurst',
+            continent: 'Europa',
+            country: 'Country2'
+        };
+        
+        var wrongOwnerPMove = {
             type: 'placing',
             unitCount: 3,
             player: 'Hanswurst',
@@ -790,6 +799,7 @@ TestCase("serverGameLoopControllerTest", {
         };
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongTypePMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongUnitCountPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongOwnerPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongPlayerPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongContinentPMove));
         assertFalse(this.serverGameLoop.validatePlacingMove(wrongCountryPMove));
