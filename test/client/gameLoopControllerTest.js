@@ -107,9 +107,21 @@ TestCase("GameLoopControllerTests", {
         assertNotUndefined(this.gameLoop.gameController);
     },
     "test gameLoop setGameController should be implemented": function () {
-
         assertFunction(this.gameLoop.setGameController);
-    },       
+    },
+    "test gameLoop.setGameController should trhow expection if not instance of gameController": function () {
+        var gameLoop = this.gameLoop;
+        
+        assertExeption(function(){
+            gameLoop.setGameController({});
+        },"TypeError");
+        assertExeption(function(){
+            gameLoop.setGameController("acontroller");
+        },"TypeError");
+        assertExeption(function(){
+            gameLoop.setGameController(112233);
+        },"TypeError");
+    }, 
     "test gameLoop getMap should be implemented": function () {        
          assertFunction(this.gameLoop.getMap);
     },
