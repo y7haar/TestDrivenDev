@@ -87,8 +87,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function makeMove(move)
     {
-        console.log("makeMove-------------");
-        console.log(_currentState.isMoveLegal(move));
+       
         if (_currentState.isMoveLegal(move))
         {   
             //console.log("MOVE:\n");
@@ -137,21 +136,29 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     // EventSource events
     function changeToPlacingState(e)
-    {     
+    {   
+        
         var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.placingState(_map, unitCount);
+        _gameController.update({
+            type:"placing",
+        unitCount: data.unitCount
+        });
+        
     }
     function changeToAttackingState(e)
     {        
         _fromServerLogs.push(e);
-        _currentState = new tddjs.client.attackingState(_map);           
+        _currentState = new tddjs.client.attackingState(_map);
+        _gameController.update();
     }
     function changeToWaitingState(e)
     {
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.waitingState(_map);
+        _gameController.update();
       
     }
     function attackResult(e)
@@ -181,7 +188,9 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _map.getContinent(changes1.continent).getCountry(changes1.country).setOwner(players[changes1.owner]);        
         //changes 2
         _map.getContinent(changes2.continent).getCountry(changes2.country).setUnitCount(changes2.unitCount);
-        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);                
+        _map.getContinent(changes2.continent).getCountry(changes2.country).setOwner(players[changes2.owner]);
+        
+        _gameController.update();
     }
     
     function placeUnits(e)
@@ -194,6 +203,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
                 " placed "+ data.change.unitCount+"-Units to "+data.change.country);
         console.log("-------------------------------------------------\n\n");
         _map.getContinent(data.change.continent).getCountry(data.change.country).setUnitCount(data.change.unitCount);
+        
+        _gameController.update();
     }
     
     function setGameController(aController)
