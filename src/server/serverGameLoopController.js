@@ -289,15 +289,20 @@ function gameLoopController()
     {        
         
     }
+    function calcPlacingResult(move)
+    {        
+        
+    }
     
-    function applyAttackResult()
+    function applyAttackResult(move)
     {
         
     }
     
-    function applyPlacingMove()
+    function applyPlacingMove(move)
     {
-        
+        var newUnitCount = _map.getContinent(move.continent).getCountry(move.country).getUnitCount() + move.unitCount;
+        _map.getContinent(move.continent).getCountry(move.country).setUnitCount(move.change.unitCount);
     }
     
     
@@ -385,6 +390,7 @@ function gameLoopController()
     this.validatePlacingMove = validatePlacingMove;
     this.calculateUnitBonus = calculateUnitBonus;
     this.calcAttackResult = calcAttackResult;
+    this.calcPlacingResult = calcPlacingResult;
     this.applyAttackResult = applyAttackResult;
     this.applyPlacingMove = applyPlacingMove;
     
