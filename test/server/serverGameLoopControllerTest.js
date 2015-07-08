@@ -201,7 +201,7 @@ TestCase("serverGameLoopControllerTest", {
         this.continent1.addCountry(this.c3);
         
         this.map.addContinent(this.continent1);
-
+  
         var sandbox = this.sandbox;
         var url = this.url;
         
@@ -301,6 +301,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sgl.currentClient should be 0 after allConnected is true" : function(){
         assertEquals(null,this.serverGameLoop.currentClient);
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         assertEquals(0, this.serverGameLoop.currentClient);
     },
@@ -318,6 +319,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc.setMaxPlayers should set maxPlayer": function(){
         assertEquals(-1,this.serverGameLoop.maxPlayers);
         this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
         assertEquals(2,this.serverGameLoop.maxPlayers);
     },
     "test sglc should hold boolean allConnected": function(){
@@ -329,6 +331,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc.allConnected should be true if all Clients Connected": function(){
         assertFalse(this.serverGameLoop.allConnected);
         this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         assertFalse(this.serverGameLoop.allConnected);
         this.serverGameLoop.addClient(this.serverPlayer1);
@@ -336,6 +339,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc should change serverPlayer1 to placingState if allConnected is true": function(){
         this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         assertFalse(this.serverGameLoop.allConnected);
@@ -352,6 +356,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to endPhase move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         assertEquals("placingState" ,this.glc1.getStateName());
         
@@ -373,6 +378,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(endPhase:placing) should be attacking after call": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);       
      
         assertEquals("placingState" ,this.glc1.getStateName());
@@ -390,6 +396,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(endPhase:attacking) should be waiting after call": function(){
         this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         this.serverGameLoop.addClient(this.serverPlayer2);
         
@@ -412,6 +419,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc should change currentState to the next Client if prev.Client changed to waitingState":function()
     {
         this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         this.serverGameLoop.addClient(this.serverPlayer2);        
         
@@ -441,6 +449,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.currentState should start at Client1 if last client changed to waitingState":function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
@@ -459,6 +468,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to makeMove(placingType) move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         assertEquals(0,this.glc1.toServerLogs.length);
@@ -481,6 +491,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove should react to makeMove(attckingType) move with Status 200 ": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
@@ -508,6 +519,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(placing) should send move back without validate": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);       
 
         assertEquals(1,this.glc1.fromServerLogs.length);
@@ -529,6 +541,7 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.playerMove(attacking) should send move back without validate": function(){
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
@@ -571,13 +584,14 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.messageAllClientsCalled);
         
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
    
         this.glc1.makeMove(this.validPlacingMove);
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
-        console.log( this.sandbox.server[this.url].requests);
+   
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
 
@@ -589,6 +603,7 @@ TestCase("serverGameLoopControllerTest", {
         assertFalse(this.serverGameLoop.messageAllClientsCalled);
         
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         
         var data = "event:changetoattacking\ndata:change to attacking state\n\n";
@@ -598,7 +613,7 @@ TestCase("serverGameLoopControllerTest", {
         // tell the server to not Response automaticly 
         this.sandbox.server[this.url].setHandleResponse(false);
         this.sandbox.update();
-        console.log( this.sandbox.server[this.url].requests);
+
         var fakeReq = this.getFakeReq(4);
         var fakeRes = this.getFakeRes(4);
 
@@ -608,6 +623,7 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc messageAllClients should send move to all clients":function()
     {  
         this.serverGameLoop.setMaxPlayers(3);
+        this.serverGameLoop.setMap(this.map);
         this.serverGameLoop.addClient(this.serverPlayer1);
         this.serverGameLoop.addClient(this.serverPlayer2);
         this.serverGameLoop.addClient(this.serverPlayer3);
@@ -654,7 +670,11 @@ TestCase("serverGameLoopControllerTest", {
     "test sglc.calculateUnitBonus should return UnitBonus of currentPlayer":function()
     {            
         this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+
         this.serverGameLoop.addClient(this.serverPlayer1);
+        //  shoulde be 3 serverPlayer only owns 2 countrys == 0 unitBonus but
+        // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
         assertEquals(3,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
     },
     
