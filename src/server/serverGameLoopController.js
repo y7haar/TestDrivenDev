@@ -290,8 +290,19 @@ function gameLoopController()
         
     }
     function calcPlacingResult(move)
-    {        
+    {
+        var newUnitCount = _map.getContinent(move.continent).getCountry(move.country).getUnitCount()+ move.unitCount;
+        var result = {
+            type: move.type,
+            player: move.player,
+            change: {
+                continent: move.continent,
+                country: move.country,
+                unitCount: newUnitCount
+            }
+        };
         
+        return result;
     }
     
     function applyAttackResult(move)
@@ -301,8 +312,7 @@ function gameLoopController()
     
     function applyPlacingResult(move)
     {
-        var newUnitCount = _map.getContinent(move.continent).getCountry(move.country).getUnitCount() + move.unitCount;
-        _map.getContinent(move.continent).getCountry(move.country).setUnitCount(move.change.unitCount);
+         _map.getContinent(move.change.continent).getCountry(move.change.country).setUnitCount(move.change.unitCount);
     }
     
     
