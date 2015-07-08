@@ -31,8 +31,14 @@
         
         <script language="javascript" type="text/javascript">
             function startGame(){
-                var con = new tddjs.client.controller.gameController();
-                con.init();
+                canvas = document.getElementById('game');
+                if (canvas && canvas.getContext) {
+                   ctx = canvas.getContext("2d");
+                   if (ctx) {
+                        var con = new tddjs.client.controller.gameController(ctx);
+                        con.init();
+                   }
+                }
             }
         </script>
         
