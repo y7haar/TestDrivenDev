@@ -20,8 +20,9 @@ function gameLoopController(aMap, aPlayer, aUrl)
     var _eventSource = null;
     var _fromServerLogs = [];
     var _toServerLogs =[];
-  
     
+    var _gameController = null;
+  
     function setUrl(aUrl)
     {
         if(typeof aUrl !== 'string')
@@ -86,7 +87,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     function makeMove(move)
     {
-        //console.log("makeMove-------------");
+        console.log("makeMove-------------");
+        console.log(_currentState.isMoveLegal(move));
         if (_currentState.isMoveLegal(move))
         {   
             //console.log("MOVE:\n");
@@ -130,7 +132,6 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
         _eventSource.addEventListener("placeUnits", placeUnits);
-        console.log("added Events");
     }      
     
     
@@ -143,15 +144,15 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _currentState = new tddjs.client.placingState(_map, unitCount);
     }
     function changeToAttackingState(e)
-    {
+    {        
         _fromServerLogs.push(e);
-        _currentState = new tddjs.client.attackingState(_map);
-        
+        _currentState = new tddjs.client.attackingState(_map);           
     }
     function changeToWaitingState(e)
     {
         _fromServerLogs.push(e);
         _currentState = new tddjs.client.waitingState(_map);
+      
     }
     function attackResult(e)
     {
@@ -195,6 +196,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _map.getContinent(data.change.continent).getCountry(data.change.country).setUnitCount(data.change.unitCount);
     }
     
+    function setGameController(aController)
+    {
+        _gameController = aController;
+    }
+    
     //  Testing
     Object.defineProperty(this, 'eventSource', {
         get: function () {
@@ -209,6 +215,11 @@ function gameLoopController(aMap, aPlayer, aUrl)
         }
     });
     
+    Object.defineProperty(this, 'gameController', {
+        get: function () {
+            return _gameController;
+        }
+    });
     Object.defineProperty(this, 'currentState', {
         get: function () {
             return _currentState;
@@ -233,5 +244,6 @@ function gameLoopController(aMap, aPlayer, aUrl)
     this.getMap = getMap;
     this.getPlayer = getPlayer;
     this.getStateName = getStateName;
+    this.setGameController = setGameController;
  
 }
