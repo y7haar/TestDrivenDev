@@ -701,7 +701,7 @@ TestCase("serverGameLoopControllerTest", {
         // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
         assertEquals(3,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
     },
-    "test sglc.calculateUnitBonus should return 500(player owns whole continent)":function()
+    "test sglc.calculateUnitBonus should return 501(player owns whole continent)":function()
     {            
         this.serverGameLoop.setMaxPlayers(1);
         this.c2.setOwner(this.serverPlayer1);
@@ -710,7 +710,7 @@ TestCase("serverGameLoopControllerTest", {
         this.serverGameLoop.addClient(this.serverPlayer1);
         //  shoulde be 3 serverPlayer only owns 2 countrys == 0 unitBonus but
         // unitbonus = owned countrys/3 + bonus for owning whole Continent but minimum = 3
-        assertEquals(500,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
+        assertEquals(501,this.serverGameLoop.calculateUnitBonus(this.serverPlayer1));
     },
     "test sglc.calculateUnitBonus should return 3 for p1 3 for p2":function()
     {            
