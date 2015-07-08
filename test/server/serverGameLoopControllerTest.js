@@ -733,10 +733,26 @@ TestCase("serverGameLoopControllerTest", {
     },
     "test sglc.validatePlacingMove should return true (validMove)":function()
     {
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        
         assertTrue(this.serverGameLoop.validatePlacingMove(this.validPlacingMove));
     },
     "test sglc.validatePlacingMove should return false (notValidMove)":function()
     {
+        this.serverGameLoop.setMaxPlayers(2);
+        this.serverGameLoop.setMap(this.map);
+
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        this.serverGameLoop.addClient(this.serverPlayer2);
+        
+        console.log("TESTCASE");
+        console.log(this.serverGameLoop.gameStarted);
+      
+        
         var wrongUnitCountPMove = {
             type: 'placing',
             unitCount: 1337,
@@ -767,16 +783,16 @@ TestCase("serverGameLoopControllerTest", {
         };
         var wrongCountryPMove = {
             type: 'placing',
-            unitCount: 1337,
+            unitCount: 3,
             player: 'Peter',
             continent: 'Europa',
             country: 'Country2'
         };
-        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongTypePMove));
-        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongUnitCountPMove));
-        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongPlayerPMove));
-        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongContinentPMove));
-        assertFalse(this.serverGameLoop.validatePlacingMoveMove(wrongCountryPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongTypePMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongUnitCountPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongPlayerPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongContinentPMove));
+        assertFalse(this.serverGameLoop.validatePlacingMove(wrongCountryPMove));
     },
      "test sglc should implement method to validate a attackingMove":function()
     {
