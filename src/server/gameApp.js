@@ -73,7 +73,7 @@ gameApp.get("/:id", function (req, res) {
 
             if(controllers[req.params.id] === undefined)
             {                  
-                var map = lobby.getMapController().getMap();           
+                var map = lobby.getMapController().getServerMap();           
                 var players = lobby.getPlayers();
                 var playerCount = players.length;
                 
@@ -94,6 +94,7 @@ gameApp.get("/:id", function (req, res) {
         {
             res.sendStatus(404);
             console.log(e);
+            console.log(e.stack);
         }              
     }
    
@@ -107,14 +108,14 @@ gameApp.get("/:id/map", function (req, res) {
     try
     {
         var lobby = lobbyController.getLobbyById(req.params.id);
-
-        var playerId = lobby.getPlayerByToken(req.session.token).getId;
+        
+        var playerId = lobby.getPlayerByToken(req.session.token).getId();
         var info = {
             playerId: playerId
         };
 
-        var map = lobby.getMapController.getSerializedMap(info);
-
+        var map = lobby.getMapController().getSerializedMap(info);
+        
         res.send(map);
     }
     catch (e)

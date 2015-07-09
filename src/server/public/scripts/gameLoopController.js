@@ -120,6 +120,8 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {
         _eventSource = new EventSource(_url, {withCredentials:true});
         addAllEventListner();
+        console.log(_eventSource);
+        console.log(_toServerLogs);
     }
     
     function addAllEventListner()
@@ -136,8 +138,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     // EventSource events
     function changeToPlacingState(e)
-    {   
-        
+    {           
         var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);

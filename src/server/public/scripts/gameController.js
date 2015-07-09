@@ -6,6 +6,7 @@
 tddjs.namespace("client.controller").gameController = gameController;
 
 function gameController(aCtx){
+    var _self = this;
     var _gameLoopController;
     var _gameUiController;
     var _Map;
@@ -36,6 +37,7 @@ function gameController(aCtx){
         
         
         _gameUiController.mapDown = mapDown;
+        initGameStates();
         _gameUiController.mapMove = mapMove;
     }
     
@@ -67,9 +69,10 @@ function gameController(aCtx){
     function onSuccess(xhr){
         var data = xhr.responseText;
         data = JSON.parse(data);
-        
+            
         var _pID = data.info.playerId;
         
+        data = JSON.stringify(data);
         
         _Map = _gameUiController.getMap(data);
         _gridMap = _gameUiController.getGridMap();
@@ -77,9 +80,10 @@ function gameController(aCtx){
         
         _gameUiController.setPlayerColor(_Player.getColor());
         
-        _gameLoopController = new tddjs.client.controller.gameLoopController(_Map, _Player, _Url);
-        _gameLoopController.setGameController(this);
+        _gameLoopController = new tddjs.client.gameLoopController(_Map, _Player, _Url);
+        _gameLoopController.setGameController(_self);
         
+        _gameLoopController.establishConnection();
         _gameUiController.init(null);
     }
     
