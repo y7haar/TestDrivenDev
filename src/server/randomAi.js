@@ -68,7 +68,7 @@ function randomAi(aPlayer, aMap, aGlc)
                         
                         var obj = {};
                         obj.value = value;
-                        obj.country = country;
+                        obj.country = countries[country];
                         
                         countryValues.push(obj);
                     }
@@ -85,7 +85,8 @@ function randomAi(aPlayer, aMap, aGlc)
             var unitPercentage = countryValues[i].value / valueSum;
             var units = parseInt(unitPercentage * unitStock);
             
-            _self.placeUnits(countryValues[i].country, units);
+            if(units > 0)
+                _self.placeUnits(countryValues[i].country, units);
             
             unitsLeft -= units;
             
@@ -96,7 +97,8 @@ function randomAi(aPlayer, aMap, aGlc)
             }
         }
         
-        _self.placeUnits(maxValueCountry, unitsLeft);
+        if(unitsLeft > 0)
+            _self.placeUnits(maxValueCountry, unitsLeft);
     }
     
     function attack()

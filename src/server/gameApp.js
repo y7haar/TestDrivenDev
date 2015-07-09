@@ -11,6 +11,7 @@ var logger = require('connect-logger');
 var sessions = require("client-sessions");
 var test = require("./testModule.js");
 var controller = require("./serverGameLoopController.js");
+GLOBAL. randomAi = require("./randomAi.js");
 
 var gameApp = express();
 

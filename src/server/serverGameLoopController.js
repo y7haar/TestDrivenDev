@@ -12,6 +12,7 @@ else
 
 function gameLoopController()
 {
+    var _self = this;
     var _map = null;
     var _clients =[];
     var _maxPlayers = -1;
@@ -38,7 +39,7 @@ function gameLoopController()
    
         if(_clients[_currentClient].getType() ==="bot")
         {
-               var ai = randomAi(_clients[_currentClient], _map, this);
+               var ai = new randomAi(_clients[_currentClient], _map, _self);
                ai.placeAllUnits();
                ai.attackAll();
                _currentClient++;
@@ -63,7 +64,7 @@ function gameLoopController()
    
         if(_clients[_currentClient].getType() ==="bot")
         {
-               var ai = randomAi(_clients[_currentClient], _map, this);
+               var ai = new randomAi(_clients[_currentClient], _map, _self);
                ai.placeAllUnits();
                ai.attackAll();
                _currentClient++;
@@ -94,10 +95,13 @@ function gameLoopController()
     // This method should place units in map
     // No Validation checking is needed
     function placeUnits(aCountry, aCount)
-    {        
+    {
+        console.log("COUNTRY");
+        console.log(aCountry);
+        
         var continents = _map.getContinents();        
         var fromContinent;     
-       
+           
         for(var continent in continents)
         {
             if(continents[continent].hasCountryByObject(aCountry))            
@@ -301,7 +305,7 @@ function gameLoopController()
 
                         if (_clients[_currentClient].getType() === "bot")
                         {
-                            var ai = randomAi(_clients[_currentClient], _map, this);
+                            var ai = new randomAi(_clients[_currentClient], _map, _self);
                             ai.placeAllUnits();
                             ai.attackAll();
                             _currentClient++;
