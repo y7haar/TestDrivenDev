@@ -64,7 +64,7 @@ function gameLoopController()
         {
             console.log("Player " + _clients[_currentClient].getName() + " won.");
         }
-        else if (_map.getContinentsByPlayer(_clients[_currentClient]) === {})
+        else if (Object.keys(_map.getContinentsByPlayer(_clients[_currentClient])).length === 0)
         {
             console.log("Player " + _clients[_currentClient].getName() + " lost.");
             _clients.splice(_currentClient, _currentClient + 1);
@@ -308,7 +308,9 @@ function gameLoopController()
 
                         // next Client
                         _currentClient++;
-
+                        
+                        console.log("###########################");
+                        console.log(_map.getContinentsByPlayer({}));
 
                         // start at first Client if lastClient ended his turn
                         if (_currentClient === _clients.length)
@@ -318,8 +320,8 @@ function gameLoopController()
                         {
                             console.log("Player "+_clients[_currentClient].getName()+" won.");
                         }
-                        else if(_map.getContinentsByPlayer(_clients[_currentClient]) === {})
-                        {
+                        else if(Object.keys(_map.getContinentsByPlayer(_clients[_currentClient])).length === 0)
+                        {            
                             console.log("Player "+_clients[_currentClient].getName()+" lost.");
                             _clients.splice(_currentClient, _currentClient+1);
                             triggerNextPlayer();
