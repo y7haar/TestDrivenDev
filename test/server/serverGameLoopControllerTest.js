@@ -1199,6 +1199,16 @@ TestCase("serverGameLoopControllerTest", {
     {
         assertFunction(this.serverGameLoop.placeUnits);
     },
+    "test sglc.placeUnits should place units ":function()
+    {
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        
+        this.serverGameLoop.placeUnits(this.c1, 1);
+        
+        assertEquals(11, this.c1.getUnitCount());
+    },
     
     "test sglc should implement method to perform an attack(AI)":function()
     {
