@@ -59,14 +59,20 @@ function gameLoopController()
     
     function triggerNextPlayer()
     {
-            
+        if (_currentClient >=_clients.length)
+         _currentClient = 0;    
+                        
         if (_clients.length === 1)
         {
             console.log("Player " + _clients[_currentClient].getName() + " won.");
+            var data = "event:close\ndata:You Won\n\n";
+            _clients[_currentClient].getResponseObject().write(data);
         }
         else if (Object.keys(_map.getContinentsByPlayer(_clients[_currentClient])).length === 0)
         {
             console.log("Player " + _clients[_currentClient].getName() + " lost.");
+            var data = "event:close\ndata:You Lost\n\n";
+            _clients[_currentClient].getResponseObject().write(data);
             _clients.splice(_currentClient, _currentClient + 1);
             triggerNextPlayer();
         }
