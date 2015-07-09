@@ -94,9 +94,31 @@ function gameLoopController()
     // This method should place units in map
     // No Validation checking is needed
     function placeUnits(aCountry, aCount)
-    {
-        var unitCount = aCountry.getUnitCount();
-        aCountry.setUnitCount(unitCount+aCount);
+    {        
+        var continents = _map.getContinents();        
+        var fromContinent;     
+       
+        for(var continent in continents)
+        {
+            if(continents[continent].hasCountryByObject(aCountry))            
+                fromContinent = continent;
+        }
+      
+        
+        var placingMove = {
+            type: 'placing',
+            unitCount: aCount,
+            player: aCountry.getOwner().getName(),
+            continent: fromContinent,
+            country: aCountry.getName()
+        };
+        
+        var result = calcPlacingResult(placingMove);
+        applyPlacingResult(result);
+        console.log(result);
+        msg = JSON.stringify(result);
+        var data = "event:placeUnits\ndata:" + msg + "\n\n";
+        messageAllClients(data);
     }
     
     // Method should return count of new units when a new round is started
@@ -111,6 +133,43 @@ function gameLoopController()
     //No Validation is needed
     function attack(aFrom, aTo)
     {
+        var continents = _map.getContinents();
+        
+        var fromContinent;
+        var toContinent;
+       
+        for(var continent in continents)
+        {
+            if(continents[continent].hasCountryByObject(aFrom))
+            {
+                fromContinent = continent;
+            }
+            if(continents[continent].hasCountryByObject(aTo))
+            {
+                toContinent = continent;
+            }
+        }
+        
+        var attackMove = {
+            type: 'attack',
+            from: {
+                player: aFrom.getOwner().getName(),
+                continent: fromContinent,
+                country: aFrom.getName()
+            },
+            to: {
+                player: aTo.getOwner().getName(),
+                continent: toContinent,
+                country: aTo.getName()
+            }
+        };
+        
+        var result = calcAttackResult(attackMove);
+        applyAttackResult(result);
+        
+        var msg = JSON.stringify(result);
+        var data = "event:attackResult\ndata:" + msg + "\n\n";
+        messageAllClients(data);
         
     }
     
@@ -185,8 +244,8 @@ function gameLoopController()
     }
     
     function calculateUnitBonus(aPlayer)
-    {        
-        console.log(_map.getContinentsByPlayer);
+    {       
+     
         
         var unitBonus = 0;
         var playerContinents = _map.getContinentsByPlayer(aPlayer);
