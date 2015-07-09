@@ -83,7 +83,7 @@ function gameLoopController()
 
             if (_clients[_currentClient].getType() === "bot")
             {
-                var ai = randomAi(_clients[_currentClient], _map, this);
+                var ai = new randomAi(_clients[_currentClient], _map, _self);
                 ai.placeAllUnits();
                 ai.attackAll();
                 _currentClient++;
@@ -343,7 +343,7 @@ function gameLoopController()
 
                             if (_clients[_currentClient].getType() === "bot")
                             {
-                                var ai = randomAi(_clients[_currentClient], _map, this);
+                                var ai = new randomAi(_clients[_currentClient], _map, _self);
                                 ai.placeAllUnits();
                                 ai.attackAll();
                                 _currentClient++;
