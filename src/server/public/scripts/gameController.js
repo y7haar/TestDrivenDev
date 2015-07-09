@@ -187,7 +187,7 @@ function gameController(aCtx){
         
         if(id>=0){ //kein wasser
             if(!_gridMap[x][y].selected & _selected.length < 2){
-                if(_gridMap[x][y].getOwner() === _Player){
+                if(_gridMap[x][y].getOwner().getId() === _Player.getId()){
                     _attack.from = _gridMap[x][y];
                     _gridMap[x][y].selected=true;
                     _selected.push(_gridMap[x][y]);
@@ -200,7 +200,7 @@ function gameController(aCtx){
             }
             
             if(_gridMap[x][y].selected){
-                if(_gridMap[x][y].getOwner() === _Player)
+                if(_gridMap[x][y].getOwner().getId() === _Player.getId())
                     _attack.from = null;
                 else
                     _attack.to = null;
@@ -235,7 +235,7 @@ function gameController(aCtx){
             for(var c in _selected){
                 for(var i in _selected[c].getBorders()){
                     if(_selected.length < 2){
-                        if(!_selected[c].getBorders()[i].getOwner() === _Player)
+                        if(!_selected[c].getBorders()[i].getOwner().getId() === _Player.getId())
                             _selected[c].getBorders()[i].activ=true;
                     }
                     else
