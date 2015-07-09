@@ -7,15 +7,15 @@ tddjs.namespace("client.controller").gameController = gameController;
 
 function gameController(aCtx){
     var _self = this;
-    var _gameLoopController;
-    var _gameUiController;
-    var _Map;
-    var _gridMap;
-    var _Player;
-    var _unitsLeft=0;
-    var _Url;
-    var states={};
-    var buttons={};
+     _gameLoopController;
+     _gameUiController;
+     _Map;
+     _gridMap;
+     _Player;
+     _unitsLeft=0;
+     _Url;
+     states={};
+     buttons={};
     var ajax = tddjs.util.ajax;
     
     var _selected=[];
@@ -35,9 +35,8 @@ function gameController(aCtx){
 
         ajax.get(_Url + "/map", options);
         
-        
-        _gameUiController.mapDown = mapDown;
         initGameStates();
+        _gameUiController.mapDown = mapDown;
         _gameUiController.mapMove = mapMove;
     }
     
@@ -84,7 +83,7 @@ function gameController(aCtx){
         _gameLoopController.setGameController(_self);
         
         _gameLoopController.establishConnection();
-        _gameUiController.init(null);
+        _gameUiController.init();
     }
     
     function onFailure(xhr){
