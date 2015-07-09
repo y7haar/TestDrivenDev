@@ -207,37 +207,18 @@ function gameController(aCtx){
                     _attack.to = null;
                 _gridMap[x][y].selected=false;
                 _selected.splice(_selected.indexOf(_gridMap[x][y]),1);
-            }
-            
-            
-            /*
-            if(!_gridMap[x][y].selected & _selected.length < 2){
-                _gridMap[x][y].selected=true;
-                _selected.push(_gridMap[x][y]);
-            }
-            else if(_gridMap[x][y].selected){
-                _gridMap[x][y].selected=false;
-                _selected.splice(_selected.indexOf(_gridMap[x][y]),1);
-            }
-            /*
-            if(_gridMap[x][y].selected){
-                if(_selected.length < 2)
-                    _selected.push(_gridMap[x][y]);
-                else
-                    _gridMap[x][y].selecte=false;
-            }
-            else
-            {
-                _selected.splice(_selected.indexOf(_gridMap[x][y]),1);
                 for(var i in _gridMap[x][y].getBorders()){
                     _gridMap[x][y].getBorders()[i].activ=false;
                 }
-            }*/
+            }
+            
+            
             for(var c in _selected){
                 for(var i in _selected[c].getBorders()){
                     if(_selected.length < 2){
-                        //if(!_selected[c].getBorders()[i].getOwner().getId() === _Player.getId())
-                            _selected[c].getBorders()[i].activ=true;
+                        _selected[c].getBorders()[i].activ=true;
+                        if(_selected[c].getBorders()[i].getOwner().getId() === _Player.getId())
+                            _selected[c].getBorders()[i].activ=false;
                     }
                     else
                         _selected[c].getBorders()[i].activ=false;
