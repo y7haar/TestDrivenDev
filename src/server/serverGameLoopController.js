@@ -62,7 +62,7 @@ function gameLoopController()
         if (_currentClient >=_clients.length)
          _currentClient = 0;    
                         
-        if (_clients.length === 1)
+        if (_clients.length === 1 && _clients[_currentClient].getType() === "human")
         {
             console.log("Player " + _clients[_currentClient].getName() + " won.");
             var data = "event:close\ndata:You Won\n\n";
@@ -72,7 +72,10 @@ function gameLoopController()
         {
             console.log("Player " + _clients[_currentClient].getName() + " lost.");
             var data = "event:close\ndata:You Lost\n\n";
-            _clients[_currentClient].getResponseObject().write(data);
+            
+            if(_clients[_currentClient].getType() === "human")
+                _clients[_currentClient].getResponseObject().write(data);
+            
             _clients.splice(_currentClient, _currentClient + 1);
             triggerNextPlayer();
         }
