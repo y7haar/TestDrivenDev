@@ -2,7 +2,7 @@
  *  Some global variables
  */
 
-var BASE_URL = "http://87.171.196.122:8181/";
+var BASE_URL = "http://localhost:8181/";
 
 var COUNTRY_NAMES_ARRAY = ["Bakaresh", "Rodkaresh", "Bastion Akundur", "Ankh Morpork", "Serandur", "Sturmgipfel",
     "Kristallnarbe", "Kristallwüste", "Gewundener Wald", "Piltover", "Zaun", "Demacia",
