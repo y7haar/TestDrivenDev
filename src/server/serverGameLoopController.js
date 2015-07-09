@@ -59,27 +59,41 @@ function gameLoopController()
     
     function triggerNextPlayer()
     {
-        var unitCount = calculateUnitBonus(_clients[_currentClient]);
-        _clients[_currentClient].setUnitCount(unitCount);      
-   
-        if(_clients[_currentClient].getType() ==="bot")
+            
+        if (_clients.length === 1)
         {
-               var ai = new randomAi(_clients[_currentClient], _map, _self);
-               ai.placeAllUnits();
-               ai.attackAll();
-               _currentClient++;
-               triggerNextPlayer();
+            console.log("Player " + _clients[_currentClient].getName() + " won.");
         }
-        else
-        {         
-            var msg = {
-                unitCount: unitCount,
-                info: "changeToPlacing"
-            };
-            msg = JSON.stringify(msg);
-            var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
-            _clients[_currentClient].getResponseObject().write(data);
-        }        
+        else if (_map.getContinentsByPlayer(_clients[_currentClient]) === {})
+        {
+            console.log("Player " + _clients[_currentClient].getName() + " lost.");
+            _clients.splice(_currentClient, _currentClient + 1);
+            triggerNextPlayer();
+        }
+        else {
+
+            var unitCount = calculateUnitBonus(_clients[_currentClient]);
+            _clients[_currentClient].setUnitCount(unitCount);
+
+            if (_clients[_currentClient].getType() === "bot")
+            {
+                var ai = randomAi(_clients[_currentClient], _map, this);
+                ai.placeAllUnits();
+                ai.attackAll();
+                _currentClient++;
+                triggerNextPlayer();
+            }
+            else
+            {
+                var msg = {
+                    unitCount: unitCount,
+                    info: "changeToPlacing"
+                };
+                msg = JSON.stringify(msg);
+                var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+                _clients[_currentClient].getResponseObject().write(data);
+            }
+        } 
     }
     
     function setMaxPlayers(intValue)
@@ -300,27 +314,40 @@ function gameLoopController()
                         if (_currentClient === _clients.length)
                             _currentClient = 0;
 
-                        var unitCount = calculateUnitBonus(_clients[_currentClient]);
-                        _clients[_currentClient].setUnitCount(unitCount);
-
-                        if (_clients[_currentClient].getType() === "bot")
+                        if(_clients.length === 1)
                         {
-                            var ai = new randomAi(_clients[_currentClient], _map, _self);
-                            ai.placeAllUnits();
-                            ai.attackAll();
-                            _currentClient++;
+                            console.log("Player "+_clients[_currentClient].getName()+" won.");
+                        }
+                        else if(_map.getContinentsByPlayer(_clients[_currentClient]) === {})
+                        {
+                            console.log("Player "+_clients[_currentClient].getName()+" lost.");
+                            _clients.splice(_currentClient, _currentClient+1);
                             triggerNextPlayer();
                         }
-                        else
-                        {
-                            var msg = {
-                                unitCount: unitCount,
-                                info: "changeToPlacing"
-                            };
-                            msg = JSON.stringify(msg);
-                            var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
-                            _clients[_currentClient].getResponseObject().write(data);
-                        }   
+                        else {
+         
+                            var unitCount = calculateUnitBonus(_clients[_currentClient]);
+                            _clients[_currentClient].setUnitCount(unitCount);
+
+                            if (_clients[_currentClient].getType() === "bot")
+                            {
+                                var ai = randomAi(_clients[_currentClient], _map, this);
+                                ai.placeAllUnits();
+                                ai.attackAll();
+                                _currentClient++;
+                                triggerNextPlayer();
+                            }
+                            else
+                            {
+                                var msg = {
+                                    unitCount: unitCount,
+                                    info: "changeToPlacing"
+                                };
+                                msg = JSON.stringify(msg);
+                                var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+                                _clients[_currentClient].getResponseObject().write(data);
+                            }
+                        } 
                     }
                     break;
                 case 'placing':
