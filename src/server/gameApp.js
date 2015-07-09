@@ -122,7 +122,7 @@ gameApp.get("/:id/map", function (req, res) {
         res.sendStatus(404);
         console.log(e);
     }
-    res.sendStatus(404);
+   
 });
 
 gameApp.post("/:id", function (req, res) {
