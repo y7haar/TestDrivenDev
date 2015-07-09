@@ -1195,19 +1195,27 @@ TestCase("serverGameLoopControllerTest", {
     
     
     
-    "test sglc should implement method to place units":function()
+    "test sglc should implement method to place units(AI)":function()
     {
         assertFunction(this.serverGameLoop.placeUnits);
     },
     
-    "test sglc should implement method to perform an attack":function()
+    "test sglc should implement method to perform an attack(AI)":function()
     {
         assertFunction(this.serverGameLoop.attack);
     },
     
-     "test sglc should implement method to get new unit stock":function()
+    "test sglc should implement method to get new unit stock(AI)":function()
     {
         assertFunction(this.serverGameLoop.getUnitStockByPlayer);
+    },
+    "test sglc.getUnitStockByPlayer should return players UnitCount":function()
+    {
+        this.serverGameLoop.setMaxPlayers(1);
+        this.serverGameLoop.setMap(this.map);
+        this.serverGameLoop.addClient(this.serverPlayer1);
+        
+        assertEquals(3,this.serverGameLoop.getUnitStockByPlayer(this.serverPlayer1));
     }
 });
     
