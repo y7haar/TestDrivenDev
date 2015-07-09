@@ -82,7 +82,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
         function writeToLogs()
         {
             _toServerLogs.push(message);
-        }
+        }        
     }
     
     function makeMove(move)
@@ -131,10 +131,18 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
         _eventSource.addEventListener("placeUnits", placeUnits);
+        _eventSource.addEventListener("close", close);
     }      
     
     
     // EventSource events
+    
+    function close(e)
+    {
+        _eventSource.close();
+        alter(e.data);
+    }
+    
     function changeToPlacingState(e)
     {   
         
