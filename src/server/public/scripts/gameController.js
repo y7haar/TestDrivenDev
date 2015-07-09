@@ -199,7 +199,7 @@ function gameController(aCtx){
                 }
             }
             
-            if(_gridMap[x][y].selected){
+            else if(_gridMap[x][y].selected){
                 if(_gridMap[x][y].getOwner().getId() === _Player.getId())
                     _attack.from = null;
                 else
@@ -263,18 +263,20 @@ function gameController(aCtx){
             return;
         }
         
+        console.log(_attack);
+        
         var from = _attack.from;
         var to = _attack.to;
         var attackMove = {
             type: 'attack',
             from: {
                 player: from.getOwner().getName(),
-                continent: _gameUiController._getContinentFromCountryById(from.getId()).getName(),
+                continent: _gameUiController._getContinentFromCountryById(from.id).getName(),
                 country: from.getName()
             },
             to: {
                 player: to.getOwner().getName(),
-                continent: _gameUiController._getContinentFromCountryById(to.getId()).getName(),
+                continent: _gameUiController._getContinentFromCountryById(to.id).getName(),
                 country: to.getName()
             }
         };
