@@ -141,7 +141,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     function close(e)
     {
         _eventSource.close();
-        alter(e.data);
+        alert(e.data);
     }
     
     function changeToPlacingState(e)
