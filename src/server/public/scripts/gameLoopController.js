@@ -82,7 +82,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
         function writeToLogs()
         {
             _toServerLogs.push(message);
-        }
+        }        
     }
     
     function makeMove(move)
@@ -120,8 +120,6 @@ function gameLoopController(aMap, aPlayer, aUrl)
     {
         _eventSource = new EventSource(_url, {withCredentials:true});
         addAllEventListner();
-        console.log(_eventSource);
-        console.log(_toServerLogs);
     }
     
     function addAllEventListner()
@@ -133,12 +131,22 @@ function gameLoopController(aMap, aPlayer, aUrl)
         _eventSource.addEventListener("changeToWaiting", changeToWaitingState);
         _eventSource.addEventListener("attackResult", attackResult);
         _eventSource.addEventListener("placeUnits", placeUnits);
+        _eventSource.addEventListener("close", close);
     }      
     
     
     // EventSource events
+    
+    //test
+    function close(e)
+    {
+        _eventSource.close();
+        alter(e.data);
+    }
+    
     function changeToPlacingState(e)
-    {           
+    {   
+        
         var data = JSON.parse(e.data);     
         var unitCount = data.unitCount;
         _fromServerLogs.push(e);
