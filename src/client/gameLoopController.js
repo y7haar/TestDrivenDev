@@ -137,6 +137,7 @@ function gameLoopController(aMap, aPlayer, aUrl)
     
     // EventSource events
     
+    //test
     function close(e)
     {
         _eventSource.close();
