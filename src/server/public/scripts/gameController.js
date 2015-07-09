@@ -104,9 +104,10 @@ function gameController(aCtx){
         for(var c in _selected){
             for(var i in _selected[c].getBorders()){
                 _selected[c].getBorders()[i].activ=false;
+                _selected[c].selected=false;
             }
         }
-        _selected=[];
+        _selected.length = 0;
         _gameUiController.updateUnitCounts();
         _gameUiController.drawGame();
     }
@@ -235,7 +236,7 @@ function gameController(aCtx){
             for(var c in _selected){
                 for(var i in _selected[c].getBorders()){
                     if(_selected.length < 2){
-                        if(!_selected[c].getBorders()[i].getOwner().getId() === _Player.getId())
+                        //if(!_selected[c].getBorders()[i].getOwner().getId() === _Player.getId())
                             _selected[c].getBorders()[i].activ=true;
                     }
                     else
