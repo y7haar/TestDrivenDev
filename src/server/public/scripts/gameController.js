@@ -5,17 +5,19 @@
 
 tddjs.namespace("client.controller").gameController = gameController;
 
+    var  _gameLoopController123;
+    var  _gameUiController;
+    var  _Map;
+    var  _gridMap;
+    var  _Player;
+    var  _unitsLeft=0;
+    var  _Url;
+    var  states123={};
+    var  buttons={};
+     
 function gameController(aCtx){
     var _self = this;
-     _gameLoopController;
-     _gameUiController;
-     _Map;
-     _gridMap;
-     _Player;
-     _unitsLeft=0;
-     _Url;
-     states={};
-     buttons={};
+
     var ajax = tddjs.util.ajax;
     
     var _selected=[];
@@ -42,13 +44,9 @@ function gameController(aCtx){
     
     function initGameStates(){
         // <editor-fold defaultstate="collapsed" desc="Game-States">
-        states["placingState"].down=placingDown;
-        states["attackingState"].down=attackingDown;
-        states["waitingState"].down=waitingDown;
-        
-        states["placingState"].move=placingMove;
-        states["attackingState"].move=attackingMove;
-        states["waitingState"].move=waitingMove;
+        states123["placingState"]= { down: placingDown, move: placingMove};
+        states123["attackingState"] = { down: attackingDown, move: attackingMove };
+        states123["waitingState"] = { down: waitingDown, move: waitingMove };
         
         buttons["placingState"]=[];
         buttons["placingState"][0]=new tddjs.client.ui.button(40,635,"Place Units",ctx);
@@ -79,10 +77,10 @@ function gameController(aCtx){
         
         _gameUiController.setPlayerColor(_Player.getColor());
         
-        _gameLoopController = new tddjs.client.gameLoopController(_Map, _Player, _Url);
-        _gameLoopController.setGameController(_self);
+        _gameLoopController123 = new tddjs.client.gameLoopController(_Map, _Player, _Url);
+        _gameLoopController123.setGameController(_self);
         
-        _gameLoopController.establishConnection();
+        _gameLoopController123.establishConnection();
         _gameUiController.init();
     }
     
@@ -95,7 +93,7 @@ function gameController(aCtx){
     }
     
     function getGameLoopController(){
-        return _gameLoopController;
+        return _gameLoopController123;
     }
     
     function update(req){
@@ -106,13 +104,16 @@ function gameController(aCtx){
     }
     
     // <editor-fold defaultstate="collapsed" desc="Game-States">
-    function mapDown(x,y){
-        states[_gameLoopController.getStateName()].down(x,y);
-    }
+
     function mapMove(x,y){
-        _gameUiController.setButtons(buttons[_gameLoopController.getStateName()]);
-        _gameUiController.setStateStr(_Player.getName() +": "+ _gameLoopController.getStateName())
-        states[_gameLoopController.getStateName()].move(x,y);
+        _gameUiController.setButtons(buttons[_gameLoopController123.getStateName()]);
+        _gameUiController.setStateStr(_Player.getName() +": "+ _gameLoopController123.getStateName());
+        states123[_gameLoopController123.getStateName()].move(x,y);
+    }
+    
+    function mapDown(x,y){
+        console.log(states123[_gameLoopController123.getStateName()]);
+        states123[_gameLoopController123.getStateName()].down(x,y);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Game-States-MouseMove">
@@ -167,7 +168,7 @@ function gameController(aCtx){
                     continent: _gameUiController._getContinentFromCountryById(id).getName(),
                     country: _gridMap[x][y].getName()
                 };
-            if(_gameLoopController.makeMove(placingMove))
+            if(_gameLoopController123.makeMove(placingMove))
                 _unitsLeft--;
         }
        
@@ -210,7 +211,7 @@ function gameController(aCtx){
     // <editor-fold defaultstate="collapsed" desc="Game-States-Buttons">
     function placingButton(){
         if (_unitsLeft <=0){
-            _gameLoopController.endPhase();
+            _gameLoopController123.endPhase();
         }
         else
             window.alert("Please place all units!");
@@ -237,10 +238,10 @@ function gameController(aCtx){
                 country: to.getName()
             }
         };
-        _gameLoopController.makeMove(attackMove);
+        _gameLoopController123.makeMove(attackMove);
     }
     function attackingButtonFinished(){
-        _gameLoopController.endPhase();
+        _gameLoopController123.endPhase();
     }
     // </editor-fold>
     

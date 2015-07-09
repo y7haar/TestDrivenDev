@@ -31,12 +31,6 @@ function gameLoopController()
     
     function startGame()
     {
-        console.log("GAME START");
-        console.log(_clients.length);
-        console.log(_clients[0].getName());
-        console.log(_clients[1].getName());
-        console.log(_clients[2].getName());
-        
         _gameStarted = true;
         _currentClient = 0;   
         var unitCount = calculateUnitBonus(_clients[_currentClient]);
