@@ -95,7 +95,8 @@ function gameLoopController()
     // No Validation checking is needed
     function placeUnits(aCountry, aCount)
     {
-        
+        var unitCount = aCountry.getUnitCount();
+        aCountry.setUnitCount(unitCount+aCount);
     }
     
     // Method should return count of new units when a new round is started
