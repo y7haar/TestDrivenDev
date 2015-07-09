@@ -101,6 +101,7 @@ function gameController(aCtx){
             _unitsLeft = req.unitCount;
         }
         _gameUiController.updateUnitCounts();
+        _gameUiController.drawGame();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Game-States">
