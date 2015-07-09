@@ -38,7 +38,11 @@ function gameLoopController()
    
         if(_clients[_currentClient].getType() ==="bot")
         {
-               
+               var ai = randomAi(_clients[_currentClient], _map, this);
+               ai.placeAllUnits();
+               ai.attackAll();
+               _currentClient++;
+               triggerNextPlayer();
         }
         else
         {         
@@ -49,8 +53,32 @@ function gameLoopController()
             msg = JSON.stringify(msg);
             var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
             _clients[_currentClient].getResponseObject().write(data);
+        }        
+    }
+    
+    function triggerNextPlayer()
+    {
+        var unitCount = calculateUnitBonus(_clients[_currentClient]);
+        _clients[_currentClient].setUnitCount(unitCount);      
+   
+        if(_clients[_currentClient].getType() ==="bot")
+        {
+               var ai = randomAi(_clients[_currentClient], _map, this);
+               ai.placeAllUnits();
+               ai.attackAll();
+               _currentClient++;
+               triggerNextPlayer();
         }
-        
+        else
+        {         
+            var msg = {
+                unitCount: unitCount,
+                info: "changeToPlacing"
+            };
+            msg = JSON.stringify(msg);
+            var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+            _clients[_currentClient].getResponseObject().write(data);
+        }        
     }
     
     function setMaxPlayers(intValue)
@@ -74,7 +102,8 @@ function gameLoopController()
     // It should also include Continent Bonus if player owns whole contintent
     function getUnitStockByPlayer(aPlayer)
     {
-        
+        var index  = _clients.indexOf(aPlayer);
+        return _clients[index].unitCount;        
     }
     
     // This method should update map with battle result of two countries
@@ -210,13 +239,24 @@ function gameLoopController()
                         var unitCount = calculateUnitBonus(_clients[_currentClient]);
                         _clients[_currentClient].setUnitCount(unitCount);
 
-                        var msg = {
-                            unitCount: unitCount,
-                            info: "changeToPlacing"
-                        };
-                        msg = JSON.stringify(msg);
-                        var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
-                        _clients[_currentClient].getResponseObject().write(data);
+                        if (_clients[_currentClient].getType() === "bot")
+                        {
+                            var ai = randomAi(_clients[_currentClient], _map, this);
+                            ai.placeAllUnits();
+                            ai.attackAll();
+                            _currentClient++;
+                            triggerNextPlayer();
+                        }
+                        else
+                        {
+                            var msg = {
+                                unitCount: unitCount,
+                                info: "changeToPlacing"
+                            };
+                            msg = JSON.stringify(msg);
+                            var data = "event:changeToPlacing\ndata:" + msg + "\n\n";
+                            _clients[_currentClient].getResponseObject().write(data);
+                        }   
                     }
                     break;
                 case 'placing':
