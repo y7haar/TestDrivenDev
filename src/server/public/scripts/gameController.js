@@ -109,6 +109,9 @@ function gameController(aCtx){
         }
         _selected.length = 0;
         _gameUiController.updateUnitCounts();
+        _gameUiController.setButtons(buttons[_gameLoopController123.getStateName()]);
+        _gameUiController.setStateStr(_Player.getName() +": "+ _gameLoopController123.getStateName());
+        buttons["placingState"][0].setText("Place Units: "+_unitsLeft+" left");
         _gameUiController.drawGame();
     }
     
