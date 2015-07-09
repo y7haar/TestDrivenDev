@@ -207,8 +207,11 @@ function gameLoopController()
                         if (_currentClient === _clients.length)
                             _currentClient = 0;
 
+                        var unitCount = calculateUnitBonus(_clients[_currentClient]);
+                        _clients[_currentClient].setUnitCount(unitCount);
+
                         var msg = {
-                            unitCount: 12,
+                            unitCount: unitCount,
                             info: "changeToPlacing"
                         };
                         msg = JSON.stringify(msg);
